@@ -8,7 +8,7 @@ public class Level {
     private String description;
     private int width;
     private int height;
-    private Start start;
+    private ArrayList<Character> characters;
     private ArrayList<Tile> grid;
 
     public String getDescription() {
@@ -23,8 +23,8 @@ public class Level {
         return height;
     }
 
-    public Start getStart() {
-        return start;
+    public ArrayList<Character> getCharacters() {
+        return characters;
     }
 
     public ArrayList<Tile> getGrid() {
@@ -37,7 +37,7 @@ public class Level {
                 "description='" + description + '\'' +
                 ", width=" + width +
                 ", height=" + height +
-                ", start=" + start +
+                ", characters=" + characters +
                 ", grid=" + grid.size() +
                 '}';
     }

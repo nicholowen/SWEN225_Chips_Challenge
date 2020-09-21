@@ -2,10 +2,9 @@
   "description": "Level 1",
   "width": 15,
   "height": 14,
-  "start": {
-    "x": 7,
-    "y": 6
-  },
+  "characters": [
+      {"x": 7, "y": 6, "name": "chap"}
+  ],
   "grid": [
       {"x": 0, "y": 0, "name": "free"},
       {"x": 1, "y": 0, "name": "free"},
