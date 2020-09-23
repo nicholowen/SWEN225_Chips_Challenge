@@ -16,7 +16,7 @@ public class Cell {
 	
 	
 	/**
-	 * This constructor only takes a name and uses a list of preset tiles to set things like the number of total frames, so on and so forth.
+	 * This constructor only takes a name and uses a list of preset tiles to set things like the number of total frames
 	 * @param n
 	 */
 	public Cell(String n) {

@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 public class Main {
@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args){
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
-        maze = new Maze();
+        maze = new Maze(persist);
         render = new Render();
         recNPlay = new RecordAndPlay();
 
