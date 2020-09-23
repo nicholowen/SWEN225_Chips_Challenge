@@ -1,7 +1,7 @@
 package src.nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import src.nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
@@ -35,8 +35,7 @@ public class EnergyBall extends Sprite{
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    BufferedImage image = animation.getImage();
-    return image;
+    return animation.getImage();
   }
 
 

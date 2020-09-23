@@ -1,7 +1,7 @@
 package src.nz.ac.vuw.ecs.swen225.gp20.render;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 import javax.swing.*;
 import java.awt.*;
