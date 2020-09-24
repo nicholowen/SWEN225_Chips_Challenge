@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
 import javax.swing.*;
@@ -12,16 +13,12 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
-  //  Assets assets = new Assets();
-
-  EnergyBall eb;
-  KeyCard kcg;
-
-  private ArrayList<FloorTile> floorTiles = new ArrayList<>();
-  private ArrayList<WallTile> wallTiles = new ArrayList<>();
-  private ArrayList<Door> doors = new ArrayList<>();
-  private ArrayList<EnergyBall> energyBalls = new ArrayList<>();
-  private ArrayList<Key> keys = new ArrayList<>();
+  //Lists to be populated with Cells surrounding player in 9x9 grid
+  private ArrayList<Cell> FLOOR = new ArrayList<>();
+  private ArrayList<Cell> WALL = new ArrayList<>();
+  private ArrayList<Cell> DOOR = new ArrayList<>();
+  private ArrayList<Cell> ENERGY = new ArrayList<>();
+  private ArrayList<Cell> KEYCARD = new ArrayList<>();
 
   public GamePanel() {
     setPreferredSize(new Dimension(500, 500));
@@ -37,41 +34,70 @@ public class GamePanel extends JPanel {
    */
   private void init() {
     BufferedImage image = new BufferedImage(500, 500, 1);
-    eb = new EnergyBall();
-    kcg = new KeyCard();
     Graphics g = image.getGraphics();
   }
 
   //needs to be called when the map has been loaded and all objects have been initialised.
-  //this assigns animation objects to all objects that can animate so they can be updated.
+  //this assigns animation objects to all objects that can animate so they can be updated
+  //as well as walls so they can have an associated wall orientation given.
   public void initAnimationObjects(Cell[][] cells){
     for(int i = 0; i < cells.length; i++){
       for(int j = 0; j < cells[i].length; i++){
         String[] data = cells[i][j].getRenderData().split(":");
-        if(Integer.parseInt(data[1]) != 0){
-          switch(data[0]){
-            case "energy_ball":
-              cells[i][j].setAnimationObject(new EnergyBall());
-            case "keycard_green":
-              cells[i][j].setAnimationObject(new KeyCard());
-            case "door":
-              cells[i][j].setAnimationObject(new Door());
-          }
+        switch(data[0]){
+          case "wall":
+            WallTile wt = new WallTile();
+            Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
+            wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
+            cells[i][j].setAnimationObject(wt);
+          case "energy_ball":
+            EnergyBall eb = new EnergyBall();
+            cells[i][j].setAnimationObject(eb);
+          case "keycard_green":
+            KeyCard kc = new KeyCard()
+            cells[i][j].setAnimationObject(kc);
+          case "door":
+            Door door = new Door();
+            cells[i][j].setAnimationObject(door);
         }
       }
     }
   }
 
+  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y, int lengthX, int lengthY){
+    Cell[] neighbours  = new Cell[4];
+
+    if(x != 0){
+      neighbours[1] = cells[y][x-1];
+      if(x < lengthX-1)neighbours[3] = cells[y][x+1];
+      else neighbours[3] = null;
+    }else{
+      neighbours[1] = null;
+      neighbours[3] = cells[y][x+1];
+    }
+    if(y != 0){
+      neighbours[0] = cells[y-1][x];
+      if(y < lengthY-1) neighbours[2] = cells[y+1][x];
+      else neighbours[2] = null;
+    }else{
+      neighbours[0] = null;
+      neighbours[2] = cells[y+1][x];
+    }
+
+    return neighbours;
+  }
+
   /**
-   * iterates through a 9x9 grid around the player. Will
-   * @param cells
-   * @param actors
+   * Gets a 9x9 grid around the player. If the player is too far to the left/right, or top/bottom of the maze boundary,
+   * will get the furthest 9x9 grid possible.
+   * @param cells All cells for entire maze
+   * @param player The players character - for obtaining current position
+   * @return 9x9 Cell array
    */
-  public void update(Cell[][] cells, Actor[] actors) {
-
-    //get player position
+  private Cell[][] getSurround(Cell[][] cells, Actor player) {
+    Cell[][] ret = new Cell[9][9];
+    //using actors[0] as a place holder for player. I assume the player will be the first one on the list.
     Point playerPos = new Point(actors[0].getX(), actors.getY());
-
 
     int x;
     int y;
@@ -86,81 +112,82 @@ public class GamePanel extends JPanel {
 
     for (int i = x; i < x + 9; i++) {
       for (int j = y; j < y + 9; j++) {
-        String data[] = cells[i][j].getRenderData().split(":");
-        if (data[0].equals("wall")) {
-          wallTiles.add
-          int animated = Integer.parseInt(data[0]);
-
-          if (animated != 0) {
-            cells[i][j].getAnimationObject().update();
-          }
-        }
+        ret[i][j] = cells[i][j];
       }
-    /*TODO: Update all objects in game - iterate through the tiles around player.
-            Update all doors (if closed, won't update, if open, updating it's key frame).
-            Update all animated objects such as Balls, Keys etc.
-            Update player depending on facing direction and if moving or not.
-     */
-
-      eb.update();
-      kcg.update();
-
-      // TODO repaint();
     }
-
+    return ret;
   }
 
   /**
-   * Test method for animations - based of system time. can swap out when tick system is implemented (runs at 30FPS)
+   * Iterates through a 9x9 grid around the player. Adds them to an appropriate list
+   * which is used for drawing in order. Also updates all updatable items
+   * (things with animation)
+   * @param cells 9x9 grid around the player
+   * @param actors for finding player position
    */
-  public void run() {
-    while(true) {
-      Cell[][] cell = new Cell[0][0];
-      this.update(cell);
-      repaint();
-      long start = System.currentTimeMillis();
-      while (true) {
-        long delay = 33;
-        if (System.currentTimeMillis() >= start + delay) {
-          break;
-        }
+  public void update(Cell[][] cells, Actor[] actors) {
 
+    Cell[][] surround = getSurround(cells, actors[0]);
+
+    for (int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+        if(surround[i][j].getName().equals("floor")) {
+          FLOOR.add(surround[i][j]);
+        }else if(surround[i][j].getName().equals("wall")) {
+          WALL.add(surround[i][j]);
+        }else if(surround[i][j].getName().equals("door")) {
+          DOOR.add(surround[i][j]);
+          surround[i][j].getAnimationObject().update();
+        }else if(surround[i][j].getName().equals("energy")) {
+          ENERGY.add(surround[i][j]);
+          surround[i][j].getAnimationObject().update();
+        }else if(surround[i][j].getName().equals("key")){
+          KEYCARD.add(surround[i][j]);
+          surround[i][j].getAnimationObject().update();
+        }
       }
     }
   }
 
 
+  /**
+   * Clears all lists ready for next frame
+   */
+  private void clearLists(){
+    FLOOR.clear();
+    WALL.clear();
+    DOOR.clear();
+    ENERGY.clear();
+    KEYCARD.clear();
+  }
 
+
+  /**
+   * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
+   * @param g graphics object
+   */
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    // draw each set of images in turn
-    // Tiles -> Doors -> Balls/Key/Items -> Player
 
-    g.drawImage(eb.getImage(), 0, 0, this);
-    g.drawImage(kcg.getImage(), 64, 0, this);
-
-    //get player position
-    Point playerPos = new Point(actors[0].getX, actors.getY);
-
-
-    int x;
-    int y;
-
-    if(playerPos.getX() <= 4) x = 0;
-    else if(playerPos.getX() >= cells.length -4) x = cells.length - 9;
-    else x = (int) (playerPos.getX() - 4);
-
-    if(playerPos.getY() <= 4) y = 0;
-    else if(playerPos.getY() >= cells[0].length -4) y = cells[0].length - 9;
-    else y = (int) (playerPos.getX() - 4);
-
-    for(int i = x; i < x + 9; i++){
-      for(int j = y; j < y + 9; j++){
-        }
-      }
+    for(Cell f : FLOOR){
+      g.drawImage(Assets.FLOOR, 64 * f.getX(), 64 * f.getY(), this);
+    }
+    for(Cell w : WALL){
+      g.drawImage(w.getAnimationObject().getImage(), 64 * w.getX(), 64 * w.getY(), this);
+    }
+    for(Cell d : DOOR){
+      g.drawImage(d.getAnimationObject().getImage(), 64 * d.getX(), 64 * d.getY(), this);
+    }
+    for(Cell e : ENERGY){
+      g.drawImage(e.getAnimationObject().getImage(), 64 * e.getX(), 64 * e.getY(), this);
+    }
+    for(Cell k : KEYCARD){
+      g.drawImage(k.getAnimationObject().getImage(), 64 * k.getX(), 64 * k.getY(), this);
     }
 
+    //clears lists for next frame
+    clearLists();
 
   }
 
