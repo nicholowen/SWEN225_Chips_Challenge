@@ -17,11 +17,11 @@ public class Tile {
     }
 
     public String getName() {
-        return name;
+        return name.toLowerCase();
     }
 
     public String getColor(){
-        return color;
+        return color.toLowerCase();
     }
 
     @Override
