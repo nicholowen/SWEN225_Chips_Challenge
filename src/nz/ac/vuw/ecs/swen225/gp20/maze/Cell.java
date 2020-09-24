@@ -1,9 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.Sprite;
+
 public class Cell {
 	private String name;
 	
 	//Rendering and Animation
+	private Sprite animationObject;
+	private int x;//Assigned when the tile is made, this value is used only for the rendering.
+	private int y;//Assigned when the tile is made, this value is used only for the rendering.
+	
 	private int metaData;//Known also as an animation state, this keeps track of which animation frame it's in.
 	private boolean animated;//If true, animates through multiple frames. If not, metaData stays at 0.
 	private int numberOfFramesTotal; //Total number of animation frames that the tile has. If it has 0, it's just static (like the floor or walls)
@@ -16,12 +22,28 @@ public class Cell {
 	
 	
 	/**
-	 * This constructor only takes a name and uses a list of preset tiles to set things like the number of total frames
+	 * This constructor takes a name and uses a list of preset tiles to set the properties of the tile.
 	 * @param n
+	 * @param xpos
+	 * @param ypos
 	 */
-	public Cell(String n) {
+	public Cell(String n, int xpos, int ypos) {
 		name=n;
+		x=xpos;
+		y=ypos;
 		//TODO: String Switch, apply appropriate properties
+		
+		switch(n) {
+		case "wall":
+			isSolid=true;
+			break;
+		case "free":
+			isSolid=false;
+			break;
+		default:
+			System.out.println("Loaded unknown tile type in Cell.java. Loaded type:"+n);//TODO: Replace with proper exception
+		
+		}
 		
 	}
 	
@@ -63,6 +85,32 @@ public class Cell {
 		
 		
 	}
+	
+	//Rendering/animating getters and setters
+	
+	public void setAnimationObject(Sprite animationObject){
+		  this.animationObject = animationObject;
+		}
+
+		public Sprite getAnimationObject(){
+		  return animationObject;
+		}
+
+	/**
+	 * For use by the renderer only!
+	 * @return
+	 */
+	public int getX(){
+		  return x;
+		}
+
+	/**
+	 * For use by the renderer only!
+	 * @return
+	 */
+	public int getY(){
+		  return y;
+		}
 	
 	
 	
