@@ -1,11 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
-
-import javax.swing.*;
-import java.awt.*;
-
+import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
@@ -36,8 +31,8 @@ public class Render {
     gp.run();
   }
 
-  public void update(){
-    gp.update();
+  public void update(Cell[][] cell){
+    gp.update(cell);
   }
 
 

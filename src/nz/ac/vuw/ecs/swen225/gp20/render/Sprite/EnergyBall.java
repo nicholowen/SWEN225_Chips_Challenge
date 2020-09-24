@@ -9,9 +9,9 @@ public class EnergyBall extends Sprite{
 
   BufferedImage[] sprites;
 
-  public EnergyBall(Maze map){
+  public EnergyBall(){
 
-    super(map); //Creates Sprite object for this, in turn creating an animation object which it can access.
+    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
     int width = 64;
     int height = 64;

@@ -10,8 +10,8 @@ public class KeyCard extends Sprite{
 
   BufferedImage[] sprites;
 
-  public KeyCard(Maze map) {
-    super(map);
+  public KeyCard() {
+    super();
 
     int width = 64;
     int height = 64;
