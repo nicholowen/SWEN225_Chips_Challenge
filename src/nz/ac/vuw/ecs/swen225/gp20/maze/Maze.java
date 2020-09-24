@@ -1,10 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
+//import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
@@ -46,22 +47,27 @@ public class Maze {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
 			return;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
-
+		
+		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
 		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
 			board[t.getX()][t.getY()] = new Cell(t.getName());//TODO:Implement or scrap Colour
 		}//At this stage, all tiles are loaded (?)
-
+		
+		//Load player
+		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY());
+		
+		/*
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		for(Character c:toLoad.getCharacters()){
 			if(c.getName().equals("chap") || c.getName().equals("player")){//If it's the player //TODO Decide on player name, "player" or "chap"
 				player=new Actor(true, "player");//TODO safeguard that only one player can be loaded at once.
 			} else{
-				creatures.add(new Actor(false, c.getName()));
+				creatures.add(new Actor(false, c.getName(), c.getX(), c.getY()));
 			}
 
 		}
-
+		*/
 
 
 
@@ -70,14 +76,36 @@ public class Maze {
 	
 	/**
 	 * One run of the core game "loop", which has the option of taking a movement.
-	 * Should be run repeatedly from Application, or whatever is in control of running the game otherwise.
+	 * Should be run repeatedly from Application.
 	 * @param movementDirection
 	 */
 	public void tick(String movementDirection) {
-		//TODO:If given move command and not currently moving, set player to move animation. +Check if player move is valid!
-		//TODO:Check if player/actors have finished move animations. If so, set them to their new location.
+		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
+		player.move(movementDirection);
+		//TODO:Update all NPCs+Player if moving
+		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		//TODO:Update all animated tiles (?) Maybe do this when Render requests tiles to draw.	
 		//TODO:
+	}
+	
+	/**
+	 * Given a character and a direction, check if it's a valid or invalid move.
+	 * @param a
+	 * @param p
+	 * @return
+	 */
+	public boolean isMoveValid(Actor a, Point p) {
+		int xToCheck=(int) (a.getX()+p.getX());
+		int yToCheck=(int) (a.getY()+p.getY());
+		
+		if(xToCheck<0||xToCheck>=board.length||yToCheck<0||yToCheck>=board[0].length)
+			return false;//Out-of-bounds, cannot walk through.
+		
+		Cell toCheck=board[xToCheck][yToCheck];
+		return toCheck.getIsSolid();
+		
+		
+		
 	}
 	
 	
