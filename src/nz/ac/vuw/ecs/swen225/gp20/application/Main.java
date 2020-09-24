@@ -12,16 +12,34 @@ public class Main {
     private static Record rec;
     private static Replay repl;
     private static Persistence persist;
+    private boolean gameEnded;
 
 
-    public static void main(String[] args){
+    public void main(String[] args){
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
         maze = new Maze(persist);
         render = new Render();
-        rec = new Record();
-        repl = new Replay();
+        rec = new Record(this);
+        repl = new Replay(this);
 
     }
 
+    /**
+     * Tick based loop. The main game runs on this loop.
+     */
+    public void play() {
+    	while(true){
+    		if(gameEnded) break;
+    		long start = System.currentTimeMillis(); 
+    		while(true) {
+    			int delay = 33;
+    			if(System.currentTimeMillis() >= start + delay) break; // wait 33 milli
+    		}
+    	}
+    }
 
+    
+    /*===================================================
+    *	Action Listeners
+    * ===================================================*/
 }

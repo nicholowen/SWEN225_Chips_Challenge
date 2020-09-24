@@ -14,7 +14,7 @@ public class ScorePanel extends JPanel {
    * contains some garbage code to draw (can see what I am doing)
    */
 
-  File path = new File("project-master/src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
+  File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
   Canvas canvas;
   private BufferedImage image;
   private static Graphics g;

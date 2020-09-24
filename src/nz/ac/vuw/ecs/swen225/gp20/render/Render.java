@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
@@ -23,13 +24,15 @@ public class Render {
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
     frame.pack();
+
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     gp.run();
   }
 
-  public void update(){
-    gp.update();
+  public void update(Cell[][] cell){
+    gp.update(cell);
   }
 
 

@@ -5,21 +5,21 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class EnergyBall extends Sprite{
+
+public class KeyCard extends Sprite{
 
   BufferedImage[] sprites;
 
-  public EnergyBall(){
-
-    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
+  public KeyCard() {
+    super();
 
     int width = 64;
     int height = 64;
 
     // calls on asset class to get the frames for this object.
-    sprites = Assets.ENERGYBALL[0];
+    sprites = Assets.KEYCARD_G[0];
     animation.setFrames(sprites);
-    animation.setDelay(6);
+    animation.setDelay(4);
 
   }
 
@@ -35,10 +35,6 @@ public class EnergyBall extends Sprite{
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    BufferedImage image = animation.getImage();
-    return image;
+    return animation.getImage();
   }
-
-
-
 }

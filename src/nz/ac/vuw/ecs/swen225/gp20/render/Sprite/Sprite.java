@@ -10,7 +10,7 @@ public abstract class Sprite {
 
   Animation animation;
 
-  public Sprite(Maze map){
+  public Sprite(){
     animation = new Animation();
   }
 }

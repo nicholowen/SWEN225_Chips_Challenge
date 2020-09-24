@@ -6,10 +6,11 @@ import java.io.File;
 
 public class Assets
 {
-  private static File path = new File("project-master/src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
+  private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
 
   //Load gifs
   public static BufferedImage[][] ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
+  public static BufferedImage[][] KEYCARD_G = loadGif(path, "key_green.gif", 64, 64);
 
   //TODO: Player, Key, Door
 
