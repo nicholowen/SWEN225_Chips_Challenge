@@ -24,27 +24,27 @@ public class WallTile {
     boolean n, e, s, w;
     n = e = s = w = false;
     BufferedImage[] img = Assets.WALL[0];
-    //checks to see if the neighvbouring tile is a wall
-    if(north != null && north.getName().equals("wall")) n = true;
-    if(east != null && east.getName().equals("wall")) e = true;
-    if(south != null && south.getName().equals("wall")) s = true;
-    if(west != null && west.getName().equals("wall")) w = true;
+    //checks to see if the neighvbouring tile is a wall or a door (walls link up to doors)
+    if(north != null && (north.getName().equals("wall") || north.getName().equals("door"))) n = true;
+    if(east != null && (east.getName().equals("wall") || east.getName().equals("door"))) e = true;
+    if(south != null && (south.getName().equals("wall") || south.getName().equals("door"))) s = true;
+    if(west != null && (west.getName().equals("wall") || west.getName().equals("door"))) w = true;
 
 
     //unsure if this is going to work as it is giving me warnings
     if(!n && e && !s && w) this.image = img[0];
-    else if(n && !e && s && !w) this.image = img[1];
-    else if(!n && e && !s && !w) this.image = img[2];
-    else if(!n && !e && !s && w) this.image = img[3];
-    else if(n && e && !s && !w) this.image = img[4];
-    else if(n && !e && !s && w) this.image = img[5];
-    else if(!n && e && s && !w) this.image = img[6];
-    else if(!n && !e && s && w) this.image = img[7];
-    else if(n && e && s && w) this.image = img[8];
-    else if(n && !e && s && w) this.image = img[9];
-    else if(n && e && !s && w) this.image = img[10];
-    else if(!n && e && s && w) this.image = img[11];
-    else this.image = img[12];
+    if(n && !e && s && !w) this.image = img[1];
+    if(!n && e && !s && !w) this.image = img[2];
+    if(!n && !e && !s && w) this.image = img[3];
+    if(n && e && !s && !w) this.image = img[4];
+    if(n && !e && !s && w) this.image = img[5];
+    if(!n && e && s && !w) this.image = img[6];
+    if(!n && !e && s && w) this.image = img[7];
+    if(n && e && s && w) this.image = img[8];
+    if(n && !e && s && w) this.image = img[9];
+    if(n && e && !s && w) this.image = img[10];
+    if(!n && e && s && w) this.image = img[11];
+    if(n && !e && s && w) this.image = img[12];
 
   }
 

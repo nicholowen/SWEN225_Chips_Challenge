@@ -47,11 +47,9 @@ public class GamePanel extends JPanel {
         switch(data[0]){
           case "wall":
             WallTile wt = new WallTile();
-            if(i == 0 && j == 0) wt.setWallType(null, cells[i+1][j], cells[i][j+1], null);
-            else if(i == 0 && j == cells[i].length) wt.setWallType(cells[i][j-1], cells[i+1][j], null, null);
-            else if(i == cells.length && j == 0) wt.setWallType(null, null, cells[i][j+1], cells[i-1][j]);
-            else if(i == cells.length && j == cells[i].length) wt.setWallType(cells[i-1][j], null, null, cells[i][j-1]);
-            else wt.setWallType(cells[i-1][j], cells[i+1][j], cells[i][j+1], cells[i][j-1]);
+            Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
+            wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
+            cells[i][j].setAnimationObject(wt);
           case "energy_ball":
             EnergyBall eb = new EnergyBall();
             cells[i][j].setAnimationObject(eb);
@@ -64,6 +62,29 @@ public class GamePanel extends JPanel {
         }
       }
     }
+  }
+
+  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y, int lengthX, int lengthY){
+    Cell[] neighbours  = new Cell[4];
+
+    if(x != 0){
+      neighbours[1] = cells[y][x-1];
+      if(x < lengthX-1)neighbours[3] = cells[y][x+1];
+      else neighbours[3] = null;
+    }else{
+      neighbours[1] = null;
+      neighbours[3] = cells[y][x+1];
+    }
+    if(y != 0){
+      neighbours[0] = cells[y-1][x];
+      if(y < lengthY-1) neighbours[2] = cells[y+1][x];
+      else neighbours[2] = null;
+    }else{
+      neighbours[0] = null;
+      neighbours[2] = cells[y+1][x];
+    }
+
+    return neighbours;
   }
 
   /**

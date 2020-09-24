@@ -8,10 +8,10 @@ public class Assets
 {
   private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
 
-  //Load gifs
-  public static BufferedImage[][] FLOOR
+  //Load gifs TODO: add floor tiles and door tiles/animations
+  //public static BufferedImage[][] FLOOR
   public static BufferedImage[][] WALL = loadGif(path, "walltiles.gif", 64, 64);
-  public static BufferedImage[][] DOOR
+  //public static BufferedImage[][] DOOR
   public static BufferedImage[][] ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
   public static BufferedImage[][] KEYCARD_G = loadGif(path, "key_green.gif", 64, 64);
 
