@@ -1,11 +1,11 @@
-package src.nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
+package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import src.nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class EnergyBall extends Sprite{
+public class EnergyBall extends Sprite {
 
   BufferedImage[] sprites;
 

@@ -1,7 +1,7 @@
-package src.nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
+package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Animation;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Animation;
 
 public abstract class Sprite {
 
