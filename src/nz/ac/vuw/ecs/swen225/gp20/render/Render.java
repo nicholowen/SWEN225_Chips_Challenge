@@ -1,7 +1,7 @@
-package src.nz.ac.vuw.ecs.swen225.gp20.render;
+package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
-import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +29,8 @@ public class Render {
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
     frame.pack();
+
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     gp.run();
