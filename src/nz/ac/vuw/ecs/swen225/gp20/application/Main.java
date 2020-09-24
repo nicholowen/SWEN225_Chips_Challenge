@@ -18,10 +18,28 @@ public class Main {
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
         maze = new Maze(persist);
         render = new Render();
-        rec = new Record(this);
-        repl = new Replay(this);
+        rec = new Record();
+        repl = new Replay();
 
     }
+
+    public void play() {
+    	while(true){
+    		if(gameEnded) break;
+    		long start = System.currentTimeMillis(); 
+    		while(true) {
+    			int delay = 33;
+    			if(System.currentTimeMillis() >= start + delay) break; // wait 33 milli
+    		}
+    	}
+    }
+
+    
+    /*===================================================
+    *	Action Listeners
+    * ===================================================*/
+}
+
 
 
 }
