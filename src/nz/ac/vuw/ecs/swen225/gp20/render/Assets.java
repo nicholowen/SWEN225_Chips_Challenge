@@ -1,4 +1,4 @@
-package src.nz.ac.vuw.ecs.swen225.gp20.render;
+package nz.ac.vuw.ecs.swen225.gp20.render;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

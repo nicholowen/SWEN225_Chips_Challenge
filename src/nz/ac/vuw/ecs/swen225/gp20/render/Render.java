@@ -6,6 +6,12 @@ import src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 import javax.swing.*;
 import java.awt.*;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+
+import javax.swing.*;
+import java.awt.*;
+
 public class Render {
 
   JFrame frame;

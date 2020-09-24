@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class EnergyBall extends Sprite {
+public class EnergyBall extends Sprite{
 
   BufferedImage[] sprites;
 
@@ -35,7 +35,8 @@ public class EnergyBall extends Sprite {
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    return animation.getImage();
+    BufferedImage image = animation.getImage();
+    return image;
   }
 
 

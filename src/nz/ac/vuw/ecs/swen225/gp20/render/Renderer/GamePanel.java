@@ -1,6 +1,6 @@
-package src.nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
+package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 
-import src.nz.ac.vuw.ecs.swen225.gp20.render.Sprite.EnergyBall;
+import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.EnergyBall;
 
 import javax.swing.*;
 import java.awt.*;
