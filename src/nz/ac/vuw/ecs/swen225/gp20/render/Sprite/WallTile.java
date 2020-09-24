@@ -5,13 +5,15 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class WallTile {
+public class WallTile extends Sprite{
 
   BufferedImage image;
 
   public WallTile(){
 
   }
+
+
 
   /**
    * Sets the image for this tile depending on neighbouring walls
@@ -24,11 +26,11 @@ public class WallTile {
     boolean n, e, s, w;
     n = e = s = w = false;
     BufferedImage[] img = Assets.WALL[0];
-    //checks to see if the neighvbouring tile is a wall or a door (walls link up to doors)
-    if(north != null && (north.getName().equals("wall") || north.getName().equals("door"))) n = true;
-    if(east != null && (east.getName().equals("wall") || east.getName().equals("door"))) e = true;
-    if(south != null && (south.getName().equals("wall") || south.getName().equals("door"))) s = true;
-    if(west != null && (west.getName().equals("wall") || west.getName().equals("door"))) w = true;
+    //checks to see if the neighbouring tile is a wall or a door (walls link up to doors)
+    if(north != null && (getInfo("name", north).equals("wall") || getInfo("name", north).equals("door"))) n = true;
+    if(east != null && (getInfo("name", east).equals("wall") || getInfo("name", east).equals("door"))) e = true;
+    if(south != null && (getInfo("name", south).equals("wall") || getInfo("name", south).equals("door"))) s = true;
+    if(west != null && (getInfo("name", west).equals("wall") || getInfo("name", west).equals("door"))) w = true;
 
 
     //unsure if this is going to work as it is giving me warnings
@@ -52,7 +54,10 @@ public class WallTile {
     return image;
   }
 
-
+  @Override
+  public void update() {
+    //unused
+  }
   /* Index positions for wall orientation images
    * 0 - front
    * 1 - top

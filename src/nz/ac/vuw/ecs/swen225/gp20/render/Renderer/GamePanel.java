@@ -91,13 +91,13 @@ public class GamePanel extends JPanel {
    * Gets a 9x9 grid around the player. If the player is too far to the left/right, or top/bottom of the maze boundary,
    * will get the furthest 9x9 grid possible.
    * @param cells All cells for entire maze
-   * @param player The players character - for obtaining current position
+   * @param actors The players character - for obtaining current position
    * @return 9x9 Cell array
    */
-  private Cell[][] getSurround(Cell[][] cells, Actor player) {
+  private Cell[][] getSurround(Cell[][] cells, Actor[] actors) {
     Cell[][] ret = new Cell[9][9];
     //using actors[0] as a place holder for player. I assume the player will be the first one on the list.
-    Point playerPos = new Point(actors[0].getX(), actors.getY());
+    Point playerPos = new Point(actors[0].getX(), actors[0].getY());
 
     int x;
     int y;
@@ -127,26 +127,44 @@ public class GamePanel extends JPanel {
    */
   public void update(Cell[][] cells, Actor[] actors) {
 
-    Cell[][] surround = getSurround(cells, actors[0]);
+    Cell[][] surround = getSurround(cells, actors);
 
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-        if(surround[i][j].getName().equals("floor")) {
-          FLOOR.add(surround[i][j]);
-        }else if(surround[i][j].getName().equals("wall")) {
-          WALL.add(surround[i][j]);
-        }else if(surround[i][j].getName().equals("door")) {
-          DOOR.add(surround[i][j]);
-          surround[i][j].getAnimationObject().update();
-        }else if(surround[i][j].getName().equals("energy")) {
-          ENERGY.add(surround[i][j]);
-          surround[i][j].getAnimationObject().update();
-        }else if(surround[i][j].getName().equals("key")){
-          KEYCARD.add(surround[i][j]);
-          surround[i][j].getAnimationObject().update();
+        switch (getInfo("name", surround[i][j])) {
+          case "floor":
+            FLOOR.add(surround[i][j]);
+            break;
+          case "wall":
+            WALL.add(surround[i][j]);
+            break;
+          case "door":
+            DOOR.add(surround[i][j]);
+            surround[i][j].getAnimationObject().update();
+            break;
+          case "energy":
+            ENERGY.add(surround[i][j]);
+            surround[i][j].getAnimationObject().update();
+            break;
+          case "key":
+            KEYCARD.add(surround[i][j]);
+            surround[i][j].getAnimationObject().update();
+            break;
         }
       }
     }
+  }
+
+  /**
+   * Gets meta data from cell
+   * @param identifier determines which part of the metadata to extract
+   * @param cell the cell with the meta data
+   * @return if identifier is "name" return the name of the cell, otherwise return the animation frame (for syncing)
+   */
+  private String getInfo(String identifier, Cell cell){
+    String[] metadata = cell.getRenderData().split(":");
+    if(identifier.equals("name")) return metadata[0];
+    else return metadata[1];
   }
 
 
