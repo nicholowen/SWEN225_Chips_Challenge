@@ -22,12 +22,12 @@ public class Persistence {
      * Reads a level from a file into an object
      *
      * @param level the level number
-     * @return a Maze object?
+     * @return a Level object
      * @throws FileNotFoundException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
     public Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
-        File file = getFile(level);
+        File file = getLevelFile(level);
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
         Level levelObj = gson.fromJson(reader, Level.class);
         levelObj.validate();
@@ -38,7 +38,7 @@ public class Persistence {
      * Alternative read method used for testing purposes.
      *
      * @param json well formed JSON string
-     * @return ?
+     * @return Level object
      * @throws JsonSyntaxException {@inheritDoc}
      */
     public Level read(String json) throws JsonSyntaxException, LevelFileException {
@@ -48,15 +48,28 @@ public class Persistence {
     }
 
     /**
-     * Gets a file object from the levels directory & checks that file exists.
+     * Helper method that checks if a file exists.
      */
-    private File getFile(int level) throws FileNotFoundException {
-        File file = new File("levels/level" + level + ".json");
+    private File checkFile(File file) throws FileNotFoundException {
         if (file.exists() && !file.isDirectory()) {
             return file;
         } else {
             throw new FileNotFoundException();
         }
+    }
+
+    /**
+     * Gets a file object from the levels directory & checks that file exists.
+     */
+    private File getLevelFile(int level) throws FileNotFoundException {
+        return checkFile(new File("levels/level" + level + ".json"));
+    }
+
+    /**
+     * Gets a file object from the save directory & checks that file exists.
+     */
+    private File getSaveFile(int save) throws FileNotFoundException {
+        return checkFile(new File("save/save" + save + ".json"));
     }
 
     /**
