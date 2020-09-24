@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.EnergyBall;
+import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.KeyCard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +13,7 @@ public class GamePanel extends JPanel {
   //  Assets assets = new Assets();
 
   EnergyBall eb;
+  KeyCard kcg;
 
   public GamePanel() {
     setPreferredSize(new Dimension(500, 500));
@@ -27,17 +30,30 @@ public class GamePanel extends JPanel {
   private void init() {
     BufferedImage image = new BufferedImage(500, 500, 1);
     eb = new EnergyBall(null);
+    kcg = new KeyCard(null);
     Graphics g = image.getGraphics();
 
   }
 
-  public void update(){
+  public void update(Cell[][] cells){
+
+    //get player position
+
+    //iterate through
+
+    for(int i = 0; i < cells.length; i++){
+      for(int j = 0; j < cells[i].length; j++){
+        //if it's a wall, draw
+      }
+    }
     /*TODO: Update all objects in game - iterate through the tiles around player.
             Update all doors (if closed, won't update, if open, updating it's key frame).
             Update all animated objects such as Balls, Keys etc.
             Update player depending on facing direction and if moving or not.
      */
+
     eb.update();
+    kcg.update();
 
     // TODO repaint();
   }
@@ -47,7 +63,8 @@ public class GamePanel extends JPanel {
    */
   public void run() {
     while(true) {
-      update();
+      Cell[][] cell = new Cell[0][0];
+      this.update(cell);
       repaint();
       long start = System.currentTimeMillis();
       while (true) {
@@ -68,6 +85,7 @@ public class GamePanel extends JPanel {
     // draw each set of images in turn
     // Tiles -> Doors -> Balls/Key/Items -> Player
     g.drawImage(eb.getImage(), 0, 0, this);
+    g.drawImage(kcg.getImage(), 64, 0, this);
 
   }
 
