@@ -4,13 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class Persistence {
@@ -28,12 +25,11 @@ public class Persistence {
      * @throws FileNotFoundException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
-    public Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
+    public Level read(int level) throws FileNotFoundException, JsonSyntaxException {
         File file = getFile(level);
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
 
-        Level levelObj = gson.fromJson(reader, Level.class);
-        return parseLevel(levelObj);
+        return gson.fromJson(reader, Level.class);
     }
 
     /**
@@ -43,61 +39,8 @@ public class Persistence {
      * @return ?
      * @throws JsonSyntaxException {@inheritDoc}
      */
-    public Level read(String json) throws JsonSyntaxException, LevelFileException {
-        Level levelObj = gson.fromJson(json, Level.class);
-        return parseLevel(levelObj);
-    }
-
-    private Level parseLevel(Level level) throws LevelFileException {
-        System.out.println(level);
-
-        String[][] board = new String[level.getWidth()][level.getHeight()];
-
-        for (Tile tile : level.getGrid()) {
-            int x = tile.getX();
-            int y = tile.getY();
-
-            if (tile.getName() == null) {
-                throw new LevelFileException("Name of tile cannot be null");
-            }
-
-            if (board[x][y] != null) {
-                throw new LevelFileException("Duplicate tile location in file");
-            }
-
-            board[tile.getX()][tile.getY()] = tile.getName();
-        }
-
-        if (containsNull(board)) {
-            throw new LevelFileException("Width and height of the board does not match grid size");
-        }
-
-        if (level.getCharacters() == null || level.getCharacters().size() == 0) {
-            throw new LevelFileException("Level contains no characters");
-        }
-
-        if (level.getCharacters().stream().noneMatch(x -> x.getName().equals("chap"))) {
-            throw new LevelFileException("Level must contain a chap");
-        }
-
-        return level;
-    }
-
-    /**
-     * Helper method that calls the recursive containsNull()
-     */
-    private boolean containsNull(String[][] board) {
-        return containsNull(board, 0);
-    }
-
-    /**
-     * Recursive method that checks if a board array contains any null values
-     */
-    private boolean containsNull(String[][] board, int row) {
-        if (row >= board.length) return false;
-        List<String> rowArray = Arrays.asList(board[row]);
-        if (rowArray.contains(null)) return true;
-        return containsNull(board, row + 1);
+    public Level read(String json) throws JsonSyntaxException {
+        return gson.fromJson(json, Level.class);
     }
 
     /**
@@ -116,8 +59,9 @@ public class Persistence {
         Persistence persist = new Persistence();
         try {
             Level level = persist.read(1);
-        } catch (FileNotFoundException | LevelFileException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException | JsonSyntaxException e) {
+            System.out.println("here1");
+            System.out.println(e.getClass());
         }
 
         String jsonString =
@@ -137,8 +81,9 @@ public class Persistence {
 
         try {
             Level level = persist.read(jsonString);
-        } catch (LevelFileException e) {
-            e.printStackTrace();
+        } catch (JsonSyntaxException e) {
+            System.out.println("here2");
+            System.out.println(e.getClass());
         }
     }
 }

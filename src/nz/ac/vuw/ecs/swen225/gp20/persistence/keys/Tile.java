@@ -18,7 +18,7 @@ public class Tile {
         return name;
     }
 
-    public String getColor() {
+    public String getColor(){
         return color;
     }
 
