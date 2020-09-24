@@ -18,8 +18,8 @@ public class Main {
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
         maze = new Maze(persist);
         render = new Render();
-        rec = new Record();
-        repl = new Replay();
+        rec = new Record(this);
+        repl = new Replay(this);
 
     }
 
