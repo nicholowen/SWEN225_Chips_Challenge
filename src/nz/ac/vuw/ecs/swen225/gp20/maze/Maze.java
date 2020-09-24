@@ -1,11 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
 public class Maze {
-	Cell[][] Board;
+	Cell[][] board;
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
@@ -13,6 +17,7 @@ public class Maze {
 	private boolean playerHasKey2;
 	
 	//Board logic
+	private Persistence loader;
 	private int boardHeight;
 	private int boardWidth;
 	
@@ -25,7 +30,7 @@ public class Maze {
 	 * Initializes a maze. The maze will not load a level until prompted.
 	 */
 	public Maze(Persistence persist) {
-		
+		loader=persist;
 	}
 	
 	
@@ -34,7 +39,32 @@ public class Maze {
 	 * @param levelToLoad
 	 */
 	public void loadMaze(int levelToLoad) {
-		
+		Level toLoad;
+		try {
+			toLoad=loader.read(levelToLoad);
+		} catch(IOException | LevelFileException e) {
+			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
+			return;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
+		}
+
+		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
+		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
+			board[t.getX()][t.getY()] = new Cell(t.getName());//TODO:Implement or scrap Colour
+		}//At this stage, all tiles are loaded (?)
+
+		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
+		for(Character c:toLoad.getCharacters()){
+			if(c.getName().equals("chap") || c.getName().equals("player")){//If it's the player //TODO Decide on player name, "player" or "chap"
+				player=new Actor(true, "player");//TODO safeguard that only one player can be loaded at once.
+			} else{
+				creatures.add(new Actor(false, c.getName()));
+			}
+
+		}
+
+
+
+
 	}
 	
 	

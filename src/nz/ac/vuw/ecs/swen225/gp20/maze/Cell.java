@@ -29,7 +29,7 @@ public class Cell {
 	 * Returns whether or not the cell is solid. A solid cell cannot be walked into/through.
 	 * @return
 	 */
-	public boolean getIsSold() {
+	public boolean getIsSolid() {
 		return isSolid;
 	}
 	
