@@ -3,6 +3,9 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.LevelFileException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Level {
@@ -50,6 +53,16 @@ public class Level {
             throw new LevelFileException("startY must be greater than 0 and less than height");
         }
 
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int finalX = x;
+                int finalY = y;
+                if (grid.stream().noneMatch(tile -> tile.getX() == finalX && tile.getY() == finalY)){
+                    throw new LevelFileException("Level must contain a tile at every coordinate");
+                }
+            }
+        }
+
         for (Tile tile : grid) {
             int x = tile.getX();
             int y = tile.getY();
@@ -74,12 +87,10 @@ public class Level {
                 throw new LevelFileException("Door must have a color");
             }
 
-            if (grid.stream().anyMatch(t -> t.getX() == x)) {
-                throw new LevelFileException("Duplicate x coordinate in level at x=" + x);
-            }
-
-            if (grid.stream().anyMatch(t -> t.getY() == y)) {
-                throw new LevelFileException("Duplicate y coordinate in level at y=" + x);
+            if (grid.stream()
+                    .filter(tile1 -> !tile1.equals(tile))
+                    .anyMatch(t -> t.getX() == x && t.getY() == y)) {
+                throw new LevelFileException("Duplicate tile coordinate in level at x=" + x + ", y=" + y);
             }
         }
     }

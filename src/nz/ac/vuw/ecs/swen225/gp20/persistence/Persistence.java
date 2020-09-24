@@ -25,11 +25,12 @@ public class Persistence {
      * @throws FileNotFoundException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
-    public Level read(int level) throws FileNotFoundException, JsonSyntaxException {
+    public Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
         File file = getFile(level);
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
-
-        return gson.fromJson(reader, Level.class);
+        Level levelObj = gson.fromJson(reader, Level.class);
+        levelObj.validate();
+        return levelObj;
     }
 
     /**
@@ -39,8 +40,10 @@ public class Persistence {
      * @return ?
      * @throws JsonSyntaxException {@inheritDoc}
      */
-    public Level read(String json) throws JsonSyntaxException {
-        return gson.fromJson(json, Level.class);
+    public Level read(String json) throws JsonSyntaxException, LevelFileException {
+        Level levelObj = gson.fromJson(json, Level.class);
+        levelObj.validate();
+        return levelObj;
     }
 
     /**
@@ -59,9 +62,10 @@ public class Persistence {
         Persistence persist = new Persistence();
         try {
             Level level = persist.read(1);
-        } catch (FileNotFoundException | JsonSyntaxException e) {
+        } catch (FileNotFoundException | JsonSyntaxException | LevelFileException e) {
             System.out.println("here1");
             System.out.println(e.getClass());
+            e.printStackTrace();
         }
 
         String jsonString =
@@ -69,9 +73,8 @@ public class Persistence {
                         " \"description\": \"Level 1\"," +
                         "  \"width\": 15," +
                         "  \"height\": 14," +
-                        "  \"characters\": [" +
-                        "      {\"x\": 7, \"y\": 6, \"name\": \"chap\"}" +
-                        "  ]," +
+                        "  \"startX\": 7," +
+                        "  \"startY\": 6," +
                         "  \"grid\": [" +
                         "      {\"x\": 0, \"y\": 0, \"name\": \"free\"}," +
                         "      {\"x\": 1, \"y\": 0, \"name\": \"free\"}," +
@@ -81,9 +84,10 @@ public class Persistence {
 
         try {
             Level level = persist.read(jsonString);
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | LevelFileException e) {
             System.out.println("here2");
             System.out.println(e.getClass());
+            e.printStackTrace();
         }
     }
 }
