@@ -66,13 +66,13 @@ public class Level {
 
             if (x < 0 || x >= width) {
                 throw new LevelFileException(
-                        "tile x coordinate must be greater than 0 and less than width (" + width + ")"
+                        "Tile x coordinate must be greater than 0 and less than width (" + width + ")"
                 );
             }
 
             if (y < 0 || y >= height) {
                 throw new LevelFileException(
-                        "tile y coordinate must be greater than 0 and less than height (" + height + ")"
+                        "Tile y coordinate must be greater than 0 and less than height (" + height + ")"
                 );
             }
 
