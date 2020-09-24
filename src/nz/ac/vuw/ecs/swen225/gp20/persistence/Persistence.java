@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +57,22 @@ public class Persistence {
         } else {
             throw new FileNotFoundException();
         }
+    }
+
+    /**
+     * Saves the recording to a json file
+     *
+     * @param record the recording to save
+     */
+    public void saveRecording(Record record) {
+
+    }
+
+    /**
+     * Reads a recorded game from a json file
+     */
+    public void readRecording() {
+
     }
 
     public static void main(String[] args) {
