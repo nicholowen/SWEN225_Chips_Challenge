@@ -1,9 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-// TODO somehow make the import classes nicer :(
-//      this is so hard to follow especially when
-//      saving it to the fileName string @ line 13
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 public class Record {
     private int count = -1;
@@ -19,8 +17,10 @@ public class Record {
     }
 
     // GETTERS AND SETTERS
+
     /**
      * Checks if the game is currently being recorded.
+     *
      * @return true if recording, false otherwise
      */
     public boolean currentlyRecording() {
@@ -29,6 +29,7 @@ public class Record {
 
     /**
      * If the game is not being recorded, set it to start recording.
+     *
      * @param recording start recording if true, false otherwise
      */
     public void setRecording(boolean recording) {
@@ -37,6 +38,7 @@ public class Record {
 
     /**
      * Returns count used for naming record file easily.
+     *
      * @return count
      */
     public int getCount() {
@@ -45,7 +47,8 @@ public class Record {
 
     /**
      * Sets the game's ending time.
-     * @param time
+     *
+     * @param time time of reaching the end of the game.
      */
     public void setGameEndTime(long time) {
         gameEndTime = time;
@@ -53,6 +56,7 @@ public class Record {
 
     /**
      * Gets the ending time of the recording.
+     *
      * @return gameEndTime
      */
     public long getGameEndTime() {
@@ -62,21 +66,26 @@ public class Record {
     /**
      * This method is called when the game is needed to be recorded.
      */
-    // TODO 1. find out what the path name is -- for saving the record 
-    //      2. need to set the recording method in game to true to start recording
+    // TODO 1. find out what the path name is -- for saving the record
+    //      2. need to set the recording method in game to true to start recording ======== DONE
     //      3. ???
     //      4. profit
     public void startRecording() {
         count++;
         setRecording(true);
-        fileName = ""; // in json format
+        fileName = ".json"; // in json format
+//        game.recordGame(true);
+        //TODO: from persistence, there should be a save game method to save the game
+        //      might look like -> Persistence.SaveGameState(game.getLevel(), filename)
     }
 
     /**
      * Call this method to stop recording the game.
      */
-    // TODO 1. set game's recording to false
     public void stopRecording() {
         setRecording(false);
+//        game.recordGame(false);
+        //TODO: from persistence, there should be an end game method to stop the recording
+        //      might look like -> Persistence.endRecording(game.getLevel(), filename)
     }
 }
