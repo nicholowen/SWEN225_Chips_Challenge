@@ -33,7 +33,7 @@ public class Main {
     /**
      * Tick based loop. The main game runs on this loop.
      */
-    public void play() {
+    public static void play() {
         maze.loadMaze(1);
         render.init(maze.getBoard());
     	while(true){
