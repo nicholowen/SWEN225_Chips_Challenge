@@ -23,7 +23,7 @@ public class Main {
         render = new Render();
         rec = new Record(this);
         repl = new Replay(this);
-
+		
 		render.getFrame().addKeyListener(this);
     }
 
