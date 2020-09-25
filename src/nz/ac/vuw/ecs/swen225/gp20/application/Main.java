@@ -15,8 +15,6 @@ public class Main {
     private static Replay repl;
     private static Persistence persist;
     private static boolean gameEnded;
-	private boolean recording = false;
-	private String direction = null;
 
 
     public static void main(String[] args){
@@ -25,8 +23,6 @@ public class Main {
         render = new Render();
         rec = new Record(this);
         repl = new Replay();
-		
-		render.getFrame().addKeyListener();
 		play();
     }
 
@@ -46,35 +42,4 @@ public class Main {
     		}
     	}
     }
-
-    
-    /*===================================================
-    *	Action Listeners
-    * ===================================================*/
-    public void keyPressed(KeyEvent e) {
-		char key = e.getKeyChar();
-		switch (key) {
-		case 'w':
-			this.direction = "up";
-		case 'a':
-			this.direction = "left";
-		case 's':
-			this.direction = "down";
-		case 'd':
-			this.direction = "right";
-		}
-	}
-
-	public void keyReleased(KeyEvent e) {
-		this.direction = null;
-	}
-
-	public void keyTyped(KeyEvent e) {
-		char key = e.getKeyChar();
-		switch (key) {
-		case 'r':
-			if(recording) recording = true;
-			else recording = false;
-		}
-	}
 }
