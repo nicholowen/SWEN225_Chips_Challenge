@@ -38,6 +38,7 @@ public class Main {
         render.init(maze.getBoard());
     	while(true){
     		if(gameEnded) break;
+            render.update(maze.getBoard(), maze.getActors());
     		long start = System.currentTimeMillis(); 
     		while(true) {
     			int delay = 33;
