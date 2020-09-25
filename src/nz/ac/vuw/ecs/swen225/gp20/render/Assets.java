@@ -11,7 +11,7 @@ public class Assets
   //Load gifs TODO: add floor tiles and door tiles/animations
   public static BufferedImage[][] FLOOR = loadGif(path, "floortile.gif", 64, 64);
   public static BufferedImage[][] WALL = loadGif(path, "walltiles.gif", 64, 64);
-  //public static BufferedImage[][] DOOR
+  public static BufferedImage[][] DOOR = loadGif(path, "door.gif", 64, 64);
   public static BufferedImage[][] ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
   public static BufferedImage[][] KEYCARD_G = loadGif(path, "key_green.gif", 64, 64);
 

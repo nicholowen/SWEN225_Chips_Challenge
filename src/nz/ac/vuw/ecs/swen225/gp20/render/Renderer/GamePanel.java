@@ -20,8 +20,18 @@ public class GamePanel extends JPanel {
   private ArrayList<Cell> ENERGY = new ArrayList<>();
   private ArrayList<Cell> KEYCARD = new ArrayList<>();
 
+  private Cell[][] floor = new Cell[9][9];
+  private Cell[][] wall = new Cell[9][9];
+  private Cell[][] door = new Cell[9][9];
+  private Cell[][] energy = new Cell[9][9];
+  private Cell[][] key = new Cell[9][9];
+
+  private Actor player;
+  private EnergyBall eg = new EnergyBall();
+  private KeyCard kc = new KeyCard();
+
   public GamePanel() {
-    setPreferredSize(new Dimension(500, 500));
+    setPreferredSize(new Dimension(585, 585));
     setBackground(Color.gray);
     setFocusable(true);
     requestFocus();
@@ -42,7 +52,7 @@ public class GamePanel extends JPanel {
   //as well as walls so they can have an associated wall orientation given.
   public void initAnimationObjects(Cell[][] cells){
     for(int i = 0; i < cells.length; i++){
-      for(int j = 0; j < cells[i].length; i++){
+      for(int j = 0; j < cells[i].length; j++){
         String[] data = cells[i][j].getRenderData().split(":");
         switch(data[0]){
           case "wall":
@@ -50,11 +60,11 @@ public class GamePanel extends JPanel {
             Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
             wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
             cells[i][j].setAnimationObject(wt);
-          case "energy_ball":
+          case "treasure":
             EnergyBall eb = new EnergyBall();
             cells[i][j].setAnimationObject(eb);
-          case "keycard_green":
-            KeyCard kc = new KeyCard()
+          case "key":
+            KeyCard kc = new KeyCard();
             cells[i][j].setAnimationObject(kc);
           case "door":
             Door door = new Door();
@@ -102,18 +112,24 @@ public class GamePanel extends JPanel {
     int x;
     int y;
 
-    if (playerPos.getX() <= 4) x = 0;
-    else if (playerPos.getX() >= cells.length - 4) x = cells.length - 9;
-    else x = (int) (playerPos.getX() - 4);
+    if (playerPos.getX() < 5) x = 0;
+    else if (playerPos.getX() > cells[0].length - 4) x = cells.length - 9;
+    else x = (int) (playerPos.getX() - 5); //dont understand why this is 5 (see next note)
 
-    if (playerPos.getY() <= 4) y = 0;
-    else if (playerPos.getY() >= cells[0].length - 4) y = cells[0].length - 9;
-    else y = (int) (playerPos.getX() - 4);
+    if (playerPos.getY() < 5) y = 0;
+    else if (playerPos.getY() > cells.length - 4) y = cells[0].length - 9;
+    else y = (int) (playerPos.getY() - 3); //and this is 3... :s
 
-    for (int i = x; i < x + 9; i++) {
-      for (int j = y; j < y + 9; j++) {
-        ret[i][j] = cells[i][j];
+    int tempx = x;
+    int tempy = y;
+
+    for (int i = 0; i < 9; i++) {
+      tempx = x;
+      for (int j = 0; j < 9; j++) {
+        ret[i][j] = cells[tempy][tempx];
+        tempx++;
       }
+      tempy++;
     }
     return ret;
   }
@@ -126,33 +142,36 @@ public class GamePanel extends JPanel {
    * @param actors for finding player position
    */
   public void update(Cell[][] cells, Actor[] actors) {
-
+    player = actors[0];
     Cell[][] surround = getSurround(cells, actors);
 
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
         switch (getInfo("name", surround[i][j])) {
-          case "floor":
-            FLOOR.add(surround[i][j]);
+          case "free":
+            floor[i][j] = surround[i][j];
             break;
           case "wall":
-            WALL.add(surround[i][j]);
+            wall[i][j] = surround[i][j];
             break;
           case "door":
-            DOOR.add(surround[i][j]);
+            door[i][j] = surround[i][j];
             surround[i][j].getAnimationObject().update();
             break;
-          case "energy":
-            ENERGY.add(surround[i][j]);
+          case "treasure":
+            energy[i][j] = surround[i][j];
+            floor[i][j] = surround[i][j];
             surround[i][j].getAnimationObject().update();
             break;
           case "key":
-            KEYCARD.add(surround[i][j]);
+            key[i][j] = surround[i][j];
+            floor[i][j] = surround[i][j];
             surround[i][j].getAnimationObject().update();
             break;
         }
       }
     }
+    repaint();
   }
 
   /**
@@ -172,11 +191,20 @@ public class GamePanel extends JPanel {
    * Clears all lists ready for next frame
    */
   private void clearLists(){
-    FLOOR.clear();
-    WALL.clear();
-    DOOR.clear();
-    ENERGY.clear();
-    KEYCARD.clear();
+    floor = new Cell[9][9];
+    wall = new Cell[9][9];
+    door = new Cell[9][9];
+    energy = new Cell[9][9];
+    key = new Cell[9][9];
+
+  }
+
+  public Point translate(Cell cell){
+    Point c = new Point(cell.getX(), cell.getY());
+    int x = -(player.getX() - 4);
+    int y = -(player.getY() - 4);
+    c.translate(x, y);
+    return c;
   }
 
 
@@ -188,20 +216,25 @@ public class GamePanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    for(Cell f : FLOOR){
-      g.drawImage(Assets.FLOOR, 64 * f.getX(), 64 * f.getY(), this);
-    }
-    for(Cell w : WALL){
-      g.drawImage(w.getAnimationObject().getImage(), 64 * w.getX(), 64 * w.getY(), this);
-    }
-    for(Cell d : DOOR){
-      g.drawImage(d.getAnimationObject().getImage(), 64 * d.getX(), 64 * d.getY(), this);
-    }
-    for(Cell e : ENERGY){
-      g.drawImage(e.getAnimationObject().getImage(), 64 * e.getX(), 64 * e.getY(), this);
-    }
-    for(Cell k : KEYCARD){
-      g.drawImage(k.getAnimationObject().getImage(), 64 * k.getX(), 64 * k.getY(), this);
+    //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
+    for(int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+        if (floor[i][j] != null) {
+          g.drawImage(Assets.FLOOR[0][0], 64 * i, 64 * j, this);
+        }
+        if (wall[i][j] != null) {
+          g.drawImage(Assets.WALL[0][0], 64 * i, 64 * j, this);
+        }
+        if (door[i][j] != null) {
+          g.drawImage(Assets.DOOR[0][0], 64 * i, 64 * j, this);
+        }
+        if (energy[i][j] != null) {
+          g.drawImage(eg.getImage(), 64 * i, 64 * j, this);
+        }
+        if (key[i][j] != null) {
+          g.drawImage(kc.getImage(), 64 * i, 64 * j, this);
+        }
+      }
     }
 
     //clears lists for next frame

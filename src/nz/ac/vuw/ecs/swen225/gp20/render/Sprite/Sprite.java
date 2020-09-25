@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 
 public abstract class Sprite {
 
-  // TODO: Introduce location information for the sprites, provided by the Maze module.
-  //       To position all objects on the screen.
 
   Animation animation;
 
@@ -18,7 +16,11 @@ public abstract class Sprite {
   }
 
   public abstract void update();
-  public abstract BufferedImage getImage();
+
+  public BufferedImage getImage() {
+    return animation.getImage();
+  }
+
 
   /**
    * Gets meta data from cell
