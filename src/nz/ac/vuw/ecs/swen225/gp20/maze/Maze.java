@@ -57,8 +57,8 @@ public class Maze {
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY());
 		
-		/*
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
+		/*
 		for(Character c:toLoad.getCharacters()){
 			if(c.getName().equals("chap") || c.getName().equals("player")){//If it's the player //TODO Decide on player name, "player" or "chap"
 				player=new Actor(true, "player");//TODO safeguard that only one player can be loaded at once.
