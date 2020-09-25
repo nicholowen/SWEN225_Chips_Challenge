@@ -15,12 +15,6 @@ import java.util.HashMap;
 public class GamePanel extends JPanel {
 
   //Lists to be populated with Cells surrounding player in 9x9 grid
-  private ArrayList<Cell> FLOOR = new ArrayList<>();
-  private ArrayList<Cell> WALL = new ArrayList<>();
-  private ArrayList<Cell> DOOR = new ArrayList<>();
-  private ArrayList<Cell> ENERGY = new ArrayList<>();
-  private ArrayList<Cell> KEYCARD = new ArrayList<>();
-
   private Cell[][] floor = new Cell[9][9];
   private Cell[][] wall = new Cell[9][9];
   private Cell[][] door = new Cell[9][9];

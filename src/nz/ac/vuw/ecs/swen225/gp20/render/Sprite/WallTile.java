@@ -37,19 +37,19 @@ public class WallTile extends Sprite{
 
 
     //unsure if this is going to work as it is giving me warnings
-    if(!n && e && !s && w) animation.setImage(img[0]);
-    if(n && !e && s && !w) animation.setImage(img[1]);
+    if(n && !e && s && !w) animation.setImage(img[0]);
+    if(!n && e && !s && w) animation.setImage(img[1]);
     if(!n && e && !s && !w) animation.setImage(img[2]);
     if(!n && !e && !s && w) animation.setImage(img[3]);
-    if(n && e && !s && !w) animation.setImage(img[4]);
-    if(n && !e && !s && w) animation.setImage(img[5]);
-    if(!n && e && s && !w) animation.setImage(img[6]);
+    if(n && e && !s && !w) animation.setImage(img[5]);
+    if(n && !e && !s && w) animation.setImage(img[10]);
+    if(!n && e && s && !w) animation.setImage(img[4]);
     if(!n && !e && s && w) animation.setImage(img[7]);
     if(n && e && s && w) animation.setImage(img[8]);
-    if(n && !e && s && w) animation.setImage(img[9]);
-    if(n && e && !s && w) animation.setImage(img[10]);
-    if(!n && e && s && w) animation.setImage(img[11]);
-    if(n && !e && s && w) animation.setImage(img[12]);
+    if(n && !e && s && w) animation.setImage(img[6]);
+    if(n && e && !s && w) animation.setImage(img[9]);
+    if(!n && e && s && w) animation.setImage(img[12]);
+    if(n && !e && s && w) animation.setImage(img[11]);
 
   }
 
