@@ -51,7 +51,7 @@ public class Maze {
 		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
 		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
-			board[t.getX()][t.getY()] = new Cell(t.getName());//TODO:Implement or scrap Colour
+			board[t.getX()][t.getY()] = new Cell(t.getName(), t.getX(), t.getY());//TODO:Implement or scrap Colour
 		}//At this stage, all tiles are loaded (?)
 		
 		//Load player
@@ -72,6 +72,25 @@ public class Maze {
 
 
 	}
+	
+	public Cell[][] getBoard(){
+		return board;
+	}
+	
+	/**
+	 * Returns all of the actors on the board, including the player.
+	 * @return
+	 */
+	public Actor[] getActors() {
+		Actor[] toReturn = new Actor[creatures.size()+1];//All of the creatures, plus the player
+		for(int i=0; i<creatures.size(); i++) {
+			toReturn[i]=creatures.get(i);
+		}
+		toReturn[creatures.size()]=player;
+		return toReturn;
+	}
+	
+	
 	
 	
 	/**
