@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.event.KeyEvent;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
@@ -12,25 +14,28 @@ public class Main {
     private static Record rec;
     private static Replay repl;
     private static Persistence persist;
-    private boolean gameEnded;
+    private static boolean gameEnded;
 	private boolean recording = false;
 	private String direction = null;
 
 
-    public void main(String[] args){
+    public static void main(String[] args){
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
         maze = new Maze(persist);
         render = new Render();
         rec = new Record(this);
-        repl = new Replay(this);
+        repl = new Replay();
 		
-		render.getFrame().addKeyListener(this);
+		render.getFrame().addKeyListener();
+		play();
     }
 
     /**
      * Tick based loop. The main game runs on this loop.
      */
-    public void play() {
+    public static void play() {
+        maze.loadMaze(1);
+        render.init(maze.getBoard());
     	while(true){
     		if(gameEnded) break;
     		long start = System.currentTimeMillis(); 
@@ -45,8 +50,7 @@ public class Main {
     /*===================================================
     *	Action Listeners
     * ===================================================*/
-    @Override
-	public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
 		char key = e.getKeyChar();
 		switch (key) {
 		case 'w':
@@ -58,15 +62,12 @@ public class Main {
 		case 'd':
 			this.direction = "right";
 		}
-
 	}
 
-	@Override
 	public void keyReleased(KeyEvent e) {
 		this.direction = null;
 	}
 
-	@Override
 	public void keyTyped(KeyEvent e) {
 		char key = e.getKeyChar();
 		switch (key) {
