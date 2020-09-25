@@ -35,6 +35,6 @@ public class KeyCard extends Sprite{
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    return animation.getImage();
+    return animation.getFrame();
   }
 }

@@ -35,7 +35,7 @@ public class EnergyBall extends Sprite{
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    BufferedImage image = animation.getImage();
+    BufferedImage image = animation.getFrame();
     return image;
   }
 

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 public class Animation {
 
   BufferedImage[] frames;
+  BufferedImage image;
   public int delay;
   public int currentFrame;
   public int numFrames;
@@ -21,6 +22,9 @@ public class Animation {
     numFrames = frames.length;
   }
 
+  public void setImage(BufferedImage image){
+    this.image = image;
+  }
   /**
    * Sets the delay for the frame.
    * @param delay how many ticks per animation frame
@@ -48,7 +52,8 @@ public class Animation {
    * Retrieves the image of the current frame
    * @return Current frame of the animated object.
    */
-  public BufferedImage getImage(){
+  public BufferedImage getFrame(){
     return frames[currentFrame];
   }
+  public BufferedImage getImage() { return image; }
 }

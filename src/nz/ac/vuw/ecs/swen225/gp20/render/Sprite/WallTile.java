@@ -8,12 +8,15 @@ import java.awt.image.BufferedImage;
 public class WallTile extends Sprite{
 
   BufferedImage image;
+  BufferedImage[] sprites;
 
   public WallTile(){
 
+    super();
+    sprites = Assets.WALL[0];
+    animation.setDelay(-1);
+
   }
-
-
 
   /**
    * Sets the image for this tile depending on neighbouring walls
@@ -34,30 +37,31 @@ public class WallTile extends Sprite{
 
 
     //unsure if this is going to work as it is giving me warnings
-    if(!n && e && !s && w) this.image = img[0];
-    if(n && !e && s && !w) this.image = img[1];
-    if(!n && e && !s && !w) this.image = img[2];
-    if(!n && !e && !s && w) this.image = img[3];
-    if(n && e && !s && !w) this.image = img[4];
-    if(n && !e && !s && w) this.image = img[5];
-    if(!n && e && s && !w) this.image = img[6];
-    if(!n && !e && s && w) this.image = img[7];
-    if(n && e && s && w) this.image = img[8];
-    if(n && !e && s && w) this.image = img[9];
-    if(n && e && !s && w) this.image = img[10];
-    if(!n && e && s && w) this.image = img[11];
-    if(n && !e && s && w) this.image = img[12];
+    if(!n && e && !s && w) animation.setImage(img[0]);
+    if(n && !e && s && !w) animation.setImage(img[1]);
+    if(!n && e && !s && !w) animation.setImage(img[2]);
+    if(!n && !e && !s && w) animation.setImage(img[3]);
+    if(n && e && !s && !w) animation.setImage(img[4]);
+    if(n && !e && !s && w) animation.setImage(img[5]);
+    if(!n && e && s && !w) animation.setImage(img[6]);
+    if(!n && !e && s && w) animation.setImage(img[7]);
+    if(n && e && s && w) animation.setImage(img[8]);
+    if(n && !e && s && w) animation.setImage(img[9]);
+    if(n && e && !s && w) animation.setImage(img[10]);
+    if(!n && e && s && w) animation.setImage(img[11]);
+    if(n && !e && s && w) animation.setImage(img[12]);
 
   }
 
   public BufferedImage getImage(){
+    BufferedImage image = animation.getImage();
     return image;
   }
 
-  @Override
-  public void update() {
-    //unused
-  }
+//  @Override
+//  public void update() {
+//    //unused
+//  }
   /* Index positions for wall orientation images
    * 0 - front
    * 1 - top

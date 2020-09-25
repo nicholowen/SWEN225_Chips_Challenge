@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GamePanel extends JPanel {
 
@@ -25,6 +26,11 @@ public class GamePanel extends JPanel {
   private Cell[][] door = new Cell[9][9];
   private Cell[][] energy = new Cell[9][9];
   private Cell[][] key = new Cell[9][9];
+
+  private HashMap<Cell, WallTile> wallObjects = new HashMap<>();
+  private HashMap<Cell, Door> doorObjects = new HashMap<>();
+  private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
+  private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
   private Actor player;
   private EnergyBall eg = new EnergyBall();
@@ -59,16 +65,16 @@ public class GamePanel extends JPanel {
             WallTile wt = new WallTile();
             Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
             wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
-            cells[i][j].setAnimationObject(wt);
+            wallObjects.put(cells[i][j], wt);
           case "treasure":
             EnergyBall eb = new EnergyBall();
-            cells[i][j].setAnimationObject(eb);
+            energyObjects.put(cells[i][j], eb);
           case "key":
             KeyCard kc = new KeyCard();
-            cells[i][j].setAnimationObject(kc);
+            keyObjects.put(cells[i][j], kc);
           case "door":
             Door door = new Door();
-            cells[i][j].setAnimationObject(door);
+            doorObjects.put(cells[i][j], door);
         }
       }
     }
@@ -156,17 +162,21 @@ public class GamePanel extends JPanel {
             break;
           case "door":
             door[i][j] = surround[i][j];
-            surround[i][j].getAnimationObject().update();
+//            (Door)surround[i][j].getAnimationObject();
             break;
           case "treasure":
             energy[i][j] = surround[i][j];
             floor[i][j] = surround[i][j];
-            surround[i][j].getAnimationObject().update();
+            if(energyObjects.containsKey(surround[i][j])){
+              energyObjects.get(surround[i][j]).update();
+            }
             break;
           case "key":
             key[i][j] = surround[i][j];
             floor[i][j] = surround[i][j];
-            surround[i][j].getAnimationObject().update();
+            if(keyObjects.containsKey(surround[i][j])){
+              keyObjects.get(surround[i][j]).update();
+            }
             break;
         }
       }
@@ -223,16 +233,16 @@ public class GamePanel extends JPanel {
           g.drawImage(Assets.FLOOR[0][0], 64 * i, 64 * j, this);
         }
         if (wall[i][j] != null) {
-          g.drawImage(Assets.WALL[0][0], 64 * i, 64 * j, this);
+          g.drawImage(wallObjects.get(wall[i][j]).getImage(), 64 * i, 64 * j, this);
         }
         if (door[i][j] != null) {
           g.drawImage(Assets.DOOR[0][0], 64 * i, 64 * j, this);
         }
         if (energy[i][j] != null) {
-          g.drawImage(eg.getImage(), 64 * i, 64 * j, this);
+          g.drawImage(energyObjects.get(energy[i][j]).getImage(), 64 * i, 64 * j, this);
         }
         if (key[i][j] != null) {
-          g.drawImage(kc.getImage(), 64 * i, 64 * j, this);
+          g.drawImage(keyObjects.get(key[i][j]).getImage(), 64 * i, 64 * j, this);
         }
       }
     }

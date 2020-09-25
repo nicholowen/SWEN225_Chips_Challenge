@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Animation;
 
 import java.awt.image.BufferedImage;
 
-public abstract class Sprite {
+public class Sprite {
 
 
   Animation animation;
@@ -15,11 +15,9 @@ public abstract class Sprite {
     animation = new Animation();
   }
 
-  public abstract void update();
-
-  public BufferedImage getImage() {
-    return animation.getImage();
-  }
+  //public abstract void update();
+  //public abstract BufferedImage getImage();
+//  public void update(){}
 
 
   /**
