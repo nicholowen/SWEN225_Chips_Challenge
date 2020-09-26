@@ -12,26 +12,12 @@ public class KeyListeners implements KeyListener{
 	private String direction = null;
 	
 	public KeyListeners(Render render) {
-		render.getFrame().addKeyListener(this);  
+        render.getGp().addKeyListener(this); 
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		char key = e.getKeyChar();
-		switch (key) {
-		case 'w':
-			this.direction = "up";
-			System.out.println(direction);
-		case 'a':
-			this.direction = "left";
-			System.out.println(direction);
-		case 's':
-			this.direction = "down";
-			System.out.println(direction);
-		case 'd':
-			this.direction = "right";
-			System.out.println(direction);
-		}
+		// Unused 
 	}
 
 	@Override
@@ -41,9 +27,25 @@ public class KeyListeners implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		char key = e.getKeyChar();
-		switch (key) {
-		case 'r':
+	    char key = e.getKeyChar();
+        switch (key) {
+        if(key == 'w') {
+            this.direction = "up";
+            System.out.println(direction);
+        }
+        else if(key == 'a') {
+            this.direction = "left";
+            System.out.println(direction);
+        }
+        else if(key == 's') {
+            this.direction = "down";
+            System.out.println(direction);
+        }
+        else if(key == 'd') {
+            this.direction = "right";
+            System.out.println(direction);
+        }
+        else if(key == 'r') {
 			if(recording) recording = true;
 			else recording = false;
 		}
