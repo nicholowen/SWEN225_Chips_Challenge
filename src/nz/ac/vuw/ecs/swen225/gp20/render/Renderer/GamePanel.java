@@ -21,6 +21,9 @@ public class GamePanel extends JPanel {
   private Cell[][] energy = new Cell[9][9];
   private Cell[][] key = new Cell[9][9];
 
+  private Cell[][] map;
+  private Object[][] sprites;
+
   private HashMap<Cell, WallTile> wallObjects = new HashMap<>();
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
@@ -49,6 +52,7 @@ public class GamePanel extends JPanel {
   //this assigns animation objects to all objects that can animate so they can be updated
   //as well as walls so they can have an associated wall orientation given.
   public void initAnimationObjects(Cell[][] cells){
+    this.map = cells;
     for(int i = 0; i < cells.length; i++){
       for(int j = 0; j < cells[i].length; j++){
         String[] data = cells[i][j].getRenderData().split(":");
@@ -57,15 +61,19 @@ public class GamePanel extends JPanel {
             WallTile wt = new WallTile();
             Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
             wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
+            sprites[i][j] = wt;
             wallObjects.put(cells[i][j], wt);
           case "treasure":
             EnergyBall eb = new EnergyBall();
+            sprites[i][j] = eb;
             energyObjects.put(cells[i][j], eb);
           case "key":
             KeyCard kc = new KeyCard();
+            sprites[i][j] = kc;
             keyObjects.put(cells[i][j], kc);
           case "door":
             Door door = new Door();
+            sprites[i][j] = door;
             doorObjects.put(cells[i][j], door);
         }
       }
@@ -102,10 +110,10 @@ public class GamePanel extends JPanel {
    * @param actors The players character - for obtaining current position
    * @return 9x9 Cell array
    */
-  private Cell[][] getSurround(Cell[][] cells, Actor[] actors) {
+  private Cell[][] getSurround(Cell[][] cells, Actor player) {
     Cell[][] ret = new Cell[9][9];
     //using actors[0] as a place holder for player. I assume the player will be the first one on the list.
-    Point playerPos = new Point(actors[0].getX(), actors[0].getY());
+    Point playerPos = new Point(player.getX(), player.getY());
 
     int x;
     int y;
@@ -141,7 +149,7 @@ public class GamePanel extends JPanel {
    */
   public void update(Cell[][] cells, Actor[] actors) {
     player = actors[0];
-    Cell[][] surround = getSurround(cells, actors);
+    Cell[][] surround = getSurround(cells, player);
 
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
@@ -193,12 +201,94 @@ public class GamePanel extends JPanel {
    * Clears all lists ready for next frame
    */
   private void clearLists(){
-    floor = new Cell[9][9];
-    wall = new Cell[9][9];
-    door = new Cell[9][9];
+    floor  = new Cell[9][9];
+    wall   = new Cell[9][9];
+    door   = new Cell[9][9];
     energy = new Cell[9][9];
-    key = new Cell[9][9];
+    key    = new Cell[9][9];
+  }
 
+  int offset = 0;
+
+  private BufferedImage[] getTransitionImages(String dir){
+    BufferedImage[] transitionImages = new BufferedImage[9];
+
+    Cell[][] surround = getSurround(map, player);
+
+    int x = 0;
+    int y = 0;
+    int i = 0;
+    int k = 0;
+    int l = 0;
+
+    for(int j = 0; j < 9; j++){
+      BufferedImage image = null;
+      switch (dir) {
+        case "north":
+          offset += -4;
+          i = 0;
+          k = 0;
+          l = 64;
+          x = surround[i][j].getX();
+          y = surround[i][j].getY();
+          break;
+        case "east":
+          offset += 4;
+          i = surround[0].length;
+          k = 0;
+          l = 0;
+          x = surround[j][i].getX();
+          y = surround[j][i].getY();
+          break;
+        case "south":
+          offset += 4;
+          i = surround.length;
+          k = 0;
+          l = 0;
+          x = surround[i][j].getX();
+          y = surround[i][j].getY();
+          break;
+        case "west":
+          offset += -4;
+          i = 0;
+          k = 60;
+          l = 0;
+          x = surround[j][i].getX();
+          y = surround[j][i].getY();
+          break;
+      }
+
+      Object sprite = sprites[y-1][x-1];
+      if(sprite instanceof WallTile){
+        WallTile wt = (WallTile)sprite;
+        image = wt.getImage();
+      }else if(sprite instanceof Door) {
+        Door door = (Door) sprite;
+        image = door.getImage();
+      }else if(sprite instanceof KeyCard) {
+        KeyCard key = (KeyCard) sprite;
+        image = joinImage(key.getImage());
+      }else if(sprite instanceof EnergyBall) {
+        EnergyBall eb = (EnergyBall) sprite;
+        image = joinImage(eb.getImage());
+      }else{
+        image = Assets.FLOOR[0][0];
+      }
+      if(image != null) {
+        transitionImages[j] = image.getSubimage(k, l + offset, image.getWidth(), image.getHeight());
+      }
+    }
+    return transitionImages;
+  }
+
+  //UNTESTED - joins two images together - so the energy and key can be drawn on top of the floors.
+  private BufferedImage joinImage(BufferedImage image){
+    BufferedImage target = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = (Graphics2D) target.getGraphics();
+    g2d.drawImage(image, 0, 0, null);
+    g2d.drawImage(Assets.FLOOR[0][0], 0, 0, null);
+    g2d.dispose();
+    return target;
   }
 
 
@@ -210,24 +300,52 @@ public class GamePanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
+    int x = 0;
+    int y = 0;
+
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
+        if(player.getIsMoving()) {
+          String playerDir = player.getDirection();
+          BufferedImage[] transition = getTransitionImages(playerDir);
+          //if player is moving, render the screen
+          switch (playerDir) {
+            case "north":
+              y += -4;
+              g.drawImage(transition[j], 64 * j, 0, this);
+              break;
+            case "east":
+              x += 4;
+              g.drawImage(transition[i], 0, 64 * i, this);
+              break;
+            case "south":
+              y += -4;
+              g.drawImage((transition[j]), 64 * j, 576 + y, null);
+              break;
+            case "west":
+              x += -4;
+              g.drawImage(transition[i], 576 + x, 64 * j, null);
+              break;
+          }
+        }
+
         if (floor[i][j] != null) {
-          g.drawImage(Assets.FLOOR[0][0], 64 * i, 64 * j, this);
+          g.drawImage(Assets.FLOOR[0][0], (64 * i) + y, x * j, this);
         }
         if (wall[i][j] != null) {
-          g.drawImage(wallObjects.get(wall[i][j]).getImage(), 64 * i, 64 * j, this);
+          g.drawImage(wallObjects.get(wall[i][j]).getImage(), y * i, x * j, this);
         }
         if (door[i][j] != null) {
-          g.drawImage(Assets.DOOR[0][0], 64 * i, 64 * j, this);
+          g.drawImage(Assets.DOOR[0][0], y * i, x * j, this);
         }
         if (energy[i][j] != null) {
-          g.drawImage(energyObjects.get(energy[i][j]).getImage(), 64 * i, 64 * j, this);
+          g.drawImage(energyObjects.get(energy[i][j]).getImage(), y * i, x * j, this);
         }
         if (key[i][j] != null) {
-          g.drawImage(keyObjects.get(key[i][j]).getImage(), 64 * i, 64 * j, this);
+          g.drawImage(keyObjects.get(key[i][j]).getImage(), y * i, x * j, this);
         }
+
       }
     }
 

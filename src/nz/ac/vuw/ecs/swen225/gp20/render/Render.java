@@ -19,6 +19,7 @@ public class Render {
 
   public Render(){
     frame = new JFrame();
+    frame.setResizable(false);
     frame.setMinimumSize(new Dimension(800, 500));
     frame.setLayout(new GridBagLayout());
     gp = new GamePanel();
@@ -45,7 +46,7 @@ public class Render {
     gp.initAnimationObjects(cells);
   }
 
-  public JPanel getPanel(){
+  public JPanel getGp(){
     return gp;
   }
 
