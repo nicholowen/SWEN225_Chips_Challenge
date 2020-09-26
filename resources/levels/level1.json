@@ -1,9 +1,12 @@
 {
   "description": "Level 1",
-  "width": 15,
-  "height": 14,
-  "startX": 7,
-  "startY": 6,
+  "start": {"x": 7, "y": 6},
+  "properties": {
+    "chips": 9,
+    "help": "Get to the exit!",
+    "width": 15,
+    "height": 14
+  },
   "grid": [
       {"x": 0, "y": 0, "name": "free"},
       {"x": 1, "y": 0, "name": "free"},
