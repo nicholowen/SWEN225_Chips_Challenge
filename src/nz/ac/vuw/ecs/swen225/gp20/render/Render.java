@@ -7,6 +7,8 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Render {
 
@@ -43,8 +45,8 @@ public class Render {
     gp.initAnimationObjects(cells);
   }
 
-  public JFrame getFrame(){
-    return frame;
+  public JPanel getPanel(){
+    return gp;
   }
 
 
