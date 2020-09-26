@@ -17,12 +17,13 @@ public class ScorePanel extends JPanel {
   File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
   Canvas canvas;
   private BufferedImage image;
+  private Image background;
   private static Graphics g;
   boolean thing = false;
 
   public ScorePanel() {
-    setPreferredSize(new Dimension(300, 500));
-    setBackground(Color.gray);
+    setPreferredSize(new Dimension(300, 576));
+    this.background = loadBackground();
     setFocusable(true);
     requestFocus();
 
@@ -40,12 +41,23 @@ public class ScorePanel extends JPanel {
     g = image.getGraphics();
   }
 
+  private BufferedImage loadBackground(){
+    File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
+    try{
+      BufferedImage bf = ImageIO.read(new File(path, "scorepanelbackground.gif"));
+      return bf;
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     if (image != null) {
-      g.drawImage(image, 0, 0, this);
+      g.drawImage(background, 0, 0, this);
     }
 
   }

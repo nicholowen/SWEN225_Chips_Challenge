@@ -27,11 +27,9 @@ public class GamePanel extends JPanel {
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
   private Actor player;
-  private EnergyBall eg = new EnergyBall();
-  private KeyCard kc = new KeyCard();
 
   public GamePanel() {
-    setPreferredSize(new Dimension(585, 585));
+    setPreferredSize(new Dimension(576, 576));
     setBackground(Color.gray);
     setFocusable(true);
     requestFocus();
@@ -201,14 +199,6 @@ public class GamePanel extends JPanel {
     energy = new Cell[9][9];
     key = new Cell[9][9];
 
-  }
-
-  public Point translate(Cell cell){
-    Point c = new Point(cell.getX(), cell.getY());
-    int x = -(player.getX() - 4);
-    int y = -(player.getY() - 4);
-    c.translate(x, y);
-    return c;
   }
 
 

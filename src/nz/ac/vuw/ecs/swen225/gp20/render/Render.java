@@ -18,10 +18,13 @@ public class Render {
   public Render(){
     frame = new JFrame();
     frame.setMinimumSize(new Dimension(800, 500));
-    frame.setLayout(new FlowLayout());
+    frame.setLayout(new GridBagLayout());
     gp = new GamePanel();
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.gridx = 0;
     frame.add(gp);
     frame.add(new ScorePanel());
+    gbc.gridx = 1;
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
     frame.pack();

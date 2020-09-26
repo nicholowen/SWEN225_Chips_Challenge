@@ -12,7 +12,7 @@ public class KeyListeners implements KeyListener{
 	private String direction = null;
 	
 	public KeyListeners(Render render) {
-		render.getFrame().addKeyListener(this);
+		render.getFrame().addKeyListener(this);  
 	}
 
 	@Override
@@ -21,12 +21,16 @@ public class KeyListeners implements KeyListener{
 		switch (key) {
 		case 'w':
 			this.direction = "up";
+			System.out.println(direction);
 		case 'a':
 			this.direction = "left";
+			System.out.println(direction);
 		case 's':
 			this.direction = "down";
+			System.out.println(direction);
 		case 'd':
 			this.direction = "right";
+			System.out.println(direction);
 		}
 	}
 
