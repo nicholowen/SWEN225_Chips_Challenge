@@ -65,6 +65,10 @@ public class Level {
         return start.y;
     }
 
+    public String getHelp() {
+        return properties.help;
+    }
+
     public void validate() throws LevelFileException {
         if (description == null || description.equals("")) {
             throw new LevelFileException("Level must contain description");
