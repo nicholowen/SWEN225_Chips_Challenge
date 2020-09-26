@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -96,4 +97,27 @@ public class RecordAndPlay {
             }
         }
     }
+
+    public static void loadRecording(String saveFileName) {
+        JsonObject obj = null;
+    }
+
+    /**
+     * Gets the moves of the actors
+     *
+     * @return moves
+     */
+    public static ArrayList<Actor.Direction> getMoves() {
+        return moves;
+    }
+
+    /**
+     * Gets the actors in the game
+     *
+     * @return actors
+     */
+    public static ArrayList<Integer> getActors () {
+        return actors;
+    }
+
 }
