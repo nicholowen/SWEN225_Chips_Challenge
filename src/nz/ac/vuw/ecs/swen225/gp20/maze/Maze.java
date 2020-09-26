@@ -73,6 +73,14 @@ public class Maze {
 
 	}
 	
+	/**
+	   * Enum of directions to go from a cell to cell. Mainly used by other classes.
+	   */
+	  public enum Direction {
+	    Up, Down, Left, Right;
+	  }
+	  
+	
 	public Cell[][] getBoard(){
 		return board;
 	}
@@ -98,13 +106,14 @@ public class Maze {
 	 * Should be run repeatedly from Application.
 	 * @param movementDirection
 	 */
-	public void tick(String movementDirection) {
+	public RenderTuple tick(String movementDirection) {
 		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
 		player.move(movementDirection);
 		//TODO:Update all NPCs+Player if moving
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		//TODO:Update all animated tiles (?) Maybe do this when Render requests tiles to draw.	
-		//TODO:
+		//TODO:Set up a RenderTuple and return it.
+		return null;//TEMP
 	}
 	
 	/**
