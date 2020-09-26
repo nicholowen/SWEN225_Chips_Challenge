@@ -56,10 +56,8 @@ public class RecordAndPlay {
 
     /**
      * Method to save the recording of the game.
-     *
-     * @param game to get the state of the game
      */
-    public static void saveRecording(Main game) {
+    public static void saveRecording() {
         if (isRecording) {
             JsonArrayBuilder array = Json.createArrayBuilder();
 
