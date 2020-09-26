@@ -112,8 +112,7 @@ public class Maze {
 		//TODO:Update all NPCs+Player if moving
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		//TODO:Update all animated tiles (?) Maybe do this when Render requests tiles to draw.	
-		//TODO:Set up a RenderTuple and return it.
-		return null;//TEMP
+		return new RenderTuple(getActors(), getBoard());//TEMP
 	}
 	
 	/**
