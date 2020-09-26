@@ -1,19 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.event.KeyEvent;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 public class Main {
     private static Maze maze;//These are only static for now, cna change if it proves to be an issue.
     private static Render render;//That said, these are never going to be deleted and replaced, so static may be better.
-    private static Record rec;
-    private static Replay repl;
+    private static RecordAndPlay rnp;
     private static Persistence persist;
+    private static KeyListeners keyListeners;
     private static boolean gameEnded;
 
 
@@ -21,8 +18,8 @@ public class Main {
         persist = new Persistence();//Persistance may need to be a parameter for Maze/Record so set it up first! Change if necessary.
         maze = new Maze(persist);
         render = new Render();
-        rec = new Record();
-        repl = new Replay();
+        rnp = new RecordAndPlay();
+        keyListeners = new KeyListeners(render);
 		play();
     }
 
@@ -35,6 +32,7 @@ public class Main {
     	while(true){
     		if(gameEnded) break;
             render.update(maze.getBoard(), maze.getActors());
+            maze.tick(keyListeners.getDirection());
     		long start = System.currentTimeMillis(); 
     		while(true) {
     			int delay = 33;
