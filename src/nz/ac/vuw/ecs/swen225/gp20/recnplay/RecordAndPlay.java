@@ -1,23 +1,23 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.json.*;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
-
-    //todo: figure out which class to talk to in order to save directions (i think best of from maze itself, could have a tile class)
-    private static ArrayList<Actor.Direction> moves = new ArrayList<>(); // i'll actually need this from maze because it's just logic, and then it gets deserialized by persistence into JSON
-
+    private static ArrayList<String> moves = new ArrayList<>();
     private static long delayTime = 123; // arbitrary number
 
     private static String saveFile;
+    private static String gameState;
     private static boolean isRecording;
     private static boolean isRunning;
     private static long startTime;
@@ -32,7 +32,7 @@ public class RecordAndPlay {
             for (int i = 0; i < actors.size(); ++i) {
                 JsonObjectBuilder builder = Json.createObjectBuilder()
                         .add("actor", actors.get(i))
-                        .add("moves", moves.get(i).toString());
+                        .add("moves", moves.get(i));
                 array.add(builder.build());
                 /* example output of array
                    [
@@ -59,6 +59,7 @@ public class RecordAndPlay {
                 } catch (IOException e) {
                     throw new Error("Saving failed for movements");
                 }
+
             } catch (IOException e) {
                 throw new Error("Saving failed for movements");
             }
@@ -90,19 +91,19 @@ public class RecordAndPlay {
 
                 switch (dir) {
                     case "up":
-                        moves.add(Actor.Direction.Up);
+                        moves.add("up");
                         break;
 
                     case "down":
-                        moves.add(Actor.Direction.Down);
+                        moves.add("down");
                         break;
 
                     case "left":
-                        moves.add(Actor.Direction.Left);
+                        moves.add("left");
                         break;
 
                     case "right":
-                        moves.add(Actor.Direction.Right);
+                        moves.add("right");
                         break;
 
                     default:
@@ -153,7 +154,7 @@ public class RecordAndPlay {
      *
      * @return moves
      */
-    public static ArrayList<Actor.Direction> getMoves() {
+    public static ArrayList<String> getMoves() {
         return moves;
     }
 
@@ -184,15 +185,36 @@ public class RecordAndPlay {
         return isRunning;
     }
 
+    public static boolean getIsBeingRecorded() {
+        return isRecording;
+    }
+
     /**
      * Adds to the history of actions.
      *
      * @param dir direction of movement
      */
-    public static void addMovement(Actor.Direction dir) {
+    public static void addMovement(String dir) {
         if (isRecording) {
             moves.add(dir);
             actors.add(0); // add the player
         }
     }
 }
+
+/*
+        Record and Replay Games
+        The record and replay module adds functionality to record game play,
+        and stores the recorded games in a file (in JSON format).
+        It also adds the dual functionality to load a recorded game, and to replay it.
+        The user should have controls for replay: step-by-step, auto-reply, set replay speed.
+        Note that this is different from the persistence module: here, not just the current game state is saved,
+        but also its history (i.e., each turn or Chap and any other actors).
+
+
+            features implemented (manual tested):
+            1. step-by-step
+            2. auto-reply
+            3. set replay speed
+
+ */
