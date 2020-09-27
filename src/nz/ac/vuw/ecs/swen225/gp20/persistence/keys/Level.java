@@ -4,13 +4,45 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.LevelFileException;
 
 import java.util.ArrayList;
 
+class Start {
+    public int x;
+    public int y;
+
+    @Override
+    public String toString() {
+        return "Start{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+}
+
+class Properties {
+    public int chipsInLevel;
+    public int chipsRequired;
+    public String help;
+    public int width;
+    public int height;
+    public int timeLimit;
+
+    @Override
+    public String toString() {
+        return "Properties{" +
+                "chipsInLevel=" + chipsInLevel +
+                ", chipsRequired=" + chipsRequired +
+                ", help='" + help + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", timeLimit=" + timeLimit +
+                '}';
+    }
+}
 
 public class Level {
     private String description;
-    private int startX;
-    private int startY;
-    private int width;
-    private int height;
+    private Start start;
+    private Properties properties;
+
     private ArrayList<Tile> grid;
 
     public String getDescription() {
@@ -22,19 +54,35 @@ public class Level {
     }
 
     public int getWidth() {
-        return width;
+        return properties.width;
     }
 
     public int getHeight() {
-        return height;
+        return properties.height;
     }
 
     public int getStartX() {
-        return startX;
+        return start.x;
     }
 
     public int getStartY() {
-        return startY;
+        return start.y;
+    }
+
+    public int getTimeLimit(){
+        return properties.timeLimit;
+    }
+
+    public int getChipsInLevel(){
+        return properties.chipsInLevel;
+    }
+
+    public int getChipsRequired(){
+        return properties.chipsRequired;
+    }
+
+    public String getHelp() {
+        return properties.help;
     }
 
     public void validate() throws LevelFileException {
@@ -42,16 +90,28 @@ public class Level {
             throw new LevelFileException("Level must contain description");
         }
 
-        if (startX < 0 || startX >= width) {
-            throw new LevelFileException("startX must be greater than 0 and less than width");
+        if (properties == null){
+            throw new LevelFileException("JSON is missing key 'properties'");
         }
 
-        if (startY < 0 || startY >= height) {
-            throw new LevelFileException("startY must be greater than 0 and less than height");
+        if (properties.help == null) {
+            throw new LevelFileException("JSON is missing key 'properties.help'");
         }
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        if (properties.timeLimit == 0) {
+            throw new LevelFileException("Time limit must be greater than 0");
+        }
+
+        if (start.x < 0 || start.y >= properties.width) {
+            throw new LevelFileException("Start x must be greater than 0 and less than width (" + properties.width + ")");
+        }
+
+        if (start.y < 0 || start.y >= properties.height) {
+            throw new LevelFileException("Start y must be greater than 0 and less than height (" + properties.height + ")");
+        }
+
+        for (int y = 0; y < properties.height; y++) {
+            for (int x = 0; x < properties.width; x++) {
                 int finalX = x;
                 int finalY = y;
                 if (grid.stream().noneMatch(tile -> tile.getX() == finalX && tile.getY() == finalY)){
@@ -60,28 +120,42 @@ public class Level {
             }
         }
 
+        int chipCount = 0;
         for (Tile tile : grid) {
             int x = tile.getX();
             int y = tile.getY();
 
-            if (x < 0 || x >= width) {
+            if (x < 0 || x >= properties.width) {
                 throw new LevelFileException(
-                        "Tile x coordinate must be greater than 0 and less than width (" + width + ")"
+                        "Tile x coordinate must be greater than 0 and less than width (" + properties.width + ")"
                 );
             }
 
-            if (y < 0 || y >= height) {
+            if (y < 0 || y >= properties.height) {
                 throw new LevelFileException(
-                        "Tile y coordinate must be greater than 0 and less than height (" + height + ")"
+                        "Tile y coordinate must be greater than 0 and less than height (" + properties.height + ")"
                 );
             }
 
             if (tile.getName() == null) {
                 throw new LevelFileException("Name of tile cannot be null");
-            } else if (tile.getName().equals("key") && (tile.getColor().equals("") || tile.getColor() == null)) {
-                throw new LevelFileException("Key must have a color");
-            } else if (tile.getName().equals("door") && (tile.getColor().equals("") || tile.getColor() == null)) {
-                throw new LevelFileException("Door must have a color");
+            }
+
+            switch (tile.getName()){
+                case "key":
+                    if (tile.getColor().equals("") || tile.getColor() == null) {
+                        throw new LevelFileException("Key must have a color");
+                    }
+                    break;
+                case "door":
+                    if (tile.getColor().equals("") || tile.getColor() == null){
+                        throw new LevelFileException("Door must have a color");
+                    }
+                    break;
+                case "treasure":
+                    chipCount++;
+                default:
+                    break;
             }
 
             if (grid.stream()
@@ -90,17 +164,24 @@ public class Level {
                 throw new LevelFileException("Duplicate tile coordinate in level at x=" + x + ", y=" + y);
             }
         }
+
+        if (chipCount != properties.chipsInLevel){
+            throw new LevelFileException("Number of chips is not consistent with 'properties.chips'");
+        }
+
+        if (properties.chipsRequired < 0 || properties.chipsInLevel < 0 ||
+                properties.chipsRequired > properties.chipsInLevel) {
+            throw new LevelFileException("Chips required must be greater than zero and less than chips in level");
+        }
     }
 
     @Override
     public String toString() {
-        return "Level{" +
-                "description='" + description + '\'' +
-                ", startX=" + startX +
-                ", startY=" + startY +
-                ", width=" + width +
-                ", height=" + height +
-                ", grid=" + grid.size() +
+        return "Level {\n" +
+                "\tdescription='" + description + "'\n" +
+                "\tstart=" + start + "\n" +
+                "\tproperties=" + properties + "\n" +
+                "\tgrid=" + grid.size() + "\n" +
                 '}';
     }
 }

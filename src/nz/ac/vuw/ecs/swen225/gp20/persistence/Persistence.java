@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,14 +62,14 @@ public class Persistence {
      * Gets a file object from the levels directory & checks that file exists.
      */
     private File getLevelFile(int level) throws FileNotFoundException {
-        return checkFile(new File("levels/level" + level + ".json"));
+        return checkFile(new File("resources/levels/level" + level + ".json"));
     }
 
     /**
      * Gets a file object from the save directory & checks that file exists.
      */
-    private File getSaveFile(int save) throws FileNotFoundException {
-        return checkFile(new File("save/save" + save + ".json"));
+    private File getSaveFile(String filename) throws FileNotFoundException {
+        return checkFile(new File(filename));
     }
 
     /**
@@ -77,7 +77,7 @@ public class Persistence {
      *
      * @param record the recording to save
      */
-    public void saveRecording(Record record) {
+    public static void saveRecording(RecordAndPlay record) {
 
     }
 
