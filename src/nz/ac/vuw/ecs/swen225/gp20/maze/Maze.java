@@ -69,8 +69,7 @@ public class Maze {
 
 		}
 		*/
-		return 25;//TEMPORARY
-		//return toLoad.getTime();
+		return toLoad.getTimeLimit();
 
 	}
 	
@@ -116,6 +115,7 @@ public class Maze {
 	public RenderTuple tick(String movementDirection) {
 		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
 		player.move(movementDirection);
+		player.tick();
 		//TODO:Update all NPCs+Player if moving
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		//TODO:Update all animated tiles (?) Maybe do this when Render requests tiles to draw.	
