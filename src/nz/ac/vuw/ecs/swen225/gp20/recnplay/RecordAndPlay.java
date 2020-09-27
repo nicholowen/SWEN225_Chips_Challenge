@@ -17,6 +17,7 @@ public class RecordAndPlay {
     private static long delayTime = 123; // arbitrary number
 
     private static String saveFile;
+    private static String gameState;
     private static boolean isRecording;
     private static boolean isRunning;
     private static long startTime;
@@ -182,6 +183,10 @@ public class RecordAndPlay {
      */
     public static boolean getIsRunning() {
         return isRunning;
+    }
+
+    public static boolean getIsBeingRecorded() {
+        return isRecording;
     }
 
     /**
