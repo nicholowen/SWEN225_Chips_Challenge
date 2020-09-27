@@ -1,11 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Component;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -19,6 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.RootPaneContainer;
+import javax.swing.SwingUtilities;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
@@ -35,6 +40,7 @@ public class GUI implements KeyListener {
     private boolean recording = false;
     private boolean paused = false;
     private String direction = null;
+    JLayeredPane layeredPane;
 
     /**
      * Instantiates a new gui.
@@ -56,39 +62,6 @@ public class GUI implements KeyListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-//    public void pausePopup(){
-//        JDialog frame = new JDialog((Frame)null, "MC Immovable");
-//        JLabel title = new JLabel("Your Cards");
-//        JPanel panel = new JPanel();
-//        frame.setUndecorated(true);
-//        frame.setPreferredSize(new Dimension(400, 400));
-//        panel.setSize(400, 400);
-//        panel.setVisible(true);
-//        JButton cancel = new JButton("Close");
-//        panel.setLayout(new BoxLayout(panel, 1));
-//        JPanel gridPanel = new JPanel();
-//        gridPanel.setLayout(new FlowLayout());
-//        gridPanel.setMinimumSize(new Dimension(100, 100));
-//
-//        panel.add(title);
-//        panel.add(gridPanel);
-//        panel.add(cancel);
-//        frame.setAlwaysOnTop(true);
-//        frame.setContentPane(panel);
-//        frame.pack();
-//        frame.setLocationRelativeTo(null);
-//        frame.setDefaultCloseOperation(2);
-//        frame.setVisible(true);
-//        boolean[] actionPerformed = new boolean[1];
-//
-//        while(!actionPerformed[0]) {
-//            cancel.addActionListener((e) -> {
-//                actionPerformed[0] = true;
-//            });
-//        }
-//
-//        frame.dispose();
-//    }
 
     /**
      * =======================================================. 
@@ -114,6 +87,16 @@ public class GUI implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         this.direction = null;
+        
+    }
+
+    /**
+     * This method is called when a key is typed on the keyboard.
+     *
+     * @param event which indicates that a keystroke occurred in a Game Panel.
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
         char key = e.getKeyChar();
         int keyCode = e.getKeyCode();
 
@@ -150,16 +133,6 @@ public class GUI implements KeyListener {
             this.direction = "right";
             System.out.println(direction);
         }
-    }
-
-    /**
-     * This method is called when a key is typed on the keyboard.
-     *
-     * @param event which indicates that a keystroke occurred in a Game Panel.
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // Unused
     }
 
     /**
