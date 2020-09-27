@@ -55,5 +55,8 @@ public class Animation {
   public BufferedImage getFrame(){
     return frames[currentFrame];
   }
+  public BufferedImage getFrame(int i){ return frames[i]; }
   public BufferedImage getImage() { return image; }
+
+
 }

@@ -30,6 +30,7 @@ public class GamePanel extends JPanel {
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
   private Info info;
+  private Player playerSprite;
 
   private Actor player;
 
@@ -56,6 +57,7 @@ public class GamePanel extends JPanel {
   public void initAnimationObjects(Cell[][] cells){
     sprites = new Object[cells.length][cells[0].length];
     this.map = cells;
+    this.playerSprite = new Player();
     for(int i = 0; i < cells.length; i++){
       for(int j = 0; j < cells[i].length; j++){
         String[] data = cells[i][j].getRenderData().split(":");
@@ -84,6 +86,15 @@ public class GamePanel extends JPanel {
     }
   }
 
+  /**
+   * Finds the neighbouring cells of a wall (all cardinal directions)
+   * @param cells
+   * @param x
+   * @param y
+   * @param lengthX
+   * @param lengthY
+   * @return
+   */
   private Cell[] getWallNeighbours(Cell[][] cells, int x, int y, int lengthX, int lengthY){
     Cell[] neighbours  = new Cell[4];
 
@@ -128,7 +139,7 @@ public class GamePanel extends JPanel {
 
     if (playerPos.getY() < 5) y = 0;
     else if (playerPos.getY() > cells.length - 5) y = cells[0].length - 10;
-    else y = (int) (playerPos.getY() - 5); //and this is 3... :s
+    else y = (int) (playerPos.getY() - 4); //and this is 3... :s
 
     int tempx = x;
     int tempy = y;
@@ -148,13 +159,13 @@ public class GamePanel extends JPanel {
    * Iterates through a 9x9 grid around the player. Adds them to an appropriate list
    * which is used for drawing in order. Also updates all updatable items
    * (things with animation)
-//   * @param cells 9x9 grid around the player
-//   * @param actors for finding player position
+   * @param tuple
    */
   public void update(RenderTuple tuple) {
     player = tuple.getActors()[0];
     Cell[][] surround = getSurround(tuple.getCells(), player);
 
+    playerSprite.update(player.getDirection());
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
         switch (getInfo("name", surround[i][j])) {
@@ -316,6 +327,7 @@ public class GamePanel extends JPanel {
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
 
+        //THIS SHIT IT TOO HARD. WILL WORRY ABOUT TRANSITION LATER
 //        if(player != null && player.getIsMoving()) {
 //          String playerDir = player.getDirection();
 //          BufferedImage[] transition = getTransitionImages(playerDir);
@@ -323,11 +335,11 @@ public class GamePanel extends JPanel {
 //          switch (playerDir) {
 //            case "up":
 //              y += -4;
-//              g.drawImage(transition[j], 64 * j, 0, this);
+//              g.drawImage(transition[j], 0, j* y, this);
 //              break;
 //            case "right":
 //              x += 4;
-//              g.drawImage(transition[i], 0, 64 * i, this);
+//              g.drawImage(transition[i], 0, 64 * i + 4, this);
 //              break;
 //            case "down":
 //              y += -4;
@@ -358,10 +370,9 @@ public class GamePanel extends JPanel {
         if (key[i][j] != null) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), y * i, x * j, this);
         }
-
-
       }
     }
+    if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, this);
 
     //clears lists for next frame
     clearLists();
