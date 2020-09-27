@@ -124,22 +124,22 @@ public class GamePanel extends JPanel {
 
     if (playerPos.getX() < 5) x = 0;
     else if (playerPos.getX() > cells[0].length - 5) x = cells.length - 10;
-    else x = (int) (playerPos.getX() - 5); //dont understand why this is 5 (see next note)
+    else x = (int) (playerPos.getX() - 4); //dont understand why this is 5 (see next note)
 
     if (playerPos.getY() < 5) y = 0;
     else if (playerPos.getY() > cells.length - 5) y = cells[0].length - 10;
-    else y = (int) (playerPos.getY() - 3); //and this is 3... :s
+    else y = (int) (playerPos.getY() - 5); //and this is 3... :s
 
     int tempx = x;
     int tempy = y;
 
     for (int i = 0; i < 9; i++) {
-      tempx = x;
+      tempy = y;
       for (int j = 0; j < 9; j++) {
-        ret[i][j] = cells[tempy][tempx];
-        tempx++;
+        ret[i][j] = cells[tempx][tempy];
+        tempy++;
       }
-      tempy++;
+      tempx++;
     }
     return ret;
   }
