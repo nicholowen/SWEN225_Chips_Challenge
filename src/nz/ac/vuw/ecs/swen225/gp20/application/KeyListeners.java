@@ -51,15 +51,19 @@ public class KeyListeners implements KeyListener {
         case 'w':
             this.direction = "up";
             System.out.println(direction);
+            break;
         case 'a':
             this.direction = "left";
             System.out.println(direction);
+            break;
         case 's':
             this.direction = "down";
             System.out.println(direction);
+            break;
         case 'd':
             this.direction = "right";
             System.out.println(direction);
+            break;
         case 'r':
             recording = !recording;
 
