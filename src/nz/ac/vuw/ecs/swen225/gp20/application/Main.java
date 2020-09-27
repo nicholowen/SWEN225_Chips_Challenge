@@ -12,7 +12,7 @@ public class Main {
                                  // better.
     private static RecordAndPlay rnp;
     private static Persistence persist;
-    private static KeyListeners keyListeners;
+    private static GUI gui;
     private static boolean gameEnded;
     private static int timeRemaining;
 
@@ -37,7 +37,7 @@ public class Main {
         while (true) {
             if (gameEnded)
                 break;
-            maze.tick(keyListeners.getDirection());
+            maze.tick(gui.getDirection());
             render.update(new RenderTuple(maze.getActors(), maze.getBoard()));
             long startTick = System.currentTimeMillis();
             while (true) {
