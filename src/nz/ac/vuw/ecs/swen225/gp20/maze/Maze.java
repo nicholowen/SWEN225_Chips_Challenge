@@ -38,14 +38,15 @@ public class Maze {
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
 	 * @param levelToLoad
+	 * @return Time limit in seconds of the level in question.
 	 */
-	public void loadMaze(int levelToLoad) {
+	public int loadMaze(int levelToLoad) {
 		Level toLoad;
 		try {
 			toLoad=loader.read(levelToLoad);
 		} catch(IOException | LevelFileException e) {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
-			return;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
+			return 0;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		
 		//Load board
@@ -55,7 +56,7 @@ public class Maze {
 		}//At this stage, all tiles are loaded (?)
 		
 		//Load player
-		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY());
+		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 15);//Player takes 15 ticks to move.
 		
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		/*
@@ -68,10 +69,16 @@ public class Maze {
 
 		}
 		*/
-
-
+		return 25;//TEMPORARY
+		//return toLoad.getTime();
 
 	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	   * Enum of directions to go from a cell to cell. Mainly used by other classes.
