@@ -14,6 +14,8 @@ public class Assets
   public static BufferedImage[][] DOOR = loadGif(path, "door.gif", 64, 64);
   public static BufferedImage[][] ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
   public static BufferedImage[][] KEYCARD_G = loadGif(path, "key_green.gif", 64, 64);
+  public static BufferedImage[][] INFO = loadGif(path, "info.gif", 64, 64);
+  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
 
 
   //TODO: Player, Key, Door
