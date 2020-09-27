@@ -151,7 +151,7 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Checks if is recording.
+     * Checks if is paused.
      *
      * @return true, if is recording
      */
@@ -160,7 +160,7 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Sets the recording.
+     * Sets paused.
      *
      * @param recording the new recording
      */
