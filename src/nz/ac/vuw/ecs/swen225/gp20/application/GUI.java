@@ -1,20 +1,28 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.Dimension;
-
+import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GUI.
  */
@@ -47,6 +55,40 @@ public class GUI implements KeyListener {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    
+//    public void pausePopup(){
+//        JDialog frame = new JDialog((Frame)null, "MC Immovable");
+//        JLabel title = new JLabel("Your Cards");
+//        JPanel panel = new JPanel();
+//        frame.setUndecorated(true);
+//        frame.setPreferredSize(new Dimension(400, 400));
+//        panel.setSize(400, 400);
+//        panel.setVisible(true);
+//        JButton cancel = new JButton("Close");
+//        panel.setLayout(new BoxLayout(panel, 1));
+//        JPanel gridPanel = new JPanel();
+//        gridPanel.setLayout(new FlowLayout());
+//        gridPanel.setMinimumSize(new Dimension(100, 100));
+//
+//        panel.add(title);
+//        panel.add(gridPanel);
+//        panel.add(cancel);
+//        frame.setAlwaysOnTop(true);
+//        frame.setContentPane(panel);
+//        frame.pack();
+//        frame.setLocationRelativeTo(null);
+//        frame.setDefaultCloseOperation(2);
+//        frame.setVisible(true);
+//        boolean[] actionPerformed = new boolean[1];
+//
+//        while(!actionPerformed[0]) {
+//            cancel.addActionListener((e) -> {
+//                actionPerformed[0] = true;
+//            });
+//        }
+//
+//        frame.dispose();
+//    }
 
     /**
      * =======================================================. 
@@ -57,7 +99,7 @@ public class GUI implements KeyListener {
     /**
      * This method is called when a key is pressed on the keyboard.
      *
-     * @param key pressed
+     * @param event which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -67,45 +109,57 @@ public class GUI implements KeyListener {
     /**
      * This method is called when a key is released on the keyboard.
      *
-     * @param key released
+     * @param event which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyReleased(KeyEvent e) {
         this.direction = null;
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            paused = !paused;
-            System.out.println(paused);
+        char key = e.getKeyChar();
+        int keyCode = e.getKeyCode();
+
+        if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
+                    + "started, it will resume from the last unfinished level");
+        } else if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("exit the game, saves the game state, game will resume next time the\r\n" + 
+                    "application will be started");
+        } else if ((e.getKeyCode() == KeyEvent.VK_R) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("resume saved game");
+        } else if ((e.getKeyCode() == KeyEvent.VK_P) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("start a new game at the last unfinished level");
+        } else if ((e.getKeyCode() == KeyEvent.VK_1) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("start a new game at level 1");
+        } else if ((e.getKeyCode() == KeyEvent.VK_P) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            System.out.println("start a new game at the last unfinished level");
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            paused = true;
+            System.out.println("pause the game and display a “game is paused” dialog");
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            paused = false;
+            System.out.println("close the “game is paused” dialog and resume the game");
+        } else if (key == 'w' || keyCode == KeyEvent.VK_UP) {
+            this.direction = "up";
+            System.out.println(direction);
+        } else if (key == 'a' || keyCode == KeyEvent.VK_LEFT) {
+            this.direction = "left";
+            System.out.println(direction);
+        } else if (key == 's' || keyCode == KeyEvent.VK_DOWN) {
+            this.direction = "down";
+            System.out.println(direction);
+        } else if (key == 'd' || keyCode == KeyEvent.VK_RIGHT) {
+            this.direction = "right";
+            System.out.println(direction);
         }
     }
 
     /**
      * This method is called when a key is typed on the keyboard.
      *
-     * @param key typed
+     * @param event which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyTyped(KeyEvent e) {
-        char key = e.getKeyChar();
-        switch (key) {
-        case 'w':
-            this.direction = "up";
-            System.out.println(direction);
-            break;
-        case 'a':
-            this.direction = "left";
-            System.out.println(direction);
-            break;
-        case 's':
-            this.direction = "down";
-            System.out.println(direction);
-            break;
-        case 'd':
-            this.direction = "right";
-            System.out.println(direction);
-            break;
-        case 'r':
-            recording = !recording;
-        }
+        // Unused
     }
 
     /**
