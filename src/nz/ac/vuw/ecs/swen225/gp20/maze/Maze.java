@@ -113,6 +113,7 @@ public class Maze {
 	 * @param movementDirection
 	 */
 	public RenderTuple tick(String movementDirection) {
+		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
 		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
 		player.move(movementDirection);
 		player.tick();
@@ -136,10 +137,7 @@ public class Maze {
 			return false;//Out-of-bounds, cannot walk through.
 		
 		Cell toCheck=board[xToCheck][yToCheck];
-		return toCheck.getIsSolid();
-		
-		
-		
+		return !toCheck.getIsSolid();
 	}
 	
 	
