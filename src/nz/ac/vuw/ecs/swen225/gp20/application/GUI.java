@@ -55,9 +55,9 @@ public class GUI implements KeyListener {
      */
 
     /**
-     * Key pressed.
+     * This method is called when a key is pressed on the keyboard.
      *
-     * @param e the e
+     * @param key pressed
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -65,9 +65,9 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Key released.
+     * This method is called when a key is released on the keyboard.
      *
-     * @param e the e
+     * @param key released
      */
     @Override
     public void keyReleased(KeyEvent e) {
@@ -75,9 +75,9 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Key typed.
+     * This method is called when a key is typed on the keyboard.
      *
-     * @param e the e
+     * @param key typed
      */
     @Override
     public void keyTyped(KeyEvent e) {
