@@ -1,28 +1,62 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Dimension;
+
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class KeyListeners implements KeyListener {
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GUI.
+ */
+public class GUI implements KeyListener {
+
+    JFrame frame;
+    GamePanel gamePanel;
+    ScorePanel scorePanel;
 
     private boolean recording = false;
     private String direction = null;
 
     /**
-     * Instantiates a new key listeners.
-     *
-     * @param game panel
+     * Instantiates a new gui.
      */
-    public KeyListeners(JPanel jPanel) {
-        jPanel.addKeyListener(this);
+    public GUI() {
+        frame = new JFrame();
+        frame.setResizable(false);
+        frame.setMinimumSize(new Dimension(800, 500));
+        frame.setLayout(new GridBagLayout());
+        gamePanel = new GamePanel();
+        frame.add(gamePanel);
+        frame.add(new ScorePanel());
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.pack();
+
+        gamePanel.addKeyListener(this);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    /**
+     * =======================================================. 
+     * Key Listeners
+     * =======================================================.
+     */
 
     /**
      * Key pressed.
      *
-     * @param which key is pressed
+     * @param e the e
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -32,7 +66,7 @@ public class KeyListeners implements KeyListener {
     /**
      * Key released.
      *
-     * @param which key is released
+     * @param e the e
      */
     @Override
     public void keyReleased(KeyEvent e) {
@@ -42,7 +76,7 @@ public class KeyListeners implements KeyListener {
     /**
      * Key typed.
      *
-     * @param which key is typed
+     * @param e the e
      */
     @Override
     public void keyTyped(KeyEvent e) {
@@ -71,10 +105,29 @@ public class KeyListeners implements KeyListener {
     }
 
     /**
-     * =================================================== 
+     * ===================================================. 
      * Getters and Setters
-     * ===================================================
+     * ===================================================.
      */
+
+    /**
+     * Gets the game panel.
+     * 
+     * @return the game panel
+     */
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    /**
+     * Gets the score panel.
+     *
+     * @return the score panel
+     */
+    public ScorePanel getScorePanel() {
+        return scorePanel;
+    }
 
     /**
      * Checks if is recording.
@@ -88,7 +141,7 @@ public class KeyListeners implements KeyListener {
     /**
      * Sets the recording.
      *
-     * @param boolean whether or not it is recording
+     * @param recording the new recording
      */
     public void setRecording(boolean recording) {
         this.recording = recording;
@@ -106,10 +159,9 @@ public class KeyListeners implements KeyListener {
     /**
      * Sets the direction.
      *
-     * @param the new direction
+     * @param direction the new direction
      */
     public void setDirection(String direction) {
         this.direction = direction;
     }
-
 }
