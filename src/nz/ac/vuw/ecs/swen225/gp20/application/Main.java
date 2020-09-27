@@ -22,7 +22,7 @@ public class Main {
         maze = new Maze(persist);
         render = new Render();
 //        rnp = new RecordAndPlay();
-        keyListeners = new KeyListeners(render);
+        keyListeners = new KeyListeners(render.getGp());
         play();
     }
 
