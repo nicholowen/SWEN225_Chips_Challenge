@@ -44,6 +44,11 @@ public class Main {
                 if (System.currentTimeMillis() >= startTick + tickDelay)
                     break; // wait 33 milli
             }
+            while(gui.isPaused()){
+                boolean paused = gui.isPaused();
+                System.out.println(paused);
+                if(!paused) break;
+            }
             if (System.currentTimeMillis() >= start + delay) {
                 start = System.currentTimeMillis();
                 timeRemaining--; // timeRemaining goes down every second
