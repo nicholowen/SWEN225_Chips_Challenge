@@ -20,9 +20,9 @@ public class Main {
         persist = new Persistence();// Persistance may need to be a parameter for Maze/Record so set it up first!
                                     // Change if necessary.
         maze = new Maze(persist);
-        render = new Render();
 //        rnp = new RecordAndPlay();
-        keyListeners = new KeyListeners(render.getGp());
+        gui = new GUI();
+        render = new Render(gui.getGamePanel(), gui.getScorePanel());
         play();
     }
 
