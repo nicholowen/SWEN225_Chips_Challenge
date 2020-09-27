@@ -29,6 +29,7 @@ public class GamePanel extends JPanel {
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
+  private Info info;
 
   private Actor player;
 
@@ -77,6 +78,7 @@ public class GamePanel extends JPanel {
             Door door = new Door();
             sprites[i][j] = door;
             doorObjects.put(cells[i][j], door);
+
         }
       }
     }
@@ -121,23 +123,23 @@ public class GamePanel extends JPanel {
     int y;
 
     if (playerPos.getX() < 5) x = 0;
-    else if (playerPos.getX() > cells[0].length - 4) x = cells.length - 9;
-    else x = (int) (playerPos.getX() - 5); //dont understand why this is 5 (see next note)
+    else if (playerPos.getX() > cells[0].length - 5) x = cells.length - 10;
+    else x = (int) (playerPos.getX() - 4); //dont understand why this is 5 (see next note)
 
     if (playerPos.getY() < 5) y = 0;
-    else if (playerPos.getY() > cells.length - 4) y = cells[0].length - 9;
-    else y = (int) (playerPos.getY() - 3); //and this is 3... :s
+    else if (playerPos.getY() > cells.length - 5) y = cells[0].length - 10;
+    else y = (int) (playerPos.getY() - 5); //and this is 3... :s
 
     int tempx = x;
     int tempy = y;
 
     for (int i = 0; i < 9; i++) {
-      tempx = x;
+      tempy = y;
       for (int j = 0; j < 9; j++) {
-        ret[i][j] = cells[tempy][tempx];
-        tempx++;
+        ret[i][j] = cells[tempx][tempy];
+        tempy++;
       }
-      tempy++;
+      tempx++;
     }
     return ret;
   }
@@ -179,6 +181,9 @@ public class GamePanel extends JPanel {
             if(keyObjects.containsKey(surround[i][j])){
               keyObjects.get(surround[i][j]).update();
             }
+            break;
+          case "info":
+            info = new Info(i, j, Assets.INFO[0][0]);
             break;
         }
       }
@@ -305,33 +310,39 @@ public class GamePanel extends JPanel {
     int x = 64;
     int y = 64;
 
+
+
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-//        if(player.getIsMoving()) {
+
+//        if(player != null && player.getIsMoving()) {
 //          String playerDir = player.getDirection();
 //          BufferedImage[] transition = getTransitionImages(playerDir);
 //          //if player is moving, render the screen
 //          switch (playerDir) {
-//            case "north":
+//            case "up":
 //              y += -4;
 //              g.drawImage(transition[j], 64 * j, 0, this);
 //              break;
-//            case "east":
+//            case "right":
 //              x += 4;
 //              g.drawImage(transition[i], 0, 64 * i, this);
 //              break;
-//            case "south":
+//            case "down":
 //              y += -4;
 //              g.drawImage((transition[j]), 64 * j, 576 + y, null);
 //              break;
-//            case "west":
+//            case "left":
 //              x += -4;
 //              g.drawImage(transition[i], 576 + x, 64 * j, null);
 //              break;
 //          }
 //        }
 
+        if(info != null && i == info.getX() && j == info.getY()){
+          g.drawImage(info.getImage(), y * i, x * j, this);
+        }
         if (floor[i][j] != null) {
           g.drawImage(Assets.FLOOR[0][0], i * y, x * j, this);
         }
@@ -347,6 +358,7 @@ public class GamePanel extends JPanel {
         if (key[i][j] != null) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), y * i, x * j, this);
         }
+
 
       }
     }
