@@ -37,8 +37,7 @@ public class Main {
         while (true) {
             if (gameEnded)
                 break;
-            maze.tick(gui.getDirection());
-            render.update(new RenderTuple(maze.getActors(), maze.getBoard()));
+            render.update(maze.tick(gui.getDirection()));
             long startTick = System.currentTimeMillis();
             while (true) {
                 int tickDelay = 33;
