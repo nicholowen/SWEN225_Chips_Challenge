@@ -13,11 +13,12 @@ public class Actor {
 	private int ticksToMove;//Total number of ticks it takes to move
 	
 	
-	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos) {
+	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos, int speed) {
 		x=xpos;
 		y=ypos;
 		this.isPlayer=isPlayer;
 		name=nameReference;
+		ticksToMove=speed;
 		direction="down";//Generic starting direction
 	}
 	
