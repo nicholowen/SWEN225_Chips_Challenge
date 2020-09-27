@@ -72,6 +72,10 @@ public class GUI implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         this.direction = null;
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            paused = !paused;
+            System.out.println(paused);
+        }
     }
 
     /**
@@ -101,9 +105,6 @@ public class GUI implements KeyListener {
             break;
         case 'r':
             recording = !recording;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            paused = !paused;
         }
     }
 
