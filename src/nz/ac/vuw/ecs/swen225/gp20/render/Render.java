@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
@@ -38,8 +39,8 @@ public class Render {
 //    gp.run();
   }
 
-  public void update(Cell[][] cell, Actor[] actors){
-    gp.update(cell, actors);
+  public void update(RenderTuple tuple){
+    gp.update(tuple);
   }
 
   public void init(Cell[][] cells){

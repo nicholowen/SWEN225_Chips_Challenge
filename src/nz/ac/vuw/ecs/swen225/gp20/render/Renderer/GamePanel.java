@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
@@ -52,6 +53,7 @@ public class GamePanel extends JPanel {
   //this assigns animation objects to all objects that can animate so they can be updated
   //as well as walls so they can have an associated wall orientation given.
   public void initAnimationObjects(Cell[][] cells){
+    sprites = new Object[cells.length][cells[0].length];
     this.map = cells;
     for(int i = 0; i < cells.length; i++){
       for(int j = 0; j < cells[i].length; j++){
@@ -107,7 +109,7 @@ public class GamePanel extends JPanel {
    * Gets a 9x9 grid around the player. If the player is too far to the left/right, or top/bottom of the maze boundary,
    * will get the furthest 9x9 grid possible.
    * @param cells All cells for entire maze
-   * @param actors The players character - for obtaining current position
+//   * @param actors The players character - for obtaining current position
    * @return 9x9 Cell array
    */
   private Cell[][] getSurround(Cell[][] cells, Actor player) {
@@ -144,12 +146,12 @@ public class GamePanel extends JPanel {
    * Iterates through a 9x9 grid around the player. Adds them to an appropriate list
    * which is used for drawing in order. Also updates all updatable items
    * (things with animation)
-   * @param cells 9x9 grid around the player
-   * @param actors for finding player position
+//   * @param cells 9x9 grid around the player
+//   * @param actors for finding player position
    */
-  public void update(Cell[][] cells, Actor[] actors) {
-    player = actors[0];
-    Cell[][] surround = getSurround(cells, player);
+  public void update(RenderTuple tuple) {
+    player = tuple.getActors()[0];
+    Cell[][] surround = getSurround(tuple.getCells(), player);
 
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
@@ -300,38 +302,38 @@ public class GamePanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    int x = 0;
-    int y = 0;
+    int x = 64;
+    int y = 64;
 
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-        if(player.getIsMoving()) {
-          String playerDir = player.getDirection();
-          BufferedImage[] transition = getTransitionImages(playerDir);
-          //if player is moving, render the screen
-          switch (playerDir) {
-            case "north":
-              y += -4;
-              g.drawImage(transition[j], 64 * j, 0, this);
-              break;
-            case "east":
-              x += 4;
-              g.drawImage(transition[i], 0, 64 * i, this);
-              break;
-            case "south":
-              y += -4;
-              g.drawImage((transition[j]), 64 * j, 576 + y, null);
-              break;
-            case "west":
-              x += -4;
-              g.drawImage(transition[i], 576 + x, 64 * j, null);
-              break;
-          }
-        }
+//        if(player.getIsMoving()) {
+//          String playerDir = player.getDirection();
+//          BufferedImage[] transition = getTransitionImages(playerDir);
+//          //if player is moving, render the screen
+//          switch (playerDir) {
+//            case "north":
+//              y += -4;
+//              g.drawImage(transition[j], 64 * j, 0, this);
+//              break;
+//            case "east":
+//              x += 4;
+//              g.drawImage(transition[i], 0, 64 * i, this);
+//              break;
+//            case "south":
+//              y += -4;
+//              g.drawImage((transition[j]), 64 * j, 576 + y, null);
+//              break;
+//            case "west":
+//              x += -4;
+//              g.drawImage(transition[i], 576 + x, 64 * j, null);
+//              break;
+//          }
+//        }
 
         if (floor[i][j] != null) {
-          g.drawImage(Assets.FLOOR[0][0], (64 * i) + y, x * j, this);
+          g.drawImage(Assets.FLOOR[0][0], i * y, x * j, this);
         }
         if (wall[i][j] != null) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), y * i, x * j, this);
