@@ -7,6 +7,7 @@ public class Tile {
     private int y;
     private String name;
     private String color;
+    private String help;
 
     public int getX() {
         return x;
@@ -20,8 +21,12 @@ public class Tile {
         return name.toLowerCase();
     }
 
-    public String getColor(){
+    public String getColor() {
         return color.toLowerCase();
+    }
+
+    public String getHelp() {
+        return help;
     }
 
     @Override
@@ -53,6 +58,7 @@ public class Tile {
                 ", y=" + y +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
+                ", help='" + help + '\'' +
                 '}';
     }
 }

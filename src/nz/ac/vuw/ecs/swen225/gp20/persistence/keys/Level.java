@@ -20,7 +20,6 @@ class Start {
 class Properties {
     public int chipsInLevel;
     public int chipsRequired;
-    public String help;
     public int width;
     public int height;
     public int timeLimit;
@@ -30,7 +29,6 @@ class Properties {
         return "Properties{" +
                 "chipsInLevel=" + chipsInLevel +
                 ", chipsRequired=" + chipsRequired +
-                ", help='" + help + '\'' +
                 ", width=" + width +
                 ", height=" + height +
                 ", timeLimit=" + timeLimit +
@@ -81,10 +79,6 @@ public class Level {
         return properties.chipsRequired;
     }
 
-    public String getHelp() {
-        return properties.help;
-    }
-
     public void validate() throws LevelFileException {
         if (description == null || description.equals("")) {
             throw new LevelFileException("Level must contain description");
@@ -92,10 +86,6 @@ public class Level {
 
         if (properties == null){
             throw new LevelFileException("JSON is missing key 'properties'");
-        }
-
-        if (properties.help == null) {
-            throw new LevelFileException("JSON is missing key 'properties.help'");
         }
 
         if (properties.timeLimit == 0) {
@@ -150,6 +140,11 @@ public class Level {
                 case "door":
                     if (tile.getColor().equals("") || tile.getColor() == null){
                         throw new LevelFileException("Door must have a color");
+                    }
+                    break;
+                case "info":
+                    if (tile.getHelp().equals("") || tile.getHelp() == null) {
+                        throw new LevelFileException("Info must have help");
                     }
                     break;
                 case "treasure":
