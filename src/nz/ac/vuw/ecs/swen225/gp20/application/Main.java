@@ -35,7 +35,6 @@ public class Main {
         timeRemaining = maze.loadMaze(1);
         render.init(maze.getBoard());
         while (true) {
-            System.out.println(timeRemaining);
             if (gameEnded)
                 break;
             maze.tick(keyListeners.getDirection());
