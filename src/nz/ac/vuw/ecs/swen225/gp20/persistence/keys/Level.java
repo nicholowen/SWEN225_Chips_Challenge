@@ -18,18 +18,22 @@ class Start {
 }
 
 class Properties {
-    public int chips;
+    public int chipsInLevel;
+    public int chipsRequired;
     public String help;
     public int width;
     public int height;
+    public int timeLimit;
 
     @Override
     public String toString() {
         return "Properties{" +
-                "chips=" + chips +
+                "chipsInLevel=" + chipsInLevel +
+                ", chipsRequired=" + chipsRequired +
                 ", help='" + help + '\'' +
                 ", width=" + width +
                 ", height=" + height +
+                ", timeLimit=" + timeLimit +
                 '}';
     }
 }
@@ -65,6 +69,18 @@ public class Level {
         return start.y;
     }
 
+    public int getTimeLimit(){
+        return properties.timeLimit;
+    }
+
+    public int getChipsInLevel(){
+        return properties.chipsInLevel;
+    }
+
+    public int getChipsRequired(){
+        return properties.chipsRequired;
+    }
+
     public String getHelp() {
         return properties.help;
     }
@@ -80,6 +96,10 @@ public class Level {
 
         if (properties.help == null) {
             throw new LevelFileException("JSON is missing key 'properties.help'");
+        }
+
+        if (properties.timeLimit == 0) {
+            throw new LevelFileException("Time limit must be greater than 0");
         }
 
         if (start.x < 0 || start.y >= properties.width) {
@@ -145,8 +165,13 @@ public class Level {
             }
         }
 
-        if (chipCount != properties.chips){
+        if (chipCount != properties.chipsInLevel){
             throw new LevelFileException("Number of chips is not consistent with 'properties.chips'");
+        }
+
+        if (properties.chipsRequired < 0 || properties.chipsInLevel < 0 ||
+                properties.chipsRequired > properties.chipsInLevel) {
+            throw new LevelFileException("Chips required must be greater than zero and less than chips in level");
         }
     }
 
