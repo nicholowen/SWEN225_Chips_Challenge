@@ -3,67 +3,109 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Render;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 
+public class KeyListeners implements KeyListener {
 
-public class KeyListeners implements KeyListener{
+    private boolean recording = false;
+    private String direction = null;
 
-	private boolean recording = false;
-	private String direction = null;
-	
-	public KeyListeners(Render render) {
-        render.getGp().addKeyListener(this); 
-	}
+    /**
+     * Instantiates a new key listeners.
+     *
+     * @param game panel
+     */
+    public KeyListeners(GamePanel gp) {
+        gp.addKeyListener(this);
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// Unused 
-	}
+    /**
+     * Key pressed.
+     *
+     * @param which key is pressed
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // Unused
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		this.direction = null;
-	}
+    /**
+     * Key released.
+     *
+     * @param which key is released
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+        this.direction = null;
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		char key = e.getKeyChar();
-		switch (key) {
-			case 'w':
-				this.direction = "up";
-				System.out.println(direction);
-			case 'a':
-				this.direction = "left";
-				System.out.println(direction);
-			case 's':
-				this.direction = "down";
-				System.out.println(direction);
-			case 'd':
-				this.direction = "right";
-				System.out.println(direction);
-			case 'r':
-				recording = !recording;
+    /**
+     * Key typed.
+     *
+     * @param which key is typed
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        switch (key) {
+        case 'w':
+            this.direction = "up";
+            System.out.println(direction);
+        case 'a':
+            this.direction = "left";
+            System.out.println(direction);
+        case 's':
+            this.direction = "down";
+            System.out.println(direction);
+        case 'd':
+            this.direction = "right";
+            System.out.println(direction);
+        case 'r':
+            recording = !recording;
 
-		}
-	}
-	
-    /*===================================================
-    *	Getters and Setters
-    * ===================================================*/
+        }
+    }
+
+    /**
+     * =================================================== 
+     * Getters and Setters
+     * ===================================================
+     */
+
+    /**
+     * Checks if is recording.
+     *
+     * @return true, if is recording
+     */
     public boolean isRecording() {
-		return recording;
-	}
+        return recording;
+    }
 
-	public void setRecording(boolean recording) {
-		this.recording = recording;
-	}
+    /**
+     * Sets the recording.
+     *
+     * @param boolean whether or not it is recording
+     */
+    public void setRecording(boolean recording) {
+        this.recording = recording;
+    }
 
-	public String getDirection() {
-		return direction;
-	}
+    /**
+     * Gets the movement direction.
+     *
+     * @return the direction
+     */
+    public String getDirection() {
+        return direction;
+    }
 
-	public void setDirection(String direction) {
-		this.direction = direction;
-	}
+    /**
+     * Sets the direction.
+     *
+     * @param the new direction
+     */
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
 
 }
