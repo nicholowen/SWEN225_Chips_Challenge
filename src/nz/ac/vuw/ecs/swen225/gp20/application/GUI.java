@@ -25,6 +25,7 @@ public class GUI implements KeyListener {
     ScorePanel scorePanel;
 
     private boolean recording = false;
+    private boolean paused = false;
     private String direction = null;
 
     /**
@@ -100,7 +101,9 @@ public class GUI implements KeyListener {
             break;
         case 'r':
             recording = !recording;
-
+        }
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            paused = !paused;
         }
     }
 
@@ -145,6 +148,24 @@ public class GUI implements KeyListener {
      */
     public void setRecording(boolean recording) {
         this.recording = recording;
+    }
+
+    /**
+     * Checks if is recording.
+     *
+     * @return true, if is recording
+     */
+    public boolean isPaused() {
+        return paused;
+    }
+
+    /**
+     * Sets the recording.
+     *
+     * @param recording the new recording
+     */
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     /**
