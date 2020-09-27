@@ -4,7 +4,6 @@
   "properties": {
     "chipsInLevel": 9,
     "chipsRequired": 9,
-    "help": "Get to the exit!",
     "width": 15,
     "height": 14,
     "timeLimit": 360
@@ -97,7 +96,7 @@
       {"x": 4, "y": 5, "name": "wall"},
       {"x": 5, "y": 5, "name": "key", "color": "blue"},
       {"x": 6, "y": 5, "name": "free"},
-      {"x": 7, "y": 5, "name": "info"},
+      {"x": 7, "y": 5, "name": "info", "help": "Get to the exit!"},
       {"x": 8, "y": 5, "name": "free"},
       {"x": 9, "y": 5, "name": "key", "color": "red"},
       {"x": 10, "y": 5, "name": "wall"},
