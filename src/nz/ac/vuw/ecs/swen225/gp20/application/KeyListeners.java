@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import javax.swing.JPanel;
 
 public class KeyListeners implements KeyListener {
 
@@ -15,8 +15,8 @@ public class KeyListeners implements KeyListener {
      *
      * @param game panel
      */
-    public KeyListeners(GamePanel gp) {
-        gp.addKeyListener(this);
+    public KeyListeners(JPanel jPanel) {
+        jPanel.addKeyListener(this);
     }
 
     /**
