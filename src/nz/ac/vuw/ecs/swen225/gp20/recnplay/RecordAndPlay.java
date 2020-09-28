@@ -14,6 +14,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Class that allows for game recording and replaying. Saves and records each movement
+ * done throughout a particular game, and allows these to be played back from a saved file.
+ *
+ * @author Melissa Lok 300472230
+ */
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
     private static Queue<Integer> previousActors;
