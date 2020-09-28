@@ -1,29 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.Component;
-import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.RootPaneContainer;
-import javax.swing.SwingUtilities;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
@@ -40,28 +26,48 @@ public class GUI implements KeyListener {
     private boolean recording = false;
     private boolean paused = false;
     private String direction = null;
-    JLayeredPane layeredPane;
+//    JLayeredPane layeredPane;
 
     /**
      * Instantiates a new gui.
      */
     public GUI() {
-        frame = new JFrame();
+        frame = new JFrame("Indecision Games: Chip's Challenge");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         frame.setResizable(false);
         frame.setMinimumSize(new Dimension(800, 500));
-        frame.setLayout(new GridBagLayout());
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        frame.setContentPane(mainPanel);
+        
         gamePanel = new GamePanel();
-        frame.add(gamePanel);
-        frame.add(new ScorePanel());
+        scorePanel = new ScorePanel();
+        mainPanel.add(gamePanel);
+        mainPanel.add(scorePanel);
+        
+        JMenuBar menu = new JMenuBar();
+        JMenu pause = new JMenu("pause");
+        menu.add(pause);
+        
+        frame.setJMenuBar(menu);
+        
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
 
         gamePanel.addKeyListener(this);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
+
+    private void setJMenuBar(JMenuBar menu) {
+    // TODO Auto-generated method stub
+    
+}
+
 
     /**
      * =======================================================. 
@@ -86,19 +92,7 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent e) {
-        this.direction = null;
-        
-    }
-
-    /**
-     * This method is called when a key is typed on the keyboard.
-     *
-     * @param event which indicates that a keystroke occurred in a Game Panel.
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-        char key = e.getKeyChar();
-        int keyCode = e.getKeyCode();
+        this.direction = null;int keyCode = e.getKeyCode();
 
         if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
@@ -120,16 +114,40 @@ public class GUI implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             System.out.println("close the “game is paused” dialog and resume the game");
-        } else if (key == 'w' || keyCode == KeyEvent.VK_UP) {
+        } else if (keyCode == KeyEvent.VK_UP) {
             this.direction = "up";
             System.out.println(direction);
-        } else if (key == 'a' || keyCode == KeyEvent.VK_LEFT) {
+        } else if (keyCode == KeyEvent.VK_LEFT) {
             this.direction = "left";
             System.out.println(direction);
-        } else if (key == 's' || keyCode == KeyEvent.VK_DOWN) {
+        } else if (keyCode == KeyEvent.VK_DOWN) {
             this.direction = "down";
             System.out.println(direction);
-        } else if (key == 'd' || keyCode == KeyEvent.VK_RIGHT) {
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            this.direction = "right";
+            System.out.println(direction);
+        }
+        
+    }
+
+    /**
+     * This method is called when a key is typed on the keyboard.
+     *
+     * @param event which indicates that a keystroke occurred in a Game Panel.
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        if (key == 'w') {
+            this.direction = "up";
+            System.out.println(direction);
+        } else if (key == 'a') {
+            this.direction = "left";
+            System.out.println(direction);
+        } else if (key == 's') {
+            this.direction = "down";
+            System.out.println(direction);
+        } else if (key == 'd') {
             this.direction = "right";
             System.out.println(direction);
         }
