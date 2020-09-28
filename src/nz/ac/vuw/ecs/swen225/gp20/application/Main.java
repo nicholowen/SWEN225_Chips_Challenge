@@ -53,4 +53,12 @@ public class Main {
         Main game = new Main();
         game.play();
     }
+
+    public void movePlayer(String direction) {
+        RecordAndPlay.addMovement(direction);
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
 }

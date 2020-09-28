@@ -142,11 +142,11 @@ public class Level {
                         throw new LevelFileException("Door must have a color");
                     }
                     break;
-                case "info":
-                    if (tile.getHelp().equals("") || tile.getHelp() == null) {
-                        throw new LevelFileException("Info must have help");
-                    }
-                    break;
+//                case "info":
+//                    if (tile.getHelp().equals("") || tile.getHelp() == null) {
+//                        throw new LevelFileException("Info must have help");
+//                    }
+//                    break;
                 case "treasure":
                     chipCount++;
                 default:

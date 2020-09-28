@@ -68,9 +68,6 @@ public class Actor {
 	
 	public int getX() {return x;}
 	public int getY() {return y;}
-	public String getDirection() {return direction;}
-	public int getTicksToMove() {return ticksToMove;}
-	public int getmoveProgress() {return moveProgress;}
 	
 
 	/**
@@ -85,7 +82,8 @@ public class Actor {
 		moveProgress=0;//Reset move progress.
 	}
 
-	public String getName() {
-		return name;
+	public String getDirection() {
+		return direction;
 	}
+	
 }

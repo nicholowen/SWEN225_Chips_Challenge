@@ -1,6 +1,6 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 public class PersistenceTest {
     @Test

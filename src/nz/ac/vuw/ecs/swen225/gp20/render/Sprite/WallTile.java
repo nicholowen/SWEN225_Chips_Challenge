@@ -51,6 +51,11 @@ public class WallTile extends Sprite{
     if(!n && e && s && w)   animation.setImage(img[12]);
     if(n && !e && s && w)   animation.setImage(img[11]);
 
+    if (!n ) {
+      if (!e) {
+
+      }
+    }
   }
 
   public BufferedImage getImage(){
