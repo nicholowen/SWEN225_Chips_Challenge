@@ -130,25 +130,26 @@ public class GamePanel extends JPanel {
     //using actors[0] as a place holder for player. I assume the player will be the first one on the list.
     Point playerPos = new Point(player.getX(), player.getY());
 
-    int x;
-    int y;
+//    int x;
+//    int y;
 
-    if (playerPos.getX() < 5) x = 0;
-    else if (playerPos.getX() > cells[0].length - 5) x = cells.length - 10;
-    else x = (int) (playerPos.getX() - 4); //dont understand why this is 5 (see next note)
+//    if (playerPos.getX() < 5) x = 0;
+//    else if (playerPos.getX() > cells[0].length - 5) x = cells.length -10;
+//    else x = (int) (playerPos.getX() - 4); //dont understand why this is 5 (see next note)
+//
+//    if (playerPos.getY() < 5) y = 0;
+//    else if (playerPos.getY() > cells.length - 5) y = cells[0].length -10;
+//    else y = (int) (playerPos.getY() - 4); //and this is 3... :s
 
-    if (playerPos.getY() < 5) y = 0;
-    else if (playerPos.getY() > cells.length - 5) y = cells[0].length - 10;
-    else y = (int) (playerPos.getY() - 4); //and this is 3... :s
-
-    int tempx = x;
-    int tempy = y;
+    int tempx = (int)playerPos.getX() - 4;
+    int tempy;
 
     for (int i = 0; i < 9; i++) {
-      tempy = y;
+      tempy = (int)playerPos.getY() - 4;
       for (int j = 0; j < 9; j++) {
-        if((tempx >= 0 && tempx <= cells.length-1) && (tempy >= 0 && tempy <= cells[0].length -1)) {
+        if((tempx >= 0 && tempx < cells.length) && (tempy >= 0 && tempy < cells[0].length)) {
           ret[i][j] = cells[tempx][tempy];
+
         }else{
           ret[i][j] = null;
         }
