@@ -14,6 +14,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Class that allows for game recording and replaying. Saves and records each movement
+ * done throughout a particular game, and allows these to be played back from a saved file.
+ *
+ * @author Melissa Lok 300472230
+ */
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
     private static Queue<Integer> previousActors;
@@ -86,7 +92,7 @@ public class RecordAndPlay {
     /**
      * loads a recording from a saved file
      * @param saveFileName saved file name
-     * @param game
+     * @param game the game
      */
     public static void loadRecording(String saveFileName, Main game) {
         JsonObject obj = null;
@@ -169,7 +175,7 @@ public class RecordAndPlay {
      * @param fileName name of file to be loaded
      * @param game the Main game
      * @return the game
-     * @throws IOException
+     * @throws IOException error
      */
     public static Main loadFileGameState(String fileName, Main game) throws IOException {
         InputStream inputStream = new FileInputStream(new File(fileName));
@@ -239,7 +245,9 @@ public class RecordAndPlay {
     }
 
     /**
-     * @param game
+     * Runs the replay on a separate thread
+     *
+     * @param game the game
      */
     public static void runReplay(Main game) {
 
@@ -265,9 +273,9 @@ public class RecordAndPlay {
     //==================================================
 
     /**
-     * Gets the thread of
+     * Gets the thread
      *
-     * @return
+     * @return thread of recnplay
      */
     public static Thread getThread() {
         return thread;
