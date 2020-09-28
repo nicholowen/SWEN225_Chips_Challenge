@@ -7,36 +7,36 @@ import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 public class Main {
-    private static Maze maze;// These are only static for now, cna change if it proves to be an issue.
-    private static Render render;// That said, these are never going to be deleted and replaced, so static may be
-                                 // better.
-    private static RecordAndPlay rnp;
-    private static Persistence persist;
-    private static GUI gui;
-    private static boolean gameEnded;
-    private static int timeRemaining;
+    private static final RecordAndPlay rnp = new RecordAndPlay();
+    private static final Persistence persist = new Persistence();
+    private static final Maze maze = new Maze(persist);
+    private static final GUI gui = new GUI();
+    private static final Render render = new Render(gui.getGamePanel(), gui.getScorePanel());
 
-    public static void main(String[] args) {
-        persist = new Persistence();// Persistance may need to be a parameter for Maze/Record so set it up first!
-                                    // Change if necessary.
-        maze = new Maze(persist);
-        rnp = new RecordAndPlay();
-        gui = new GUI();
-        render = new Render(gui.getGamePanel(), gui.getScorePanel());
-        play();
+    private boolean gameEnded;
+    private int timeRemaining;
+
+    public Main() {
+
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
     }
 
     /**
      * Tick based loop. The main game runs on this loop.
      */
-    public static void play() {
+    public void play() {
         long start = System.currentTimeMillis();
         int delay = 1000;   // 1 Second
         timeRemaining = maze.loadMaze(1);
         render.init(maze.getBoard());
-        while (true) {
-            if (gameEnded)
-                break;
+        while (!gameEnded) {
             render.update(maze.tick(gui.getDirection()), timeRemaining);
             long startTick = System.currentTimeMillis();
             while (true) {
@@ -44,15 +44,20 @@ public class Main {
                 if (System.currentTimeMillis() >= startTick + tickDelay)
                     break; // wait 33 milli
             }
-            while(gui.isPaused()){
+            while (gui.isPaused()) {
                 boolean paused = gui.isPaused();
                 System.out.println(paused);
-                if(!paused) break;
+                if (!paused) break;
             }
             if (System.currentTimeMillis() >= start + delay) {
                 start = System.currentTimeMillis();
                 timeRemaining--; // timeRemaining goes down every second
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Main game = new Main();
+        game.play();
     }
 }
