@@ -9,6 +9,7 @@ public class Assets
   private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
 
   //Load gifs TODO: add floor tiles and door tiles/animations
+  //Map/Game gifs
   public static BufferedImage[][]           FLOOR = loadGif(path, "floortile.gif", 64, 64);
   public static BufferedImage[][]            WALL = loadGif(path, "walltiles.gif", 64, 64);
   public static BufferedImage[][]            DOOR = loadGif(path, "door.gif", 64, 64);
@@ -16,9 +17,11 @@ public class Assets
   public static BufferedImage[][]       KEYCARD_G = loadGif(path, "key_green.gif", 64, 64);
   public static BufferedImage[][]            INFO = loadGif(path, "info.gif", 64, 64);
   public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
-  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
 
+  //Score/info gifs
+  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
+  public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 9);
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
