@@ -21,7 +21,7 @@ public class Assets
   //Score/info gifs
   public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
-  public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 9);
+  public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
