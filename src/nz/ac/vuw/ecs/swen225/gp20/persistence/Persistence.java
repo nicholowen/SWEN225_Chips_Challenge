@@ -127,7 +127,7 @@ public class Persistence {
 
     public static void main(String[] args) {
         Persistence persistence = new Persistence();
-        Maze maze = new Maze(persistence);
+        Maze maze = new Maze();
         maze.loadMaze(1);
 
         Main game = new Main();

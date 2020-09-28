@@ -1,15 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.MainAdapter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
+@JsonAdapter(MainAdapter.class)
 public class Main {
     private static final RecordAndPlay rnp = new RecordAndPlay();
     private static final Persistence persist = new Persistence();
-    private static final Maze maze = new Maze(persist);
+    private static final Maze maze = new Maze();
     private static final GUI gui = new GUI();
     private static final Render render = new Render(gui.getGamePanel(), gui.getScorePanel());
 
