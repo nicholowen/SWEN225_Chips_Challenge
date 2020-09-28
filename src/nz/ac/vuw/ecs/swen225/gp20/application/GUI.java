@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -20,6 +22,7 @@ import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.MenuBar;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 /**
@@ -57,15 +60,22 @@ public class GUI implements KeyListener {
 
         MenuBar menu = new MenuBar();
         menu.setOpaque(true);
-        menu.setBG((new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/menubg.png").getImage()));
         frame.setJMenuBar(menu);
 
-//        JButton pause = new JButton("pause");
-//        JButton save = new JButton("save");
-//        JButton load = new JButton("load");
-//        menu.add(pause);
-//        menu.add(save);
-//        menu.add(load);
+        JButton pausenplay = new JButton("pause");
+        JButton save = new JButton("save");
+        JButton load = new JButton("load");
+        menu.add(pausenplay);
+
+//        pausenplay.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent ev) {
+//                paused = !paused;
+//                if (paused) {
+//                    pausenplay.setText("Play");
+//                } else
+//                    pausenplay.setText("Pause");
+//            }
+//        });
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -234,21 +244,5 @@ public class GUI implements KeyListener {
      */
     public void setDirection(String direction) {
         this.direction = direction;
-    }
-}
-
-class MenuBar extends JMenuBar {
-    Image img;
-
-    public void setBG(Image img) {
-        this.img = img;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(img, 0, 0, this);
-
     }
 }
