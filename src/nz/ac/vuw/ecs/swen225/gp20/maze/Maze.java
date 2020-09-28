@@ -10,7 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
 public class Maze {
-	Cell[][] board;
+	private static Cell[][] board;
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
@@ -31,8 +31,8 @@ public class Maze {
 	 */
 	public Maze() {
 	}
-	
-	
+
+
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
 	 * @param levelToLoad
@@ -108,10 +108,19 @@ public class Maze {
 		return toLoad.getTimeLimit();
 
 	}
-	
-	
-	
-	
+
+
+//
+//	public static void saveGameState(ChapsChallenge game, String name) {
+//		String jsonGame = getGameState(game);
+//		try {
+//			BufferedWriter writer = new BufferedWriter(new FileWriter(name));
+//			writer.write(jsonGame);
+//			writer.close();
+//		} catch (IOException e) {
+//			System.out.println("Error saving game" + e);
+//		}
+//	}
 	
 	
 	
@@ -123,8 +132,12 @@ public class Maze {
 	  }
 	  
 	
-	public Cell[][] getBoard(){
+	public static Cell[][] getBoard(){
 		return board;
+	}
+
+	public static int getBoardSize() {
+	  	return board.length;
 	}
 	
 	/**
@@ -206,9 +219,4 @@ public class Maze {
 	}
 
 
-
-	
-	
-	
-	
 }

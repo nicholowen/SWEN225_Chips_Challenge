@@ -1,17 +1,24 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
@@ -35,25 +42,31 @@ public class GUI implements KeyListener {
     public GUI() {
         frame = new JFrame("Indecision Games: Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         frame.setResizable(false);
         frame.setMinimumSize(new Dimension(800, 500));
-        
+
         mainPanel = new JLayeredPane();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         frame.setContentPane(mainPanel);
-        
+
         gamePanel = new GamePanel();
         scorePanel = new ScorePanel();
         mainPanel.add(gamePanel);
         mainPanel.add(scorePanel);
-        
-        JMenuBar menu = new JMenuBar();
-        JMenu pause = new JMenu("pause");
-        menu.add(pause);
-        
+
+        MenuBar menu = new MenuBar();
+        menu.setOpaque(true);
+        menu.setBG((new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/menubg.png").getImage()));
         frame.setJMenuBar(menu);
-        
+
+//        JButton pause = new JButton("pause");
+//        JButton save = new JButton("save");
+//        JButton load = new JButton("load");
+//        menu.add(pause);
+//        menu.add(save);
+//        menu.add(load);
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
@@ -62,13 +75,10 @@ public class GUI implements KeyListener {
         gamePanel.addKeyListener(this);
 
     }
-    
 
-    /**
-     * =======================================================. 
-     * Key Listeners
-     * =======================================================.
-     */
+    // =======================================================.
+    // Key Listeners
+    // =======================================================.
 
     /**
      * This method is called when a key is pressed on the keyboard.
@@ -77,7 +87,20 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        // Unused
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_UP) {
+            this.direction = "up";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_LEFT) {
+            this.direction = "left";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_DOWN) {
+            this.direction = "down";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            this.direction = "right";
+            System.out.println(direction);
+        }
     }
 
     /**
@@ -87,14 +110,14 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent e) {
-        this.direction = null;int keyCode = e.getKeyCode();
-
+        this.direction = null;
+        int keyCode = e.getKeyCode();
         if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
                     + "started, it will resume from the last unfinished level");
         } else if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            System.out.println("exit the game, saves the game state, game will resume next time the\r\n" + 
-                    "application will be started");
+            System.out.println("exit the game, saves the game state, game will resume next time the\r\n"
+                    + "application will be started");
         } else if ((e.getKeyCode() == KeyEvent.VK_R) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             System.out.println("resume saved game");
         } else if ((e.getKeyCode() == KeyEvent.VK_P) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
@@ -109,20 +132,8 @@ public class GUI implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             System.out.println("close the “game is paused” dialog and resume the game");
-        } else if (keyCode == KeyEvent.VK_UP) {
-            this.direction = "up";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_LEFT) {
-            this.direction = "left";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_DOWN) {
-            this.direction = "down";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
-            this.direction = "right";
-            System.out.println(direction);
-        }
-        
+        } 
+
     }
 
     /**
@@ -148,11 +159,9 @@ public class GUI implements KeyListener {
         }
     }
 
-    /**
-     * ===================================================. 
-     * Getters and Setters
-     * ===================================================.
-     */
+    // ===================================================.
+    // Getters and Setters
+    // ===================================================.
 
     /**
      * Gets the game panel.
@@ -225,5 +234,21 @@ public class GUI implements KeyListener {
      */
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+}
+
+class MenuBar extends JMenuBar {
+    Image img;
+
+    public void setBG(Image img) {
+        this.img = img;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(img, 0, 0, this);
+
     }
 }
