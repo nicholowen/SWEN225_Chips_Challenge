@@ -4,11 +4,13 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.google.gson.annotations.JsonAdapter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 //import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
+@JsonAdapter(MazeAdapter.class)
 public class Maze {
 	Cell[][] board;
 	private int currentLevel;//Iterate every time a level is complete
@@ -145,9 +147,9 @@ public class Maze {
 		
 		return !toCheck.getIsSolid();
 	}
-	
-	
-	
+
+
+
 	
 	
 	
