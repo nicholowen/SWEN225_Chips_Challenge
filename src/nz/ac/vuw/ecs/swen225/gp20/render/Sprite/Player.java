@@ -5,6 +5,13 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents the player. This Class contains the different orientations of the
+ * player.
+ * TODO: Include the animation frames for movement (running or jumping).
+ *
+ * @author Owen N
+ */
 public class Player extends Sprite {
 
   BufferedImage[] sprites;

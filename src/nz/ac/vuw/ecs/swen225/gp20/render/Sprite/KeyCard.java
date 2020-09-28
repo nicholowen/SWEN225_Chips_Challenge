@@ -3,7 +3,10 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
-
+/**
+ * Represents a Key Card. This Class contains the animation frames of the object,
+ * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
+ */
 public class KeyCard extends Sprite{
 
   BufferedImage[] sprites;
