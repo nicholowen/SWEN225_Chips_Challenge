@@ -77,10 +77,15 @@ public class Maze {
 			case "info":
 				board[t.getX()][t.getY()] = new CellInfo(t.getX(),t.getY());//TODO: Implement Info.
 				break;
-			case "exit lock":
-				 CellExitLocked exit = new CellExitLocked(t.getX(),t.getY());
+			case "exit":
+				CellExit exit = new CellExit(t.getX(),t.getY());
 				 exitList.add(exit);
 				 board[t.getX()][t.getY()] = exit;
+				
+			case "exit lock":
+				 CellExitLocked exitLocked = new CellExitLocked(t.getX(),t.getY());
+				 exitList.add(exitLocked);
+				 board[t.getX()][t.getY()] = exitLocked;
 				break;
 			
 			
