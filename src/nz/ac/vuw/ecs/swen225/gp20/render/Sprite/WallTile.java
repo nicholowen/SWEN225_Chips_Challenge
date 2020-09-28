@@ -57,11 +57,6 @@ public class WallTile extends Sprite{
     BufferedImage image = animation.getImage();
     return image;
   }
-
-//  @Override
-//  public void update() {
-//    //unused
-//  }
   /* Index positions for wall orientation images
    * 0 - front
    * 1 - top
