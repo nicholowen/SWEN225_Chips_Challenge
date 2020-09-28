@@ -52,6 +52,10 @@ public class Main {
             }
         }
     }
+    
+    public Maze getMaze() {
+        return maze;
+    }
 
     public static void main(String[] args) {
         Main game = new Main();
