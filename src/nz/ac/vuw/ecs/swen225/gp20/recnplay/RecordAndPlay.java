@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import javax.json.*;
 import javax.swing.*;
@@ -22,47 +23,51 @@ public class RecordAndPlay {
     private static boolean isRunning;
     private static long startTime;
 
+    public static void save(Main game, String saveName) {
+        saveFile = saveName;
+        isRecording = true;
+        moves.clear();
+        gameState = getGameState(game);
+    }
+
     /**
      * Method to save the recording of the game.
      */
-    public static void saveRecording() {
-        if (isRecording) {
-            JsonArrayBuilder array = Json.createArrayBuilder();
+    public static void saveRecording(Main game) {
+        JsonArrayBuilder array = Json.createArrayBuilder();
 
-            for (int i = 0; i < actors.size(); ++i) {
-                JsonObjectBuilder builder = Json.createObjectBuilder()
-                        .add("actor", actors.get(i))
-                        .add("moves", moves.get(i));
-                array.add(builder.build());
+        for (int i = 0; i < actors.size(); ++i) {
+            JsonObjectBuilder builder = Json.createObjectBuilder()
+                    .add("actor", actors.get(i))
+                    .add("moves", moves.get(i));
+            array.add(builder.build());
                 /* example output of array
                    [
                         "actor": 1, (aka the player)
                         "moves": ["North", "East", "East", "North", "West"]
                    ]
                  */
-            }
+        }
 
-            JsonObjectBuilder builder = Json.createObjectBuilder()
-                    // todo: add game state deserialized from persistence .add("game", gameState)
-                    .add("moves", array)                            // output: {"moves": ["North", "East", "East", "North", "West"]}
-//                    .add("timeRemaining", game.getTimeRemaining());
-                    ;
+        JsonObjectBuilder builder = Json.createObjectBuilder()
+                .add("game", gameState)
+                .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
+                .add("timeRemaining", game.getTimeRemaining());
 
-            // save moves to the file
-            try (Writer w = new StringWriter()) {
-                Json.createWriter(w).write(builder.build());
+        // save moves to the file
+        try (Writer w = new StringWriter()) {
+            Json.createWriter(w).write(builder.build());
 
-                try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile));
-                    bw.write(w.toString());
-                    bw.close();
-                } catch (IOException e) {
-                    throw new Error("Saving failed for movements");
-                }
-
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile));
+                bw.write(w.toString());
+                bw.close();
             } catch (IOException e) {
                 throw new Error("Saving failed for movements");
             }
+
+        } catch (IOException e) {
+            throw new Error("Saving failed for movements");
         }
     }
 
@@ -195,10 +200,38 @@ public class RecordAndPlay {
      * @param dir direction of movement
      */
     public static void addMovement(String dir) {
-        if (isRecording) {
-            moves.add(dir);
-            actors.add(0); // add the player
+        moves.add(dir);
+        actors.add(0); // add the player
+    }
+
+    public static void setTimeRemaining() {
+
+    }
+
+    /**
+     *
+     * @param game
+     * @return
+     */
+    public static String getGameState(Main game) {
+        String jsonGame;
+
+        // Json dump board
+        Json.createObjectBuilder();
+        JsonObjectBuilder builder;
+
+        // Dump game info
+        builder = Json.createObjectBuilder()
+                .add("timeLeft", game.getTimeRemaining());
+
+        // Compose game section
+        try (Writer writer = new StringWriter()) {
+            Json.createWriter(writer).write(builder.build());
+            jsonGame = writer.toString();
+        } catch (IOException e) {
+            throw new Error("Failed to parse game");
         }
+        return jsonGame;
     }
 }
 
