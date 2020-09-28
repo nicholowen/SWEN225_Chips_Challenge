@@ -19,15 +19,7 @@ public class Main {
     public Main() {
 
     }
-
-    public int getTimeRemaining() {
-        return timeRemaining;
-    }
-
-    public boolean isGameEnded() {
-        return gameEnded;
-    }
-
+    
     /**
      * Tick based loop. The main game runs on this loop.
      */
