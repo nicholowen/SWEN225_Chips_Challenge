@@ -9,6 +9,13 @@ import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 @JsonAdapter(MainAdapter.class)
+/**
+ * This class handles the main loop where the game runs. It also sends all the
+ * info needed to different classes every tick.
+ * 
+ * @author Maiza Rehan 300472305
+ *
+ */
 public class Main {
     private static final RecordAndPlay rnp = new RecordAndPlay();
     private static final Persistence persist = new Persistence();
