@@ -18,7 +18,7 @@ public class ScorePanel extends JPanel {
 
   private Image background;
   private BufferedImage[] digits;
-  char[] chars = new char[3];
+  char[] chars = {0, 0, 0};
 
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
@@ -61,7 +61,9 @@ public class ScorePanel extends JPanel {
 
     for(int i = 0; i < chars.length; i++){
       int digit = Character.getNumericValue(chars[i]);
-      g.drawImage(digits[digit], 110 + ((i + offset) * 32), 179, this);
+      if(digit >= 0) {
+        g.drawImage(digits[digit], 110 + ((i + offset) * 32), 179, this);
+      }
 
     }
 
