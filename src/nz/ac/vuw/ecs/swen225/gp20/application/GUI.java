@@ -26,7 +26,10 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.MenuBar;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 /**
- * The Class GUI.
+ * This class handles the setup of the main frame. It also handles the key
+ * listeners and buttons as user input.
+ * 
+ * @author Maiza
  */
 public class GUI implements KeyListener {
 
@@ -57,6 +60,8 @@ public class GUI implements KeyListener {
         scorePanel = new ScorePanel();
         mainPanel.add(gamePanel);
         mainPanel.add(scorePanel);
+        gamePanel.setFocusable(true);
+        gamePanel.setRequestFocusEnabled(true);
 
         MenuBar menu = new MenuBar();
         menu.setOpaque(true);
@@ -65,24 +70,25 @@ public class GUI implements KeyListener {
         JButton pausenplay = new JButton("pause");
         JButton save = new JButton("save");
         JButton load = new JButton("load");
-        menu.add(pausenplay);
+//        menu.add(pausenplay);
 
-//        pausenplay.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent ev) {
-//                paused = !paused;
-//                if (paused) {
-//                    pausenplay.setText("Play");
-//                } else
-//                    pausenplay.setText("Pause");
-//            }
-//        });
+        pausenplay.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                if (paused) {
+                    paused = false;
+                    pausenplay.setText("Play");
+                } else
+                    paused = true;
+                pausenplay.setText("Pause");
+            }
+        });
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
 
-        gamePanel.addKeyListener(this);
+        frame.addKeyListener(this);
 
     }
 
@@ -142,7 +148,7 @@ public class GUI implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             System.out.println("close the “game is paused” dialog and resume the game");
-        } 
+        }
 
     }
 
