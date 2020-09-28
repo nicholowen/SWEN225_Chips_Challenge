@@ -23,17 +23,17 @@ public class RecordAndPlay {
     private static boolean isRunning;
     private static long startTime;
 
-    public static void save(Main game, String saveName) {
+    public static void recording(int timeRemaining, String saveName) {
         saveFile = saveName;
         isRecording = true;
         moves.clear();
-        gameState = getGameState(game);
+        gameState = getGameState(timeRemaining);
     }
 
     /**
      * Method to save the recording of the game.
      */
-    public static void saveRecording(Main game) {
+    public static void saveRecording(int timeRemaining) {
         JsonArrayBuilder array = Json.createArrayBuilder();
 
         for (int i = 0; i < actors.size(); ++i) {
@@ -52,7 +52,7 @@ public class RecordAndPlay {
         JsonObjectBuilder builder = Json.createObjectBuilder()
                 .add("game", gameState)
                 .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
-                .add("timeRemaining", game.getTimeRemaining());
+                .add("timeRemaining", timeRemaining);
 
         // save moves to the file
         try (Writer w = new StringWriter()) {
@@ -204,16 +204,11 @@ public class RecordAndPlay {
         actors.add(0); // add the player
     }
 
-    public static void setTimeRemaining() {
-
-    }
-
     /**
      *
-     * @param game
-     * @return
+     * @return state of the game
      */
-    public static String getGameState(Main game) {
+    public static String getGameState(int timeRemaining) {
         String jsonGame;
 
         // Json dump board
@@ -222,7 +217,7 @@ public class RecordAndPlay {
 
         // Dump game info
         builder = Json.createObjectBuilder()
-                .add("timeLeft", game.getTimeRemaining());
+                .add("timeRemaining", timeRemaining);
 
         // Compose game section
         try (Writer writer = new StringWriter()) {
