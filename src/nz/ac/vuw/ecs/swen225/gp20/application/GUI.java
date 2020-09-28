@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -26,7 +27,7 @@ public class GUI implements KeyListener {
     private boolean recording = false;
     private boolean paused = false;
     private String direction = null;
-//    JLayeredPane layeredPane;
+    JLayeredPane mainPanel;
 
     /**
      * Instantiates a new gui.
@@ -38,7 +39,7 @@ public class GUI implements KeyListener {
         frame.setResizable(false);
         frame.setMinimumSize(new Dimension(800, 500));
         
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JLayeredPane();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         frame.setContentPane(mainPanel);
         
@@ -62,12 +63,6 @@ public class GUI implements KeyListener {
 
     }
     
-
-    private void setJMenuBar(JMenuBar menu) {
-    // TODO Auto-generated method stub
-    
-}
-
 
     /**
      * =======================================================. 
