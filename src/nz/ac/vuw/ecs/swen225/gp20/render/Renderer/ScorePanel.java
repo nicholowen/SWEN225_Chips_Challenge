@@ -17,24 +17,53 @@ public class ScorePanel extends JPanel {
    */
 
   private Image background;
+  private BufferedImage[] digits;
+  char[] chars = new char[3];
 
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
     requestFocus();
-
+    init();
   }
 
+  public void init(){
+    digits = Assets.DIGITS[0];
+  }
 
   private BufferedImage loadBackground(){
     return Assets.SCOREBACKGROUND[0][0];
+  }
+
+  public void update(int timeLimit){
+    String time = String.valueOf(timeLimit);
+    chars = time.toCharArray();
+//    System.out.println(time);
+    repaint();
   }
 
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-      g.drawImage(background, 0, 0, this);
+    g.drawImage(background, 0, 0, this);
+
+    int offset = 0;
+    if(chars.length == 2){
+      offset = 1;
+      g.drawImage(digits[0], 110, 179, this);
+    }
+    else if(chars.length == 1) {
+      offset = 2;
+      g.drawImage(digits[0], 110, 179, this);
+      g.drawImage(digits[0], 142, 179, this);
+    }
+
+    for(int i = 0; i < chars.length; i++){
+      int digit = Character.getNumericValue(chars[i]);
+      g.drawImage(digits[digit], 110 + ((i + offset) * 32), 179, this);
+
+    }
 
   }
 
