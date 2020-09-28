@@ -42,6 +42,9 @@ public class GUI implements KeyListener {
     private boolean recording = false;
     private boolean paused = false;
     private String direction = null;
+    private boolean saveState = false;
+    private String loadingState = null;
+    
     JLayeredPane mainPanel;
     JButton pausenplay;
 
@@ -83,7 +86,6 @@ public class GUI implements KeyListener {
 
         pausenplay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-
                 if (paused) {
                     paused = false;
                     pausenplay.setText("pause");
@@ -91,6 +93,11 @@ public class GUI implements KeyListener {
                     paused = true;
                     pausenplay.setText("play");
                 }
+            }
+        });
+        pausenplay.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                saveState = true;
             }
         });
 
@@ -159,30 +166,26 @@ public class GUI implements KeyListener {
         // exit the game, the current game state will be lost, the next time the game is
         // started, it will resume from the last unfinished level
         if ((keyCode == KeyEvent.VK_X) && ctrl) {
-            System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
-                    + "started, it will resume from the last unfinished level");
+            saveState = true;
+            loadingState = "unfinished";
         }
         // exit the game, saves the game state, game will resume next time the
         // application will be started
         else if ((keyCode == KeyEvent.VK_S) && ctrl) {
-            System.out.println("exit the game, saves the game state, game will resume next time the\r\n"
-                    + "application will be started");
+            saveState = true;
+            loadingState = "resume";
         }
         // resume saved game
         else if ((keyCode == KeyEvent.VK_R) && ctrl) {
-            System.out.println("resume saved game");
+            loadingState = "resume";
         }
         // start a new game at the last unfinished level
         else if ((keyCode == KeyEvent.VK_P) && ctrl) {
-            System.out.println("start a new game at the last unfinished level");
+            loadingState = "unfinished";
         }
         // start a new game at level 1
         else if ((keyCode == KeyEvent.VK_1) && ctrl) {
-            System.out.println("start a new game at level 1");
-        }
-        // start a new game at the last unfinished level
-        else if ((keyCode == KeyEvent.VK_P) && ctrl) {
-            System.out.println("start a new game at the last unfinished level");
+            loadingState = "lvl 1";
         }
         // pause the game and display a “game is paused” dialog
         else if (keyCode == KeyEvent.VK_SPACE) {
@@ -252,14 +255,6 @@ public class GUI implements KeyListener {
         return recording;
     }
 
-    /**
-     * Sets the recording.
-     *
-     * @param recording the new recording
-     */
-    public void setRecording(boolean recording) {
-        this.recording = recording;
-    }
 
     /**
      * Checks if is paused.
@@ -271,15 +266,6 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Sets paused.
-     *
-     * @param recording the new recording
-     */
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    /**
      * Gets the movement direction.
      *
      * @return the direction
@@ -287,13 +273,32 @@ public class GUI implements KeyListener {
     public String getDirection() {
         return direction;
     }
+    
+    /**
+     * Checks if is user wants to save state.
+     *
+     * @return true, if is saving
+     */
+    public boolean isSaving() {
+        return saveState;
+    }
 
     /**
-     * Sets the direction.
+     * Sets saving to false (called once saving is complete).
      *
-     * @param direction the new direction
      */
-    public void setDirection(String direction) {
-        this.direction = direction;
+    public void saved() {
+        this.saveState = false;
+    }
+    
+    /**
+     * Checks what state the game is to be loaded in
+     *
+     * @return unfinished, if is last unfinished level
+     *         lvl 1, if is first level
+     *         resume, if is resuming a game
+     */
+    public String getLoadState() {
+        return loadingState;
     }
 }
