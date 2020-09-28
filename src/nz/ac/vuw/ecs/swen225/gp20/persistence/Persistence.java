@@ -1,18 +1,28 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class Persistence {
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
+    public static final String resources = "resources";
+    public static final String levels = Paths.get(resources, "levels").toString();
+    public static final String recordings = Paths.get(resources, "recordings").toString();
+    public static final String savedState = Paths.get(resources, "saved-state").toString();
 
     public Persistence() {
 
@@ -54,6 +64,7 @@ public class Persistence {
         if (file.exists() && !file.isDirectory()) {
             return file;
         } else {
+            System.out.println(file);
             throw new FileNotFoundException();
         }
     }
@@ -62,7 +73,7 @@ public class Persistence {
      * Gets a file object from the levels directory & checks that file exists.
      */
     private File getLevelFile(int level) throws FileNotFoundException {
-        return checkFile(new File("resources/levels/level" + level + ".json"));
+        return checkFile(Paths.get(levels, "level" + level + ".json").toFile());
     }
 
     /**
@@ -83,40 +94,45 @@ public class Persistence {
 
     /**
      * Reads a recorded game from a json file
+     *
+     * @return a recording of the game
      */
-    public void readRecording() {
+    public RecordAndPlay readRecording() {
+        return null;
+    }
 
+    /**
+     * Saves the current state of the maze as a json file
+     *
+     * @param maze the maz to save
+     * @throws IOException {@inheritDoc}
+     */
+    public void saveGameState(Maze maze) throws IOException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
+
+        try (Writer writer = new FileWriter(Paths.get(savedState, filename).toString())) {
+            gson.toJson(maze, writer);
+        }
+    }
+
+    /**
+     * Reads a saved game from a json file into a Maze object
+     *
+     * @return the saved maze object
+     */
+    public Maze getGameState() {
+        return null;
     }
 
     public static void main(String[] args) {
-        Persistence persist = new Persistence();
-        try {
-            Level level = persist.read(1);
-        } catch (FileNotFoundException | JsonSyntaxException | LevelFileException e) {
-            System.out.println("here1");
-            System.out.println(e.getClass());
-            e.printStackTrace();
-        }
-
-        String jsonString =
-                "{" +
-                        " \"description\": \"Level 1\"," +
-                        "  \"width\": 15," +
-                        "  \"height\": 14," +
-                        "  \"startX\": 7," +
-                        "  \"startY\": 6," +
-                        "  \"grid\": [" +
-                        "      {\"x\": 0, \"y\": 0, \"name\": \"free\"}," +
-                        "      {\"x\": 1, \"y\": 0, \"name\": \"free\"}," +
-                        "      {\"x\": 2, \"y\": 0, \"name\": \"wall\"}" +
-                        "  ]" +
-                        "}";
+        Persistence persistence = new Persistence();
+        Maze maze = new Maze(persistence);
+        maze.loadMaze(1);
 
         try {
-            Level level = persist.read(jsonString);
-        } catch (JsonSyntaxException | LevelFileException e) {
-            System.out.println("here2");
-            System.out.println(e.getClass());
+            persistence.saveGameState(maze);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

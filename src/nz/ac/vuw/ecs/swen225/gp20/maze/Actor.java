@@ -83,7 +83,7 @@ public class Actor {
 		moveProgress=0;//Reset move progress.
 	}
 
-
-
-	
+	public String getName() {
+		return name;
+	}
 }
