@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
-//import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
@@ -14,12 +14,12 @@ public class Maze {
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
-	private boolean playerHasKey1;
-	private boolean playerHasKey2;
+	private ArrayList<String> playerInventory;
 	
 	//Board logic
 	private int boardHeight;
 	private int boardWidth;
+	private ArrayList<Cell> exitList;
 	
 	
 	//Actor logic
@@ -46,17 +46,53 @@ public class Maze {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
 			return 0;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
+		//Resetting/initializing
+		currentTreasureLeft=0;
+		currentTreasureCollected=0;
+		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
+		exitList=new ArrayList<>();
 		
 		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
 		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
-			board[t.getX()][t.getY()] = new Cell(t.getName(), t.getX(), t.getY());//TODO:Implement or scrap Colour
+			//board[t.getX()][t.getY()] = new Cell(t.getName(), t.getX(), t.getY());
+			String tileName=t.getName();
+			switch(tileName) {
+			case "free":
+				board[t.getX()][t.getY()] = new CellFree(t.getX(),t.getY());
+				break;
+			case "wall":
+				board[t.getX()][t.getY()] = new CellWall(t.getX(),t.getY());
+				break;
+			case "treasure":
+				currentTreasureLeft++;
+				board[t.getX()][t.getY()] = new CellTreasure(t.getX(),t.getY());
+				break;
+			case "key":
+				board[t.getX()][t.getY()] = new CellKey(t.getX(),t.getY(), t.getColor());
+				break;
+			case "door":
+				board[t.getX()][t.getY()] = new CellDoor(t.getX(),t.getY(), t.getColor());
+				break;
+			case "info":
+				board[t.getX()][t.getY()] = new CellInfo(t.getX(),t.getY());//TODO: Implement Info.
+				break;
+			case "exit lock":
+				 CellExitLocked exit = new CellExitLocked(t.getX(),t.getY());
+				 exitList.add(exit);
+				 board[t.getX()][t.getY()] = exit;
+				break;
+			
+			
+			
+			}
+
 		}//At this stage, all tiles are loaded (?)
 		
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
 		
-		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
+		
 		/*
 		for(Character c:toLoad.getCharacters()){
 			if(c.getName().equals("chap") || c.getName().equals("player")){//If it's the player //TODO Decide on player name, "player" or "chap"
@@ -67,6 +103,7 @@ public class Maze {
 
 		}
 		*/
+		playerInventory=new ArrayList<>();//Reset the player's keys!
 		currentLevel=levelToLoad;
 		return toLoad.getTimeLimit();
 
@@ -107,6 +144,10 @@ public class Maze {
 		return currentLevel;
 	}
 	
+	public ArrayList<String> getPlayerInventory(){
+		return playerInventory;
+	}
+	
 	
 	/**
 	 * One run of the core game "loop", which has the option of taking a movement.
@@ -118,9 +159,29 @@ public class Maze {
 		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
 		player.move(movementDirection);
 		player.tick();
-		//TODO:Update all NPCs+Player if moving
+		//TODO: Tick all NPCs once they're implemented.
+		
+		
+		
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
-		//TODO:Update all animated tiles (?) Maybe do this when Render requests tiles to draw.	
+		
+		//Collision check
+		Cell stoodOn=board[player.getX()][player.getY()];
+		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
+			if(stoodOn.isTreasure()) {//If treasure, increment counters, ignore inventory.
+				currentTreasureCollected++;
+				currentTreasureLeft--;
+			} else {//If not treasure, add item to inventory
+				playerInventory.add(stoodOn.getPickupName());
+			}
+			//Nomatter what the pickup WAS, replace it with an empty tile
+			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
+			
+			
+			
+		}
+		
+		
 		return new RenderTuple(getActors(), getBoard());//TEMP
 	}
 	
