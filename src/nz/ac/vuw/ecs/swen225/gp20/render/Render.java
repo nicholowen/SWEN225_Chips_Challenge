@@ -23,8 +23,9 @@ public class Render {
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    * @param tuple Contains the current state of the cells and the player
    */
-  public void update(RenderTuple tuple){
+  public void update(RenderTuple tuple, int timeRemaining){
     gp.update(tuple);
+    sp.update(timeRemaining);
   }
 
   /**

@@ -56,7 +56,7 @@ public class Maze {
 		}//At this stage, all tiles are loaded (?)
 		
 		//Load player
-		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 15);//Player takes 15 ticks to move.
+		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
 		
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		/*
@@ -69,6 +69,7 @@ public class Maze {
 
 		}
 		*/
+		currentLevel=levelToLoad;
 		return toLoad.getTimeLimit();
 
 	}
@@ -104,7 +105,9 @@ public class Maze {
 		return toReturn;
 	}
 	
-	
+	public int getLevel() {
+		return currentLevel;
+	}
 	
 	
 	/**
@@ -137,6 +140,9 @@ public class Maze {
 			return false;//Out-of-bounds, cannot walk through.
 		
 		Cell toCheck=board[xToCheck][yToCheck];
+		
+		
+		
 		return !toCheck.getIsSolid();
 	}
 	

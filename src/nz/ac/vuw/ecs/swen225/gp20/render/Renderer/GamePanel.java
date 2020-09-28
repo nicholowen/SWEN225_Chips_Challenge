@@ -147,7 +147,11 @@ public class GamePanel extends JPanel {
     for (int i = 0; i < 9; i++) {
       tempy = y;
       for (int j = 0; j < 9; j++) {
-        ret[i][j] = cells[tempx][tempy];
+        if((tempx >= 0 && tempx <= cells.length-1) && (tempy >= 0 && tempy <= cells[0].length -1)) {
+          ret[i][j] = cells[tempx][tempy];
+        }else{
+          ret[i][j] = null;
+        }
         tempy++;
       }
       tempx++;
@@ -168,34 +172,36 @@ public class GamePanel extends JPanel {
     playerSprite.update(player.getDirection());
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-        switch (getInfo("name", surround[i][j])) {
-          case "free":
-            floor[i][j] = surround[i][j];
-            break;
-          case "wall":
-            wall[i][j] = surround[i][j];
-            break;
-          case "door":
-            door[i][j] = surround[i][j];
+        if(surround[i][j] != null) {
+          switch (getInfo("name", surround[i][j])) {
+            case "free":
+              floor[i][j] = surround[i][j];
+              break;
+            case "wall":
+              wall[i][j] = surround[i][j];
+              break;
+            case "door":
+              door[i][j] = surround[i][j];
 //            (Door)surround[i][j].getAnimationObject();
-            break;
-          case "treasure":
-            energy[i][j] = surround[i][j];
-            floor[i][j] = surround[i][j];
-            if(energyObjects.containsKey(surround[i][j])){
-              energyObjects.get(surround[i][j]).update();
-            }
-            break;
-          case "key":
-            key[i][j] = surround[i][j];
-            floor[i][j] = surround[i][j];
-            if(keyObjects.containsKey(surround[i][j])){
-              keyObjects.get(surround[i][j]).update();
-            }
-            break;
-          case "info":
-            info = new Info(i, j, Assets.INFO[0][0]);
-            break;
+              break;
+            case "treasure":
+              energy[i][j] = surround[i][j];
+              floor[i][j] = surround[i][j];
+              if (energyObjects.containsKey(surround[i][j])) {
+                energyObjects.get(surround[i][j]).update();
+              }
+              break;
+            case "key":
+              key[i][j] = surround[i][j];
+              floor[i][j] = surround[i][j];
+              if (keyObjects.containsKey(surround[i][j])) {
+                keyObjects.get(surround[i][j]).update();
+              }
+              break;
+            case "info":
+              info = new Info(i, j, Assets.INFO[0][0]);
+              break;
+          }
         }
       }
     }
@@ -209,7 +215,10 @@ public class GamePanel extends JPanel {
    * @return if identifier is "name" return the name of the cell, otherwise return the animation frame (for syncing)
    */
   private String getInfo(String identifier, Cell cell){
-    String[] metadata = cell.getRenderData().split(":");
+    String[] metadata = new String[0];
+    if(cell.getRenderData() != null){
+      metadata = cell.getRenderData().split(":");
+    }
     if(identifier.equals("name")) return metadata[0];
     else return metadata[1];
   }
@@ -322,7 +331,7 @@ public class GamePanel extends JPanel {
     int y = 64;
 
 
-
+    g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, this);
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
