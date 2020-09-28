@@ -51,7 +51,7 @@ public class Persistence {
      * @return Level object
      * @throws JsonSyntaxException {@inheritDoc}
      */
-    public Level read(String json) throws JsonSyntaxException, LevelFileException {
+    public static Level read(String json) throws JsonSyntaxException, LevelFileException {
         Level levelObj = gson.fromJson(json, Level.class);
         levelObj.validate();
         return levelObj;
