@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
@@ -16,8 +17,7 @@ import java.util.Calendar;
 
 
 public class Persistence {
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static final String resources = "resources";
     public static final String levels = Paths.get(resources, "levels").toString();
@@ -36,7 +36,7 @@ public class Persistence {
      * @throws FileNotFoundException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
-    public Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
+    public static Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
         File file = getLevelFile(level);
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
         Level levelObj = gson.fromJson(reader, Level.class);
@@ -60,7 +60,7 @@ public class Persistence {
     /**
      * Helper method that checks if a file exists.
      */
-    private File checkFile(File file) throws FileNotFoundException {
+    private static File checkFile(File file) throws FileNotFoundException {
         if (file.exists() && !file.isDirectory()) {
             return file;
         } else {
@@ -72,7 +72,7 @@ public class Persistence {
     /**
      * Gets a file object from the levels directory & checks that file exists.
      */
-    private File getLevelFile(int level) throws FileNotFoundException {
+    private static File getLevelFile(int level) throws FileNotFoundException {
         return checkFile(Paths.get(levels, "level" + level + ".json").toFile());
     }
 
@@ -104,15 +104,15 @@ public class Persistence {
     /**
      * Saves the current state of the maze as a json file
      *
-     * @param maze the maz to save
+     * @param game the game to save
      * @throws IOException {@inheritDoc}
      */
-    public void saveGameState(Maze maze) throws IOException {
+    public void saveGameState(Main game) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
         try (Writer writer = new FileWriter(Paths.get(savedState, filename).toString())) {
-            gson.toJson(maze, writer);
+            gson.toJson(game, writer);
         }
     }
 
@@ -130,8 +130,11 @@ public class Persistence {
         Maze maze = new Maze(persistence);
         maze.loadMaze(1);
 
+        Main game = new Main();
+        //game.play();
+
         try {
-            persistence.saveGameState(maze);
+            persistence.saveGameState(game);
         } catch (IOException e) {
             e.printStackTrace();
         }
