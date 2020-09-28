@@ -3,18 +3,21 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.IOException;
 
-public class MazeAdapter extends TypeAdapter<Maze> {
+public class MainAdapter extends TypeAdapter<Main> {
 
     @Override
-    public void write(JsonWriter jsonWriter, Maze maze) throws IOException {
+    public void write(JsonWriter jsonWriter, Main game) throws IOException {
         jsonWriter.beginObject();
 
+        Maze maze = game.getMaze();
         jsonWriter.name("level").value(maze.getLevel());
+        jsonWriter.name("timeRemaining").value(game.getTimeRemaining());
 
         jsonWriter.name("actors");
         writeActorsArray(jsonWriter, maze.getActors());
@@ -55,8 +58,9 @@ public class MazeAdapter extends TypeAdapter<Maze> {
     }
 
     @Override
-    public Maze read(JsonReader jsonReader) throws IOException {
+    public Main read(JsonReader jsonReader) throws IOException {
         Persistence persist = new Persistence();
-        return new Maze(persist);
+        //return new Maze(persist);
+        return null;
     }
 }

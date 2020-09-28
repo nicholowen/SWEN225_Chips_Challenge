@@ -4,13 +4,11 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.google.gson.annotations.JsonAdapter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 //import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Character;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
-@JsonAdapter(MazeAdapter.class)
 public class Maze {
 	Cell[][] board;
 	private int currentLevel;//Iterate every time a level is complete
@@ -20,7 +18,6 @@ public class Maze {
 	private boolean playerHasKey2;
 	
 	//Board logic
-	private Persistence loader;
 	private int boardHeight;
 	private int boardWidth;
 	
@@ -32,8 +29,7 @@ public class Maze {
 	/**
 	 * Initializes a maze. The maze will not load a level until prompted.
 	 */
-	public Maze(Persistence persist) {
-		loader=persist;
+	public Maze() {
 	}
 	
 	
@@ -45,7 +41,7 @@ public class Maze {
 	public int loadMaze(int levelToLoad) {
 		Level toLoad;
 		try {
-			toLoad=loader.read(levelToLoad);
+			toLoad=Persistence.read(levelToLoad);
 		} catch(IOException | LevelFileException e) {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
 			return 0;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
