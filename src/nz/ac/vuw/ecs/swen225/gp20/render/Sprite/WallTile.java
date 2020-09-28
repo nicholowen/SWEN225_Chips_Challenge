@@ -5,6 +5,11 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents a wall tile. The wall type will depend on adjacent cells and if there are walls there.
+ *
+ *
+ */
 public class WallTile extends Sprite{
 
   BufferedImage image;
@@ -20,6 +25,7 @@ public class WallTile extends Sprite{
 
   /**
    * Sets the image for this tile depending on neighbouring walls
+   * > seems to have an issue with this algorithm where it's not doing what I expected.
    * @param north Tile to the north
    * @param east Tile to the east
    * @param south Tile to the south
@@ -51,11 +57,6 @@ public class WallTile extends Sprite{
     if(!n &&  e &&  s &&  w) animation.setImage(img[12]);
     if( n && !e &&  s &&  w) animation.setImage(img[11]);
 
-    if (!n ) {
-      if (!e) {
-
-      }
-    }
   }
 
   public BufferedImage getImage(){

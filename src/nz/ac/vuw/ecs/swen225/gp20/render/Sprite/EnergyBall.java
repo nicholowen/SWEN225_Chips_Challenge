@@ -3,6 +3,12 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents a 'treasure' that we have called energy ball. This Class contains the animation frames of the object,
+ * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
+ *
+ * @author Owen N
+ */
 public class EnergyBall extends Sprite{
 
   BufferedImage[] sprites;
@@ -22,7 +28,7 @@ public class EnergyBall extends Sprite{
   }
 
   /**
-   * Updates the frame of the object
+   * Updates the frame of the object by progressing the counter in it's animation object.
    */
   public void update(){
     animation.update();

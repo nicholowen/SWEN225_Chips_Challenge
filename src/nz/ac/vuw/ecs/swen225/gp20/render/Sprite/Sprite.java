@@ -3,6 +3,10 @@ package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Animation;
 
+/**
+ * Parent class to represent all types of sprites. Some sprites may not require this parent,
+ * specifically things that don't require animation or doesn't change.
+ */
 public class Sprite {
 
 

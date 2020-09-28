@@ -8,6 +8,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * Allows the current status of the game to be displayed - this includes the Level information,
+ * timer, and inventory.
+ *
+ * @author Owen N
+ *
+ * TODO: Include a space for the 'treasure' items remaining, as well as
+ *  implement all other information graphics (including custom font for information panel).
+ */
 public class ScorePanel extends JPanel {
 
   /*===============================================================
@@ -27,7 +36,10 @@ public class ScorePanel extends JPanel {
     init();
   }
 
-  public void init(){
+  /**
+   * Initialises the background - more coming soon...
+   */
+  private void init(){
     digits = Assets.DIGITS[0];
   }
 
@@ -35,14 +47,22 @@ public class ScorePanel extends JPanel {
     return Assets.SCOREBACKGROUND[0][0];
   }
 
+  /**
+   * Gets a time and converts to char array to be converted into an int
+   * @param timeLimit the time in 'int'
+   */
   public void update(int timeLimit){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
-//    System.out.println(time);
     repaint();
   }
 
 
+  /**
+   * Converts the char array to numeric values which are then drawn on screen
+   * with absolute values (dictated by the background graphic of the ScorePanel
+   * @param g Graphics object
+   */
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -60,8 +80,8 @@ public class ScorePanel extends JPanel {
     }
 
     for(int i = 0; i < chars.length; i++){
-      int digit = Character.getNumericValue(chars[i]);
-      if(digit >= 0) {
+      int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
+      if(digit >= 0) { //to avoid null pointer
         g.drawImage(digits[digit], 110 + ((i + offset) * 32), 179, this);
       }
 

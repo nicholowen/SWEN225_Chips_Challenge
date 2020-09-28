@@ -4,6 +4,12 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents the Information screen on the 'score panel'.
+ * Get's updated and information rendered when the player is on the info cell.
+ *
+ * @author Owen N
+ */
 public class Info {
   private BufferedImage image;
   private int x, y;

@@ -4,6 +4,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * Loads assets into 2D BufferedImage Arrays. This allows multiple states
+ * of image to be loaded from a single sprite sheet.
+ *
+ * Credit: Zequnyu - https://github.com/zequnyu
+ * @author Owen N
+ */
 public class Assets
 {
   private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
@@ -26,10 +33,6 @@ public class Assets
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
 
-
-
-
-  //TODO: Player, Key, Door
 
 
   /**

@@ -13,6 +13,12 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Allows the game map to be rendered and animated in a 9 x 9 grid around the player.
+ * This class initialises all render-able objects and updates them (if they need to be animated) every tick.
+ *
+ * @author Owen N
+ */
 public class GamePanel extends JPanel {
 
   //Lists to be populated with Cells surrounding player in 9x9 grid
@@ -22,13 +28,17 @@ public class GamePanel extends JPanel {
   private Cell[][] energy = new Cell[9][9];
   private Cell[][] key = new Cell[9][9];
 
+  // currently not being used (for transition animation if being implemented)
   private Cell[][] map;
   private Object[][] sprites;
 
+  // HashMaps to store all rendered objects in the game
   private HashMap<Cell, WallTile> wallObjects = new HashMap<>();
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
+
+  //Single Rendered object (only one per map)
   private Info info;
   private Player playerSprite;
 
@@ -51,9 +61,11 @@ public class GamePanel extends JPanel {
     Graphics g = image.getGraphics();
   }
 
-  //needs to be called when the map has been loaded and all objects have been initialised.
-  //this assigns animation objects to all objects that can animate so they can be updated
-  //as well as walls so they can have an associated wall orientation given.
+  /**
+   * Initialises all 'sprites' in game, based on the position of the cells.
+   * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
+   * @param cells The tiles of the game map.
+   */
   public void initAnimationObjects(Cell[][] cells){
     sprites = new Object[cells.length][cells[0].length];
     this.map = cells;
@@ -64,8 +76,8 @@ public class GamePanel extends JPanel {
         switch(data[0]){
           case "wall":
             WallTile wt = new WallTile();
-            Cell[] neighbours = getWallNeighbours(cells, j, i, cells[0].length, cells.length);
-            wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]);
+            Cell[] neighbours = getWallNeighbours(cells, j, i);
+            wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]); //wall object initialised with cells at each cardinal direction
             sprites[i][j] = wt;
             wallObjects.put(cells[i][j], wt);
           case "treasure":
@@ -87,16 +99,16 @@ public class GamePanel extends JPanel {
   }
 
   /**
-   * Finds the neighbouring cells of a wall (all cardinal directions)
-   * @param cells
-   * @param x
-   * @param y
-   * @param lengthX
-   * @param lengthY
-   * @return
+   * Finds the neighbouring cells of a wall (all cardinal directions).
+   * @param cells All map cells.
+   * @param x the x coordinate of the main cell being checked.
+   * @param y the y coordinate of the main cell being checked.
+   * @return A cell array containing between 1 and 4 cells which are adjacent to the main cell in north, east, south, west order..
    */
-  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y, int lengthX, int lengthY){
+  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y){
     Cell[] neighbours  = new Cell[4];
+    int lengthX = cells[0].length;
+    int lengthY = cells.length;
 
     if(x != 0){
       neighbours[1] = cells[y][x-1];
@@ -119,43 +131,31 @@ public class GamePanel extends JPanel {
   }
 
   /**
-   * Gets a 9x9 grid around the player. If the player is too far to the left/right, or top/bottom of the maze boundary,
-   * will get the furthest 9x9 grid possible.
+   * Gets a 9x9 grid around the player. Will keep the player centered on the screen.
    * @param cells All cells for entire maze
-//   * @param actors The players character - for obtaining current position
+   * @param player The player's character - for obtaining current position
    * @return 9x9 Cell array
    */
   private Cell[][] getSurround(Cell[][] cells, Actor player) {
-    Cell[][] ret = new Cell[9][9];
-    //using actors[0] as a place holder for player. I assume the player will be the first one on the list.
+    Cell[][] ret = new Cell[9][9]; //a new array to store all the cells around the player
     Point playerPos = new Point(player.getX(), player.getY());
 
-//    int x;
-//    int y;
 
-//    if (playerPos.getX() < 5) x = 0;
-//    else if (playerPos.getX() > cells[0].length - 5) x = cells.length -10;
-//    else x = (int) (playerPos.getX() - 4); //dont understand why this is 5 (see next note)
-//
-//    if (playerPos.getY() < 5) y = 0;
-//    else if (playerPos.getY() > cells.length - 5) y = cells[0].length -10;
-//    else y = (int) (playerPos.getY() - 4); //and this is 3... :s
-
-    int tempx = (int)playerPos.getX() - 4;
-    int tempy;
+    int x = (int)playerPos.getX() - 4;
+    int y;
 
     for (int i = 0; i < 9; i++) {
-      tempy = (int)playerPos.getY() - 4;
+      y = (int)playerPos.getY() - 4;
       for (int j = 0; j < 9; j++) {
-        if((tempx >= 0 && tempx < cells.length) && (tempy >= 0 && tempy < cells[0].length)) {
-          ret[i][j] = cells[tempx][tempy];
+        if((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
+          ret[i][j] = cells[x][y];
 
         }else{
           ret[i][j] = null;
         }
-        tempy++;
+        y++;
       }
-      tempx++;
+      x++;
     }
     return ret;
   }
@@ -236,90 +236,6 @@ public class GamePanel extends JPanel {
     key    = new Cell[9][9];
   }
 
-  int offset = 0;
-
-  private BufferedImage[] getTransitionImages(String dir){
-    BufferedImage[] transitionImages = new BufferedImage[9];
-
-    Cell[][] surround = getSurround(map, player);
-
-    int x = 0;
-    int y = 0;
-    int i = 0;
-    int k = 0;
-    int l = 0;
-
-    for(int j = 0; j < 9; j++){
-      BufferedImage image = null;
-      switch (dir) {
-        case "north":
-          offset += -4;
-          i = 0;
-          k = 0;
-          l = 64;
-          x = surround[i][j].getX();
-          y = surround[i][j].getY();
-          break;
-        case "east":
-          offset += 4;
-          i = surround[0].length;
-          k = 0;
-          l = 0;
-          x = surround[j][i].getX();
-          y = surround[j][i].getY();
-          break;
-        case "south":
-          offset += 4;
-          i = surround.length;
-          k = 0;
-          l = 0;
-          x = surround[i][j].getX();
-          y = surround[i][j].getY();
-          break;
-        case "west":
-          offset += -4;
-          i = 0;
-          k = 60;
-          l = 0;
-          x = surround[j][i].getX();
-          y = surround[j][i].getY();
-          break;
-      }
-
-      Object sprite = sprites[y-1][x-1];
-      if(sprite instanceof WallTile){
-        WallTile wt = (WallTile)sprite;
-        image = wt.getImage();
-      }else if(sprite instanceof Door) {
-        Door door = (Door) sprite;
-        image = door.getImage();
-      }else if(sprite instanceof KeyCard) {
-        KeyCard key = (KeyCard) sprite;
-        image = joinImage(key.getImage());
-      }else if(sprite instanceof EnergyBall) {
-        EnergyBall eb = (EnergyBall) sprite;
-        image = joinImage(eb.getImage());
-      }else{
-        image = Assets.FLOOR[0][0];
-      }
-      if(image != null) {
-        transitionImages[j] = image.getSubimage(k, l + offset, image.getWidth(), image.getHeight());
-      }
-    }
-    return transitionImages;
-  }
-
-  //UNTESTED - joins two images together - so the energy and key can be drawn on top of the floors.
-  private BufferedImage joinImage(BufferedImage image){
-    BufferedImage target = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D g2d = (Graphics2D) target.getGraphics();
-    g2d.drawImage(image, 0, 0, null);
-    g2d.drawImage(Assets.FLOOR[0][0], 0, 0, null);
-    g2d.dispose();
-    return target;
-  }
-
-
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
    * @param g graphics object
@@ -336,31 +252,6 @@ public class GamePanel extends JPanel {
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-
-        //THIS SHIT IT TOO HARD. WILL WORRY ABOUT TRANSITION LATER
-//        if(player != null && player.getIsMoving()) {
-//          String playerDir = player.getDirection();
-//          BufferedImage[] transition = getTransitionImages(playerDir);
-//          //if player is moving, render the screen
-//          switch (playerDir) {
-//            case "up":
-//              y += -4;
-//              g.drawImage(transition[j], 0, j* y, this);
-//              break;
-//            case "right":
-//              x += 4;
-//              g.drawImage(transition[i], 0, 64 * i + 4, this);
-//              break;
-//            case "down":
-//              y += -4;
-//              g.drawImage((transition[j]), 64 * j, 576 + y, null);
-//              break;
-//            case "left":
-//              x += -4;
-//              g.drawImage(transition[i], 576 + x, 64 * j, null);
-//              break;
-//          }
-//        }
 
         if(info != null && i == info.getX() && j == info.getY()){
           g.drawImage(info.getImage(), y * i, x * j, this);
@@ -382,11 +273,99 @@ public class GamePanel extends JPanel {
         }
       }
     }
+    //draws player last to remain on top
     if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, this);
 
     //clears lists for next frame
     clearLists();
 
   }
+
+  //=====================================
+// CURRENTLY UNUSED - UNDER DELEVOPMENT
+//=====================================
+
+//  int offset = 0;
+
+//  private BufferedImage[] getTransitionImages(String dir){
+//    BufferedImage[] transitionImages = new BufferedImage[9];
+//
+//    Cell[][] surround = getSurround(map, player);
+//
+//    int x = 0;
+//    int y = 0;
+//    int i = 0;
+//    int k = 0;
+//    int l = 0;
+//
+//    for(int j = 0; j < 9; j++){
+//      BufferedImage image = null;
+//      switch (dir) {
+//        case "north":
+//          offset += -4;
+//          i = 0;
+//          k = 0;
+//          l = 64;
+//          x = surround[i][j].getX();
+//          y = surround[i][j].getY();
+//          break;
+//        case "east":
+//          offset += 4;
+//          i = surround[0].length;
+//          k = 0;
+//          l = 0;
+//          x = surround[j][i].getX();
+//          y = surround[j][i].getY();
+//          break;
+//        case "south":
+//          offset += 4;
+//          i = surround.length;
+//          k = 0;
+//          l = 0;
+//          x = surround[i][j].getX();
+//          y = surround[i][j].getY();
+//          break;
+//        case "west":
+//          offset += -4;
+//          i = 0;
+//          k = 60;
+//          l = 0;
+//          x = surround[j][i].getX();
+//          y = surround[j][i].getY();
+//          break;
+//      }
+//
+//      Object sprite = sprites[y-1][x-1];
+//      if(sprite instanceof WallTile){
+//        WallTile wt = (WallTile)sprite;
+//        image = wt.getImage();
+//      }else if(sprite instanceof Door) {
+//        Door door = (Door) sprite;
+//        image = door.getImage();
+//      }else if(sprite instanceof KeyCard) {
+//        KeyCard key = (KeyCard) sprite;
+//        image = joinImage(key.getImage());
+//      }else if(sprite instanceof EnergyBall) {
+//        EnergyBall eb = (EnergyBall) sprite;
+//        image = joinImage(eb.getImage());
+//      }else{
+//        image = Assets.FLOOR[0][0];
+//      }
+//      if(image != null) {
+//        transitionImages[j] = image.getSubimage(k, l + offset, image.getWidth(), image.getHeight());
+//      }
+//    }
+//    return transitionImages;
+//  }
+//
+//  //UNTESTED - joins two images together - so the energy and key can be drawn on top of the floors.
+//  private BufferedImage joinImage(BufferedImage image){
+//    BufferedImage target = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+//    Graphics2D g2d = (Graphics2D) target.getGraphics();
+//    g2d.drawImage(image, 0, 0, null);
+//    g2d.drawImage(Assets.FLOOR[0][0], 0, 0, null);
+//    g2d.dispose();
+//    return target;
+//  }
 
 }

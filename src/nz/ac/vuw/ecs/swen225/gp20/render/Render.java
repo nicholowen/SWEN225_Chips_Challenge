@@ -4,6 +4,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
+/**
+ * Main Render Module class. Simply stores the Drawing panels and performs updates to both every tick.
+ *
+ * @author Owen N
+ */
 public class Render {
 
   GamePanel gp;
