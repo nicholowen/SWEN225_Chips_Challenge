@@ -1,7 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -41,6 +43,7 @@ public class GUI implements KeyListener {
     private boolean paused = false;
     private String direction = null;
     JLayeredPane mainPanel;
+    JButton pausenplay;
 
     /**
      * Instantiates a new gui.
@@ -68,9 +71,9 @@ public class GUI implements KeyListener {
         menu.setOpaque(true);
         frame.setJMenuBar(menu);
 
-        JButton pausenplay = new JButton("pause");
-        JButton save = new JButton("save");
-        JButton load = new JButton("load");
+        pausenplay = new JButton("pause");
+        JButton save = new JButton("save state");
+        JButton load = new JButton("load state");
         menu.add(pausenplay);
         menu.add(save);
         menu.add(load);
@@ -80,6 +83,7 @@ public class GUI implements KeyListener {
 
         pausenplay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
+
                 if (paused) {
                     paused = false;
                     pausenplay.setText("pause");
@@ -109,9 +113,10 @@ public class GUI implements KeyListener {
      */
     public void formatButton(JButton button) {
         button.setForeground(new Color(107, 201, 240));
+        button.setFont(new Font("Arial", Font.PLAIN, 18));
         button.setOpaque(false);
         button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
+        button.setBorderPainted(true);
     }
 
     // =======================================================.
@@ -150,26 +155,44 @@ public class GUI implements KeyListener {
     public void keyReleased(KeyEvent e) {
         this.direction = null;
         int keyCode = e.getKeyCode();
-        if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        boolean ctrl = (e.getModifiers() & KeyEvent.CTRL_MASK) != 0;
+        // exit the game, the current game state will be lost, the next time the game is
+        // started, it will resume from the last unfinished level
+        if ((keyCode == KeyEvent.VK_X) && ctrl) {
             System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
                     + "started, it will resume from the last unfinished level");
-        } else if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        }
+        // exit the game, saves the game state, game will resume next time the
+        // application will be started
+        else if ((keyCode == KeyEvent.VK_S) && ctrl) {
             System.out.println("exit the game, saves the game state, game will resume next time the\r\n"
                     + "application will be started");
-        } else if ((e.getKeyCode() == KeyEvent.VK_R) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        }
+        // resume saved game
+        else if ((keyCode == KeyEvent.VK_R) && ctrl) {
             System.out.println("resume saved game");
-        } else if ((e.getKeyCode() == KeyEvent.VK_P) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        }
+        // start a new game at the last unfinished level
+        else if ((keyCode == KeyEvent.VK_P) && ctrl) {
             System.out.println("start a new game at the last unfinished level");
-        } else if ((e.getKeyCode() == KeyEvent.VK_1) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        }
+        // start a new game at level 1
+        else if ((keyCode == KeyEvent.VK_1) && ctrl) {
             System.out.println("start a new game at level 1");
-        } else if ((e.getKeyCode() == KeyEvent.VK_P) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        }
+        // start a new game at the last unfinished level
+        else if ((keyCode == KeyEvent.VK_P) && ctrl) {
             System.out.println("start a new game at the last unfinished level");
-        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        }
+        // pause the game and display a “game is paused” dialog
+        else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
-            System.out.println("pause the game and display a “game is paused” dialog");
-        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            pausenplay.setText("play");
+        }
+        // close the “game is paused” dialog and resume the game
+        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
-            System.out.println("close the “game is paused” dialog and resume the game");
+            pausenplay.setText("pause");
         }
 
     }
