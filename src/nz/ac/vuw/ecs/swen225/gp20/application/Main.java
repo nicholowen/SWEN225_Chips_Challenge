@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import com.google.gson.annotations.JsonAdapter;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.MainAdapter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -20,17 +22,18 @@ public class Main {
     public Main() {
 
     }
-    
+
     /**
      * Tick based loop. The main game runs on this loop.
      */
     public void play() {
         long start = System.currentTimeMillis();
-        int delay = 1000;   // 1 Second
+        int delay = 1000; // 1 Second
         timeRemaining = maze.loadMaze(1);
         render.init(maze.getBoard());
         while (!gameEnded) {
             render.update(maze.tick(gui.getDirection()), timeRemaining);
+
             long startTick = System.currentTimeMillis();
             while (true) {
                 int tickDelay = 33;
@@ -40,7 +43,8 @@ public class Main {
             while (gui.isPaused()) {
                 boolean paused = gui.isPaused();
                 System.out.println(paused);
-                if (!paused) break;
+                if (!paused)
+                    break;
             }
             if (System.currentTimeMillis() >= start + delay) {
                 start = System.currentTimeMillis();
@@ -53,6 +57,10 @@ public class Main {
         Main game = new Main();
         game.play();
     }
+
+    // ======================================
+    // ONLY FOR RECNPLAY TESTING PURPOSES
+    // ======================================
 
     public void movePlayer(String direction) {
         RecordAndPlay.addMovement(direction);
