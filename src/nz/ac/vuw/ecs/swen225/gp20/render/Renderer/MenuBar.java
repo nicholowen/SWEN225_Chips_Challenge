@@ -4,13 +4,12 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 class MenuBar extends JMenuBar {
-  BufferedImage background;
+  Image background;
 
   public MenuBar() {
-    this.background = Assets.MENUBARBG[0][0];
+    this.background = new ImageIcon(Assets.MENUBARBG[0][0]).getImage();
   }
 
   @Override
