@@ -51,9 +51,12 @@ public class ScorePanel extends JPanel {
     int offset = 0;
     if(chars.length == 2){
       offset = 1;
+      g.drawImage(digits[0], 110, 179, this);
     }
     else if(chars.length == 1) {
       offset = 2;
+      g.drawImage(digits[0], 110, 179, this);
+      g.drawImage(digits[0], 142, 179, this);
     }
 
     for(int i = 0; i < chars.length; i++){
