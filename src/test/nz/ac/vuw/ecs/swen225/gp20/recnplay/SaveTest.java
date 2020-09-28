@@ -2,7 +2,7 @@ package test.nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 public class SaveTest {
 
