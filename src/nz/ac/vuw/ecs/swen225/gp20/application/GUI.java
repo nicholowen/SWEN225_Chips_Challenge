@@ -44,7 +44,7 @@ public class GUI implements KeyListener {
     private String direction = null;
     private boolean saveState = false;
     private String loadingState = null;
-    
+
     JLayeredPane mainPanel;
     JButton pausenplay;
 
@@ -98,6 +98,7 @@ public class GUI implements KeyListener {
         pausenplay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 saveState = true;
+                loadingState = "resume";
             }
         });
 
@@ -187,12 +188,12 @@ public class GUI implements KeyListener {
         else if ((keyCode == KeyEvent.VK_1) && ctrl) {
             loadingState = "lvl 1";
         }
-        // pause the game and display a game is paused dialog
+        // pause the game and display a “game is paused” dialog
         else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
             pausenplay.setText("play");
         }
-        // close the game is paused dialog and resume the game
+        // close the “game is paused” dialog and resume the game
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             pausenplay.setText("pause");
@@ -255,7 +256,6 @@ public class GUI implements KeyListener {
         return recording;
     }
 
-
     /**
      * Checks if is paused.
      *
@@ -273,7 +273,7 @@ public class GUI implements KeyListener {
     public String getDirection() {
         return direction;
     }
-    
+
     /**
      * Checks if is user wants to save state.
      *
@@ -291,15 +291,25 @@ public class GUI implements KeyListener {
     public void saved(Boolean saved) {
         this.saveState = !saved;
     }
-    
+
     /**
      * Checks what state the game is to be loaded in
      *
-     * @return unfinished, if is last unfinished level
-     *         lvl 1, if is first level
+     * @return unfinished, if is last 
+     *         unfinished level lvl 1, if is first level
      *         resume, if is resuming a game
+     *         null, if is no need to load
      */
     public String getLoadState() {
         return loadingState;
+    }
+
+    /**
+     * Sets saving once loading is complete
+     * 
+     *
+     */
+    public void setLoadState(String loaded) {
+        this.loadingState = loaded;
     }
 }
