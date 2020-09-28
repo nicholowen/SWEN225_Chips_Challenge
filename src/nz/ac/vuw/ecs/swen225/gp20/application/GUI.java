@@ -284,11 +284,12 @@ public class GUI implements KeyListener {
     }
 
     /**
-     * Sets saving to false (called once saving is complete).
+     * Sets saving once saving is complete
+     * 
      *
      */
-    public void saved() {
-        this.saveState = false;
+    public void saved(Boolean saved) {
+        this.saveState = saved;
     }
     
     /**
