@@ -52,6 +52,9 @@ public class GUI implements KeyListener {
         frame.setResizable(false);
         frame.setMinimumSize(new Dimension(800, 500));
 
+        frame.setFocusable(true);
+        frame.addKeyListener(this);
+
         mainPanel = new JLayeredPane();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         frame.setContentPane(mainPanel);
@@ -60,8 +63,6 @@ public class GUI implements KeyListener {
         scorePanel = new ScorePanel();
         mainPanel.add(gamePanel);
         mainPanel.add(scorePanel);
-        gamePanel.setFocusable(true);
-        gamePanel.setRequestFocusEnabled(true);
 
         MenuBar menu = new MenuBar();
         menu.setOpaque(true);
@@ -70,16 +71,22 @@ public class GUI implements KeyListener {
         JButton pausenplay = new JButton("pause");
         JButton save = new JButton("save");
         JButton load = new JButton("load");
-//        menu.add(pausenplay);
+        menu.add(pausenplay);
+        menu.add(save);
+        menu.add(load);
+        this.formatButton(pausenplay);
+        this.formatButton(save);
+        this.formatButton(load);
 
         pausenplay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 if (paused) {
                     paused = false;
-                    pausenplay.setText("Play");
-                } else
+                    pausenplay.setText("pause");
+                } else {
                     paused = true;
-                pausenplay.setText("Pause");
+                    pausenplay.setText("play");
+                }
             }
         });
 
@@ -88,8 +95,23 @@ public class GUI implements KeyListener {
         frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
 
-        frame.addKeyListener(this);
+    }
 
+    // =======================================================.
+    // Utility Methods
+    // =======================================================.
+
+    /**
+     * Makes a button transparent and formats the text colour. This method makes it
+     * easier to format all buttons because it calls on the same functions.
+     *
+     * @param JButton to be formatted
+     */
+    public void formatButton(JButton button) {
+        button.setForeground(new Color(107, 201, 240));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
     }
 
     // =======================================================.
@@ -99,7 +121,7 @@ public class GUI implements KeyListener {
     /**
      * This method is called when a key is pressed on the keyboard.
      *
-     * @param event which indicates that a keystroke occurred in a Game Panel.
+     * @param KeyEvent which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -122,7 +144,7 @@ public class GUI implements KeyListener {
     /**
      * This method is called when a key is released on the keyboard.
      *
-     * @param event which indicates that a keystroke occurred in a Game Panel.
+     * @param KeyEvent which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyReleased(KeyEvent e) {
@@ -155,7 +177,7 @@ public class GUI implements KeyListener {
     /**
      * This method is called when a key is typed on the keyboard.
      *
-     * @param event which indicates that a keystroke occurred in a Game Panel.
+     * @param KeyEvent which indicates that a keystroke occurred in a Game Panel.
      */
     @Override
     public void keyTyped(KeyEvent e) {
