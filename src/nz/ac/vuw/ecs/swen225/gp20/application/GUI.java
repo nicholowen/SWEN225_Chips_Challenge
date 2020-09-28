@@ -60,12 +60,12 @@ public class GUI implements KeyListener {
         menu.setBG((new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/menubg.png").getImage()));
         frame.setJMenuBar(menu);
 
-        JButton pause = new JButton("pause");
-        JButton save = new JButton("save");
-        JButton load = new JButton("load");
-        menu.add(pause);
-        menu.add(save);
-        menu.add(load);
+//        JButton pause = new JButton("pause");
+//        JButton save = new JButton("save");
+//        JButton load = new JButton("load");
+//        menu.add(pause);
+//        menu.add(save);
+//        menu.add(load);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -87,7 +87,20 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        // Unused
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_UP) {
+            this.direction = "up";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_LEFT) {
+            this.direction = "left";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_DOWN) {
+            this.direction = "down";
+            System.out.println(direction);
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            this.direction = "right";
+            System.out.println(direction);
+        }
     }
 
     /**
@@ -99,7 +112,6 @@ public class GUI implements KeyListener {
     public void keyReleased(KeyEvent e) {
         this.direction = null;
         int keyCode = e.getKeyCode();
-
         if ((e.getKeyCode() == KeyEvent.VK_X) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             System.out.println("exit the game, the current game state will be lost, the next time the game is\r\n"
                     + "started, it will resume from the last unfinished level");
@@ -120,19 +132,7 @@ public class GUI implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             System.out.println("close the “game is paused” dialog and resume the game");
-        } else if (keyCode == KeyEvent.VK_UP) {
-            this.direction = "up";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_LEFT) {
-            this.direction = "left";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_DOWN) {
-            this.direction = "down";
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
-            this.direction = "right";
-            System.out.println(direction);
-        }
+        } 
 
     }
 
