@@ -187,12 +187,12 @@ public class GUI implements KeyListener {
         else if ((keyCode == KeyEvent.VK_1) && ctrl) {
             loadingState = "lvl 1";
         }
-        // pause the game and display a “game is paused” dialog
+        // pause the game and display a game is paused dialog
         else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
             pausenplay.setText("play");
         }
-        // close the “game is paused” dialog and resume the game
+        // close the game is paused dialog and resume the game
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
             pausenplay.setText("pause");
@@ -289,7 +289,7 @@ public class GUI implements KeyListener {
      *
      */
     public void saved(Boolean saved) {
-        this.saveState = saved;
+        this.saveState = !saved;
     }
     
     /**
