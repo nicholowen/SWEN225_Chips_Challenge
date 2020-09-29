@@ -9,6 +9,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.IOException;
 
+/**
+ * Specific to read and write methods to serialise and deserialize the Main class to json
+ *
+ * @author Campbell Whitworth 300490070
+ */
 public class MainAdapter extends TypeAdapter<Main> {
 
     @Override
@@ -50,7 +55,7 @@ public class MainAdapter extends TypeAdapter<Main> {
     private void writeActor(JsonWriter writer, Actor actor) throws IOException {
         writer.beginObject();
 
-//        writer.name("name").value(actor.getName());
+        writer.name("name").value(actor.getName());
         writer.name("x").value(actor.getX());
         writer.name("y").value(actor.getY());
 

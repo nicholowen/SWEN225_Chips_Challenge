@@ -85,5 +85,8 @@ public class Actor {
 	public String getDirection() {
 		return direction;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
 }
