@@ -25,3 +25,6 @@ Record And Replay
     Line 52   : inter-module communication with Persistence
 
 Render
+    Class name: Render  
+        Line 25  : Calls on Maze (provided by Application) to get the board (cells) and initialise all Render's objects, and associate them with an
+        array of objects of the same size.
