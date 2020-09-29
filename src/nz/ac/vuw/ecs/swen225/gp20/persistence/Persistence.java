@@ -89,24 +89,6 @@ public class Persistence {
     }
 
     /**
-     * Saves the recording to a json file
-     *
-     * @param record the recording to save
-     */
-    public static void saveRecording(RecordAndPlay record) {
-
-    }
-
-    /**
-     * Reads a recorded game from a json file
-     *
-     * @return a recording of the game
-     */
-    public RecordAndPlay readRecording() {
-        return null;
-    }
-
-    /**
      * Saves the current state of the maze as a json file
      *
      * @param game the game to save
