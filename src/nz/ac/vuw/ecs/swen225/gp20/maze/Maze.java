@@ -35,8 +35,8 @@ public class Maze {
 
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
-	 * @param levelToLoad
-	 * @return Time limit in seconds of the level in question.
+	 * @param levelToLoad Number of the level to load.
+	 * @return Time limit in seconds of the level in question. -1 if an error occured while loading.
 	 */
 	public int loadMaze(int levelToLoad) {
 		Level toLoad;
@@ -44,13 +44,15 @@ public class Maze {
 			toLoad=Persistence.read(levelToLoad);
 		} catch(IOException | LevelFileException e) {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
-			return 0;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
+			return -1;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		//Resetting/initializing
 		currentTreasureLeft=0;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		exitList=new ArrayList<>();
+		playerInventory=new ArrayList<>();//Reset the player's keys!
+		currentLevel=levelToLoad;
 		
 		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
@@ -87,12 +89,8 @@ public class Maze {
 				 exitList.add(exitLocked);
 				 board[t.getX()][t.getY()] = exitLocked;
 				break;
-			
-			
-			
-			}
-
-		}//At this stage, all tiles are loaded (?)
+			}//End of switch
+		}//At this stage, all tiles are loaded
 		
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
@@ -100,16 +98,10 @@ public class Maze {
 		
 		/*
 		for(Character c:toLoad.getCharacters()){
-			if(c.getName().equals("chap") || c.getName().equals("player")){//If it's the player //TODO Decide on player name, "player" or "chap"
-				player=new Actor(true, "player");//TODO safeguard that only one player can be loaded at once.
-			} else{
 				creatures.add(new Actor(false, c.getName(), c.getX(), c.getY()));
-			}
-
 		}
 		*/
-		playerInventory=new ArrayList<>();//Reset the player's keys!
-		currentLevel=levelToLoad;
+
 		return toLoad.getTimeLimit();
 
 	}
@@ -178,9 +170,6 @@ public class Maze {
 		player.move(movementDirection);
 		player.tick();
 		//TODO: Tick all NPCs once they're implemented.
-		
-		
-		
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		
 		//Collision check
@@ -190,9 +179,9 @@ public class Maze {
 				currentTreasureCollected++;
 				currentTreasureLeft--;
 			} else {//If not treasure, add item to inventory
-				playerInventory.add(stoodOn.getPickupName());
+				playerInventory.add(stoodOn.getColor());//TODO: If items other than keys are added, account for it
 			}
-			//Nomatter what the pickup WAS, replace it with an empty tile
+			//Nomatter what the pickup was, replace it with an empty tile
 			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
 			
 			
@@ -218,9 +207,18 @@ public class Maze {
 		
 		Cell toCheck=board[xToCheck][yToCheck];
 		
-		
-		
+		if(toCheck.isOpenable()) {
+			for(String s:playerInventory) {//Check every key the player has
+				if(s.equals(toCheck.getColor())) {//If the key's the same colour as the door
+					board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
+					return true;
+				}
+			}
+			return !toCheck.getIsSolid();
+			
+		} else {
 		return !toCheck.getIsSolid();
+		}
 	}
 
 

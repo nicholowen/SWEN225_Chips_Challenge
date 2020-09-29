@@ -25,4 +25,9 @@ test:
   tags:
     - shell
   script:
-    - mvn $MAVEN_OPTS test
+    - mvn $MAVEN_OPTS verify
+#  artifacts:
+#    when: always
+#    reports:
+#      junit:
+#        - surefire-reports/TEST-*.xml
