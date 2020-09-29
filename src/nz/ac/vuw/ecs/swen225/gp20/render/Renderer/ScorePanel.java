@@ -74,19 +74,18 @@ public class ScorePanel extends JPanel {
     g.drawImage(background, 0, 0, this);
 
     int offset = 0;
-    if(chars.length == 2){
+    if (chars.length == 2) {
       offset = 1;
       g.drawImage(digits[0], 110, 167, this);
-    }
-    else if(chars.length == 1) {
+    } else if (chars.length == 1) {
       offset = 2;
       g.drawImage(digits[0], 110, 167, this);
       g.drawImage(digits[0], 142, 167, this);
     }
 
-    for(int i = 0; i < chars.length; i++){
+    for (int i = 0; i < chars.length; i++) {
       int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
-      if(digit >= 0) { //to avoid null pointer
+      if (digit >= 0) { //to avoid null pointer
         g.drawImage(digits[digit], 110 + ((i + offset) * 32), 167, this);
       }
 
@@ -95,27 +94,31 @@ public class ScorePanel extends JPanel {
     int countY = 0;
     int i = 0;
     int j = 0;
-    for(String s : inventory){
-      switch(s){
-        case "red":
-          j = 0;
-          break;
-        case "green":
-          j = 1;
-          break;
-        case "blue":
-          j = 2;
-          break;
-        case "yellow":
-          j = 3;
-          break;
+    if (inventory != null) {
+      for (String s : inventory) {
+        switch (s) {
+          case "red":
+            j = 0;
+            break;
+          case "green":
+            j = 1;
+            break;
+          case "blue":
+            j = 2;
+            break;
+          case "yellow":
+            j = 3;
+            break;
+        }
+
+        g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
+        countX++;
+        if (countX == 4) {
+          countY++;
+          countX = 0;
+        }
       }
-      g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
-      countX++;
-      if(countX == 4){
-        countY++;
-        countX = 0;
-      }
+
     }
 
 
