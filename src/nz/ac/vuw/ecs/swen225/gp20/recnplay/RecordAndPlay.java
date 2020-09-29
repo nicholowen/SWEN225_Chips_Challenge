@@ -62,20 +62,14 @@ public class RecordAndPlay {
         for (int i = 0; i < actors.size(); ++i) {
             JsonObjectBuilder builder = Json.createObjectBuilder()
                     .add("actor", actors.get(i))
-                    .add("moves", moves.get(i));
+                    .add("move", moves.get(i));
             array.add(builder.build());
-                /* example output of array
-                   [
-                        "actor": 1, (aka the player)
-                        "moves": ["North", "East", "East", "North", "West"]
-                   ]
-                 */
         }
 
         JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add("game", gameState.toString())
+                .add("game", gameState)
                 .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
-                .add("timeRemaining", timeRemaining); // time passed from Main
+                .add("timeRemaining", timeRemaining); // time passed from Main (the final time after running all the moves)
 
         // save moves to the file
         try (Writer w = new StringWriter()) {
@@ -206,9 +200,9 @@ public class RecordAndPlay {
         Runnable runnable = () -> {
             while (moves.size() > 0) {
                 try {
-                    if (actors.get(0) == 0 && actors.size() > 0) {
+                    if (actors.get(0) == 0 && actors.size() > 0)
                         Thread.sleep(playbackSpeed);
-                    }
+
                     playByStep(game);
                 } catch (InterruptedException e) {
                     System.out.println("Interrupted: " + e);
@@ -289,9 +283,9 @@ public class RecordAndPlay {
         but also its history (i.e., each turn or Chap and any other actors).
 
             features implemented (manual tested):
-            1. step-by-step (somewhat_
-            2. auto-reply ()
-            3. set replay speed
+            1. step-by-step (somewhat done)
+            2. auto-reply (not done)
+            3. set replay speed (not done)
  */
 
 // todo: save every tick
