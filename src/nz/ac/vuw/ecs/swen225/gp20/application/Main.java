@@ -10,17 +10,17 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
-@JsonAdapter(MainAdapter.class)
+
 /**
  * This class handles the main loop where the game runs. It also sends all the
  * info needed to different classes every tick.
- * 
+ *
  * @author Maiza Rehan 300472305
  *
  */
+@JsonAdapter(MainAdapter.class)
 public class Main {
     private static final RecordAndPlay rnp = new RecordAndPlay();
-    private static final Persistence persist = new Persistence();
     private static final Maze maze = new Maze();
     private static final GUI gui = new GUI();
     private static final Render render = new Render(gui.getGamePanel(), gui.getScorePanel());
@@ -74,7 +74,7 @@ public class Main {
         // Check if user wants to save
         if (gui.isSaving()) {
             try {
-                persist.saveGameState(this);
+                Persistence.saveGameState(this);
             System.out.println("Saving");
             gui.saved(true);
             } catch (IOException e) {
@@ -84,7 +84,7 @@ public class Main {
         }
 
         if(gui.getLoadState() != null) {
-            persist.loadGameState();
+            Persistence.loadGameState();
             System.out.println(gui.getLoadState());
             gui.setLoadState(null);
         }
