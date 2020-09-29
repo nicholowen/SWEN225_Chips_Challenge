@@ -10,15 +10,34 @@ import java.awt.image.BufferedImage;
 public class KeyCard extends Sprite{
 
   BufferedImage[] sprites;
+  String color;
 
-  public KeyCard() {
+  public KeyCard(String c) {
     super();
 
     int width = 64;
     int height = 64;
 
+    this.color = c;
+    int index = 0;
+    switch (c) {
+      case "red":
+        index = 0;
+        break;
+      case "green":
+        index = 1;
+        break;
+      case "blue":
+        index = 2;
+        break;
+      case "yellow":
+        index = 3;
+        break;
+
+    }
+
     // calls on asset class to get the frames for this object.
-    sprites = Assets.KEYCARD_G[0];
+    sprites = Assets.KEYCARD_G[index];
     animation.setFrames(sprites);
     animation.setDelay(4);
 
