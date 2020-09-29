@@ -43,7 +43,7 @@ public class Main {
         render.init(maze.getBoard());
         while (!gameEnded) {
             checkUpdates();
-            render.update(maze.tick(direction), timeRemaining);
+            render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
 
             long startTick = System.currentTimeMillis();
             while (true) {
