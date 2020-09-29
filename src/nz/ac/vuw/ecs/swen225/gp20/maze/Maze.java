@@ -21,15 +21,17 @@ public class Maze {
 	private int boardWidth;
 	private ArrayList<Cell> exitList;
 	
-	
 	//Actor logic
 	private Actor player;//Player character, there is only one.
 	private ArrayList<Actor> creatures;//Hostile NPCs
 	
+	
 	/**
-	 * Initializes a maze. The maze will not load a level until prompted.
+	 * This module handles the maze, collision, actors and inventory.
+	 * Loads maze "1" by default. Completely resets every time a maze is loaded.
 	 */
 	public Maze() {
+		loadMaze(1);
 	}
 
 
