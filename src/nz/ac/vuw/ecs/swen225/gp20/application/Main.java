@@ -27,6 +27,7 @@ public class Main {
     private boolean gameEnded;
     private int timeRemaining;
     private String direction = null;
+    private boolean paused = false;
 
     public Main() {
 
@@ -41,7 +42,7 @@ public class Main {
         timeRemaining = maze.loadMaze(1);
         render.init(maze.getBoard());
         while (true) {
-            if (!gameEnded && !gui.isPaused()) {
+            if (!gameEnded && !paused) {
                 checkUpdates();
                 render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
 
@@ -55,15 +56,19 @@ public class Main {
                     start = System.currentTimeMillis();
                     timeRemaining--; // timeRemaining goes down every second
                 }
+            } else {
+                checkUpdates();
             }
         }
     }
 
     /**
-     * Checks for user input updates from the GUI class. Handles saving and loading behaviours,
-     * and updating direction.
+     * Checks for user input updates from the GUI class. Handles saving, loading,
+     * updating direction and pausing behaviours.
      */
     public void checkUpdates() {
+        // Update paused
+        paused = gui.isPaused();
         // Update direction
         direction = gui.getDirection();
         // Check if user wants to save
