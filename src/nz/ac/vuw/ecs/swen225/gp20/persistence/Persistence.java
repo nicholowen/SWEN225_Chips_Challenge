@@ -100,8 +100,7 @@ public class Persistence {
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
         if (!savedState.toFile().exists() && !savedState.toFile().mkdirs()) {
-            System.out.println("Error making directory");
-            return;
+            throw new IOException("Error creating directory, check that you have permission");
         }
 
         try (Writer writer = new FileWriter(Paths.get(savedState.toString(), filename).toString())) {
