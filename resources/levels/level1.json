@@ -9,6 +9,7 @@
     "timeLimit": 360
   },
   "grid": [
+
       {"x": 0, "y": 0, "name": "free"},
       {"x": 1, "y": 0, "name": "free"},
       {"x": 2, "y": 0, "name": "wall"},

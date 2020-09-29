@@ -5,6 +5,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.IOException;
@@ -26,6 +27,9 @@ public class MainAdapter extends TypeAdapter<Main> {
 
         jsonWriter.name("actors");
         writeActorsArray(jsonWriter, maze.getActors());
+
+        jsonWriter.name("board");
+        writeBoardArray(jsonWriter, maze.getBoard());
 
         jsonWriter.endObject();
     }
@@ -49,23 +53,43 @@ public class MainAdapter extends TypeAdapter<Main> {
      * Writes an actor to an object in json
      *
      * @param writer a json writer to write to
-     * @param actor the actor
+     * @param actor  the actor
      * @throws IOException {@inheritDoc}
      */
     private void writeActor(JsonWriter writer, Actor actor) throws IOException {
         writer.beginObject();
 
         writer.name("name").value(actor.getName());
+        writer.name("direction").value(actor.getDirection());
         writer.name("x").value(actor.getX());
         writer.name("y").value(actor.getY());
 
         writer.endObject();
     }
 
+    private void writeBoardArray(JsonWriter writer, Cell[][] board) throws IOException {
+        writer.beginArray();
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                writeTile(writer, board[row][col]);
+            }
+        }
+        writer.endArray();
+    }
+
+    private void writeTile(JsonWriter writer, Cell cell) throws IOException {
+        writer.beginObject();
+
+        writer.name("name").value(cell.getName());
+        writer.name("x").value(cell.getX());
+        writer.name("y").value(cell.getY());
+
+        writer.endObject();
+    }
+
     @Override
     public Main read(JsonReader jsonReader) throws IOException {
-        Persistence persist = new Persistence();
-        //return new Maze(persist);
+
         return null;
     }
 }

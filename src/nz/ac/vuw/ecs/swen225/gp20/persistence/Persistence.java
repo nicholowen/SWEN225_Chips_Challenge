@@ -102,6 +102,15 @@ public class Persistence {
     }
 
     /**
+     * Saves the current state of the maze as a string
+     *
+     * @param game the game to save
+     */
+    public static String getGameState(Main game) {
+        return gson.toJson(game);
+    }
+
+    /**
      * Reads a saved game from a json file into a Maze object
      *
      * @return the saved maze object
@@ -122,6 +131,15 @@ public class Persistence {
     }
 
     /**
+     * Loads a the saved game state from a string into a Maze object
+     *
+     * @return the saved maze object
+     */
+    public static Main loadGameState(String state) {
+        return gson.fromJson(state, Main.class);
+    }
+
+    /**
      * Gets the most recent save from the save game state directory.
      */
     private static File getRecentSave(){
@@ -135,9 +153,10 @@ public class Persistence {
     }
 
     public static void main(String[] args) {
-        System.out.println(Persistence.getRecentSave());
-
         Main game = new Main();
+        String state = Persistence.getGameState(game);
+        System.out.println(state);
+
         try {
             Persistence.saveGameState(game);
         } catch (IOException e) {

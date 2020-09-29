@@ -138,6 +138,10 @@ public abstract class Cell {
 	public String getColor() {
 		return color;
 	}
+
+	public String getName() {
+		return name;
+	}
 	
 	public String getInfo() {
 		return infoMessage;

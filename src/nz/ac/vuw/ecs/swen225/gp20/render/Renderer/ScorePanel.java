@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Allows the current status of the game to be displayed - this includes the Level information,
@@ -28,11 +29,14 @@ public class ScorePanel extends JPanel {
   private Image background;
   private BufferedImage[] digits;
   char[] chars = {0, 0, 0};
+  BufferedImage[][] inventorySprites;
+  private ArrayList<String> inventory;
 
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
     requestFocus();
+    inventorySprites = Assets.INVENTORY;
     init();
   }
 
@@ -51,9 +55,10 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit){
+  public void update(int timeLimit, ArrayList<String> inventory){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
+    this.inventory = inventory;
     repaint();
   }
 
@@ -69,23 +74,54 @@ public class ScorePanel extends JPanel {
     g.drawImage(background, 0, 0, this);
 
     int offset = 0;
-    if(chars.length == 2){
+    if (chars.length == 2) {
       offset = 1;
       g.drawImage(digits[0], 110, 167, this);
-    }
-    else if(chars.length == 1) {
+    } else if (chars.length == 1) {
       offset = 2;
       g.drawImage(digits[0], 110, 167, this);
       g.drawImage(digits[0], 142, 167, this);
     }
 
-    for(int i = 0; i < chars.length; i++){
+    for (int i = 0; i < chars.length; i++) {
       int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
-      if(digit >= 0) { //to avoid null pointer
+      if (digit >= 0) { //to avoid null pointer
         g.drawImage(digits[digit], 110 + ((i + offset) * 32), 167, this);
       }
 
     }
+    int countX = 0;
+    int countY = 0;
+    int i = 0;
+    int j = 0;
+    if (inventory != null) {
+      for (String s : inventory) {
+        switch (s) {
+          case "red":
+            j = 0;
+            break;
+          case "green":
+            j = 1;
+            break;
+          case "blue":
+            j = 2;
+            break;
+          case "yellow":
+            j = 3;
+            break;
+        }
+
+        g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
+        countX++;
+        if (countX == 4) {
+          countY++;
+          countX = 0;
+        }
+      }
+
+    }
+
+
 
   }
 

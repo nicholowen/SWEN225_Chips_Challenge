@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class Assets
 {
-  private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
+  private static File path = new File("resources/Assets/Images/");
 
   //Load gifs TODO: add floor tiles and door tiles/animations
   //Map/Game gifs
@@ -29,6 +29,7 @@ public class Assets
   public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
   public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
+  public static BufferedImage[][]       INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);

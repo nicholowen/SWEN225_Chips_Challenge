@@ -20,6 +20,7 @@ import java.util.*;
  *
  * @author Melissa Lok 300472230
  */
+
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
     private static Queue<Integer> previousActors;
@@ -29,6 +30,7 @@ public class RecordAndPlay {
 
     private static long playbackSpeed = 123; // arbitrary number
 
+    private static boolean isRecording;
     private static String saveFile;
     private static String gameState;
     private static boolean isRunning;
@@ -39,17 +41,20 @@ public class RecordAndPlay {
 
     /**
      * Called by main to start recording
-     * @param timeRemaining the time left until game ends
+     *
+     * @param game     the game state
      * @param saveName file to be saved into
      */
-    public static void recording(int timeRemaining, String saveName) {
-        saveFile = saveName;
+    public static void recording(Main game, String saveName) {
         moves.clear();
-        gameState = getGameState(timeRemaining);
+        isRecording = true;
+        saveFile = saveName;
+        gameState = Persistence.getGameState(game);
     }
 
     /**
      * Method to save the recording of the game.
+     * Main method calls this and passes the time in to record every tick.
      */
     public static void saveRecording(int timeRemaining) {
         JsonArrayBuilder array = Json.createArrayBuilder();
@@ -57,20 +62,14 @@ public class RecordAndPlay {
         for (int i = 0; i < actors.size(); ++i) {
             JsonObjectBuilder builder = Json.createObjectBuilder()
                     .add("actor", actors.get(i))
-                    .add("moves", moves.get(i));
+                    .add("move", moves.get(i));
             array.add(builder.build());
-                /* example output of array
-                   [
-                        "actor": 1, (aka the player)
-                        "moves": ["North", "East", "East", "North", "West"]
-                   ]
-                 */
         }
 
         JsonObjectBuilder builder = Json.createObjectBuilder()
                 .add("game", gameState)
                 .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
-                .add("timeRemaining", timeRemaining);
+                .add("timeRemaining", timeRemaining); // time passed from Main (the final time after running all the moves)
 
         // save moves to the file
         try (Writer w = new StringWriter()) {
@@ -91,114 +90,60 @@ public class RecordAndPlay {
 
     /**
      * loads a recording from a saved file
+     *
      * @param saveFileName saved file name
-     * @param game the game
+     * @param game         the game
      */
     public static void loadRecording(String saveFileName, Main game) {
         JsonObject obj = null;
 
+//        try {
+//            Persistence.loadFileGameState(saveFileName, game);
+
         try {
-            loadFileGameState(saveFileName, game);
+            BufferedReader r = new BufferedReader(new FileReader(saveFileName));
+            JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
+            r.close();
+            obj = jReader.readObject();
+        } catch (IOException e) {
+            System.out.println("File reading error: " + e);
+            return;
+        }
 
-            try {
-                BufferedReader r = new BufferedReader(new FileReader(saveFileName));
-                JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
-                r.close();
-                obj = jReader.readObject();
-            } catch (IOException e) {
-                System.out.println("File reading error: " + e);
-                return;
-            }
+        JsonArray allMoves = obj != null ? obj.getJsonArray("moves") : null;
 
-            JsonArray allMoves = obj != null ? obj.getJsonArray("moves") : null;
+        if (allMoves != null) {
+            for (int i = 0; i < allMoves.size(); i++) {
+                JsonObject obj2 = allMoves.getJsonObject(i);
+                String dir = obj2.getString("moves");
 
-            if (allMoves != null) {
-                for (int i = 0; i < allMoves.size(); i++) {
-                    JsonObject obj2 = allMoves.getJsonObject(i);
-                    String dir = obj2.getString("moves");
+                int actor = obj2.getInt("actor");
+                actors.add(actor);
 
-                    int actor = obj2.getInt("actor");
-                    actors.add(actor);
-
-                    switch (dir) {
-                        case "up":
-                            moves.add("up");
-                            break;
-                        case "down":
-                            moves.add("down");
-                            break;
-                        case "left":
-                            moves.add("left");
-                            break;
-                        case "right":
-                            moves.add("right");
-                            break;
-                        default:
-                            break;
-                    }
+                switch (dir) {
+                    case "up":
+                        moves.add("up");
+                        break;
+                    case "down":
+                        moves.add("down");
+                        break;
+                    case "left":
+                        moves.add("left");
+                        break;
+                    case "right":
+                        moves.add("right");
+                        break;
+                    default:
+                        break;
                 }
             }
-
-            // if there are moves left to be played, that means the replaying is still running
-            if (moves.size() > 0) isRunning = true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e);
         }
-    }
 
-    /**
-     * @return state of the game
-     */
-    public static String getGameState(int timeRemaining) {
-        String jsonGame;
-
-        // Json dump board
-        Json.createObjectBuilder();
-        JsonObjectBuilder builder;
-
-        // Dump game info
-        builder = Json.createObjectBuilder()
-                .add("timeRemaining", timeRemaining);
-
-        // Compose game section
-        try (Writer writer = new StringWriter()) {
-            Json.createWriter(writer).write(builder.build());
-            jsonGame = writer.toString();
-        } catch (IOException e) {
-            throw new Error("Failed to parse game");
-        }
-        return jsonGame;
-    }
-
-    /**
-     * Loads a game state from pre-saved file
-     * @param fileName name of file to be loaded
-     * @param game the Main game
-     * @return the game
-     * @throws IOException error
-     */
-    public static Main loadFileGameState(String fileName, Main game) throws IOException {
-        InputStream inputStream = new FileInputStream(new File(fileName));
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String line = bufferedReader.readLine();
-        if (line == null) line = "";
-
-        Main chips = loadGameState(line, game);
-
-        inputStream.close();
-        bufferedReader.close();
-        return chips;
-    }
-
-    /**
-     * Loads the game state from a save file into game to run in parallel
-     * @param saveGame name of saved game file
-     * @param game game class
-     * @return the recording to be played in the game
-     */
-    public static Main loadGameState(String saveGame, Main game) {
-        return game;
+        // if there are moves left to be played, that means the replaying is still running
+        if (moves.size() > 0) isRunning = true;
+//        } catch (IOException e) {
+//            System.out.println("Error: " + e);
+//        }
     }
 
     /**
@@ -255,9 +200,9 @@ public class RecordAndPlay {
         Runnable runnable = () -> {
             while (moves.size() > 0) {
                 try {
-                    if (actors.get(0) == 0 && actors.size() > 0) {
+                    if (actors.get(0) == 0 && actors.size() > 0)
                         Thread.sleep(playbackSpeed);
-                    }
+
                     playByStep(game);
                 } catch (InterruptedException e) {
                     System.out.println("Interrupted: " + e);
@@ -338,7 +283,10 @@ public class RecordAndPlay {
         but also its history (i.e., each turn or Chap and any other actors).
 
             features implemented (manual tested):
-            1. step-by-step (somewhat_
-            2. auto-reply ()
-            3. set replay speed
+            1. step-by-step (somewhat done)
+            2. auto-reply (not done)
+            3. set replay speed (not done)
  */
+
+// todo: save every tick
+//          more elegant way: hit record, save the state as it is, and then take in just the movements of the user

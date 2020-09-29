@@ -112,21 +112,6 @@ public class Maze {
 		return toLoad.getTimeLimit();
 
 	}
-
-
-//
-//	public static void saveGameState(ChapsChallenge game, String name) {
-//		String jsonGame = getGameState(game);
-//		try {
-//			BufferedWriter writer = new BufferedWriter(new FileWriter(name));
-//			writer.write(jsonGame);
-//			writer.close();
-//		} catch (IOException e) {
-//			System.out.println("Error saving game" + e);
-//		}
-//	}
-	
-	
 	
 	/**
 	   * Enum of directions to go from a cell to cell. Mainly used by other classes.
