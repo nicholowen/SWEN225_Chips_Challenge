@@ -46,7 +46,7 @@ public class Actor {
 	/**
 	 * Returns a Point with the x and y change that an inputed move would have.
 	 * null or "none" results in no change, but still returns a point.
-	 * @param s
+	 * @param s Direction, "up", "down", "left" or "right"
 	 * @return
 	 */
 	public Point dirFromString(String s) {

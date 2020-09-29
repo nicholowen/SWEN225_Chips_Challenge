@@ -39,7 +39,7 @@ public class Maze {
 
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
-	 * Completely wipes any data when used. Player inventory, treasure count, everything is reset.
+	 * Completely wipes any data when used, re-initializing the player inventory, treasure count, everything is reset.
 	 * @param levelToLoad Number of the level to load.
 	 * @return Time limit in seconds of the level in question. -1 if an error occurred while loading.
 	 */
@@ -102,7 +102,7 @@ public class Maze {
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
 		
 		
-		/*
+		/*//Load NPCs
 		for(Character c:toLoad.getCharacters()){
 				creatures.add(new Actor(false, c.getName(), c.getX(), c.getY()));
 		}
@@ -152,7 +152,8 @@ public class Maze {
 	/**
 	 * One run of the core game "loop", which has the option of taking a movement.
 	 * Should be run repeatedly from Application.
-	 * @param movementDirection
+	 * @param movementDirection Input from the application indicating the direction of movement.
+	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(String movementDirection) {
 		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
@@ -194,7 +195,7 @@ public class Maze {
 	}
 	
 	/**
-	 * "Uses" a single item from the inventory. Removes it from the inventory if it was the last instance of that item.
+	 * "Uses" a single item from the inventory. Removes it from the inventory(Keyset) if it was the last instance of that item.
 	 * @param s
 	 */
 	public void removeFromInventory(String s) {
