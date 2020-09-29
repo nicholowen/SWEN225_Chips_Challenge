@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Tile {
@@ -8,11 +7,7 @@ public class Tile {
     private int y;
     private String name;
     private String color;
-    private static List<Tile> allTiles;
-
-    public static List<Tile> getAllTiles() {
-        return allTiles;
-    }
+    private String help;
 
     public int getX() {
         return x;
@@ -28,6 +23,10 @@ public class Tile {
 
     public String getColor(){
         return color.toLowerCase();
+    }
+
+    public String getHelp() {
+        return help;
     }
 
     @Override

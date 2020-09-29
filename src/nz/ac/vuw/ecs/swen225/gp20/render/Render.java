@@ -4,6 +4,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
+import java.util.ArrayList;
+
 /**
  * Main Render Module class. Simply stores the Drawing panels and performs updates to both every tick.
  *
@@ -28,9 +30,9 @@ public class Render {
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    * @param tuple Contains the current state of the cells and the player
    */
-  public void update(RenderTuple tuple, int timeRemaining){
+  public void update(RenderTuple tuple, int timeRemaining, ArrayList<String> inventory){
     gp.update(tuple);
-    sp.update(timeRemaining);
+    sp.update(timeRemaining, inventory);
   }
 
   /**
