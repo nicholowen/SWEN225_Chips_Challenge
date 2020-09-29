@@ -7,14 +7,15 @@ import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 
 /**
  * Class to handle reading of json level files and
@@ -83,13 +84,6 @@ public class Persistence {
     }
 
     /**
-     * Gets a file object from the save directory & checks that file exists.
-     */
-    private File getSaveFile(String filename) throws FileNotFoundException {
-        return checkFile(new File(filename));
-    }
-
-    /**
      * Saves the current state of the maze as a json file
      *
      * @param game the game to save
@@ -113,13 +107,38 @@ public class Persistence {
      *
      * @return the saved maze object
      */
-    public Maze loadGameState() {
-        return null;
+    public static Maze loadGameState() {
+        File recentSave = getRecentSave();
+
+        if (recentSave == null) {
+            return null;
+        } else {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(recentSave.getAbsoluteFile()));
+                return gson.fromJson(reader, Main.class);
+            } catch (FileNotFoundException e){
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Gets the most recent save from the save game state directory.
+     */
+    private static File getRecentSave(){
+        File[] directoryList= savedState.toFile().listFiles();
+
+        if (directoryList == null){
+            return null;
+        } else {
+            return Arrays.stream(directoryList).max(Comparator.comparing(File::getName)).orElse(null);
+        }
     }
 
     public static void main(String[] args) {
+        System.out.println(Persistence.getRecentSave());
+
         Main game = new Main();
-        game.getMaze().loadMaze(1);
         try {
             Persistence.saveGameState(game);
         } catch (IOException e) {
