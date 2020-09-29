@@ -10,6 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +25,10 @@ import java.util.Calendar;
 public class Persistence {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final String resources = "resources";
-    public static final String levels = Paths.get(resources, "levels").toString();
-    public static final String recordings = Paths.get(resources, "recordings").toString();
-    public static final String savedState = Paths.get(resources, "saved-state").toString();
+    public static final Path resources = Paths.get("resources");
+    public static final Path levels = Paths.get(resources.toString(), "levels");
+    public static final Path recordings = Paths.get(resources.toString(), "recordings");
+    public static final Path savedState = Paths.get(resources.toString(), "saved-state");
 
     public Persistence() {
 
@@ -78,7 +79,7 @@ public class Persistence {
      * Gets a file object from the levels directory & checks that file exists.
      */
     private static File getLevelFile(int level) throws FileNotFoundException {
-        return checkFile(Paths.get(levels, "level" + level + ".json").toFile());
+        return checkFile(Paths.get(levels.toString(), "level" + level + ".json").toFile());
     }
 
     /**
@@ -94,11 +95,16 @@ public class Persistence {
      * @param game the game to save
      * @throws IOException {@inheritDoc}
      */
-    public void saveGameState(Main game) throws IOException {
+    public static void saveGameState(Main game) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
-        try (Writer writer = new FileWriter(Paths.get(savedState, filename).toString())) {
+        if (!savedState.toFile().exists() && !savedState.toFile().mkdirs()) {
+            System.out.println("Error making directory");
+            return;
+        }
+
+        try (Writer writer = new FileWriter(Paths.get(savedState.toString(), filename).toString())) {
             gson.toJson(game, writer);
         }
     }
@@ -108,20 +114,15 @@ public class Persistence {
      *
      * @return the saved maze object
      */
-    public Maze getGameState() {
+    public Maze loadGameState() {
         return null;
     }
 
     public static void main(String[] args) {
-        Persistence persistence = new Persistence();
-        Maze maze = new Maze();
-        maze.loadMaze(1);
-
         Main game = new Main();
-        game.play();
-
+        game.getMaze().loadMaze(1);
         try {
-            persistence.saveGameState(game);
+            Persistence.saveGameState(game);
         } catch (IOException e) {
             e.printStackTrace();
         }
