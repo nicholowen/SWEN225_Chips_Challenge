@@ -30,10 +30,10 @@ public class RecordAndPlay {
 
     private static long playbackSpeed = 123; // arbitrary number
 
-    private static boolean isRecording;
     private static String saveFile;
     private static String gameState;
     private static boolean isRunning;
+    private static boolean currentlyRecording;
     private static int remainingTimeAfterRun;
     private static long startTime;
 
@@ -47,9 +47,9 @@ public class RecordAndPlay {
      */
     public static void recording(Main game, String saveName) {
         moves.clear();
-        isRecording = true;
+        currentlyRecording = true;
         saveFile = saveName;
-        gameState = Persistence.getGameState(game);
+        gameState = Persistence.getGameState(game); // save the current state the game is currently in during recoding
     }
 
     /**
@@ -57,34 +57,40 @@ public class RecordAndPlay {
      * Main method calls this and passes the time in to record every tick.
      */
     public static void saveRecording(int timeRemaining) {
-        JsonArrayBuilder array = Json.createArrayBuilder();
+        if (currentlyRecording) {
 
-        for (int i = 0; i < actors.size(); ++i) {
+            JsonArrayBuilder array = Json.createArrayBuilder();
+
+            // save player and player movements now
+            for (int i = 0; i < actors.size(); ++i) {
+                JsonObjectBuilder builder = Json.createObjectBuilder()
+                        .add("actor", actors.get(i))
+                        .add("move", moves.get(i));
+                array.add(builder.build());
+            }
+
+            // build the bject and att it to every single tick using time remaining fed from Main
             JsonObjectBuilder builder = Json.createObjectBuilder()
-                    .add("actor", actors.get(i))
-                    .add("move", moves.get(i));
-            array.add(builder.build());
-        }
+                    .add("game", gameState)
+                    .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
+                    .add("timeRemaining", timeRemaining); // time passed from Main (the final time after running all the moves)
 
-        JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add("game", gameState)
-                .add("moves", array) // output: {"moves": ["North", "East", "East", "North", "West"]}
-                .add("timeRemaining", timeRemaining); // time passed from Main (the final time after running all the moves)
+            // save moves to the file
+            try (Writer w = new StringWriter()) {
+                Json.createWriter(w).write(builder.build());
 
-        // save moves to the file
-        try (Writer w = new StringWriter()) {
-            Json.createWriter(w).write(builder.build());
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile));
+                    bw.write(w.toString());
+                    bw.close();
+                } catch (IOException e) {
+                    throw new Error("Saving failed for movements");
+                }
 
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile));
-                bw.write(w.toString());
-                bw.close();
             } catch (IOException e) {
                 throw new Error("Saving failed for movements");
             }
-
-        } catch (IOException e) {
-            throw new Error("Saving failed for movements");
+            currentlyRecording = false;
         }
     }
 
@@ -155,6 +161,7 @@ public class RecordAndPlay {
         gameState = null;
 
         isRunning = false;
+        currentlyRecording = false;
 
         moves.clear();
         actors.clear();
@@ -268,8 +275,10 @@ public class RecordAndPlay {
      * @param dir direction of movement
      */
     public static void addMovement(String dir) {
-        moves.add(dir);
-        actors.add(0); // add the player
+        if (currentlyRecording) {
+            moves.add(dir);
+            actors.add(0); // add the player
+        }
     }
 }
 
