@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellDoor;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
@@ -89,9 +90,15 @@ public class GamePanel extends JPanel {
             sprites[i][j] = kc;
             keyObjects.put(cells[i][j], kc);
           case "door":
-            Door door = new Door();
-            sprites[i][j] = door;
-            doorObjects.put(cells[i][j], door);
+//            Cell doorcell = cells[i][j];
+//
+            if(cells[i][j] instanceof CellDoor) {
+
+//              String color = doorcell.getColor();
+              Door door = new Door(cells[i][j].getColor());
+              sprites[i][j] = door;
+              doorObjects.put(cells[i][j], door);
+            }
 
         }
       }
@@ -183,7 +190,9 @@ public class GamePanel extends JPanel {
               break;
             case "door":
               door[i][j] = surround[i][j];
-//            (Door)surround[i][j].getAnimationObject();
+              if(doorObjects.containsKey(surround[i][j])){
+                doorObjects.get(surround[i][j]).update();
+              }
               break;
             case "treasure":
               energy[i][j] = surround[i][j];
@@ -263,7 +272,7 @@ public class GamePanel extends JPanel {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), y * i, x * j, this);
         }
         if (door[i][j] != null) {
-          g.drawImage(Assets.DOOR[0][0], y * i, x * j, this);
+          g.drawImage(doorObjects.get(door[i][j]).getImage(), y * i, x * j, this);
         }
         if (energy[i][j] != null) {
           g.drawImage(energyObjects.get(energy[i][j]).getImage(), y * i, x * j, this);
