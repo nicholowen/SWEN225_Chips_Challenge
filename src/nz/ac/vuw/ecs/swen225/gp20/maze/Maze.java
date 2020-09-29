@@ -37,7 +37,6 @@ public class Maze {
 		loadMaze(1);
 	}
 
-
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
 	 * Completely wipes any data when used. Player inventory, treasure count, everything is reset.
@@ -110,7 +109,6 @@ public class Maze {
 		*/
 
 		return toLoad.getTimeLimit();
-
 	}
 	
 	/**
@@ -176,11 +174,8 @@ public class Maze {
 			//Nomatter what the pickup was, replace it with an empty tile
 			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
 		}
-		
-		//Open the exit lock if the player has gathered all of the chips
-		
 		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);//Check if the player's standing on an info tile
-		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo());
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft);
 	}
 	
 	/**
@@ -193,12 +188,6 @@ public class Maze {
 			Integer i = playerInventory.get(s);
 			i++;
 			playerInventory.put(s, i);
-			
-			
-			//FINISH THIS
-			
-			
-			
 		} else {//Else, the key's not on the hashmap, so add it
 			playerInventory.put(s, 1);
 		}
@@ -217,8 +206,6 @@ public class Maze {
 			playerInventory.put(s, i);
 		}
 	}
-	
-
 	
 	/**
 	 * Given a character and a direction, check if it's a valid or invalid move.
@@ -243,15 +230,6 @@ public class Maze {
 				return true;//Immediately walk onto the space where the door used to be. Will be FALSE once doors are animated.
 			}
 			return false;//If there was no matching keycard, return false.
-			
-			/*//OLD METHOD - REMOVE WHEN NEW WORKS
-			for(String s:playerInventory) {//Check every key the player has
-				if(s.equals(toCheck.getColor())) {//If the key's the same colour as the door
-					board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
-					return true;
-				}
-			}
-			return !toCheck.getIsSolid();*/
 			
 		} else if(toCheck instanceof CellExitLocked){//If it's an exit door/lock, see if the player has enough chips.
 			if(currentTreasureLeft==0) {//If all treasure's been collected
