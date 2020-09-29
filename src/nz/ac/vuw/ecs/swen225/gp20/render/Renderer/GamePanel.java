@@ -93,11 +93,7 @@ public class GamePanel extends JPanel {
               keyObjects.put(cells[i][j], kc);
             }
           case "door":
-//            Cell doorcell = cells[i][j];
-//
             if(cells[i][j] instanceof CellDoor) {
-
-//              String color = doorcell.getColor();
               Door door = new Door(cells[i][j].getColor());
               sprites[i][j] = door;
               doorObjects.put(cells[i][j], door);

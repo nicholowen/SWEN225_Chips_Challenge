@@ -12,7 +12,6 @@ public class Door extends Sprite {
   private String color;
   private BufferedImage[] sprites;
 
-
   public Door(String c){
 
     super();
