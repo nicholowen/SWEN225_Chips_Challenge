@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 
 public class CellInfo extends Cell{
 	
-	public CellInfo(int xpos, int ypos) {		
+	public CellInfo(int xpos, int ypos, String info) {		
 		name="info";
 		x=xpos;
 		y=ypos;
@@ -13,6 +13,7 @@ public class CellInfo extends Cell{
 		hasPickup=false;
 		isOpenable=false;
 		animated=false;
+		infoMessage=info;
 		}
 
 }

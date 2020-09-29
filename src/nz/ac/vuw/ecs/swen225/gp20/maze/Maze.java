@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
@@ -14,8 +15,8 @@ public class Maze {
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
-	private String helpMessage;
-	private ArrayList<String> playerInventory;
+	//private ArrayList<String> playerInventory;
+	private HashMap<String, Integer> playerInventory;
 	
 	//Board logic
 	private int boardHeight;
@@ -56,7 +57,7 @@ public class Maze {
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		exitList=new ArrayList<>();
-		playerInventory=new ArrayList<>();//Reset the player's keys!
+		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
 		//helpMessage=toLoad.getHelp(); //TODO: Have getHelp implemented in Persistence/Level
 		
@@ -83,7 +84,7 @@ public class Maze {
 				board[t.getX()][t.getY()] = new CellDoor(t.getX(),t.getY(), t.getColor());
 				break;
 			case "info":
-				board[t.getX()][t.getY()] = new CellInfo(t.getX(),t.getY());//TODO: Implement Info.
+				board[t.getX()][t.getY()] = new CellInfo(t.getX(),t.getY(), t.getHelp());
 				break;
 			case "exit":
 				CellExit exit = new CellExit(t.getX(),t.getY());
@@ -135,11 +136,11 @@ public class Maze {
 	  }
 	  
 	
-	public static Cell[][] getBoard(){
+	public Cell[][] getBoard(){
 		return board;
 	}
 
-	public static int getBoardSize() {
+	public  int getBoardSize() {
 	  	return board.length;
 	}
 	
@@ -156,18 +157,11 @@ public class Maze {
 		return toReturn;
 	}
 	
-	public String[] getInventory() {
-		String[] toReturn = new String[playerInventory.size()];
-		for(int i=0; i<playerInventory.size(); i++)
-			toReturn[i] = playerInventory.get(i);
-		return toReturn;
-	}
-	
 	public int getLevel() {
 		return currentLevel;
 	}
 	
-	public ArrayList<String> getPlayerInventory(){
+	public HashMap<String, Integer> getPlayerInventory() {
 		return playerInventory;
 	}
 	
@@ -192,7 +186,7 @@ public class Maze {
 				currentTreasureCollected++;
 				currentTreasureLeft--;
 			} else {//If not treasure, add item to inventory
-				playerInventory.add(stoodOn.getColor());//TODO: If items other than keys are added, account for it
+				addToInventory(stoodOn.getPickupName());//TODO: If items other than keys are added, account for it
 			}
 			//Nomatter what the pickup was, replace it with an empty tile
 			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
@@ -202,13 +196,51 @@ public class Maze {
 		}
 		
 		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);
-		return new RenderTuple(getActors(), getBoard(), getInventory(), playerStandingOnInfo, helpMessage);
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo());
 	}
 	
 	/**
+	 * Simple way of adding to a character's inventory.
+	 * If the item is present then increment it's count by 1, else add it to the inventory.
+	 * @param s Name of the item being added to the inventory
+	 */
+	public void addToInventory(String s) {
+		if(playerInventory.containsKey(s)) {//If the key is already on the hash map
+			Integer i = playerInventory.get(s);
+			i++;
+			playerInventory.put(s, i);
+			
+			
+			//FINISH THIS
+			
+			
+			
+		} else {//Else, the key's not on the hashmap, so add it
+			playerInventory.put(s, 1);
+		}
+	}
+	
+	/**
+	 * "Uses" a single item from the inventory. Removes it from the inventory if it was the last instance of that item.
+	 * @param s
+	 */
+	public void removeFromInventory(String s) {
+		Integer i = playerInventory.get(s);
+		i--;
+		if(i==0)
+			playerInventory.remove(s);
+		else{
+			playerInventory.put(s, i);
+		}
+	}
+	
+
+	
+	/**
 	 * Given a character and a direction, check if it's a valid or invalid move.
-	 * @param a
-	 * @param p
+	 * Also unlocks doors if a character walks over/against it.
+	 * @param a The actor who is attempting to make a move
+	 * @param p A Point representing the change in x/y coordinates from the actor's current position
 	 * @return
 	 */
 	public boolean isMoveValid(Actor a, Point p) {
@@ -219,17 +251,25 @@ public class Maze {
 			return false;//Out-of-bounds, cannot walk through.
 		
 		Cell toCheck=board[xToCheck][yToCheck];
-		
-		if(toCheck.isOpenable()) {
+		if(toCheck.isOpenable()) {//If the checked tile is a door
+			String keycardName = (toCheck.getColor()+"key");
+			if(playerInventory.containsKey(keycardName)) {//If true, then it means there's at least one matching keycard
+				removeFromInventory(keycardName);
+				board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
+				return true;//Immediately walk onto the space where the door used to be. Will be FALSE once doors are animated.
+			}
+			return false;//If there was no matching keycard, return false.
+			
+			/*//OLD METHOD - REMOVE WHEN NEW WORKS
 			for(String s:playerInventory) {//Check every key the player has
 				if(s.equals(toCheck.getColor())) {//If the key's the same colour as the door
 					board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
 					return true;
 				}
 			}
-			return !toCheck.getIsSolid();
+			return !toCheck.getIsSolid();*/
 			
-		} else {
+		} else {//Not a door
 		return !toCheck.getIsSolid();
 		}
 	}

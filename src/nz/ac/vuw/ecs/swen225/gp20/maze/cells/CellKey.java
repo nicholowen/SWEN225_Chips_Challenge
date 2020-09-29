@@ -12,10 +12,9 @@ public class CellKey extends Cell{
 		isTreasure=false;
 		hasPickup=true;
 		isOpenable=false;
-		pickupName="key:"+c;
+		pickupName=c+"key";
 		color=c;
 		animated=false;
-		
 		}
 
 }

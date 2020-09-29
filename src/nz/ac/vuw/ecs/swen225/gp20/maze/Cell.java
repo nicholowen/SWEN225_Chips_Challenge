@@ -24,6 +24,7 @@ public abstract class Cell {
 	protected boolean isTreasure;
 	protected String pickupName;
 	protected String color;
+	protected String infoMessage;
 	
 	
 	/**
@@ -138,6 +139,8 @@ public abstract class Cell {
 		return color;
 	}
 	
-	
+	public String getInfo() {
+		return infoMessage;
+	}
 	
 }

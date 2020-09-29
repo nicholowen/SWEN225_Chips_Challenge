@@ -1,15 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.util.HashMap;
+
 public class RenderTuple {
 	
 	private Actor[] actorList;
 	private Cell[][] board;
-	private String[] inventory;
+	private HashMap<String, Integer> inventory;
 	private boolean playerStandingOnInfo;
 	String info;
 	
 	
-	public RenderTuple(Actor[] aList, Cell[][] b, String[] inv, boolean playerOnInfo, String info) {
+	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info) {
 		actorList=aList;
 		board=b;
 		playerStandingOnInfo=playerOnInfo;
@@ -25,7 +27,7 @@ public class RenderTuple {
 		return board;
 	}
 	
-	public String[] getInventory() {
+	public HashMap<String, Integer> getInventory() {
 		return inventory;
 	}
 	public boolean isPlayerOnInfo() {
