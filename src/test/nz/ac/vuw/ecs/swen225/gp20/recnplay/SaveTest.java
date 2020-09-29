@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class SaveTest {
 
-    private Main game = new Main();
+    //private Main game = new Main(); // this causes error in CI as it opens the GUI.
 
     //@Test
     //public void simpleMoveRecording() {
