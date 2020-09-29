@@ -15,7 +15,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
+/**
+ * Class to handle reading of json level files and
+ * reading and writing of game state
+ *
+ * @author Campbell Whitworth 300490070
+ */
 public class Persistence {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
