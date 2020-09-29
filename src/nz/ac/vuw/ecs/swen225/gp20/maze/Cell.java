@@ -125,6 +125,10 @@ public abstract class Cell {
 	public boolean hasPickup() {
 		return hasPickup;
 	}
+	
+	public boolean isOpenable() {
+		return isOpenable;
+	}
 
 	public boolean isTreasure() {
 		return isTreasure;
