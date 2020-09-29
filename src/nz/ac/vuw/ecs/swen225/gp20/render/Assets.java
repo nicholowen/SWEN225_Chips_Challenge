@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class Assets
 {
-  private static File path = new File("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/");
+  private static File path = new File("resources/Assets/Images/");
 
   //Load gifs TODO: add floor tiles and door tiles/animations
   //Map/Game gifs
