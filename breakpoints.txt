@@ -2,10 +2,10 @@ Application
 
 Maze
     Class name: Maze
-    Line count:274
+    Line count:252
     Breakpoints:
-        *159, tick() - Used by Application, application gives Maze a direction for the character to use, then it returns a RenderTuple
-        *50, Persistence.read(int i), calls Persistence with the number of the level to load, then recieves the map data which Maze can then load
+        *157, tick() - Used by Application, application gives Maze a direction for the character to use, then it returns a RenderTuple
+        *49, Persistence.read(int i), calls Persistence with the number of the level to load, then recieves the map data which Maze can then load
 
 Persistence
 
