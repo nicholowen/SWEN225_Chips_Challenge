@@ -131,6 +131,15 @@ public class Persistence {
     }
 
     /**
+     * Loads a the saved game state from a string into a Maze object
+     *
+     * @return the saved maze object
+     */
+    public static Main loadGameState(String state) {
+        return gson.fromJson(state, Main.class);
+    }
+
+    /**
      * Gets the most recent save from the save game state directory.
      */
     private static File getRecentSave(){
