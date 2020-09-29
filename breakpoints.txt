@@ -19,6 +19,10 @@ Maze
         Line 49   : Persistence.read(int i), calls Persistence with the number of the level to load, then recieves the map data which Maze can then load
 
 Persistence
+    Class name: Persistence
+        Line 91: Called from Main.java to save the game state as json
+    Class name: MainAdapter
+        Line 24: Gets the maze (board) from the game class to write
 
 Record And Replay
     Class name: RecordAndPlay
