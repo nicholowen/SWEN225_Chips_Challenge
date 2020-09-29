@@ -146,5 +146,4 @@ public abstract class Cell {
 	public String getInfo() {
 		return infoMessage;
 	}
-	
 }

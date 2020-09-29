@@ -8,15 +8,19 @@ public class RenderTuple {
 	private Cell[][] board;
 	private HashMap<String, Integer> inventory;
 	private boolean playerStandingOnInfo;
-	String info;
+	private String info;
+	private int treasureTaken;
+	private int treasureLeft;
 	
 	
-	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info) {
+	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft) {
 		actorList=aList;
 		board=b;
 		playerStandingOnInfo=playerOnInfo;
 		this.info=info;
 		inventory=inv;
+		treasureTaken=treasureCollected;
+		this.treasureLeft=treasureLeft;
 	}
 	
 	public Actor[] getActors() {
@@ -35,6 +39,14 @@ public class RenderTuple {
 	}
 	public String getInfo() {
 		return info;
+	}
+
+	public int getTreasureCollected() {
+		return treasureTaken;
+	}
+
+	public int getTreasureLeft() {
+		return treasureLeft;
 	}
 	
 }
