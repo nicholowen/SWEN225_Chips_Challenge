@@ -14,6 +14,7 @@ public class Maze {
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
+	private String helpMessage;
 	private ArrayList<String> playerInventory;
 	
 	//Board logic
@@ -29,6 +30,7 @@ public class Maze {
 	/**
 	 * This module handles the maze, collision, actors and inventory.
 	 * Loads maze "1" by default. Completely resets every time a maze is loaded.
+	 * @author Lex Ashurst 300431928
 	 */
 	public Maze() {
 		loadMaze(1);
@@ -37,8 +39,9 @@ public class Maze {
 
 	/**
 	 * Uses the Persistence module to load a maze from file, then sets the current board to match.
+	 * Completely wipes any data when used. Player inventory, treasure count, everything is reset.
 	 * @param levelToLoad Number of the level to load.
-	 * @return Time limit in seconds of the level in question. -1 if an error occured while loading.
+	 * @return Time limit in seconds of the level in question. -1 if an error occurred while loading.
 	 */
 	public int loadMaze(int levelToLoad) {
 		Level toLoad;
@@ -55,6 +58,7 @@ public class Maze {
 		exitList=new ArrayList<>();
 		playerInventory=new ArrayList<>();//Reset the player's keys!
 		currentLevel=levelToLoad;
+		//helpMessage=toLoad.getHelp(); //TODO: Have getHelp implemented in Persistence/Level
 		
 		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
@@ -137,6 +141,13 @@ public class Maze {
 		return toReturn;
 	}
 	
+	public String[] getInventory() {
+		String[] toReturn = new String[playerInventory.size()];
+		for(int i=0; i<playerInventory.size(); i++)
+			toReturn[i] = playerInventory.get(i);
+		return toReturn;
+	}
+	
 	public int getLevel() {
 		return currentLevel;
 	}
@@ -175,8 +186,8 @@ public class Maze {
 			
 		}
 		
-		
-		return new RenderTuple(getActors(), getBoard());//TEMP
+		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);
+		return new RenderTuple(getActors(), getBoard(), getInventory(), playerStandingOnInfo, helpMessage);
 	}
 	
 	/**
