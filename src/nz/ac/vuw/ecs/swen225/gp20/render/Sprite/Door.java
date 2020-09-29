@@ -17,8 +17,6 @@ public class Door extends Sprite {
 
     super();
 
-    System.out.println("Door Color: " + c);
-
     this.color = c;
     int index = 0;
       switch (c) {

@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellDoor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellKey;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
@@ -86,9 +87,11 @@ public class GamePanel extends JPanel {
             sprites[i][j] = eb;
             energyObjects.put(cells[i][j], eb);
           case "key":
-            KeyCard kc = new KeyCard();
-            sprites[i][j] = kc;
-            keyObjects.put(cells[i][j], kc);
+            if(cells[i][j] instanceof CellKey) {
+              KeyCard kc = new KeyCard(cells[i][j].getColor());
+              sprites[i][j] = kc;
+              keyObjects.put(cells[i][j], kc);
+            }
           case "door":
 //            Cell doorcell = cells[i][j];
 //
