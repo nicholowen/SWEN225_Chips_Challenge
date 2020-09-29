@@ -175,12 +175,11 @@ public class Maze {
 			}
 			//Nomatter what the pickup was, replace it with an empty tile
 			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
-			
-			
-			
 		}
 		
-		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);
+		//Open the exit lock if the player has gathered all of the chips
+		
+		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);//Check if the player's standing on an info tile
 		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo());
 	}
 	
@@ -254,7 +253,18 @@ public class Maze {
 			}
 			return !toCheck.getIsSolid();*/
 			
-		} else {//Not a door
+		} else if(toCheck instanceof CellExitLocked){//If it's an exit door/lock, see if the player has enough chips.
+			if(currentTreasureLeft==0) {//If all treasure's been collected
+				board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);
+				return true;//Immediately walk onto the space where the lock used to be!
+				
+			} else {//Not all treasure's been collected, so it's solid.
+				return false;
+			}
+			
+			
+		} else{//Not a door
+		
 		return !toCheck.getIsSolid();
 		}
 	}
