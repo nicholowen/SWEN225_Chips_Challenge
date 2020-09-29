@@ -10,7 +10,6 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
-
 /**
  * This class handles the main loop where the game runs. It also sends all the
  * info needed to different classes every tick.
@@ -28,6 +27,7 @@ public class Main {
     private boolean gameEnded;
     private int timeRemaining;
     private String direction = null;
+    private boolean paused = false;
 
     public Main() {
 
@@ -41,19 +41,23 @@ public class Main {
         int delay = 1000; // 1 Second
         timeRemaining = maze.loadMaze(1);
         render.init(maze.getBoard());
-        while (!gameEnded) {
-            checkUpdates();
-            render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
+        while (true) {
+            if (!gameEnded && !paused) {
+                checkUpdates();
+                render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
 
-            long startTick = System.currentTimeMillis();
-            while (true) {
-                int tickDelay = 33;
-                if (System.currentTimeMillis() >= startTick + tickDelay)
-                    break; // wait 33 milli
-            }
-            if (System.currentTimeMillis() >= start + delay) {
-                start = System.currentTimeMillis();
-                timeRemaining--; // timeRemaining goes down every second
+                long startTick = System.currentTimeMillis();
+                while (true) {
+                    int tickDelay = 33;
+                    if (System.currentTimeMillis() >= startTick + tickDelay)
+                        break; // wait 33 milli
+                }
+                if (System.currentTimeMillis() >= start + delay) {
+                    start = System.currentTimeMillis();
+                    timeRemaining--; // timeRemaining goes down every second
+                }
+            } else {
+                checkUpdates();
             }
         }
     }
@@ -63,27 +67,23 @@ public class Main {
      * updating direction and pausing behaviours.
      */
     public void checkUpdates() {
-        while (gui.isPaused()) {
-            boolean paused = gui.isPaused();
-            System.out.println(paused);
-            if (!paused)
-                break;
-        }
+        // Update paused
+        paused = gui.isPaused();
         // Update direction
         direction = gui.getDirection();
         // Check if user wants to save
         if (gui.isSaving()) {
             try {
                 Persistence.saveGameState(this);
-            System.out.println("Saving");
-            gui.saved(true);
+                System.out.println("Saving");
+                gui.saved(true);
             } catch (IOException e) {
-                gui.saved(true);    // true for now (will change later)
+                gui.saved(true); // true for now (will change later)
                 System.out.println("Error With Saving State");
             }
         }
 
-        if(gui.getLoadState() != null) {
+        if (gui.getLoadState() != null) {
             Persistence.loadGameState();
             System.out.println(gui.getLoadState());
             gui.setLoadState(null);
