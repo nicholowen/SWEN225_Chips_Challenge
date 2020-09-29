@@ -9,6 +9,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.IOException;
 
+/**
+ * Specific to read and write methods to serialise and deserialize the Main class to json
+ *
+ * @author Campbell Whitworth 300490070
+ */
 public class MainAdapter extends TypeAdapter<Main> {
 
     @Override
