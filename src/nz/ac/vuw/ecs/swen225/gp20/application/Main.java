@@ -40,7 +40,7 @@ public class Main {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
         timeRemaining = maze.loadMaze(1);
-        render.init(maze.getBoard());
+        render.init(maze);
         while (true) {
             if (!gameEnded && !paused) {
                 checkUpdates();
