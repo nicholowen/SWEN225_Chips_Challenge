@@ -7,6 +7,8 @@ import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -134,14 +136,36 @@ public class Persistence {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(Persistence.getRecentSave());
+    /**
+     * @return state of the game
+     */
+    public static String getGameState(int timeRemaining) {
+        String jsonGame;
 
-        Main game = new Main();
-        try {
-            Persistence.saveGameState(game);
+        Json.createObjectBuilder();
+        JsonObjectBuilder builder;
+
+        builder = Json.createObjectBuilder()
+                .add("timeRemaining", timeRemaining);
+
+        try (Writer writer = new StringWriter()) {
+            Json.createWriter(writer).write(builder.build());
+            jsonGame = writer.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new Error("Failed to parse game");
         }
+        return jsonGame;
+    }
+
+    public static void main(String[] args) {
+        Main gameState = Persistence.loadGameState();
+        System.out.println(gameState);
+
+        //Main game = new Main();
+        //try {
+        //    Persistence.saveGameState(game);
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
     }
 }
