@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
@@ -39,10 +40,10 @@ public class Render {
   /**
    * Initialises all the assets in the game.
    * This is required so the renderer has knowledge of what graphics are where at the start of the game.
-   * @param cells
+  // * @param cells
    */
-  public void init(Cell[][] cells){
-    gp.initAnimationObjects(cells);
+  public void init(Maze maze){
+    gp.initAnimationObjects(maze.getBoard());
   }
 
 }
