@@ -55,7 +55,7 @@ public class MainAdapter extends TypeAdapter<Main> {
     private void writeActor(JsonWriter writer, Actor actor) throws IOException {
         writer.beginObject();
 
-//        writer.name("name").value(actor.getName());
+        writer.name("name").value(actor.getName());
         writer.name("x").value(actor.getX());
         writer.name("y").value(actor.getY());
 
