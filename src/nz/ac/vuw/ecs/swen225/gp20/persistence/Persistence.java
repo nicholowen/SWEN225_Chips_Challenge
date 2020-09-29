@@ -7,15 +7,19 @@ import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
+import java.util.Queue;
 
 /**
  * Class to handle reading of json level files and
@@ -26,10 +30,10 @@ import java.util.Comparator;
 public class Persistence {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final Path resources = Paths.get("resources");
-    public static final Path levels = Paths.get(resources.toString(), "levels");
-    public static final Path recordings = Paths.get(resources.toString(), "recordings");
-    public static final Path savedState = Paths.get(resources.toString(), "saved-state");
+    public static final String resources = "resources";
+    public static final String levels = Paths.get(resources, "levels").toString();
+    public static final String recordings = Paths.get(resources, "recordings").toString();
+    public static final String savedState = Paths.get(resources, "saved-state").toString();
 
     public Persistence() {
 
@@ -80,7 +84,24 @@ public class Persistence {
      * Gets a file object from the levels directory & checks that file exists.
      */
     private static File getLevelFile(int level) throws FileNotFoundException {
-        return checkFile(Paths.get(levels.toString(), "level" + level + ".json").toFile());
+        return checkFile(Paths.get(levels, "level" + level + ".json").toFile());
+    }
+
+    /**
+     * Gets a file object from the save directory & checks that file exists.
+     */
+    private File getSaveFile(String filename) throws FileNotFoundException {
+        return checkFile(new File(filename));
+    }
+
+
+    /**
+     * Reads a recorded game from a json file
+     *
+     * @return a recording of the game
+     */
+    public RecordAndPlay readRecording() {
+        return null;
     }
 
     /**
@@ -89,15 +110,11 @@ public class Persistence {
      * @param game the game to save
      * @throws IOException {@inheritDoc}
      */
-    public static void saveGameState(Main game) throws IOException {
+    public void saveGameState(Main game) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
-        if (!savedState.toFile().exists() && !savedState.toFile().mkdirs()) {
-            throw new IOException("Error creating directory, check that you have permission");
-        }
-
-        try (Writer writer = new FileWriter(Paths.get(savedState.toString(), filename).toString())) {
+        try (Writer writer = new FileWriter(Paths.get(savedState, filename).toString())) {
             gson.toJson(game, writer);
         }
     }
@@ -107,40 +124,38 @@ public class Persistence {
      *
      * @return the saved maze object
      */
-    public static Maze loadGameState() {
-        File recentSave = getRecentSave();
+    public static String getGameState(Main game) {
+        String jsonGame;
 
-        if (recentSave == null) {
-            return null;
-        } else {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(recentSave.getAbsoluteFile()));
-                return gson.fromJson(reader, Main.class);
-            } catch (FileNotFoundException e){
-                return null;
-            }
+        // Json dump board
+        Json.createObjectBuilder();
+        JsonObjectBuilder builder;
+
+        // Dump game info
+        builder = Json.createObjectBuilder()
+                .add("timeRemaining", game.getTimeRemaining());
+
+        // Compose game section
+        try (Writer writer = new StringWriter()) {
+            Json.createWriter(writer).write(builder.build());
+            jsonGame = writer.toString();
+        } catch (IOException e) {
+            throw new Error("Failed to parse game");
         }
+        return jsonGame;
     }
 
-    /**
-     * Gets the most recent save from the save game state directory.
-     */
-    private static File getRecentSave(){
-        File[] directoryList= savedState.toFile().listFiles();
-
-        if (directoryList == null){
-            return null;
-        } else {
-            return Arrays.stream(directoryList).max(Comparator.comparing(File::getName)).orElse(null);
-        }
-    }
 
     public static void main(String[] args) {
-        System.out.println(Persistence.getRecentSave());
+        Persistence persistence = new Persistence();
+        Maze maze = new Maze();
+        maze.loadMaze(1);
 
         Main game = new Main();
+        game.play();
+
         try {
-            Persistence.saveGameState(game);
+            persistence.saveGameState(game);
         } catch (IOException e) {
             e.printStackTrace();
         }

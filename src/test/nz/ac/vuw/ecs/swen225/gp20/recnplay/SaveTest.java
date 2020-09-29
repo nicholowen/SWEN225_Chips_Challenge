@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test;
 
 public class SaveTest {
 
-    //private Main game = new Main(); // this causes error in CI as it opens the GUI.
+    private Main game = new Main(); // this causes error in CI as it opens the GUI.
 
-    //@Test
-    //public void simpleMoveRecording() {
-    //    RecordAndPlay.recording(game.getTimeRemaining(), "save1move.json");
-    //    game.movePlayer("up");
-    //    RecordAndPlay.saveRecording(game.getTimeRemaining());
-    //    assert RecordAndPlay.getMoves().size() == 1;
-    //    System.out.println("saved");
-    //}
+    @Test
+    public void simpleMoveRecording() {
+        RecordAndPlay.recording(game, "save1move.json");
+        game.movePlayer("up");
+        RecordAndPlay.saveRecording(20);
+        assert RecordAndPlay.getMoves().size() == 1;
+        System.out.println("saved");
+    }
 
     @Test
     public void playTest() {
