@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Main Render Module class. Simply stores the Drawing panels and performs updates to both every tick.
@@ -30,7 +31,7 @@ public class Render {
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    * @param tuple Contains the current state of the cells and the player
    */
-  public void update(RenderTuple tuple, int timeRemaining, ArrayList<String> inventory){
+  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory){
     gp.update(tuple);
     sp.update(timeRemaining, inventory);
   }

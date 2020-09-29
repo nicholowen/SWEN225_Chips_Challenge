@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Allows the current status of the game to be displayed - this includes the Level information,
@@ -30,7 +31,7 @@ public class ScorePanel extends JPanel {
   private BufferedImage[] digits;
   char[] chars = {0, 0, 0};
   BufferedImage[][] inventorySprites;
-  private ArrayList<String> inventory;
+  private HashMap<String, Integer> inventory;
 
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
@@ -55,7 +56,7 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, ArrayList<String> inventory){
+  public void update(int timeLimit, HashMap<String, Integer> inventory){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = inventory;
@@ -90,27 +91,30 @@ public class ScorePanel extends JPanel {
       }
 
     }
-    int countX = 0;
-    int countY = 0;
+
+    // INVENTORY RENDERER
+    // renders each inventory item.
+    int countX = 0; //columns of the inventory panel
+    int countY = 0; //for the each row of the inventory panel
     int i = 0;
     int j = 0;
     if (inventory != null) {
-      for (String s : inventory) {
+      for (String s : inventory.keySet()) {
         switch (s) {
-          case "red":
+          case "redkey":
             j = 0;
             break;
-          case "green":
+          case "greenkey":
             j = 1;
             break;
-          case "blue":
+          case "bluekey":
             j = 2;
             break;
-          case "yellow":
+          case "yellowkey":
             j = 3;
             break;
         }
-
+        // TODO: Draw counter onto inventory slot.
         g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
         countX++;
         if (countX == 4) {
