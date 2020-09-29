@@ -26,8 +26,8 @@ test:
     - shell
   script:
     - mvn $MAVEN_OPTS verify
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - surefire-reports/TEST-*.xml
+#  artifacts:
+#    when: always
+#    reports:
+#      junit:
+#        - surefire-reports/TEST-*.xml
