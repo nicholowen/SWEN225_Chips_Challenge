@@ -13,9 +13,12 @@ public class Animation {
 
   BufferedImage[] frames;
   BufferedImage image;
-  public int delay;
-  public int currentFrame;
-  public int numFrames;
+  private int delay;
+  private int currentFrame;
+  private int numFrames;
+
+  private boolean singleAnimation;
+
 
   int count = 0;
 
@@ -44,6 +47,10 @@ public class Animation {
     this.delay = delay;
   }
 
+  public void setSingleAnimation(boolean singleAnimation){
+    this.singleAnimation = singleAnimation;
+  }
+
   /**
    * Increments the frame number of the animation depending on the delay.
    * Will revert back to zero to count again when this happens.
@@ -56,6 +63,10 @@ public class Animation {
       count = 0;
     }
     if(currentFrame == numFrames) {
+      if(singleAnimation){
+        delay = -1;
+        return;
+      }
       currentFrame = 0;
     }
   }
