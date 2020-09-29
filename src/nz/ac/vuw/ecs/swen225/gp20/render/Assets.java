@@ -24,6 +24,7 @@ public class Assets
   public static BufferedImage[][]       KEYCARD_G = loadGif(path, "keycardsprites.gif", 64, 64);
   public static BufferedImage[][]            INFO = loadGif(path, "info.gif", 64, 64);
   public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
+  public static BufferedImage[][]            EXIT = loadGif(path, "exit.gif", 64, 64);
 
   //Score/info gifs
   public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);

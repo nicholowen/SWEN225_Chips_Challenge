@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellDoor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellExit;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellKey;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
@@ -42,6 +43,7 @@ public class GamePanel extends JPanel {
 
   //Single Rendered object (only one per map)
   private Info info;
+  private Exit exit;
   private Player playerSprite;
 
   private Actor player;
@@ -74,8 +76,7 @@ public class GamePanel extends JPanel {
     this.playerSprite = new Player();
     for(int i = 0; i < cells.length; i++){
       for(int j = 0; j < cells[i].length; j++){
-        String[] data = cells[i][j].getRenderData().split(":");
-        switch(data[0]){
+        switch(cells[i][j].getName()){
           case "wall":
             WallTile wt = new WallTile();
             Cell[] neighbours = getWallNeighbours(cells, j, i);
@@ -97,6 +98,11 @@ public class GamePanel extends JPanel {
               Door door = new Door(cells[i][j].getColor());
               sprites[i][j] = door;
               doorObjects.put(cells[i][j], door);
+            }
+          case "exit":
+            if(cells[i][j] instanceof CellExit) {
+              System.out.println("GOT HERE");
+              exit = new Exit(i, j);
             }
 
         }
@@ -170,7 +176,7 @@ public class GamePanel extends JPanel {
    * Iterates through a 9x9 grid around the player. Adds them to an appropriate list
    * which is used for drawing in order. Also updates all updatable items
    * (things with animation)
-   * @param tuple
+   * @param tuple tuple containing Cells and actors
    */
   public void update(RenderTuple tuple) {
     player = tuple.getActors()[0];
@@ -180,7 +186,7 @@ public class GamePanel extends JPanel {
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
         if(surround[i][j] != null) {
-          switch (getInfo("name", surround[i][j])) {
+          switch (surround[i][j].getName()) {
             case "free":
               floor[i][j] = surround[i][j];
               break;
@@ -209,6 +215,9 @@ public class GamePanel extends JPanel {
               break;
             case "info":
               info = new Info(i, j, Assets.INFO[0][0]);
+              break;
+            case "exit":
+              exit.update();
               break;
           }
         }
@@ -255,6 +264,8 @@ public class GamePanel extends JPanel {
     int x = 64;
     int y = 64;
 
+//    System.out.println(exit.getX() +":" + exit.getY());
+
 
     g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, this);
     //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
@@ -263,6 +274,9 @@ public class GamePanel extends JPanel {
 
         if(info != null && i == info.getX() && j == info.getY()){
           g.drawImage(info.getImage(), y * i, x * j, this);
+        }
+        if(exit != null && i == exit.getX() && j == info.getY()){
+          g.drawImage(exit.getImage(), y * i, x * j, this);
         }
         if (floor[i][j] != null) {
           g.drawImage(Assets.FLOOR[0][0], i * y, x * j, this);
