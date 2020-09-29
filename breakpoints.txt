@@ -1,4 +1,15 @@
 Application
+    Class name: Main
+        Line 42   : Tells Maze to load the maze
+        Line 43   : Tells Render to initialise all assets in the game. In order to do this, the board is sent to Render as well.
+        Line 46   : Both Maze and Render are updated every tick(33 milli seconds). Maze is given the direction of the player 
+        (null if player is not moving) and Render is given a tuple (returned from maze), the time remaining in the level and the player's inventory,
+        which is also retrieved from Maze.
+        Line 77   : Communication with Persistence if user wants to save the game
+        Line 87   : Communication with Persistence if user wants to load the game
+    Class name: GUI
+        Line 68   : Instantiates a new GamePanel (requires communication with Render)
+        Line 69   : Instantiates a new ScorePanel  (requires communication with Render)
 
 Maze
     Class name: Maze
@@ -12,4 +23,5 @@ Persistence
 Record And Replay
     Class name: RecordAndPlay
     Line 52   : inter-module communication with Persistence
+
 Render
