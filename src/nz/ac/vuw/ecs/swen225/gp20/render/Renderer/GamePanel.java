@@ -13,6 +13,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,10 @@ public class GamePanel extends JPanel {
   private Player playerSprite;
 
   private Actor player;
+
+  //transition offset
+  int offsetX = 0;
+  int offsetY = 0;
 
   public GamePanel() {
     setPreferredSize(new Dimension(576, 576));
@@ -267,7 +272,16 @@ public class GamePanel extends JPanel {
     key    = new Cell[9][9];
     exit   = new Cell[9][9];
     info   = new Cell[9][9];
+
   }
+
+  private BufferedImage getPartialImage(BufferedImage img, int x, int y){
+    BufferedImage partial;
+
+    return null;
+  }
+
+
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
@@ -277,39 +291,65 @@ public class GamePanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
+
+    // transition animation - draws all objects depending on offset (speed)
+    if(player != null && player.getIsMoving()){
+      int speed = 12;
+      switch(player.getDirection()){
+        case "up":
+          offsetY += speed;
+          break;
+        case "down":
+          offsetY -= speed;
+          break;
+        case "left":
+          offsetX += speed;
+          break;
+        case "right":
+          offsetX -= speed;
+          break;
+      }
+    }else{
+      offsetX = offsetY = 0;
+    }
+
+
     int x = 64;
     int y = 64;
 
-//    System.out.println(exit.getX() +":" + exit.getY());
-
+    //draw the cells in transition
+    if(player != null && player.getIsMoving()) {
+      for (int i = 0; i < 9; i++) {
+        if(player.getDirection().equals("up")){
+          BufferedImage partial;
+        }
+      }
+    }
 
     g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, this);
-    //currently using static images - not retrieved from the object itself yet (it didn't work when I tried)
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
 
-
-
         if (floor[i][j] != null) {
-          g.drawImage(Assets.FLOOR[0][0], i * y, x * j, this);
+          g.drawImage(Assets.FLOOR[0][0], x * i + offsetX, y * j + offsetY, this);
         }
         if (wall[i][j] != null) {
-          g.drawImage(wallObjects.get(wall[i][j]).getImage(), y * i, x * j, this);
+          g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX, y * j + offsetY, this);
         }
         if (door[i][j] != null) {
-          g.drawImage(doorObjects.get(door[i][j]).getImage(), y * i, x * j, this);
+          g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX, y * j + offsetY, this);
         }
         if (energy[i][j] != null) {
-          g.drawImage(energyObjects.get(energy[i][j]).getImage(), y * i, x * j, this);
+          g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX, y * j + offsetY, this);
         }
         if (key[i][j] != null) {
-          g.drawImage(keyObjects.get(key[i][j]).getImage(), y * i, x * j, this);
+          g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX, y * j + offsetY, this);
         }
         if(exit[i][j] != null){
-          g.drawImage(exitOb.getImage(), y * i, x * j, this);
+          g.drawImage(exitOb.getImage(), x * i + offsetX, y * j + offsetY, this);
         }
         if(info[i][j] != null){
-          g.drawImage(infoOb.getImage(), y * i, x * j, this);
+          g.drawImage(infoOb.getImage(), x * i + offsetX, y * j + offsetY, this);
         }
       }
     }
