@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellDoor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellExit;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellInfo;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellKey;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
@@ -30,6 +31,8 @@ public class GamePanel extends JPanel {
   private Cell[][] door = new Cell[9][9];
   private Cell[][] energy = new Cell[9][9];
   private Cell[][] key = new Cell[9][9];
+  private Cell[][] exit = new Cell[9][9];
+  private Cell[][] info = new Cell[9][9];
 
   // currently not being used (for transition animation if being implemented)
   private Cell[][] map;
@@ -42,8 +45,8 @@ public class GamePanel extends JPanel {
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
   //Single Rendered object (only one per map)
-  private Info info;
-  private Exit exit;
+  private Info infoOb;
+  private Exit exitOb;
   private Player playerSprite;
 
   private Actor player;
@@ -101,8 +104,14 @@ public class GamePanel extends JPanel {
             }
           case "exit":
             if(cells[i][j] instanceof CellExit) {
-              System.out.println("GOT HERE");
-              exit = new Exit(i, j);
+              Exit e = new Exit(i, j);
+              sprites[i][j] = e;
+              exitOb = e;
+            }
+          case "info":
+            if(cells[i][j] instanceof CellInfo){
+              Info in = new Info(i, j, Assets.INFO[0][0]);
+              infoOb = in;
             }
 
         }
@@ -214,10 +223,15 @@ public class GamePanel extends JPanel {
               }
               break;
             case "info":
-              info = new Info(i, j, Assets.INFO[0][0]);
+              info[i][j] = surround[i][j];
               break;
             case "exit":
-              exit.update();
+              exit[i][j] = surround[i][j];
+              if(exitOb != null){
+                exitOb.update();
+              }
+              break;
+            default:
               break;
           }
         }
@@ -251,6 +265,8 @@ public class GamePanel extends JPanel {
     door   = new Cell[9][9];
     energy = new Cell[9][9];
     key    = new Cell[9][9];
+    exit   = new Cell[9][9];
+    info   = new Cell[9][9];
   }
 
   /**
@@ -272,12 +288,8 @@ public class GamePanel extends JPanel {
     for(int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
 
-        if(info != null && i == info.getX() && j == info.getY()){
-          g.drawImage(info.getImage(), y * i, x * j, this);
-        }
-        if(exit != null && i == exit.getX() && j == info.getY()){
-          g.drawImage(exit.getImage(), y * i, x * j, this);
-        }
+
+
         if (floor[i][j] != null) {
           g.drawImage(Assets.FLOOR[0][0], i * y, x * j, this);
         }
@@ -292,6 +304,12 @@ public class GamePanel extends JPanel {
         }
         if (key[i][j] != null) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), y * i, x * j, this);
+        }
+        if(exit[i][j] != null){
+          g.drawImage(exitOb.getImage(), y * i, x * j, this);
+        }
+        if(info[i][j] != null){
+          g.drawImage(infoOb.getImage(), y * i, x * j, this);
         }
       }
     }
