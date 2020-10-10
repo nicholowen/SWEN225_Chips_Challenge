@@ -11,8 +11,9 @@ public class Door extends Sprite {
 
   private String color;
   private BufferedImage[] sprites;
+  boolean vertical = false;
 
-  public Door(String c){
+  public Door(String c, boolean vertical){
 
     super();
 
@@ -33,7 +34,13 @@ public class Door extends Sprite {
           break;
 
     }
-    sprites = Assets.DOOR[index];
+    this.vertical = vertical;
+      if(!vertical){
+        sprites = Assets.VDOOR[index];
+      }else{
+        sprites = Assets.DOOR[index];
+      }
+
     animation.setFrames(sprites);
     animation.setSingleAnimation(true);
     animation.setDelay(-1);
@@ -44,6 +51,10 @@ public class Door extends Sprite {
 
   public BufferedImage getImage() {
     return animation.getFrame();
+  }
+
+  public boolean isVertical(){
+    return vertical;
   }
 
 

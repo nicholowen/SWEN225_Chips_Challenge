@@ -3,10 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellDoor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellExit;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellInfo;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.CellKey;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
@@ -27,13 +24,14 @@ import java.util.HashMap;
 public class GamePanel extends JPanel {
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
-  private Cell[][] floor  = new Cell[11][11];
-  private Cell[][] wall   = new Cell[11][11];
-  private Cell[][] door   = new Cell[11][11];
-  private Cell[][] energy = new Cell[11][11];
-  private Cell[][] key    = new Cell[11][11];
-  private Cell[][] exit   = new Cell[11][11];
-  private Cell[][] info   = new Cell[11][11];
+  private Cell[][] floor    = new Cell[11][11];
+  private Cell[][] wall     = new Cell[11][11];
+  private Cell[][] door     = new Cell[11][11];
+  private Cell[][] energy   = new Cell[11][11];
+  private Cell[][] key      = new Cell[11][11];
+  private Cell[][] exit     = new Cell[11][11];
+  private Cell[][] exitLock = new Cell[11][11];
+  private Cell[][] info     = new Cell[11][11];
 
   // currently not being used (for transition animation if being implemented)
   private Cell[][] map;
@@ -47,6 +45,7 @@ public class GamePanel extends JPanel {
 
   //Single Rendered object (only one per map)
   private Info infoOb;
+  private ExitLock exitLockOb;
   private Exit exitOb;
   private Player playerSprite;
 
@@ -103,7 +102,12 @@ public class GamePanel extends JPanel {
             }
           case "door":
             if(cells[i][j] instanceof CellDoor) {
-              Door door = new Door(cells[i][j].getColor());
+              Door door;
+              if(i > 0 && (cells[i+1][j] instanceof CellWall || cells[i-1][j] instanceof CellWall)){
+                door = new Door(cells[i][j].getColor(), true);
+              }else{
+                door = new Door(cells[i][j].getColor(), false);
+              }
               sprites[i][j] = door;
               doorObjects.put(cells[i][j], door);
             }
@@ -112,6 +116,12 @@ public class GamePanel extends JPanel {
               Exit e = new Exit(i, j);
               sprites[i][j] = e;
               exitOb = e;
+            }
+          case "exit lock":
+            if(cells[i][j] instanceof CellExitLocked) {
+              ExitLock el = new ExitLock(i, j);
+              sprites[i][j] = el;
+              exitLockOb = el;
             }
           case "info":
             if(cells[i][j] instanceof CellInfo){
@@ -236,6 +246,12 @@ public class GamePanel extends JPanel {
                 exitOb.update();
               }
               break;
+            case "exit lock":
+              exitLock[i][j] = surround[i][j];
+              if(exitLockOb != null){
+                exitLockOb.update();
+              }
+              break;
             default:
               break;
           }
@@ -265,13 +281,14 @@ public class GamePanel extends JPanel {
    * Clears all lists ready for next frame
    */
   private void clearLists(){
-    floor  = new Cell[11][11];
-    wall   = new Cell[11][11];
-    door   = new Cell[11][11];
-    energy = new Cell[11][11];
-    key    = new Cell[11][11];
-    exit   = new Cell[11][11];
-    info   = new Cell[11][11];
+    floor    = new Cell[11][11];
+    wall     = new Cell[11][11];
+    door     = new Cell[11][11];
+    energy   = new Cell[11][11];
+    key      = new Cell[11][11];
+    exit     = new Cell[11][11];
+    exitLock = new Cell[11][11];
+    info     = new Cell[11][11];
 
   }
 
@@ -321,7 +338,12 @@ public class GamePanel extends JPanel {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
         }
         if (door[i][j] != null) {
-          g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          if(doorObjects.get(door[i][j]).isVertical()){
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          }
+          else{
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, this);
+          }
         }
         if (energy[i][j] != null) {
           g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
@@ -334,6 +356,9 @@ public class GamePanel extends JPanel {
         }
         if(info[i][j] != null){
           g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+        }
+        if(exitLock[i][j] != null){
+          g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
         }
       }
     }

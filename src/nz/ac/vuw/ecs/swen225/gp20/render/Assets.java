@@ -20,10 +20,12 @@ public class Assets
   public static BufferedImage[][]           FLOOR = loadGif(path, "floortile.gif", 64, 64);
   public static BufferedImage[][]            WALL = loadGif(path, "walltiles.gif", 64, 64);
   public static BufferedImage[][]            DOOR = loadGif(path, "doorsheet.gif", 64, 64);
+  public static BufferedImage[][]           VDOOR = loadGif(path, "vertdoorsheet.gif", 64, 106);
   public static BufferedImage[][]      ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
   public static BufferedImage[][]       KEYCARD_G = loadGif(path, "keycardsprites.gif", 64, 64);
   public static BufferedImage[][]            INFO = loadGif(path, "info.gif", 64, 64);
   public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
+  public static BufferedImage[][]        EXITLOCK = loadGif(path, "exitlock.gif", 64, 64);
   public static BufferedImage[][]            EXIT = loadGif(path, "exit.gif", 64, 64);
 
   //Score/info gifs
