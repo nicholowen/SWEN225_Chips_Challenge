@@ -89,7 +89,7 @@ public class Maze {
 				CellExit exit = new CellExit(t.getX(),t.getY());
 				 exitList.add(exit);
 				 board[t.getX()][t.getY()] = exit;
-				
+				 break;
 			case "exit lock":
 				 CellExitLocked exitLocked = new CellExitLocked(t.getX(),t.getY());
 				 exitList.add(exitLocked);
