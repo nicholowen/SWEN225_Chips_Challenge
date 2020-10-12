@@ -4,27 +4,6 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.LevelFileException;
 
 import java.util.ArrayList;
 
-class Npc extends Coordinate {
-    private String type;
-    private ArrayList<Coordinate> path;
-
-    private String getType() {
-        return type;
-    }
-
-    public ArrayList<Coordinate> getPath() {
-        return path;
-    }
-
-    @Override
-    public String toString() {
-        return "Npc{" +
-                "type='" + type + '\'' +
-                ", path=" + path.size() +
-                '}';
-    }
-}
-
 class Coordinate {
     public int x;
     public int y;
