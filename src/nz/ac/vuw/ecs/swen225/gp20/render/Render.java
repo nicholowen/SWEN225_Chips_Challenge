@@ -1,13 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Intro;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.PausePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
