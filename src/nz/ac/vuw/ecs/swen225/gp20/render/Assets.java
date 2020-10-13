@@ -1,12 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import javafx.scene.media.AudioClip;
-
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Loads assets into 2D BufferedImage Arrays. This allows multiple states

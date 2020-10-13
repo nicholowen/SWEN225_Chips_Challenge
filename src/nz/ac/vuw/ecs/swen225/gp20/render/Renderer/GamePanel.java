@@ -5,7 +5,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
-import nz.ac.vuw.ecs.swen225.gp20.render.Audio;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
 import javax.swing.*;
@@ -31,8 +30,6 @@ public class GamePanel extends JPanel {
   private Cell[][] exitLock = new Cell[11][11];
   private Cell[][] info     = new Cell[11][11];
 
-  // currently not being used (for transition animation if being implemented)
-  private Cell[][] map;
   private Object[][] sprites;
 
   // HashMaps to store all rendered objects in the game
@@ -75,7 +72,6 @@ public class GamePanel extends JPanel {
    */
   public void initAnimationObjects(Cell[][] cells) {
     sprites = new Object[cells.length][cells[0].length];
-    this.map = cells;
     this.playerSprite = new Player();
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
@@ -256,22 +252,6 @@ public class GamePanel extends JPanel {
     }
     repaint();
   }
-
-  /**
-   * Gets meta data from cell
-   * @param identifier determines which part of the metadata to extract
-   * @param cell the cell with the meta data
-   * @return if identifier is "name" return the name of the cell, otherwise return the animation frame (for syncing)
-   */
-  private String getInfo(String identifier, Cell cell){
-    String[] metadata = new String[0];
-    if(cell.getRenderData() != null){
-      metadata = cell.getRenderData().split(":");
-    }
-    if(identifier.equals("name")) return metadata[0];
-    else return metadata[1];
-  }
-
 
   /**
    * Clears all lists ready for next frame

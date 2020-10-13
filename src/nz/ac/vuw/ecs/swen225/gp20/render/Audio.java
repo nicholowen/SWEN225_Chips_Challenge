@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -44,17 +42,6 @@ public class Audio {
       }
 
     }
-//    Clip c = AudioSystem.getClip();
-//    c.open(clip);
-//    c.start();
-  }
-
-  public void setPlay(boolean play){
-    this.play = play;
-  }
-
-  public boolean getPlay(){
-    return play;
   }
 
   public void playMusic() {
