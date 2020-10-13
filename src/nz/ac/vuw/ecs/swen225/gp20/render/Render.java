@@ -3,6 +3,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.Intro;
+import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.PausePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
 
 import java.util.ArrayList;
@@ -17,24 +19,35 @@ public class Render {
 
   GamePanel gp;
   ScorePanel sp;
+  //PausePanel pp;
+
+  Audio audio;
 
   /**
    * Constuctor
    * @param gp The Panel which the map is drawn
    * @param sp The Panel on which the score (time inventory etc is drawn)
    */
-  public Render(GamePanel gp, ScorePanel sp){
+  public Render(GamePanel gp, ScorePanel sp/*, PausePanel pp*/){
     this.gp = gp;
     this.sp = sp;
+    //this.pp = pp;
+    audio = new Audio();
   }
 
   /**
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    * @param tuple Contains the current state of the cells and the player
    */
-  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory){
+  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory, String button){
     gp.update(tuple);
-    sp.update(timeRemaining, inventory);
+    sp.update(timeRemaining, inventory, button);
+    audio.update(tuple.getSoundEvent());
+  }
+
+  public void displayPause(){
+    gp.repaint();
+    //pp.repaint();
   }
 
   /**

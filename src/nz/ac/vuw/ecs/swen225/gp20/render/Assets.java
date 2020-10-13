@@ -1,8 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import javafx.scene.media.AudioClip;
+
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Loads assets into 2D BufferedImage Arrays. This allows multiple states
@@ -29,13 +33,18 @@ public class Assets
   public static BufferedImage[][]            EXIT = loadGif(path, "exit.gif", 64, 64);
 
   //Score/info gifs
-  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
+  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground2.gif", 300, 576);
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
   public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
   public static BufferedImage[][]       INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
+
+
+//  public static BufferedImage[][]           PAUSE = loadGif(path, "pause.gif", 876, 576);
+//  public static BufferedImage[][]    PAUSEPRESSED = loadGif(path, "pause_depressed.gif", 102, 22);
+
 
 
 
