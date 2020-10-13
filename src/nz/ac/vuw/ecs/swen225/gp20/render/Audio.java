@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -8,20 +10,24 @@ public class Audio {
 
   boolean play;
 
-  public Audio(){
+  File path = new File("resources/Assets/Audio/");
 
+
+  public Audio(){ }
+
+  public void update(String soundEvent){
+    play(soundEvent);
 
   }
 
   public void play(String action){
     String file = null;
-    if(action.equals("step")){
-      file = "sfx_step3.wav";
+    if(action != null) {
+      file = action + ".wav";
     }
     if(file != null){
       try {
 
-        File path = new File("resources/Assets/Images/");
         AudioInputStream audioIn;
         audioIn = AudioSystem.getAudioInputStream(new File(path, file));
         Clip clip = AudioSystem.getClip();
@@ -32,6 +38,7 @@ public class Audio {
 
       } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
         e.printStackTrace();
+        System.out.println(action);
       }
 
     }
@@ -50,10 +57,8 @@ public class Audio {
 
   public void playMusic() {
     try {
-
-      File path = new File("resources/Assets/Images/");
       AudioInputStream audioIn;
-      audioIn = AudioSystem.getAudioInputStream(new File(path, "Chiptune_Journal_Flashback1992 (1).wav"));
+      audioIn = AudioSystem.getAudioInputStream(new File(path, "main_theme.wav"));
       Clip clip = AudioSystem.getClip();
       clip.open(audioIn);
 
