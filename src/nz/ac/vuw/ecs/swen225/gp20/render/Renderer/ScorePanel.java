@@ -33,6 +33,8 @@ public class ScorePanel extends JPanel {
   BufferedImage[][] inventorySprites;
   private HashMap<String, Integer> inventory;
 
+  String button;
+
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
@@ -56,10 +58,11 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, HashMap<String, Integer> inventory){
+  public void update(int timeLimit, HashMap<String, Integer> inventory, String button){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = inventory;
+    this.button = button;
     repaint();
   }
 
@@ -77,17 +80,17 @@ public class ScorePanel extends JPanel {
     int offset = 0;
     if (chars.length == 2) {
       offset = 1;
-      g.drawImage(digits[0], 110, 167, this);
+      g.drawImage(digits[0], 110, 133, this);
     } else if (chars.length == 1) {
       offset = 2;
-      g.drawImage(digits[0], 110, 167, this);
-      g.drawImage(digits[0], 142, 167, this);
+      g.drawImage(digits[0], 110, 133, this);
+      g.drawImage(digits[0], 142, 133, this);
     }
 
     for (int i = 0; i < chars.length; i++) {
       int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
       if (digit >= 0) { //to avoid null pointer
-        g.drawImage(digits[digit], 110 + ((i + offset) * 32), 167, this);
+        g.drawImage(digits[digit], 110 + ((i + offset) * 32), 133, this);
       }
 
     }
@@ -98,24 +101,30 @@ public class ScorePanel extends JPanel {
     int countY = 0; //for the each row of the inventory panel
     int i = 0;
     int j = 0;
+    int c = 0;
     if (inventory != null) {
       for (String s : inventory.keySet()) {
         switch (s) {
           case "redkey":
             j = 0;
+            c = inventory.get(s);
             break;
           case "greenkey":
             j = 1;
+            c = inventory.get(s);
             break;
           case "bluekey":
             j = 2;
+            c = inventory.get(s);
             break;
           case "yellowkey":
             j = 3;
+            c = inventory.get(s);
             break;
         }
         // TODO: Draw counter onto inventory slot.
         g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
+        g.drawImage(inventorySprites[3][c-1], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
         countX++;
         if (countX == 4) {
           countY++;
@@ -124,6 +133,9 @@ public class ScorePanel extends JPanel {
       }
 
     }
+//    if(button != null && button.equals("playpause")){
+//      g.drawImage(Assets.PAUSEPRESSED[0][0], 96, 539, this);
+//    }
 
 
 

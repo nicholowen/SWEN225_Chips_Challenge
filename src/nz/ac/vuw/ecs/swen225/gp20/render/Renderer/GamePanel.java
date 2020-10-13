@@ -11,9 +11,6 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
