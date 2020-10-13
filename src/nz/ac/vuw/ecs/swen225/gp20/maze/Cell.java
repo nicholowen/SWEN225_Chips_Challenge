@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.Sprite;
 
-public class Cell {
+public abstract class Cell {
 	
 	
 	//Rendering and Animation

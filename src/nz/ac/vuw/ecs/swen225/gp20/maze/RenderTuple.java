@@ -11,6 +11,8 @@ public class RenderTuple {
 	private String info;
 	private int treasureTaken;
 	private int treasureLeft;
+	private String soundToPlay;
+	private boolean gameIsOver;
 	
 	/**
 	 * The RenderTuple is designed to be passed to the renderer, and contains all of the information that the renderer needs to draw the maze each tick.
@@ -21,8 +23,10 @@ public class RenderTuple {
 	 * @param info If the player is standing on an info tile, the info to be displayed.
 	 * @param treasureCollected The current amount of treasure the player has collected.
 	 * @param treasureLeft The current amount of treasure that is left for the player to collect.
+	 * @param soundEvent The name of the sound, if any, which should be played on this current tick, decided by the user's actions (picking up items, moving, etc), null if no sound.
+	 * @param gameOver If true, the player died and the game's over!
 	 */
-	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft) {
+	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft, String soundEvent, boolean gameOver) {
 		actorList=aList;
 		board=b;
 		playerStandingOnInfo=playerOnInfo;
@@ -30,6 +34,8 @@ public class RenderTuple {
 		inventory=inv;
 		treasureTaken=treasureCollected;
 		this.treasureLeft=treasureLeft;
+		this.soundToPlay=soundEvent;
+		gameIsOver=gameOver;
 	}
 	
 	public Actor[] getActors() {
@@ -56,6 +62,14 @@ public class RenderTuple {
 
 	public int getTreasureLeft() {
 		return treasureLeft;
+	}
+	
+	public String getSoundEvent() {
+		return soundToPlay;
+	}
+	
+	public boolean gameOver() {
+		return gameIsOver;
 	}
 	
 }

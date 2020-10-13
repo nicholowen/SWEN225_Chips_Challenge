@@ -28,6 +28,10 @@ public class Maze {
 	private Actor player;//Player character, there is only one.
 	private ArrayList<Actor> creatures;//Hostile NPCs
 	
+	//Sound logic
+	private int oomphCounter;//Forces a small delay between "oomph" sounds to stop them from stacking up in a deafening way.
+	private final int oomphDelay=10;//Time in ticks between each "oomph" sound if the player repeatedly tries to cause it.
+	
 	
 	/**
 	 * This module handles the maze, collision, actors and inventory.
@@ -60,6 +64,7 @@ public class Maze {
 		exitList=new ArrayList<>();
 		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
+		oomphCounter=0;
 		//helpMessage=toLoad.getHelp(); //TODO: Have getHelp implemented in Persistence/Level
 		
 		//Load board
@@ -161,28 +166,57 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(String movementDirection) {
+		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
+			oomphCounter--;
+		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
 		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
-		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection)))
-		player.move(movementDirection);
+		boolean isWalkingIntoDoor=false;
+		if(movementDirection!=null) {
+		isWalkingIntoDoor = (getCellFromDir(player,player.dirFromString(movementDirection)) instanceof CellDoor) 
+				|| (getCellFromDir(player,player.dirFromString(movementDirection)) instanceof CellExitLocked);//True if the player's about to walk into a door or exitLock
+		} 
+		
+		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection))) {//If there's movement input and it's valid, move.	
+			if(!player.getIsMoving()) {//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
+				if(isWalkingIntoDoor) 
+					soundEvent="unlock";
+				else
+					soundEvent="move";
+				}
+			player.move(movementDirection);
+		} else if(movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
+			if(isWalkingIntoDoor) 
+				soundEvent="whawhaa";
+			else
+				soundEvent="oomph";
+			oomphCounter=oomphDelay;
+		}
 		player.tick();
 		//TODO: Tick all NPCs once they're implemented.
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		
 		//Collision check - see what's under the player's feet.
 		Cell stoodOn=board[player.getX()][player.getY()];
-		if(stoodOn.killsPlayer(playerInventory))
+		if(stoodOn.killsPlayer(playerInventory)) {
+			soundEvent="dyingnoises";
+			gameOver=true;
+		}
 		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
 			if(stoodOn.isTreasure()) {//If treasure, increment counters, ignore inventory.
 				currentTreasureCollected++;
 				currentTreasureLeft--;
+				soundEvent="pickupshiny";
 			} else {//If not treasure, add item to inventory
 				addToInventory(stoodOn.getPickupName());//TODO: If items other than keys are added, account for it
+				soundEvent="pickup";
 			}
 			//Nomatter what the pickup was, replace it with an empty tile
 			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
 		}
 		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);//Check if the player's standing on an info tile
-		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft);
+		//if(soundEvent!=null)
+		//System.out.println("DEBUG: Play sound:"+soundEvent);
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, gameOver);
 	}
 	
 	/**
@@ -212,6 +246,22 @@ public class Maze {
 		else{
 			playerInventory.put(s, i);
 		}
+	}
+	
+	/**
+	 * From a given actor and a given direction (as a point) return a cell, or null if there is no cell.
+	 * @param a The actor whose coordinates are the starting point
+	 * @param p A Point representing the change in x/y coordinates from the actor's current position
+	 * @return
+	 */
+	public Cell getCellFromDir(Actor a, Point p) {
+		int xToCheck=(int) (a.getX()+p.getX());
+		int yToCheck=(int) (a.getY()+p.getY());
+		
+		if(xToCheck<0||xToCheck>=board.length||yToCheck<0||yToCheck>=board[0].length)
+			return null;//Out-of-bounds, return null to avoid crashing
+		
+		return(board[xToCheck][yToCheck]);
 	}
 	
 	/**
