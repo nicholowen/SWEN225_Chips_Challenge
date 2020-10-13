@@ -58,7 +58,7 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, HashMap<String, Integer> inventory, String button){
+  public void update(int timeLimit, HashMap<String, Integer> inventory/*, String button*/){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = inventory;
