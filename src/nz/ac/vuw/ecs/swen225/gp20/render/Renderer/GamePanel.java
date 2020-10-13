@@ -288,7 +288,6 @@ public class GamePanel extends JPanel {
 
   }
 
-  int sfxCount = 0;
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
@@ -303,8 +302,6 @@ public class GamePanel extends JPanel {
 
     // transition animation - draws all objects depending on offset (speed)
     if(player != null && player.getIsMoving()){
-      sfxCount ++;
-      if(sfxCount == 1) audio.play("step");
 
       int speed = 12;
       switch(player.getDirection()){
@@ -323,7 +320,6 @@ public class GamePanel extends JPanel {
       }
     }else{
       offsetX = offsetY = 0;
-      sfxCount = 0;
     }
 
     int x = 64;
