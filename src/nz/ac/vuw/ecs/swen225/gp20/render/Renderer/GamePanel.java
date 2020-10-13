@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.Audio;
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
 
 import javax.swing.*;
@@ -55,6 +56,12 @@ public class GamePanel extends JPanel {
   int offsetX = 0;
   int offsetY = 0;
 
+
+
+
+  //audio
+  private Audio audio;
+
   public GamePanel() {
     setPreferredSize(new Dimension(576, 576));
     setBackground(Color.gray);
@@ -77,13 +84,13 @@ public class GamePanel extends JPanel {
    * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
    * @param cells The tiles of the game map.
    */
-  public void initAnimationObjects(Cell[][] cells){
+  public void initAnimationObjects(Cell[][] cells) {
     sprites = new Object[cells.length][cells[0].length];
     this.map = cells;
     this.playerSprite = new Player();
-    for(int i = 0; i < cells.length; i++){
-      for(int j = 0; j < cells[i].length; j++){
-        switch(cells[i][j].getName()){
+    for (int i = 0; i < cells.length; i++) {
+      for (int j = 0; j < cells[i].length; j++) {
+        switch (cells[i][j].getName()) {
           case "wall":
             WallTile wt = new WallTile();
             Cell[] neighbours = getWallNeighbours(cells, j, i);
@@ -95,36 +102,36 @@ public class GamePanel extends JPanel {
             sprites[i][j] = eb;
             energyObjects.put(cells[i][j], eb);
           case "key":
-            if(cells[i][j] instanceof CellKey) {
+            if (cells[i][j] instanceof CellKey) {
               KeyCard kc = new KeyCard(cells[i][j].getColor());
               sprites[i][j] = kc;
               keyObjects.put(cells[i][j], kc);
             }
           case "door":
-            if(cells[i][j] instanceof CellDoor) {
+            if (cells[i][j] instanceof CellDoor) {
               Door door;
-              if(i > 0 && (cells[i+1][j] instanceof CellWall || cells[i-1][j] instanceof CellWall)){
+              if (i > 0 && (cells[i + 1][j] instanceof CellWall || cells[i - 1][j] instanceof CellWall)) {
                 door = new Door(cells[i][j].getColor(), true);
-              }else{
+              } else {
                 door = new Door(cells[i][j].getColor(), false);
               }
               sprites[i][j] = door;
               doorObjects.put(cells[i][j], door);
             }
           case "exit":
-            if(cells[i][j] instanceof CellExit) {
+            if (cells[i][j] instanceof CellExit) {
               Exit e = new Exit(i, j);
               sprites[i][j] = e;
               exitOb = e;
             }
           case "exit lock":
-            if(cells[i][j] instanceof CellExitLocked) {
+            if (cells[i][j] instanceof CellExitLocked) {
               ExitLock el = new ExitLock(i, j);
               sprites[i][j] = el;
               exitLockOb = el;
             }
           case "info":
-            if(cells[i][j] instanceof CellInfo){
+            if (cells[i][j] instanceof CellInfo) {
               Info in = new Info(i, j, Assets.INFO[0][0]);
               infoOb = in;
             }
@@ -132,9 +139,18 @@ public class GamePanel extends JPanel {
         }
       }
     }
+
+
+
+    audio = new Audio();
+
+    audio.playMusic();
+
+
+
   }
 
-  /**
+    /**
    * Finds the neighbouring cells of a wall (all cardinal directions).
    * @param cells All map cells.
    * @param x the x coordinate of the main cell being checked.
@@ -292,6 +308,8 @@ public class GamePanel extends JPanel {
 
   }
 
+  int sfxCount = 0;
+
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
    * The extra lines are for transition frames  - they are drawn off-screen and transition in
@@ -305,6 +323,9 @@ public class GamePanel extends JPanel {
 
     // transition animation - draws all objects depending on offset (speed)
     if(player != null && player.getIsMoving()){
+      sfxCount ++;
+      if(sfxCount == 1) audio.play("step");
+
       int speed = 12;
       switch(player.getDirection()){
         case "up":
@@ -322,6 +343,7 @@ public class GamePanel extends JPanel {
       }
     }else{
       offsetX = offsetY = 0;
+      sfxCount = 0;
     }
 
     int x = 64;
