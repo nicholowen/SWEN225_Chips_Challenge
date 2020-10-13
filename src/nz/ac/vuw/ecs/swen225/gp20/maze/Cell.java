@@ -1,8 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.util.HashMap;
+
 import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.Sprite;
 
-public abstract class Cell {
+public class Cell {
 	
 	
 	//Rendering and Animation
@@ -22,13 +24,17 @@ public abstract class Cell {
 	protected boolean isOpenable;//If true, it's possible for this cell to be opened or unlocked with the right tool!
 	protected boolean hasPickup;
 	protected boolean isTreasure;
+	protected boolean killsPlayer;
 	protected String pickupName;
 	protected String color;
 	protected String infoMessage;
+	protected String protectiveItem;//The item which will protect a player from being killed if they stand on this tile. Null if there isn't one.
 	
 	
 	/**
-	 * This constructor takes a name and uses a list of preset tiles to set the properties of the tile.
+	 * Constructor is no longer used as this class is a parent class - abstract in all but name.
+	 * The only reason this class is not still abstract is because saving/loading can't serialize abstract classes.
+	 * A default constructor here WOULD make it easier to work with other classes, but is not used to ensure that nobody accidentally initializes a "blank cell" now that it's not strictly abstract.
 	 * @param n
 	 * @param xpos
 	 * @param ypos
@@ -42,9 +48,6 @@ public abstract class Cell {
 		hasPickup=true;
 		isOpenable=false;
 		pickupName=pickName;
-		color=c;
-
-		
 		}
 		
 	}*/
@@ -146,4 +149,18 @@ public abstract class Cell {
 	public String getInfo() {
 		return infoMessage;
 	}
+	
+	/**
+	 * Checks whether or not a certain tile kills the player based on their inventory.
+	 * If they have the correct protective item, it doesn't kill them. Else, it does.
+	 * @param inventory The player's current inventory
+	 * @return
+	 */
+	public boolean killsPlayer(HashMap<String, Integer> inventory) {
+		if(protectiveItem!=null) {//If there's a protective item associated with this (meaning it's lethal otherwise)
+			return(!inventory.containsKey(protectiveItem));//Return false if the protective item is in the inventory, true if it's not.
+		}
+		return killsPlayer;
+	}
+	
 }

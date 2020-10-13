@@ -13,7 +13,7 @@ public class CellFree extends Cell{
 		hasPickup=false;
 		isOpenable=false;
 		animated=false;
-
+		killsPlayer=false;
 		}
 
 }

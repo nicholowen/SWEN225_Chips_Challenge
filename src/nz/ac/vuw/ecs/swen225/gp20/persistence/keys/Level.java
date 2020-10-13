@@ -4,13 +4,13 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.LevelFileException;
 
 import java.util.ArrayList;
 
-class Start {
+class Coordinate {
     public int x;
     public int y;
 
     @Override
     public String toString() {
-        return "Start{" +
+        return "Coordinate{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';
@@ -38,10 +38,15 @@ class Properties {
 
 public class Level {
     private String description;
-    private Start start;
+    private Coordinate start;
     private Properties properties;
 
     private ArrayList<Tile> grid;
+    private ArrayList<Npc> npc;
+
+    public ArrayList<Npc> getNpc() {
+        return npc;
+    }
 
     public String getDescription() {
         return description;
@@ -142,11 +147,11 @@ public class Level {
                         throw new LevelFileException("Door must have a color");
                     }
                     break;
-//                case "info":
-//                    if (tile.getHelp().equals("") || tile.getHelp() == null) {
-//                        throw new LevelFileException("Info must have help");
-//                    }
-//                    break;
+                case "info":
+                    if (tile.getHelp().equals("") || tile.getHelp() == null) {
+                        throw new LevelFileException("Info must have help");
+                    }
+                    break;
                 case "treasure":
                     chipCount++;
                 default:

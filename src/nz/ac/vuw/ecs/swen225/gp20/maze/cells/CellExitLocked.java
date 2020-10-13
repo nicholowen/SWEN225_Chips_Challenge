@@ -13,6 +13,7 @@ public class CellExitLocked extends Cell{
 		hasPickup=false;
 		isOpenable=false;
 		animated=false;
+		killsPlayer=false;
 		}
 
 }

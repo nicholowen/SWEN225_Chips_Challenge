@@ -2,19 +2,17 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.cells;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 
-public class CellDoor extends Cell{
+public class CellWater extends Cell{
 	
-	public CellDoor(int xpos, int ypos, String c) {		
-		name="door";
+	public CellWater(int xpos, int ypos) {	
+		name="water";
 		x=xpos;
 		y=ypos;
-		isSolid=true;
+		isSolid=false;
 		isTreasure=false;
 		hasPickup=false;
-		isOpenable=true;
-		color=c;
+		isOpenable=false;
 		animated=false;
-		killsPlayer=false;
+		killsPlayer=true;
 		}
-
 }

@@ -98,7 +98,7 @@
       {"x": 5, "y": 5, "name": "key", "color": "blue"},
       {"x": 6, "y": 5, "name": "free"},
       {"x": 7, "y": 5, "name": "info", "help": "Get to the exit!"},
-      {"x": 8, "y": 5, "name": "free"},
+      {"x": 8, "y": 5, "name": "key", "color": "green"},
       {"x": 9, "y": 5, "name": "key", "color": "red"},
       {"x": 10, "y": 5, "name": "wall"},
       {"x": 11, "y": 5, "name": "free"},
