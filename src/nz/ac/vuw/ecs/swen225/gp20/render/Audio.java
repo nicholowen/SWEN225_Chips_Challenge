@@ -13,7 +13,9 @@ public class Audio {
   File path = new File("resources/Assets/Audio/");
 
 
-  public Audio(){ }
+  public Audio(){
+    playMusic();
+  }
 
   public void update(String soundEvent){
     play(soundEvent);

@@ -54,22 +54,14 @@ public class GamePanel extends JPanel {
   int offsetY = 0;
 
 
-
-
-  //audio
-  private Audio audio;
-
   public GamePanel() {
     setPreferredSize(new Dimension(576, 576));
     setBackground(Color.gray);
-    setFocusable(true);
-    requestFocus();
     init();
   }
 
   /**
-   * Initialises all objects - if they are created in other classes, can reference them here with getters.
-   * I would assume all objects will be kept in arrays..?
+   * Initialises the main graphics object that will be drawn to.
    */
   private void init() {
     BufferedImage image = new BufferedImage(500, 500, 1);
@@ -136,15 +128,6 @@ public class GamePanel extends JPanel {
         }
       }
     }
-
-
-
-    audio = new Audio();
-
-    audio.playMusic();
-
-
-
   }
 
     /**
