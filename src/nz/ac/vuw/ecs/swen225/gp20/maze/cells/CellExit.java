@@ -19,6 +19,7 @@ public class CellExit extends Cell{
 		hasPickup=false;
 		isOpenable=false;
 		animated=false;
+		killsPlayer=false;
 		}
 
 }

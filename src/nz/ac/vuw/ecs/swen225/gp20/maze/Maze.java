@@ -12,6 +12,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
 
 public class Maze {
 	private static Cell[][] board;
+	private boolean gameOver;//If true, the player is dead or the level is otherwise failed.
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
@@ -52,6 +53,7 @@ public class Maze {
 			return -1;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		//Resetting/initializing
+		gameOver=false;
 		currentTreasureLeft=0;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
@@ -95,6 +97,9 @@ public class Maze {
 				 exitList.add(exitLocked);
 				 board[t.getX()][t.getY()] = exitLocked;
 				break;
+			case "water":
+				board[t.getX()][t.getY()] = new CellWater(t.getX(),t.getY());
+				break; 
 			}//End of switch
 		}//At this stage, all tiles are loaded
 		
@@ -163,8 +168,9 @@ public class Maze {
 		//TODO: Tick all NPCs once they're implemented.
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		
-		//Collision check
+		//Collision check - see what's under the player's feet.
 		Cell stoodOn=board[player.getX()][player.getY()];
+		if(stoodOn.killsPlayer(playerInventory))
 		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
 			if(stoodOn.isTreasure()) {//If treasure, increment counters, ignore inventory.
 				currentTreasureCollected++;

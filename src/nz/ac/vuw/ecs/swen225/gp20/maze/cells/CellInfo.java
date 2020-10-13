@@ -14,6 +14,7 @@ public class CellInfo extends Cell{
 		isOpenable=false;
 		animated=false;
 		infoMessage=info;
+		killsPlayer=false;
 		}
 
 }

@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 public class Actor {
 	private String name;
@@ -11,12 +12,25 @@ public class Actor {
 	private int y;
 	private int moveProgress;//Number of ticks the actor's been moving
 	private int ticksToMove;//Total number of ticks it takes to move
+	private boolean killsPlayer;
+	private boolean blocksMovement;
+	private boolean isPushable;
 	
-	
+	/**
+	 * This constructor should be used for the player and the player alone - anything else should have a custom class.
+	 * @param isPlayer
+	 * @param nameReference
+	 * @param xpos
+	 * @param ypos
+	 * @param speed
+	 */
 	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos, int speed) {
 		x=xpos;
 		y=ypos;
 		this.isPlayer=isPlayer;
+		if(isPlayer) {
+			this.killsPlayer=false;
+		}
 		name=nameReference;
 		ticksToMove=speed;
 		direction="down";//Generic starting direction
@@ -66,6 +80,15 @@ public class Actor {
 		
 	}
 	
+	/**
+	 * Compares two actors and returns true if they both share the same coordinates (IE, if they collide)
+	 * @param o The second actor to compare with this one
+	 * @return True if the actors collide, false otherwise
+	 */
+	public boolean collidesWith(Actor o) {
+		return(this.x==o.getX()&&this.y==o.getY());
+	}
+	
 	public int getX() {return x;}
 	public int getY() {return y;}
 	
@@ -88,5 +111,17 @@ public class Actor {
 
 	public String getName() {
 		return name;
+	}
+
+	public boolean killsPlayer() {
+		return killsPlayer;
+	}
+
+	public boolean blocksMovement() {
+		return blocksMovement;
+	}
+
+	public boolean isPushable() {
+		return isPushable;
 	}
 }

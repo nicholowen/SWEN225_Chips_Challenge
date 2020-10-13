@@ -13,6 +13,7 @@ public class CellTreasure extends Cell{
 		hasPickup=true;
 		isOpenable=false;
 		animated=false;
+		killsPlayer=false;
 		}
 
 }

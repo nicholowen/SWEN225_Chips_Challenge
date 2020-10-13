@@ -15,6 +15,7 @@ public class CellKey extends Cell{
 		pickupName=c+"key";
 		color=c;
 		animated=false;
+		killsPlayer=false;
 		}
 
 }
