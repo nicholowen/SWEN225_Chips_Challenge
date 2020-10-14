@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
   //Lists to be populated with Cells surrounding player in 11x11 grid
   private Cell[][] floor    = new Cell[11][11];
   private Cell[][] wall     = new Cell[11][11];
+  private Cell[][] hole     = new Cell[11][11];
   private Cell[][] door     = new Cell[11][11];
   private Cell[][] energy   = new Cell[11][11];
   private Cell[][] key      = new Cell[11][11];
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel {
 
   // HashMaps to store all rendered objects in the game
   private HashMap<Cell, WallTile> wallObjects = new HashMap<>();
+  private HashMap<Cell, HoleTile> holeObjects = new HashMap<>();
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
@@ -75,58 +77,66 @@ public class GamePanel extends JPanel {
     this.playerSprite = new Player();
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
-        switch (cells[i][j].getName()) {
-          case "wall":
-            WallTile wt = new WallTile();
-            Cell[] neighbours = getWallNeighbours(cells, j, i);
-            wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]); //wall object initialised with cells at each cardinal direction
-            sprites[i][j] = wt;
-            wallObjects.put(cells[i][j], wt);
-          case "treasure":
-            EnergyBall eb = new EnergyBall();
-            sprites[i][j] = eb;
-            energyObjects.put(cells[i][j], eb);
-          case "key":
-            if (cells[i][j] instanceof CellKey) {
-              KeyCard kc = new KeyCard(cells[i][j].getColor());
-              sprites[i][j] = kc;
-              keyObjects.put(cells[i][j], kc);
-            }
-          case "door":
-            if (cells[i][j] instanceof CellDoor) {
-              Door door;
-              if (i > 0 && (cells[i + 1][j] instanceof CellWall || cells[i - 1][j] instanceof CellWall)) {
-                door = new Door(cells[i][j].getColor(), true);
-              } else {
-                door = new Door(cells[i][j].getColor(), false);
+        if(cells[i][j] != null) {
+          switch (cells[i][j].getName()) {
+            case "wall":
+              WallTile wt = new WallTile();
+              Cell[] neighbours = getWallNeighbours(cells, j, i);
+              wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]); //wall object initialised with cells at each cardinal direction
+              sprites[i][j] = wt;
+              wallObjects.put(cells[i][j], wt);
+            case "water":
+              HoleTile ht = new HoleTile();
+              Cell[] holeNeighbours = getWallNeighbours(cells, j, i);
+              ht.setWallType(holeNeighbours[0], holeNeighbours[1], holeNeighbours[2], holeNeighbours[3]);
+              sprites[i][j] = ht;
+              holeObjects.put(cells[i][j], ht);
+            case "treasure":
+              EnergyBall eb = new EnergyBall();
+              sprites[i][j] = eb;
+              energyObjects.put(cells[i][j], eb);
+            case "key":
+              if (cells[i][j] instanceof CellKey) {
+                KeyCard kc = new KeyCard(cells[i][j].getColor());
+                sprites[i][j] = kc;
+                keyObjects.put(cells[i][j], kc);
               }
-              sprites[i][j] = door;
-              doorObjects.put(cells[i][j], door);
-            }
-          case "exit":
-            if (cells[i][j] instanceof CellExit) {
-              Exit e = new Exit(i, j);
-              sprites[i][j] = e;
-              exitOb = e;
-            }
-          case "exit lock":
-            if (cells[i][j] instanceof CellExitLocked) {
-              ExitLock el = new ExitLock(i, j);
-              sprites[i][j] = el;
-              exitLockOb = el;
-            }
-          case "info":
-            if (cells[i][j] instanceof CellInfo) {
-              Info in = new Info(i, j, Assets.INFO[0][0]);
-              infoOb = in;
-            }
+            case "door":
+              if (cells[i][j] instanceof CellDoor) {
+                Door door;
+                if (i > 0 && (cells[i + 1][j] instanceof CellWall || cells[i - 1][j] instanceof CellWall)) {
+                  door = new Door(cells[i][j].getColor(), true);
+                } else {
+                  door = new Door(cells[i][j].getColor(), false);
+                }
+                sprites[i][j] = door;
+                doorObjects.put(cells[i][j], door);
+              }
+            case "exit":
+              if (cells[i][j] instanceof CellExit) {
+                Exit e = new Exit(i, j);
+                sprites[i][j] = e;
+                exitOb = e;
+              }
+            case "exit lock":
+              if (cells[i][j] instanceof CellExitLocked) {
+                ExitLock el = new ExitLock(i, j);
+                sprites[i][j] = el;
+                exitLockOb = el;
+              }
+            case "info":
+              if (cells[i][j] instanceof CellInfo) {
+                Info in = new Info(i, j, Assets.INFO[0][0]);
+                infoOb = in;
+              }
 
+          }
         }
       }
     }
   }
 
-    /**
+  /**
    * Finds the neighbouring cells of a wall (all cardinal directions).
    * @param cells All map cells.
    * @param x the x coordinate of the main cell being checked.
@@ -209,6 +219,9 @@ public class GamePanel extends JPanel {
             case "wall":
               wall[i][j] = surround[i][j];
               break;
+            case "water":
+              hole[i][j] = surround[i][j];
+              break;
             case "door":
               door[i][j] = surround[i][j];
               if(doorObjects.containsKey(surround[i][j])){
@@ -259,6 +272,7 @@ public class GamePanel extends JPanel {
   private void clearLists(){
     floor    = new Cell[11][11];
     wall     = new Cell[11][11];
+    hole     = new Cell[11][11];
     door     = new Cell[11][11];
     energy   = new Cell[11][11];
     key      = new Cell[11][11];
@@ -315,7 +329,10 @@ public class GamePanel extends JPanel {
         if (wall[i][j] != null) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
         }
-        if (door[i][j] != null) {
+        if (hole[i][j] != null) {
+          g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+        }
+        if (door[i][j] != null && doorObjects != null) {
           if(doorObjects.get(door[i][j]).isVertical()){
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
           }
@@ -340,7 +357,7 @@ public class GamePanel extends JPanel {
         }
       }
     }
-    //draws player last to remain on top
+    //draws player last to remain on top (uses abolsute positioning.... for now)
     if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, this);
 
     //clears lists for next frame
