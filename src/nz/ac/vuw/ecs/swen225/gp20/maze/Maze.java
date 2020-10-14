@@ -9,6 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 public class Maze {
 	private static Cell[][] board;
@@ -121,14 +122,6 @@ public class Maze {
 		return toLoad.getTimeLimit();
 	}
 	
-	/**
-	   * Enum of directions to go from a cell to cell. Mainly used by other classes.
-	   */
-	  public enum Direction {
-	    Up, Down, Left, Right;
-	  }
-	  
-	
 	public Cell[][] getBoard(){
 		return board;
 	}
@@ -165,18 +158,18 @@ public class Maze {
 	 * @param movementDirection Input from the application indicating the direction of movement.
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
-	public RenderTuple tick(String movementDirection) {
+	public RenderTuple tick(Direction movementDirection) {
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
 			oomphCounter--;
 		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
 		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
 		boolean isWalkingIntoDoor=false;
 		if(movementDirection!=null) {
-		isWalkingIntoDoor = (getCellFromDir(player,player.dirFromString(movementDirection)) instanceof CellDoor) 
-				|| (getCellFromDir(player,player.dirFromString(movementDirection)) instanceof CellExitLocked);//True if the player's about to walk into a door or exitLock
+		isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()) instanceof CellDoor)
+				|| (getCellFromDir(player,movementDirection.getDirection()) instanceof CellExitLocked);//True if the player's about to walk into a door or exitLock
 		} 
 		
-		if(movementDirection!=null && isMoveValid(player, player.dirFromString(movementDirection))) {//If there's movement input and it's valid, move.	
+		if(movementDirection!=null && isMoveValid(player, movementDirection.getDirection())) {//If there's movement input and it's valid, move.
 			if(!player.getIsMoving()) {//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
 				if(isWalkingIntoDoor) 
 					soundEvent="unlock";

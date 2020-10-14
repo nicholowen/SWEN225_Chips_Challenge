@@ -26,6 +26,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.MenuBar;
 import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
@@ -41,7 +42,7 @@ public class GUI implements KeyListener {
 
     private boolean recording = false;
     private boolean paused = false;
-    private String direction = null;
+    private Direction direction = null;
     private boolean saveState = false;
     private String loadingState = null;
 
@@ -140,16 +141,16 @@ public class GUI implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_UP) {
-            this.direction = "up";
+            this.direction = Direction.UP;
             System.out.println(direction);
         } else if (keyCode == KeyEvent.VK_LEFT) {
-            this.direction = "left";
+            this.direction = Direction.LEFT;
             System.out.println(direction);
         } else if (keyCode == KeyEvent.VK_DOWN) {
-            this.direction = "down";
+            this.direction = Direction.DOWN;
             System.out.println(direction);
         } else if (keyCode == KeyEvent.VK_RIGHT) {
-            this.direction = "right";
+            this.direction = Direction.RIGHT;
             System.out.println(direction);
         }
     }
@@ -210,16 +211,16 @@ public class GUI implements KeyListener {
     public void keyTyped(KeyEvent e) {
         char key = e.getKeyChar();
         if (key == 'w') {
-            this.direction = "up";
+            this.direction = Direction.UP;
             System.out.println(direction);
         } else if (key == 'a') {
-            this.direction = "left";
+            this.direction = Direction.LEFT;
             System.out.println(direction);
         } else if (key == 's') {
-            this.direction = "down";
+            this.direction = Direction.DOWN;
             System.out.println(direction);
         } else if (key == 'd') {
-            this.direction = "right";
+            this.direction = Direction.RIGHT;
             System.out.println(direction);
         }
     }
@@ -270,7 +271,7 @@ public class GUI implements KeyListener {
      *
      * @return the direction
      */
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 

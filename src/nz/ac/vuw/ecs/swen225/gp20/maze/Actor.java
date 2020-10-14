@@ -1,12 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
-import java.util.HashMap;
 
 public class Actor {
 	private String name;
 	private boolean isPlayer;
-	private String direction;
+	private Direction direction;
 	private boolean isMoving;
 	private int x;
 	private int y;
@@ -33,7 +32,7 @@ public class Actor {
 		}
 		name=nameReference;
 		ticksToMove=speed;
-		direction="down";//Generic starting direction
+		direction=Direction.DOWN;//Generic starting direction
 	}
 	
 	public boolean getIsMoving(){
@@ -51,33 +50,10 @@ public class Actor {
 		moveProgress++;
 		if(moveProgress>=ticksToMove) {
 			isMoving=false;
-			x=(int) (x+dirFromString(direction).getX());
-			y=(int) (y+dirFromString(direction).getY());
+			x=(int) (x+direction.getDirection().getX());
+			y=(int) (y+direction.getDirection().getY());
 		}
 
-	}
-	
-	/**
-	 * Returns a Point with the x and y change that an inputed move would have.
-	 * null or "none" results in no change, but still returns a point.
-	 * @param s Direction, "up", "down", "left" or "right"
-	 * @return
-	 */
-	public Point dirFromString(String s) {
-		switch(s){	
-		case "up":
-			return new Point(0,-1);
-		case "down":
-			return new Point(0,1);
-		case "left":
-			return new Point(-1,0);
-		case "right":
-			return new Point(1,0);
-		default:
-		case "none":
-			return new Point(0,0);
-		}
-		
 	}
 	
 	/**
@@ -96,7 +72,7 @@ public class Actor {
 	/**
 	 *
 	 */
-	public void move(String dir){
+	public void move(Direction dir){
 		if(isMoving)
 			return;//If already moving, then ignore the suggestion to move again.
 		
@@ -105,7 +81,7 @@ public class Actor {
 		moveProgress=0;//Reset move progress.
 	}
 
-	public String getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
 

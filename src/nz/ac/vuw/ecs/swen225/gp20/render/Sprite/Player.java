@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import java.awt.image.BufferedImage;
@@ -15,7 +16,7 @@ import java.awt.image.BufferedImage;
 public class Player extends Sprite {
 
   BufferedImage[] sprites;
-  String direction = "down";
+  Direction direction = Direction.DOWN;
   Cell[][] cell;
 
   public Player(){
@@ -35,7 +36,7 @@ public class Player extends Sprite {
   /**
    * Updates the frame of the object
    */
-  public void update(String direction){
+  public void update(Direction direction){
     this.direction = direction;
   }
 
@@ -46,16 +47,16 @@ public class Player extends Sprite {
   public BufferedImage getImage(){
     int frame = 1;
     switch(direction) {
-      case "up":
+      case UP:
         frame = 0;
         break;
-      case "down":
+      case DOWN:
         frame = 1;
         break;
-      case "left":
+      case LEFT:
         frame = 2;
         break;
-      case "right":
+      case RIGHT:
         frame = 3;
         break;
     }
