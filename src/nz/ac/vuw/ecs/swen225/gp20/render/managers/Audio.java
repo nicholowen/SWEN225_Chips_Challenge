@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.render;
+package nz.ac.vuw.ecs.swen225.gp20.render.managers;
 
 import javax.sound.sampled.*;
 import java.io.File;

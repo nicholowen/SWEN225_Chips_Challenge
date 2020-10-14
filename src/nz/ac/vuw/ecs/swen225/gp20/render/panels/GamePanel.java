@@ -1,11 +1,11 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
+package nz.ac.vuw.ecs.swen225.gp20.render.panels;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
-import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.*;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.sprites.*;
 
 import javax.swing.*;
 import java.awt.*;

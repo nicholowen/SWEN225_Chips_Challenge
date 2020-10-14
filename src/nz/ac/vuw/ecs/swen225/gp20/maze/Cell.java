@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.HashMap;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Sprite.Sprite;
+import nz.ac.vuw.ecs.swen225.gp20.render.sprites.Sprite;
 
 public class Cell {
 	

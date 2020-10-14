@@ -1,15 +1,21 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
+package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class ExitLock extends Sprite {
+/**
+ * Represents the exit portal. This Class contains the animation frames of the object,
+ * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
+ *
+ * @author Owen N
+ */
+public class Exit extends Sprite {
 
   BufferedImage[] sprites;
   int x, y;
 
-  public ExitLock(int x, int y) {
+  public Exit(int x, int y) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
@@ -20,9 +26,9 @@ public class ExitLock extends Sprite {
     this.y = y;
 
     // calls on asset class to get the frames for this object.
-    sprites = Assets.EXITLOCK[0];
+    sprites = Assets.EXIT[0];
     animation.setFrames(sprites);
-    animation.setDelay(2);
+    animation.setDelay(3);
 
   }
 
@@ -52,3 +58,4 @@ public class ExitLock extends Sprite {
   public int getY(){ return y; }
 
 }
+

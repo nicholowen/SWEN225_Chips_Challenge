@@ -1,8 +1,8 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.Sprite;
+package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 

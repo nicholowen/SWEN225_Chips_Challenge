@@ -1,6 +1,6 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
+package nz.ac.vuw.ecs.swen225.gp20.render.panels;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import javax.swing.*;
 import java.awt.*;

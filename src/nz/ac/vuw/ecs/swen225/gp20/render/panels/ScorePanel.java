@@ -1,14 +1,11 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
+package nz.ac.vuw.ecs.swen225.gp20.render.panels;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

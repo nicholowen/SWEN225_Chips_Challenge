@@ -4,9 +4,6 @@ import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,15 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.MenuBar;
-import nz.ac.vuw.ecs.swen225.gp20.render.Renderer.ScorePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.panels.GamePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.panels.MenuBar;
+import nz.ac.vuw.ecs.swen225.gp20.render.panels.ScorePanel;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 /**
