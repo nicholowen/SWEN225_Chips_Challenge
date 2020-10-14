@@ -42,14 +42,14 @@ public class RecordAndPlay {
     /**
      * Called by main to start recording
      *
-     * @param game     the game state
+     * @param maze     the maze state
      * @param saveName file to be saved into
      */
-    public static void recording(Main game, String saveName) {
+    public static void recording(Maze maze, String saveName) {
         moves.clear();
         currentlyRecording = true;
         saveFile = saveName;
-        gameState = Persistence.getGameState(game); // save the current state the game is currently in during recoding
+        gameState = Persistence.getGameState(maze); // save the current state the game is currently in during recoding
     }
 
     /**

@@ -2,9 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
 
 import java.util.Objects;
 
-public class Tile {
-    private int x;
-    private int y;
+public class Tile extends Coordinate {
     private String name;
     private String color;
     private String help;
@@ -44,11 +42,7 @@ public class Tile {
 
     @Override
     public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        return result;
+        return Objects.hash(x, y, name, color, help);
     }
 
     @Override

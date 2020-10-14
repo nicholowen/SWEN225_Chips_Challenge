@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 
 import java.io.*;
@@ -85,10 +86,10 @@ public class Persistence {
     /**
      * Saves the current state of the maze as a json file
      *
-     * @param game the game to save
+     * @param maze the maze to save
      * @throws IOException {@inheritDoc}
      */
-    public static void saveGameState(Main game) throws IOException {
+    public static void saveGameState(Maze maze) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
@@ -97,17 +98,17 @@ public class Persistence {
         }
 
         try (Writer writer = new FileWriter(Paths.get(savedState.toString(), filename).toString())) {
-            gson.toJson(game, writer);
+            gson.toJson(maze, writer);
         }
     }
 
     /**
      * Saves the current state of the maze as a string
      *
-     * @param game the game to save
+     * @param maze the game to save
      */
-    public static String getGameState(Main game) {
-        return gson.toJson(game);
+    public static String getGameState(Maze maze) {
+        return gson.toJson(maze);
     }
 
     /**
@@ -115,7 +116,7 @@ public class Persistence {
      *
      * @return the saved maze object
      */
-    public static Main loadGameState() {
+    public static Maze loadGameState() throws IOException {
         File recentSave = getRecentSave();
 
         if (recentSave == null) {
@@ -123,7 +124,7 @@ public class Persistence {
         } else {
             try {
                 JsonReader reader = new JsonReader(new FileReader(recentSave.getAbsoluteFile()));
-                return gson.fromJson(reader, Main.class);
+                return gson.fromJson(reader, Maze.class);
             } catch (FileNotFoundException e){
                 return null;
             }
@@ -135,30 +136,32 @@ public class Persistence {
      *
      * @return the saved maze object
      */
-    public static Main loadGameState(String state) {
-        return gson.fromJson(state, Main.class);
+    public static Maze loadGameState(String state) {
+        return gson.fromJson(state, Maze.class);
     }
 
     /**
      * Gets the most recent save from the save game state directory.
      */
-    private static File getRecentSave(){
+    private static File getRecentSave() throws IOException {
         File[] directoryList= savedState.toFile().listFiles();
 
         if (directoryList == null){
-            return null;
+            throw new IOException("Directory '" + savedState + "' is empty.");
         } else {
             return Arrays.stream(directoryList).max(Comparator.comparing(File::getName)).orElse(null);
         }
     }
 
-    public static void main(String[] args) {
-        Main game = new Main();
-        String state = Persistence.getGameState(game);
+    public static void main(String[] args) throws FileNotFoundException, LevelFileException {
+        Maze maze = new Maze();
+        String state = Persistence.getGameState(maze);
         System.out.println(state);
 
+        Persistence.read(2);
+
         try {
-            Persistence.saveGameState(game);
+            Persistence.saveGameState(maze);
         } catch (IOException e) {
             e.printStackTrace();
         }

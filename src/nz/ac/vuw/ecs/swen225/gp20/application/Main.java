@@ -2,10 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.IOException;
 
-import com.google.gson.annotations.JsonAdapter;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.MainAdapter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
@@ -17,7 +14,6 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
  * @author Maiza Rehan 300472305
  *
  */
-@JsonAdapter(MainAdapter.class)
 public class Main {
     private static final RecordAndPlay rnp = new RecordAndPlay();
     private static final Maze maze = new Maze();
@@ -74,7 +70,7 @@ public class Main {
         // Check if user wants to save
         if (gui.isSaving()) {
             try {
-                Persistence.saveGameState(this);
+                Persistence.saveGameState(maze);
                 System.out.println("Saving");
                 gui.saved(true);
             } catch (IOException e) {
@@ -84,7 +80,7 @@ public class Main {
         }
 
         if (gui.getLoadState() != null) {
-            Persistence.loadGameState();
+            //Persistence.loadGameState();
             System.out.println(gui.getLoadState());
             gui.setLoadState(null);
         }

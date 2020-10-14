@@ -42,10 +42,10 @@ public class Level {
     private Properties properties;
 
     private ArrayList<Tile> grid;
-    private ArrayList<Npc> npc;
+    private ArrayList<NonPlayableCharacter> nonPlayableCharacters;
 
-    public ArrayList<Npc> getNpc() {
-        return npc;
+    public ArrayList<NonPlayableCharacter> getNonPlayableCharacters() {
+        return nonPlayableCharacters;
     }
 
     public String getDescription() {

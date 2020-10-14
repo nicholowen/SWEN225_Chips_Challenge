@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
 
 import java.util.ArrayList;
 
-public class Npc extends Coordinate {
+public class NonPlayableCharacter extends Coordinate {
     private String type;
     private ArrayList<Coordinate> path;
 

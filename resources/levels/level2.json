@@ -1,7 +1,7 @@
 {
   "description": "Level 2",
   "start": {"x": 18, "y": 5},
-  "npc": [
+  "nonPlayableCharacters": [
     {"x": 15, "y": 9, "type": "spider",
       "path": [
         {"x": 15, "y": 1},
