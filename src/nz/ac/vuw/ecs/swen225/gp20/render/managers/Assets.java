@@ -25,12 +25,10 @@ public class Assets
   public static BufferedImage[][]      ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
   public static BufferedImage[][]       KEYCARD_G = loadGif(path, "keycardsprites.gif", 64, 64);
   public static BufferedImage[][]            INFO = loadGif(path, "info.gif", 64, 64);
-  public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
   public static BufferedImage[][]        EXITLOCK = loadGif(path, "exitlock.gif", 64, 64);
   public static BufferedImage[][]            EXIT = loadGif(path, "exit.gif", 64, 64);
 
   //Score/info gifs
-  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground2.gif", 300, 576);
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
   public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
   public static BufferedImage[][]       INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
@@ -39,9 +37,13 @@ public class Assets
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
 
-
-//  public static BufferedImage[][]           PAUSE = loadGif(path, "pause.gif", 876, 576);
-//  public static BufferedImage[][]    PAUSEPRESSED = loadGif(path, "pause_depressed.gif", 102, 22);
+  //panel backgrounds
+  public static BufferedImage                LOGO = loadGif(path, "logo.gif", 892, 576)[0][0];
+  public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
+  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground2.gif", 300, 576);
+  public static BufferedImage                MENU = loadGif(path, "menu2.gif", 892, 576)[0][0];
+  public static BufferedImage               LEVEL = loadGif(path, "levels.gif", 892, 576)[0][0];
+  public static BufferedImage               PAUSE = loadGif(path, "pause.gif", 876, 576)[0][0];
 
 
 
