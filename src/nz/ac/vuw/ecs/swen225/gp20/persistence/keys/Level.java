@@ -109,7 +109,7 @@ public class Level {
             for (int x = 0; x < properties.width; x++) {
                 int finalX = x;
                 int finalY = y;
-                if (grid.stream().noneMatch(tile -> tile.getX() == finalX && tile.getY() == finalY)){
+                if (grid.stream().noneMatch(tile -> tile.x == finalX && tile.y == finalY)){
                     throw new LevelFileException("Level must contain a tile at every coordinate");
                 }
             }
@@ -117,8 +117,8 @@ public class Level {
 
         int chipCount = 0;
         for (Tile tile : grid) {
-            int x = tile.getX();
-            int y = tile.getY();
+            int x = tile.x;
+            int y = tile.y;
 
             if (x < 0 || x >= properties.width) {
                 throw new LevelFileException(
@@ -160,7 +160,7 @@ public class Level {
 
             if (grid.stream()
                     .filter(tile1 -> !tile1.equals(tile))
-                    .anyMatch(t -> t.getX() == x && t.getY() == y)) {
+                    .anyMatch(t -> t.x == x && t.y == y)) {
                 throw new LevelFileException("Duplicate tile coordinate in level at x=" + x + ", y=" + y);
             }
         }

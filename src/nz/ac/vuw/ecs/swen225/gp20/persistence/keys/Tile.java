@@ -7,19 +7,11 @@ public class Tile extends Coordinate {
     private String color;
     private String help;
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     public String getName() {
         return name.toLowerCase();
     }
 
-    public String getColor(){
+    public String getColor() {
         return color.toLowerCase();
     }
 
@@ -30,14 +22,13 @@ public class Tile extends Coordinate {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof Tile)) return false;
         Tile tile = (Tile) o;
-
-        if (x != tile.x) return false;
-        if (y != tile.y) return false;
-        if (!Objects.equals(name, tile.name)) return false;
-        return Objects.equals(color, tile.color);
+        return Objects.equals(name, tile.name) &&
+                Objects.equals(color, tile.color) &&
+                Objects.equals(help, tile.help) &&
+                Objects.equals(x, tile.x) &&
+                Objects.equals(y, tile.y);
     }
 
     @Override

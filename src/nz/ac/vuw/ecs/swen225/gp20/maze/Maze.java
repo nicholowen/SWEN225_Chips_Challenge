@@ -70,40 +70,40 @@ public class Maze {
 		//Load board
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
 		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
-			//board[t.getX()][t.getY()] = new Cell(t.getName(), t.getX(), t.getY());
+			//board[t.x][t.y] = new Cell(t.getName(), t.x, t.y);
 			String tileName=t.getName();
 			switch(tileName) {
 			case "free":
-				board[t.getX()][t.getY()] = new CellFree(t.getX(),t.getY());
+				board[t.x][t.y] = new CellFree(t.x,t.y);
 				break;
 			case "wall":
-				board[t.getX()][t.getY()] = new CellWall(t.getX(),t.getY());
+				board[t.x][t.y] = new CellWall(t.x,t.y);
 				break;
 			case "treasure":
 				currentTreasureLeft++;
-				board[t.getX()][t.getY()] = new CellTreasure(t.getX(),t.getY());
+				board[t.x][t.y] = new CellTreasure(t.x,t.y);
 				break;
 			case "key":
-				board[t.getX()][t.getY()] = new CellKey(t.getX(),t.getY(), t.getColor());
+				board[t.x][t.y] = new CellKey(t.x,t.y, t.getColor());
 				break;
 			case "door":
-				board[t.getX()][t.getY()] = new CellDoor(t.getX(),t.getY(), t.getColor());
+				board[t.x][t.y] = new CellDoor(t.x,t.y, t.getColor());
 				break;
 			case "info":
-				board[t.getX()][t.getY()] = new CellInfo(t.getX(),t.getY(), t.getHelp());
+				board[t.x][t.y] = new CellInfo(t.x,t.y, t.getHelp());
 				break;
 			case "exit":
-				CellExit exit = new CellExit(t.getX(),t.getY());
+				CellExit exit = new CellExit(t.x,t.y);
 				 exitList.add(exit);
-				 board[t.getX()][t.getY()] = exit;
+				 board[t.x][t.y] = exit;
 				 break;
 			case "exit lock":
-				 CellExitLocked exitLocked = new CellExitLocked(t.getX(),t.getY());
+				 CellExitLocked exitLocked = new CellExitLocked(t.x,t.y);
 				 exitList.add(exitLocked);
-				 board[t.getX()][t.getY()] = exitLocked;
+				 board[t.x][t.y] = exitLocked;
 				break;
 			case "water":
-				board[t.getX()][t.getY()] = new CellWater(t.getX(),t.getY());
+				board[t.x][t.y] = new CellWater(t.x,t.y);
 				break; 
 			}//End of switch
 		}//At this stage, all tiles are loaded
