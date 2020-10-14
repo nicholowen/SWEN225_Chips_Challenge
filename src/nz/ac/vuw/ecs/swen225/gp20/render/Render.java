@@ -37,7 +37,7 @@ public class Render {
    */
   public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*, String button*/){
     gp.update(tuple);
-    sp.update(timeRemaining, inventory/*, button*/);
+    sp.update(timeRemaining, tuple);
     audio.update(tuple.getSoundEvent());
   }
 

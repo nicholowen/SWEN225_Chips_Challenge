@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.Renderer;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.Assets;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,10 @@ public class ScorePanel extends JPanel {
   BufferedImage[][] inventorySprites;
   private HashMap<String, Integer> inventory;
 
+  BufferedImage[] info;
+
+  boolean onInfo;
+
   String button;
 
   public ScorePanel() {
@@ -58,12 +63,31 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, HashMap<String, Integer> inventory/*, String button*/){
+  public void update(int timeLimit, RenderTuple tuple/*, String button*/){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
-    this.inventory = inventory;
+    this.inventory = tuple.getInventory();
+    this.info = drawString(tuple.getInfo());
+    this.onInfo = tuple.isPlayerOnInfo();
     this.button = button;
     repaint();
+  }
+
+  private BufferedImage[] drawString(String s){
+    if(s == null) return null;
+    BufferedImage[] string = new BufferedImage[s.length()];
+
+    for(int i = 0; i < s.length(); i++){
+      char ch = s.charAt(i);
+      int c = 0;
+      if(ch >= 65 && ch <= 90) {
+        string[i] = Assets.FONT[0][ch - 65];
+      }
+      if(ch >= 97 && ch <= 122){
+        string[i] = Assets.FONT[1][ch - 97];
+      }
+    }
+    return string;
   }
 
 
@@ -133,9 +157,12 @@ public class ScorePanel extends JPanel {
       }
 
     }
-//    if(button != null && button.equals("playpause")){
-//      g.drawImage(Assets.PAUSEPRESSED[0][0], 96, 539, this);
-//    }
+    //can only handle a single line up to 22 characters (including spaces)
+    if(onInfo && info != null){
+      for(int f = 0; f < info.length; f++){
+        g.drawImage(info[f], 57 + (f * 9), 259, this);
+      }
+    }
 
 
 

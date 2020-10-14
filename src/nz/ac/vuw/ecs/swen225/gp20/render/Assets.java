@@ -33,6 +33,7 @@ public class Assets
   public static BufferedImage[][]          DIGITS = loadGif(path, "digits.gif", 32, 45);
   public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
   public static BufferedImage[][]       INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
+  public static BufferedImage[][]            FONT = loadGif(path, "font.gif", 9, 12);
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
