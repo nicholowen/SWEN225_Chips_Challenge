@@ -14,16 +14,10 @@ import java.util.HashMap;
  *
  * @author Owen N
  *
- * TODO: Include a space for the 'treasure' items remaining, as well as
- *  implement all other information graphics (including custom font for information panel).
+ * TODO: Include a space for the 'treasure' items remaining
  */
 public class ScorePanel extends JPanel {
 
-  /*===============================================================
-   * PLACE HOLDER - will show the score board, time, and inventory
-   *===============================================================
-   * contains some garbage code to draw (can see what I am doing)
-   */
 
   private Image background;
   private BufferedImage[] digits;
@@ -34,8 +28,6 @@ public class ScorePanel extends JPanel {
   BufferedImage[] info;
 
   boolean onInfo;
-
-  String button;
 
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
@@ -60,16 +52,20 @@ public class ScorePanel extends JPanel {
    * Gets a time and converts to char array to be converted into an int
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple/*, String button*/){
+  public void update(int timeLimit, RenderTuple tuple){
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = tuple.getInventory();
     this.info = drawString(tuple.getInfo());
     this.onInfo = tuple.isPlayerOnInfo();
-    this.button = button;
     repaint();
   }
 
+  /**
+   * Constructs an array of images based on the input
+   * @param s A string to be converted
+   * @return a BufferedImage array of the string converted to images (custom font)
+   */
   private BufferedImage[] drawString(String s){
     if(s == null) return null;
     BufferedImage[] string = new BufferedImage[s.length()];
@@ -118,6 +114,7 @@ public class ScorePanel extends JPanel {
 
     // INVENTORY RENDERER
     // renders each inventory item.
+    //TODO: Add other inventory items.
     int countX = 0; //columns of the inventory panel
     int countY = 0; //for the each row of the inventory panel
     int i = 0;
@@ -143,9 +140,8 @@ public class ScorePanel extends JPanel {
             c = inventory.get(s);
             break;
         }
-        // TODO: Draw counter onto inventory slot.
-        g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
-        g.drawImage(inventorySprites[3][c-1], 92 + (countX * 32) + 3, 471 + (countY * 32) + 3, this);
+        g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, this);
+        g.drawImage(inventorySprites[3][c-1], 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, this);
         countX++;
         if (countX == 4) {
           countY++;
