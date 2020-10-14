@@ -285,16 +285,16 @@ public class GamePanel extends JPanel {
 
       int speed = 12;
       switch(player.getDirection()){
-        case "up":
+        case UP:
           offsetY += speed;
           break;
-        case "down":
+        case DOWN:
           offsetY -= speed;
           break;
-        case "left":
+        case LEFT:
           offsetX += speed;
           break;
-        case "right":
+        case RIGHT:
           offsetX -= speed;
           break;
       }

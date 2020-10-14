@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.IOException;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
@@ -22,7 +23,7 @@ public class Main {
 
     private boolean gameEnded;
     private int timeRemaining;
-    private String direction = null;
+    private Direction direction = null;
     private boolean paused = false;
 
     public Main() {
