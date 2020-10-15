@@ -1,6 +1,9 @@
 {
   "description": "Level 1",
-  "start": {"x": 7, "y": 6},
+  "start": {
+    "x": 7,
+    "y": 6
+  },
   "properties": {
     "chipsInLevel": 9,
     "chipsRequired": 9,
@@ -9,229 +12,972 @@
     "timeLimit": 360
   },
   "grid": [
-
-      {"x": 0, "y": 0, "name": "free"},
-      {"x": 1, "y": 0, "name": "free"},
-      {"x": 2, "y": 0, "name": "wall"},
-      {"x": 3, "y": 0, "name": "wall"},
-      {"x": 4, "y": 0, "name": "wall"},
-      {"x": 5, "y": 0, "name": "wall"},
-      {"x": 6, "y": 0, "name": "wall"},
-      {"x": 7, "y": 0, "name": "free"},
-      {"x": 8, "y": 0, "name": "wall"},
-      {"x": 9, "y": 0, "name": "wall"},
-      {"x": 10, "y": 0, "name": "wall"},
-      {"x": 11, "y": 0, "name": "wall"},
-      {"x": 12, "y": 0, "name": "wall"},
-      {"x": 13, "y": 0, "name": "free"},
-      {"x": 14, "y": 0, "name": "free"},
-
-      {"x": 0, "y": 1, "name": "free"},
-      {"x": 1, "y": 1, "name": "free"},
-      {"x": 2, "y": 1, "name": "wall"},
-      {"x": 3, "y": 1, "name": "free"},
-      {"x": 4, "y": 1, "name": "free"},
-      {"x": 5, "y": 1, "name": "free"},
-      {"x": 6, "y": 1, "name": "wall"},
-      {"x": 7, "y": 1, "name": "wall"},
-      {"x": 8, "y": 1, "name": "wall"},
-      {"x": 9, "y": 1, "name": "free"},
-      {"x": 10, "y": 1, "name": "free"},
-      {"x": 11, "y": 1, "name": "free"},
-      {"x": 12, "y": 1, "name": "wall"},
-      {"x": 13, "y": 1, "name": "free"},
-      {"x": 14, "y": 1, "name": "free"},
-
-      {"x": 0, "y": 2, "name": "free"},
-      {"x": 1, "y": 2, "name": "free"},
-      {"x": 2, "y": 2, "name": "wall"},
-      {"x": 3, "y": 2, "name": "free"},
-      {"x": 4, "y": 2, "name": "treasure"},
-      {"x": 5, "y": 2, "name": "free"},
-      {"x": 6, "y": 2, "name": "wall"},
-      {"x": 7, "y": 2, "name": "exit"},
-      {"x": 8, "y": 2, "name": "wall"},
-      {"x": 9, "y": 2, "name": "free"},
-      {"x": 10, "y": 2, "name": "treasure"},
-      {"x": 11, "y": 2, "name": "free"},
-      {"x": 12, "y": 2, "name": "wall"},
-      {"x": 13, "y": 2, "name": "free"},
-      {"x": 14, "y": 2, "name": "free"},
-
-      {"x": 0, "y": 3, "name": "wall"},
-      {"x": 1, "y": 3, "name": "wall"},
-      {"x": 2, "y": 3, "name": "wall"},
-      {"x": 3, "y": 3, "name": "wall"},
-      {"x": 4, "y": 3, "name": "wall"},
-      {"x": 5, "y": 3, "name": "door", "color": "green"},
-      {"x": 6, "y": 3, "name": "wall"},
-      {"x": 7, "y": 3, "name": "exit lock"},
-      {"x": 8, "y": 3, "name": "wall"},
-      {"x": 9, "y": 3, "name": "door", "color":  "green"},
-      {"x": 10, "y": 3, "name": "wall"},
-      {"x": 11, "y": 3, "name": "wall"},
-      {"x": 12, "y": 3, "name": "wall"},
-      {"x": 13, "y": 3, "name": "wall"},
-      {"x": 14, "y": 3, "name": "wall"},
-
-      {"x": 0, "y": 4, "name": "wall"},
-      {"x": 1, "y": 4, "name": "free"},
-      {"x": 2, "y": 4, "name": "key", "color": "yellow"},
-      {"x": 3, "y": 4, "name": "free"},
-      {"x": 4, "y": 4, "name": "door", "color": "blue"},
-      {"x": 5, "y": 4, "name": "free"},
-      {"x": 6, "y": 4, "name": "free"},
-      {"x": 7, "y": 4, "name": "free"},
-      {"x": 8, "y": 4, "name": "free"},
-      {"x": 9, "y": 4, "name": "free"},
-      {"x": 10, "y": 4, "name": "door", "color": "red"},
-      {"x": 11, "y": 4, "name": "free"},
-      {"x": 12, "y": 4, "name": "key", "color":  "yellow"},
-      {"x": 13, "y": 4, "name": "free"},
-      {"x": 14, "y": 4, "name": "wall"},
-
-      {"x": 0, "y": 5, "name": "wall"},
-      {"x": 1, "y": 5, "name": "free"},
-      {"x": 2, "y": 5, "name": "free"},
-      {"x": 3, "y": 5, "name": "free"},
-      {"x": 4, "y": 5, "name": "wall"},
-      {"x": 5, "y": 5, "name": "key", "color": "blue"},
-      {"x": 6, "y": 5, "name": "free"},
-      {"x": 7, "y": 5, "name": "info", "help": "Get to the exit!"},
-      {"x": 8, "y": 5, "name": "key", "color": "green"},
-      {"x": 9, "y": 5, "name": "key", "color": "red"},
-      {"x": 10, "y": 5, "name": "wall"},
-      {"x": 11, "y": 5, "name": "free"},
-      {"x": 12, "y": 5, "name": "free"},
-      {"x": 13, "y": 5, "name": "free"},
-      {"x": 14, "y": 5, "name": "wall"},
-
-      {"x": 0, "y": 6, "name": "wall"},
-      {"x": 1, "y": 6, "name": "wall"},
-      {"x": 2, "y": 6, "name": "wall"},
-      {"x": 3, "y": 6, "name": "wall"},
-      {"x": 4, "y": 6, "name": "wall"},
-      {"x": 5, "y": 6, "name": "treasure"},
-      {"x": 6, "y": 6, "name": "free"},
-      {"x": 7, "y": 6, "name": "free"},
-      {"x": 8, "y": 6, "name": "free"},
-      {"x": 9, "y": 6, "name": "treasure"},
-      {"x": 10, "y":6,  "name": "wall"},
-      {"x": 11, "y": 6, "name": "wall"},
-      {"x": 12, "y": 6, "name": "wall"},
-      {"x": 13, "y": 6, "name": "wall"},
-      {"x": 14, "y": 6, "name": "wall"},
-
-      {"x": 0, "y": 7, "name": "wall"},
-      {"x": 1, "y": 7, "name": "free"},
-      {"x": 2, "y": 7, "name": "treasure"},
-      {"x": 3, "y": 7, "name": "free"},
-      {"x": 4, "y": 7, "name": "wall"},
-      {"x": 5, "y": 7, "name": "key", "color": "blue"},
-      {"x": 6, "y": 7, "name": "free"},
-      {"x": 7, "y": 7, "name": "free"},
-      {"x": 8, "y": 7, "name": "free"},
-      {"x": 9, "y": 7, "name": "key", "color":  "red"},
-      {"x": 10, "y": 7,  "name": "wall"},
-      {"x": 11, "y": 7, "name": "free"},
-      {"x": 12, "y": 7, "name": "treasure"},
-      {"x": 13, "y": 7, "name": "free"},
-      {"x": 14, "y": 7, "name": "wall"},
-
-      {"x": 0, "y": 8, "name": "wall"},
-      {"x": 1, "y": 8, "name": "free"},
-      {"x": 2, "y": 8, "name": "free"},
-      {"x": 3, "y": 8, "name": "free"},
-      {"x": 4, "y": 8, "name": "door", "color": "red"},
-      {"x": 5, "y": 8, "name": "free"},
-      {"x": 6, "y": 8, "name": "free"},
-      {"x": 7, "y": 8, "name": "treasure"},
-      {"x": 8, "y": 8, "name": "free"},
-      {"x": 9, "y": 8, "name": "free"},
-      {"x": 10, "y": 8, "name": "door", "color": "blue"},
-      {"x": 11, "y": 8, "name": "free"},
-      {"x": 12, "y": 8, "name": "free"},
-      {"x": 13, "y": 8, "name": "free"},
-      {"x": 14, "y": 8, "name": "wall"},
-
-      {"x": 0, "y": 9, "name": "wall"},
-      {"x": 1, "y": 9, "name": "wall"},
-      {"x": 2, "y": 9, "name": "wall"},
-      {"x": 3, "y": 9, "name": "wall"},
-      {"x": 4, "y": 9, "name": "wall"},
-      {"x": 5, "y": 9, "name": "wall"},
-      {"x": 6, "y": 9, "name": "door", "color":  "yellow"},
-      {"x": 7, "y": 9, "name": "wall"},
-      {"x": 8, "y": 9, "name": "door", "color":  "yellow"},
-      {"x": 9, "y": 9, "name": "wall"},
-      {"x": 10, "y": 9, "name": "wall"},
-      {"x": 11, "y": 9, "name": "wall"},
-      {"x": 12, "y": 9, "name": "wall"},
-      {"x": 13, "y": 9, "name": "wall"},
-      {"x": 14, "y": 9, "name": "wall"},
-
-      {"x": 0, "y": 10, "name": "free"},
-      {"x": 1, "y": 10, "name": "free"},
-      {"x": 2, "y": 10, "name": "free"},
-      {"x": 3, "y": 10, "name": "free"},
-      {"x": 4, "y": 10, "name": "wall"},
-      {"x": 5, "y": 10, "name": "free"},
-      {"x": 6, "y": 10, "name": "free"},
-      {"x": 7, "y": 10, "name": "wall"},
-      {"x": 8, "y": 10, "name": "free"},
-      {"x": 9, "y": 10, "name": "free"},
-      {"x": 10, "y": 10, "name": "wall"},
-      {"x": 11, "y": 10, "name": "free"},
-      {"x": 12, "y": 10, "name": "free"},
-      {"x": 13, "y": 10, "name": "free"},
-      {"x": 14, "y": 10, "name": "free"},
-
-      {"x": 0, "y": 11, "name": "free"},
-      {"x": 1, "y": 11, "name": "free"},
-      {"x": 2, "y": 11, "name": "free"},
-      {"x": 3, "y": 11, "name": "free"},
-      {"x": 4, "y": 11, "name": "wall"},
-      {"x": 5, "y": 11, "name": "free"},
-      {"x": 6, "y": 11, "name": "treasure"},
-      {"x": 7, "y": 11, "name": "wall"},
-      {"x": 8, "y": 11, "name": "treasure"},
-      {"x": 9, "y": 11, "name": "free"},
-      {"x": 10, "y": 11, "name": "wall"},
-      {"x": 11, "y": 11, "name": "free"},
-      {"x": 12, "y": 11, "name": "free"},
-      {"x": 13, "y": 11, "name": "free"},
-      {"x": 14, "y": 11, "name": "free"},
-
-      {"x": 0, "y": 12, "name": "free"},
-      {"x": 1, "y": 12, "name": "free"},
-      {"x": 2, "y": 12, "name": "free"},
-      {"x": 3, "y": 12, "name": "free"},
-      {"x": 4, "y": 12, "name": "wall"},
-      {"x": 5, "y": 12, "name": "free"},
-      {"x": 6, "y": 12, "name": "free"},
-      {"x": 7, "y": 12, "name": "wall"},
-      {"x": 8, "y": 12, "name": "key", "color":  "green"},
-      {"x": 9, "y": 12, "name": "free"},
-      {"x": 10, "y": 12, "name": "wall"},
-      {"x": 11, "y": 12, "name": "free"},
-      {"x": 12, "y": 12, "name": "free"},
-      {"x": 13, "y": 12, "name": "free"},
-      {"x": 14, "y": 12, "name": "free"},
-
-      {"x": 0, "y": 13, "name": "free"},
-      {"x": 1, "y": 13, "name": "free"},
-      {"x": 2, "y": 13, "name": "free"},
-      {"x": 3, "y": 13, "name": "free"},
-      {"x": 4, "y": 13, "name": "wall"},
-      {"x": 5, "y": 13, "name": "wall"},
-      {"x": 6, "y": 13, "name": "wall"},
-      {"x": 7, "y": 13, "name": "wall"},
-      {"x": 8, "y": 13, "name": "wall"},
-      {"x": 9, "y": 13, "name": "wall"},
-      {"x": 10, "y": 13, "name": "wall"},
-      {"x": 11, "y": 13, "name": "free"},
-      {"x": 12, "y": 13, "name": "free"},
-      {"x": 13, "y": 13, "name": "free"},
-      {"x": 14, "y": 13, "name": "free"}
-    ]
+    {
+      "x": 0,
+      "y": 0
+    },
+    {
+      "x": 1,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 7,
+      "y": 0
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 0
+    },
+    {
+      "x": 14,
+      "y": 0
+    },
+    {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 1,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 1
+    },
+    {
+      "x": 4,
+      "y": 1
+    },
+    {
+      "x": 5,
+      "y": 1
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "terrain": "wall"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "terrain": "wall"
+    },
+    {
+      "x": 9,
+      "y": 1
+    },
+    {
+      "x": 10,
+      "y": 1
+    },
+    {
+      "x": 11,
+      "y": 1
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 1
+    },
+    {
+      "x": 14,
+      "y": 1
+    },
+    {
+      "x": 0,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 2
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 2
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "object": "treasure"
+    },
+    {
+      "x": 5,
+      "y": 2
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "terrain": "wall"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "terrain": "exit"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "terrain": "wall"
+    },
+    {
+      "x": 9,
+      "y": 2
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "object": "treasure"
+    },
+    {
+      "x": 11,
+      "y": 2
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 2
+    },
+    {
+      "x": 14,
+      "y": 2
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "terrain": "door",
+      "color": "green"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "terrain": "exit lock"
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "terrain": "door",
+      "color": "green"
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 4
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "color": "yellow",
+      "object": "key"
+    },
+    {
+      "x": 3,
+      "y": 4
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "terrain": "door",
+      "color": "blue"
+    },
+    {
+      "x": 5,
+      "y": 4
+    },
+    {
+      "x": 6,
+      "y": 4
+    },
+    {
+      "x": 7,
+      "y": 4
+    },
+    {
+      "x": 8,
+      "y": 4
+    },
+    {
+      "x": 9,
+      "y": 4
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "terrain": "door",
+      "color": "red"
+    },
+    {
+      "x": 11,
+      "y": 4
+    },
+    {
+      "x": 12,
+      "y": 4,
+      "color": "yellow",
+      "object": "key"
+    },
+    {
+      "x": 13,
+      "y": 4
+    },
+    {
+      "x": 14,
+      "y": 4,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 5
+    },
+    {
+      "x": 2,
+      "y": 5
+    },
+    {
+      "x": 3,
+      "y": 5
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "color": "blue",
+      "object": "key"
+    },
+    {
+      "x": 6,
+      "y": 5
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "terrain": "info",
+      "help": "Get to the exit!"
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "color": "green",
+      "object": "key"
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "object": "key",
+      "color": "red"
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 5
+    },
+    {
+      "x": 12,
+      "y": 5
+    },
+    {
+      "x": 13,
+      "y": 5
+    },
+    {
+      "x": 14,
+      "y": 5,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "object": "treasure"
+    },
+    {
+      "x": 6,
+      "y": 6
+    },
+    {
+      "x": 7,
+      "y": 6
+    },
+    {
+      "x": 8,
+      "y": 6
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "object": "treasure"
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 7
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "object": "treasure"
+    },
+    {
+      "x": 3,
+      "y": 7
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "object": "key",
+      "color": "blue"
+    },
+    {
+      "x": 6,
+      "y": 7
+    },
+    {
+      "x": 7,
+      "y": 7
+    },
+    {
+      "x": 8,
+      "y": 7
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "object": "key",
+      "color": "red"
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 7
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "object": "treasure"
+    },
+    {
+      "x": 13,
+      "y": 7
+    },
+    {
+      "x": 14,
+      "y": 7,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 8
+    },
+    {
+      "x": 2,
+      "y": 8
+    },
+    {
+      "x": 3,
+      "y": 8
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "terrain": "door",
+      "color": "red"
+    },
+    {
+      "x": 5,
+      "y": 8
+    },
+    {
+      "x": 6,
+      "y": 8
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "object": "treasure"
+    },
+    {
+      "x": 8,
+      "y": 8
+    },
+    {
+      "x": 9,
+      "y": 8
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "terrain": "door",
+      "color": "blue"
+    },
+    {
+      "x": 11,
+      "y": 8
+    },
+    {
+      "x": 12,
+      "y": 8
+    },
+    {
+      "x": 13,
+      "y": 8
+    },
+    {
+      "x": 14,
+      "y": 8,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "terrain": "door",
+      "color": "yellow"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "terrain": "door",
+      "color": "yellow"
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "terrain": "wall"
+    },
+    {
+      "x": 0,
+      "y": 10
+    },
+    {
+      "x": 1,
+      "y": 10
+    },
+    {
+      "x": 2,
+      "y": 10
+    },
+    {
+      "x": 3,
+      "y": 10
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 10
+    },
+    {
+      "x": 6,
+      "y": 10
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 10
+    },
+    {
+      "x": 9,
+      "y": 10
+    },
+    {
+      "x": 10,
+      "y": 10,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 10
+    },
+    {
+      "x": 12,
+      "y": 10
+    },
+    {
+      "x": 13,
+      "y": 10
+    },
+    {
+      "x": 14,
+      "y": 10
+    },
+    {
+      "x": 0,
+      "y": 11
+    },
+    {
+      "x": 1,
+      "y": 11
+    },
+    {
+      "x": 2,
+      "y": 11
+    },
+    {
+      "x": 3,
+      "y": 11
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 11
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "object": "treasure"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "object": "treasure"
+    },
+    {
+      "x": 9,
+      "y": 11
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 11
+    },
+    {
+      "x": 12,
+      "y": 11
+    },
+    {
+      "x": 13,
+      "y": 11
+    },
+    {
+      "x": 14,
+      "y": 11
+    },
+    {
+      "x": 0,
+      "y": 12
+    },
+    {
+      "x": 1,
+      "y": 12
+    },
+    {
+      "x": 2,
+      "y": 12
+    },
+    {
+      "x": 3,
+      "y": 12
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 12
+    },
+    {
+      "x": 6,
+      "y": 12
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 12,
+      "object": "key",
+      "color": "green"
+    },
+    {
+      "x": 9,
+      "y": 12
+    },
+    {
+      "x": 10,
+      "y": 12,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 12
+    },
+    {
+      "x": 12,
+      "y": 12
+    },
+    {
+      "x": 13,
+      "y": 12
+    },
+    {
+      "x": 14,
+      "y": 12
+    },
+    {
+      "x": 0,
+      "y": 13
+    },
+    {
+      "x": 1,
+      "y": 13
+    },
+    {
+      "x": 2,
+      "y": 13
+    },
+    {
+      "x": 3,
+      "y": 13
+    },
+    {
+      "x": 4,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 5,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 6,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 7,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 8,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 9,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 10,
+      "y": 13,
+      "terrain": "wall"
+    },
+    {
+      "x": 11,
+      "y": 13
+    },
+    {
+      "x": 12,
+      "y": 13
+    },
+    {
+      "x": 13,
+      "y": 13
+    },
+    {
+      "x": 14,
+      "y": 13
+    }
+  ]
 }

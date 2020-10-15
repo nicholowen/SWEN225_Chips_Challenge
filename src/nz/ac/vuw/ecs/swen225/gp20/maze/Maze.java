@@ -9,7 +9,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 public class Maze {
 	private static Cell[][] board;
@@ -53,7 +52,7 @@ public class Maze {
 		Level toLoad;
 		try {
 			toLoad=Persistence.read(levelToLoad);
-		} catch(IOException | LevelFileException e) {
+		} catch(IOException e) {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
 			return -1;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
@@ -72,7 +71,7 @@ public class Maze {
 		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
 		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
 			//board[t.x][t.y] = new Cell(t.getName(), t.x, t.y);
-			String tileName=t.getName();
+			String tileName=t.getTerrain();
 			switch(tileName) {
 			case "free":
 				board[t.x][t.y] = new CellFree(t.x,t.y);

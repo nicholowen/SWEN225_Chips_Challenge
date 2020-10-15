@@ -3,20 +3,30 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
 import java.util.Objects;
 
 public class Tile extends Coordinate {
-    private String name;
+    private String terrain;
+    private String object;
     private String color;
     private String help;
 
-    public String getName() {
-        return name.toLowerCase();
+    private String toLowerCaseSafe(String s) {
+        if (s == null) return null;
+        return s.toLowerCase();
+    }
+
+    public String getTerrain() {
+        return toLowerCaseSafe(terrain);
+    }
+
+    public String getObject() {
+        return toLowerCaseSafe(object);
     }
 
     public String getColor() {
-        return color.toLowerCase();
+        return toLowerCaseSafe(color);
     }
 
     public String getHelp() {
-        return help;
+        return toLowerCaseSafe(help);
     }
 
     @Override
@@ -24,7 +34,8 @@ public class Tile extends Coordinate {
         if (this == o) return true;
         if (!(o instanceof Tile)) return false;
         Tile tile = (Tile) o;
-        return Objects.equals(name, tile.name) &&
+        return Objects.equals(terrain, tile.terrain) &&
+                Objects.equals(object, tile.object) &&
                 Objects.equals(color, tile.color) &&
                 Objects.equals(help, tile.help) &&
                 Objects.equals(x, tile.x) &&
@@ -33,16 +44,18 @@ public class Tile extends Coordinate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, name, color, help);
+        return Objects.hash(x, y, terrain, object, color, help);
     }
 
     @Override
     public String toString() {
         return "Tile{" +
-                "x=" + x +
-                ", y=" + y +
-                ", name='" + name + '\'' +
+                "terrain='" + terrain + '\'' +
+                ", object='" + object + '\'' +
                 ", color='" + color + '\'' +
+                ", help='" + help + '\'' +
+                ", x=" + x +
+                ", y=" + y +
                 '}';
     }
 }

@@ -42,7 +42,7 @@ public class Persistence {
      * @throws FileNotFoundException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
-    public static Level read(int level) throws FileNotFoundException, JsonSyntaxException, LevelFileException {
+    public static Level read(int level) throws FileNotFoundException, JsonSyntaxException {
         File file = getLevelFile(level);
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
         Level levelObj = gson.fromJson(reader, Level.class);
@@ -57,7 +57,7 @@ public class Persistence {
      * @return Level object
      * @throws JsonSyntaxException {@inheritDoc}
      */
-    public static Level read(String json) throws JsonSyntaxException, LevelFileException {
+    public static Level read(String json) throws JsonSyntaxException {
         Level levelObj = gson.fromJson(json, Level.class);
         levelObj.validate();
         return levelObj;
@@ -152,17 +152,7 @@ public class Persistence {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException, LevelFileException {
-        Maze maze = new Maze();
-        String state = Persistence.getGameState(maze);
-        System.out.println(state);
-
+    public static void main(String[] args) throws FileNotFoundException {
         Persistence.read(2);
-
-        try {
-            Persistence.saveGameState(maze);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
