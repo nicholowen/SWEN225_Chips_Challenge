@@ -153,6 +153,6 @@ public class Persistence {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Persistence.read(2);
+        Level level = Persistence.read(2);
     }
 }
