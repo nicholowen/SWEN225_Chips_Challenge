@@ -68,45 +68,7 @@ public class Maze {
 		//helpMessage=toLoad.getHelp(); //TODO: Have getHelp implemented in Persistence/Level
 		
 		//Load board
-		board = new Cell[toLoad.getWidth()][toLoad.getHeight()];//Set up the board dimensions
-		for(Tile t:toLoad.getGrid()){//For every tile on the map to load
-			//board[t.x][t.y] = new Cell(t.getName(), t.x, t.y);
-			String tileName=t.getTerrain();
-			switch(tileName) {
-			case "free":
-				board[t.x][t.y] = new CellFree(t.x,t.y);
-				break;
-			case "wall":
-				board[t.x][t.y] = new CellWall(t.x,t.y);
-				break;
-			case "treasure":
-				currentTreasureLeft++;
-				board[t.x][t.y] = new CellTreasure(t.x,t.y);
-				break;
-			case "key":
-				board[t.x][t.y] = new CellKey(t.x,t.y, t.getColor());
-				break;
-			case "door":
-				board[t.x][t.y] = new CellDoor(t.x,t.y, t.getColor());
-				break;
-			case "info":
-				board[t.x][t.y] = new CellInfo(t.x,t.y, t.getHelp());
-				break;
-			case "exit":
-				CellExit exit = new CellExit(t.x,t.y);
-				 exitList.add(exit);
-				 board[t.x][t.y] = exit;
-				 break;
-			case "exit lock":
-				 CellExitLocked exitLocked = new CellExitLocked(t.x,t.y);
-				 exitList.add(exitLocked);
-				 board[t.x][t.y] = exitLocked;
-				break;
-			case "water":
-				board[t.x][t.y] = new CellWater(t.x,t.y);
-				break; 
-			}//End of switch
-		}//At this stage, all tiles are loaded
+		board = toLoad.getBoard();
 		
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
@@ -118,7 +80,7 @@ public class Maze {
 		}
 		*/
 
-		return toLoad.getTimeLimit();
+		return toLoad.properties.height;
 	}
 	
 	public Cell[][] getBoard(){

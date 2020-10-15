@@ -6,7 +6,7 @@ public class NonPlayableCharacter extends Coordinate {
     private String type;
     private ArrayList<Coordinate> path;
 
-    private String getType() {
+    public String getType() {
         return type;
     }
 
@@ -16,9 +16,11 @@ public class NonPlayableCharacter extends Coordinate {
 
     @Override
     public String toString() {
-        return "Npc{" +
+        return "NonPlayableCharacter{" +
                 "type='" + type + '\'' +
-                ", path=" + path.size() +
+                ", path=" + path +
+                ", x=" + x +
+                ", y=" + y +
                 '}';
     }
 }

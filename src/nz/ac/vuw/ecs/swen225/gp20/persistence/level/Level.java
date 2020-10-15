@@ -2,17 +2,22 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.google.common.base.Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 
 public class Level {
     private String description;
     private Coordinate start;
-    private Properties properties;
-
+    public Properties properties;
     private ArrayList<Tile> grid = new ArrayList<>();
     private ArrayList<NonPlayableCharacter> nonPlayableCharacters = new ArrayList<>();
 
+    private Cell[][] board;
+
+    /* GETTERS */
     public ArrayList<NonPlayableCharacter> getNonPlayableCharacters() {
         return nonPlayableCharacters;
     }
@@ -25,14 +30,6 @@ public class Level {
         return grid;
     }
 
-    public int getWidth() {
-        return properties.width;
-    }
-
-    public int getHeight() {
-        return properties.height;
-    }
-
     public int getStartX() {
         return start.x;
     }
@@ -41,27 +38,101 @@ public class Level {
         return start.y;
     }
 
-    public int getTimeLimit(){
-        return properties.timeLimit;
+    public Cell[][] getBoard() {
+        if (board == null) loadBoard();
+        return board;
     }
 
-    public int getChipsInLevel(){
-        return properties.chipsInLevel;
+    private void loadBoard() {
+        board = new Cell[properties.width][properties.height];
+        for(Tile tile: grid){
+            String tileName=tile.getTerrain();
+            switch(tileName) {
+                case "free":
+                    board[tile.x][tile.y] = new CellFree(tile.x,tile.y);
+                    break;
+                case "wall":
+                    board[tile.x][tile.y] = new CellWall(tile.x,tile.y);
+                    break;
+                case "treasure":
+                    board[tile.x][tile.y] = new CellTreasure(tile.x,tile.y);
+                    break;
+                case "key":
+                    board[tile.x][tile.y] = new CellKey(tile.x,tile.y, tile.getColor());
+                    break;
+                case "door":
+                    board[tile.x][tile.y] = new CellDoor(tile.x,tile.y, tile.getColor());
+                    break;
+                case "info":
+                    board[tile.x][tile.y] = new CellInfo(tile.x,tile.y, tile.getHelp());
+                    break;
+                case "exit":
+                    CellExit exit = new CellExit(tile.x,tile.y);
+                    board[tile.x][tile.y] = exit;
+                    break;
+                case "exit lock":
+                    CellExitLocked exitLocked = new CellExitLocked(tile.x,tile.y);
+                    board[tile.x][tile.y] = exitLocked;
+                    break;
+                case "water":
+                    board[tile.x][tile.y] = new CellWater(tile.x,tile.y);
+                    break;
+            }
+        }
     }
 
-    public int getChipsRequired(){
-        return properties.chipsRequired;
+    private boolean checkX(int x) {
+        return x >= 0 && x < properties.width;
     }
 
+    private boolean checkY(int y) {
+        return y >= 0 && y < properties.height;
+    }
+
+    private boolean checkXY(int x, int y) {
+        return checkX(x) && checkY(y);
+    }
+
+    /* METHODS TO VALIDATE JSON */
     private void validateCharacter(NonPlayableCharacter character) {
-        System.out.println(character);
+        List<String> allowed = List.of("spider");
+        Preconditions.checkArgument(allowed.contains(character.getType()),
+                "NonPlayableCharacter 'type' cannot be " + character.getType() + " or null must be one of " + allowed);
+
+        Preconditions.checkArgument(checkXY(character.x, character.y),
+                "Character (" + character + ") outside board");
+
+        ListIterator<Coordinate> iter = character.getPath().listIterator();
+        while(iter.hasNext()){
+            Coordinate coordinate = iter.next();
+
+            Preconditions.checkArgument(checkXY(coordinate.x, coordinate.y), "Path outside board");
+
+            if (!iter.hasPrevious()) {
+                Preconditions.checkArgument(character.x == coordinate.x || character.y == coordinate.y,
+                        "Path must be a straight line");
+            }
+
+            if (!iter.hasNext()) {
+                Preconditions.checkArgument(coordinate.x == character.x && coordinate.y == character.y,
+                        "Last coordinate in path must be starting position");
+            }
+
+            if (iter.hasPrevious()) {
+                Coordinate prev = iter.previous();
+                Preconditions.checkArgument(prev.x == coordinate.x || prev.y == coordinate.y,
+                        "Path must be a straight line");
+
+                iter.next();
+            }
+        }
     }
 
     private void validateTile(Tile tile) {
-        Preconditions.checkArgument(tile.x >= 0 && tile.x < properties.width,
+        Preconditions.checkArgument(checkX(tile.x),
                 "Tile x coordinate must be greater than 0 and less than width (" + properties.width + ")");
 
-        Preconditions.checkArgument(tile.y >= 0 && tile.y < properties.height,
+        Preconditions.checkArgument(checkY(tile.y),
                 "Tile y coordinate must be greater than 0 and less than height (" + properties.height + ")");
 
         if (tile.getTerrain() != null){
