@@ -45,37 +45,48 @@ public class Level {
 
     private void loadBoard() {
         board = new Cell[properties.width][properties.height];
-        for(Tile tile: grid){
-            String tileName=tile.getTerrain();
-            switch(tileName) {
-                case "free":
-                    board[tile.x][tile.y] = new CellFree(tile.x,tile.y);
-                    break;
+        for (Tile tile : grid) {
+            String terrain = tile.getTerrain();
+            String object = tile.getObject();
+
+            if (terrain == null && object == null) {
+                board[tile.x][tile.y] = new CellFree(tile.x, tile.y);
+                continue;
+            }
+
+            if (terrain == null) {
+                switch (object) {
+                    case "treasure":
+                        board[tile.x][tile.y] = new CellTreasure(tile.x, tile.y);
+                        break;
+                    case "key":
+                        board[tile.x][tile.y] = new CellKey(tile.x, tile.y, tile.getColor());
+                        break;
+                }
+
+                continue;
+            }
+
+            switch (terrain) {
                 case "wall":
-                    board[tile.x][tile.y] = new CellWall(tile.x,tile.y);
-                    break;
-                case "treasure":
-                    board[tile.x][tile.y] = new CellTreasure(tile.x,tile.y);
-                    break;
-                case "key":
-                    board[tile.x][tile.y] = new CellKey(tile.x,tile.y, tile.getColor());
+                    board[tile.x][tile.y] = new CellWall(tile.x, tile.y);
                     break;
                 case "door":
-                    board[tile.x][tile.y] = new CellDoor(tile.x,tile.y, tile.getColor());
+                    board[tile.x][tile.y] = new CellDoor(tile.x, tile.y, tile.getColor());
                     break;
                 case "info":
-                    board[tile.x][tile.y] = new CellInfo(tile.x,tile.y, tile.getHelp());
+                    board[tile.x][tile.y] = new CellInfo(tile.x, tile.y, tile.getHelp());
                     break;
                 case "exit":
-                    CellExit exit = new CellExit(tile.x,tile.y);
+                    CellExit exit = new CellExit(tile.x, tile.y);
                     board[tile.x][tile.y] = exit;
                     break;
                 case "exit lock":
-                    CellExitLocked exitLocked = new CellExitLocked(tile.x,tile.y);
+                    CellExitLocked exitLocked = new CellExitLocked(tile.x, tile.y);
                     board[tile.x][tile.y] = exitLocked;
                     break;
                 case "water":
-                    board[tile.x][tile.y] = new CellWater(tile.x,tile.y);
+                    board[tile.x][tile.y] = new CellWater(tile.x, tile.y);
                     break;
             }
         }
@@ -103,7 +114,7 @@ public class Level {
                 "Character (" + character + ") outside board");
 
         ListIterator<Coordinate> iter = character.getPath().listIterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             Coordinate coordinate = iter.next();
 
             Preconditions.checkArgument(checkXY(coordinate.x, coordinate.y), "Path outside board");
@@ -135,8 +146,8 @@ public class Level {
         Preconditions.checkArgument(checkY(tile.y),
                 "Tile y coordinate must be greater than 0 and less than height (" + properties.height + ")");
 
-        if (tile.getTerrain() != null){
-            switch (tile.getTerrain()){
+        if (tile.getTerrain() != null) {
+            switch (tile.getTerrain()) {
                 case "door":
                     Preconditions.checkNotNull(tile.getColor(),
                             "Tile with terrain 'door' must have 'color'");
@@ -153,8 +164,8 @@ public class Level {
             }
         }
 
-        if (tile.getObject() != null){
-            switch (tile.getObject()){
+        if (tile.getObject() != null) {
+            switch (tile.getObject()) {
                 case "key":
                     Preconditions.checkNotNull(tile.getColor(),
                             "Tile with object 'key' must have 'color'");

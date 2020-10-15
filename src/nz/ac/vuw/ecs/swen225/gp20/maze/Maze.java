@@ -58,7 +58,7 @@ public class Maze {
 		}
 		//Resetting/initializing
 		gameOver=false;
-		currentTreasureLeft=0;
+		currentTreasureLeft=toLoad.properties.chipsInLevel;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
 		exitList=new ArrayList<>();
@@ -69,18 +69,17 @@ public class Maze {
 		
 		//Load board
 		board = toLoad.getBoard();
-		
+
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
-		
-		
+
 		/*//Load NPCs
 		for(Character c:toLoad.getCharacters()){
 				creatures.add(new Actor(false, c.getName(), c.getX(), c.getY()));
 		}
 		*/
 
-		return toLoad.properties.height;
+		return toLoad.properties.timeLimit;
 	}
 	
 	public Cell[][] getBoard(){
