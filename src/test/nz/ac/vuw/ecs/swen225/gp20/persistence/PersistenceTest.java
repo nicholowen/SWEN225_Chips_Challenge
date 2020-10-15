@@ -1,11 +1,9 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import nz.ac.vuw.ecs.swen225.gp20.persistence.LevelFileException;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
 
@@ -61,10 +59,5 @@ public class PersistenceTest {
                         "}";
 
         //testHelper(jsonString, "Level must contain a tile at every coordinate");
-    }
-
-    private void testHelper(String jsonString, String message) {
-        LevelFileException thrown = assertThrows(LevelFileException.class, () -> Persistence.read(jsonString));
-        assertEquals(thrown.getMessage(), message);
     }
 }

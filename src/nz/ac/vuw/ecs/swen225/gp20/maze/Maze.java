@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Tile;
 
 public class Maze {
 	private static Cell[][] board;

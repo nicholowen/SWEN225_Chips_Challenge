@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.keys.Level;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 
 import java.io.*;
 import java.nio.file.Path;

@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.persistence.keys;
+package nz.ac.vuw.ecs.swen225.gp20.persistence.level;
 
 import java.util.Objects;
 
