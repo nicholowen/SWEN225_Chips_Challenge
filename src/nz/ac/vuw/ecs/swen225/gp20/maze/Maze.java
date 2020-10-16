@@ -11,7 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Tile;
 
 public class Maze {
-	private static Cell[][] board;
+	private Cell[][] board;
 	private boolean gameOver;//If true, the player is dead or the level is otherwise failed.
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;

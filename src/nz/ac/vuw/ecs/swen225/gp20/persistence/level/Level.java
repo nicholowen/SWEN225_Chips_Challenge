@@ -8,6 +8,12 @@ import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 
+/**
+ * Class to handle loading of json files into objects
+ * that can be used by the rest of the game components
+ *
+ * @author Campbell Whitworth 300490070
+ */
 public class Level {
     private String description;
     private Coordinate start;
@@ -61,6 +67,8 @@ public class Level {
                         break;
                     case "key":
                         board[tile.x][tile.y] = new CellKey(tile.x, tile.y, tile.getColor());
+                        break;
+                    default:
                         break;
                 }
 

@@ -1,13 +1,12 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -145,6 +144,16 @@ public class PersistenceTest {
         assertEquals(levelObj.properties.width, 10);
         assertEquals(levelObj.properties.height, 10);
         assertEquals(levelObj.properties.timeLimit, 60);
+    }
+
+    @Test
+    public void persistenceTest10() {
+        assertThrows(FileNotFoundException.class, () -> Persistence.read(99));
+    }
+
+    @Test
+    public void persistenceTest11() {
+        assertThrows(JsonSyntaxException.class, () -> Persistence.read("Invalid Json"));
     }
 
     private JsonObject createLevel(int startX, int startY, int chipsInLevel, int chipsRequired,

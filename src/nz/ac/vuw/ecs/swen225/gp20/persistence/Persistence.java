@@ -3,11 +3,11 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -35,13 +35,13 @@ public class Persistence {
      *
      * @param level the level number
      * @return a Level object
-     * @throws FileNotFoundException if the level is not found
+     * @throws IOException if the level is not found
      * @throws JsonSyntaxException   {@inheritDoc}
      */
-    public static Level read(int level) throws FileNotFoundException, JsonSyntaxException {
+    public static Level read(int level) throws IOException, JsonSyntaxException {
         File file = getLevelFile(level);
-        JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
-        Level levelObj = gson.fromJson(reader, Level.class);
+
+        Level levelObj = readJsonFromFile(file, Level.class);
         levelObj.validate();
 
         return levelObj;
@@ -55,9 +55,24 @@ public class Persistence {
      * @throws JsonSyntaxException {@inheritDoc}
      */
     public static Level read(String json) throws JsonSyntaxException {
-        Level levelObj = gson.fromJson(json, Level.class);
+        Level levelObj = readJsonFromString(json, Level.class);
         levelObj.validate();
+
         return levelObj;
+    }
+
+    private static <T> T readJsonFromFile(File file, Class<T> type) throws IOException {
+        InputStream inputStream = new FileInputStream(file.getAbsoluteFile());
+        InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+        T typeObj = gson.fromJson(streamReader, type);
+        streamReader.close();
+
+        return typeObj;
+    }
+
+    private static <T> T readJsonFromString(String json, Class<T> type) {
+        return gson.fromJson(json, type);
     }
 
     /**
@@ -67,7 +82,6 @@ public class Persistence {
         if (file.exists() && !file.isDirectory()) {
             return file;
         } else {
-            System.out.println(file);
             throw new FileNotFoundException();
         }
     }
@@ -93,15 +107,18 @@ public class Persistence {
             throw new IOException("Error creating directory, check that you have permission");
         }
 
-        try (Writer writer = new FileWriter(Paths.get(savedState.toString(), filename).toString())) {
-            gson.toJson(maze, writer);
-        }
+        OutputStream outputStream = new FileOutputStream(Paths.get(savedState.toString(), filename).toFile());
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+        gson.toJson(maze, bufferedWriter);
+        bufferedWriter.close();
     }
 
     /**
-     * Saves the current state of the maze as a string
+     * Returns the current state of the maze as a json string
      *
      * @param maze the game to save
+     * @return json string of the maze
      */
     public static String getGameState(Maze maze) {
         return gson.toJson(maze);
@@ -116,15 +133,10 @@ public class Persistence {
         File recentSave = getRecentSave();
 
         if (recentSave == null) {
-            return null;
-        } else {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(recentSave.getAbsoluteFile()));
-                return gson.fromJson(reader, Maze.class);
-            } catch (FileNotFoundException e){
-                return null;
-            }
+            throw new FileNotFoundException("No recent saved games found.");
         }
+
+        return readJsonFromFile(recentSave, Maze.class);
     }
 
     /**
@@ -133,7 +145,7 @@ public class Persistence {
      * @return the saved maze object
      */
     public static Maze loadGameState(String state) {
-        return gson.fromJson(state, Maze.class);
+        return readJsonFromString(state, Maze.class);
     }
 
     /**
@@ -149,7 +161,10 @@ public class Persistence {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        Level level = Persistence.read(2);
+    public static void main(String[] args) throws IOException {
+        Persistence.read(1);
+        Maze maze = new Maze();
+        Persistence.saveGameState(maze);
+        maze = Persistence.loadGameState();
     }
 }
