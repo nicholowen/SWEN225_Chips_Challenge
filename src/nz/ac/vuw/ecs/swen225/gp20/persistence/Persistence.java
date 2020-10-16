@@ -125,17 +125,13 @@ public class Persistence {
     }
 
     /**
-     * Reads a saved game from a json file into a Maze object
+     * Reads the most recent saved game
+     * from a json file into a Maze object
      *
      * @return the saved maze object
      */
     public static Maze loadGameState() throws IOException {
         File recentSave = getRecentSave();
-
-        if (recentSave == null) {
-            throw new FileNotFoundException("No recent saved games found.");
-        }
-
         return readJsonFromFile(recentSave, Maze.class);
     }
 
@@ -150,21 +146,23 @@ public class Persistence {
 
     /**
      * Gets the most recent save from the save game state directory.
+     *
+     * @throws FileNotFoundException if the directory is empty
+     * @return the most recent file, cannot be null
      */
-    private static File getRecentSave() throws IOException {
+    private static File getRecentSave() throws FileNotFoundException {
         File[] directoryList= savedState.toFile().listFiles();
 
-        if (directoryList == null){
-            throw new IOException("Directory '" + savedState + "' is empty.");
+        if (directoryList == null || directoryList.length == 0){
+            throw new FileNotFoundException("Directory '" + savedState + "' is empty.");
         } else {
-            return Arrays.stream(directoryList).max(Comparator.comparing(File::getName)).orElse(null);
+            Arrays.sort(directoryList, Comparator.comparing(File::getName).reversed());
+            assert directoryList[0] != null;
+            return directoryList[0];
         }
     }
 
     public static void main(String[] args) throws IOException {
-        Persistence.read(1);
-        Maze maze = new Maze();
-        Persistence.saveGameState(maze);
-        maze = Persistence.loadGameState();
+        System.out.println(Persistence.getRecentSave());
     }
 }
