@@ -1,12 +1,15 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -155,6 +158,22 @@ public class PersistenceTest {
     @Test
     public void persistenceTest11() {
         assertThrows(JsonSyntaxException.class, () -> Persistence.read("Invalid Json"));
+    }
+
+    @Test
+    public void persistenceTest12() {
+        File path = new File("resources/saved-state");
+        File[] directoryList= path.listFiles();
+
+        if (directoryList == null || directoryList.length == 0) {
+            assertThrows(IOException.class, Persistence::loadGameState);
+        } else {
+            try {
+                Maze maze = Persistence.loadGameState();
+            } catch (IOException e) {
+                throw new Error("Persistence.loadGameState() should not throw IOException");
+            }
+        }
     }
 
     private JsonObject createLevel(int startX, int startY, int chipsInLevel, int chipsRequired,
