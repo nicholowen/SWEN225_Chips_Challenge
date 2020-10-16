@@ -176,6 +176,45 @@ public class PersistenceTest {
         }
     }
 
+    @Test
+    public void persistenceTest13() {
+        JsonObject level = createLevel(
+                9,
+                0,
+                4,
+                4,
+                10,
+                10,
+                60);
+
+        JsonArray nonPlayableCharacters = new JsonArray();
+        JsonObject npc1 = new JsonObject();
+        npc1.addProperty("x", 1);
+        npc1.addProperty("y", 1);
+        npc1.addProperty("type", "spider");
+
+        JsonArray path = new JsonArray();
+
+        JsonObject coordinate1 = new JsonObject();
+        coordinate1.addProperty("x", 2);
+        coordinate1.addProperty("y", 1);
+        path.add(coordinate1);
+
+        JsonObject coordinate2 = new JsonObject();
+        coordinate2.addProperty("x", 1);
+        coordinate2.addProperty("y", 1);
+        path.add(coordinate2);
+
+        npc1.add("path", path);
+
+        nonPlayableCharacters.add(npc1);
+        level.add("nonPlayableCharacters", nonPlayableCharacters);
+
+        testCorrect(level);
+    }
+
+
+
     private JsonObject createLevel(int startX, int startY, int chipsInLevel, int chipsRequired,
                                    int width, int height, int timeLimit) {
 
