@@ -96,6 +96,8 @@ public class Level {
                 case "water":
                     board[tile.x][tile.y] = new CellWater(tile.x, tile.y);
                     break;
+                default:
+                    break;
             }
         }
     }
