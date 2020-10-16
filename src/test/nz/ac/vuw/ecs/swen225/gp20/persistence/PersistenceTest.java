@@ -175,7 +175,7 @@ public class PersistenceTest {
     }
 
     private JsonObject setupLevel(String description, int startX, int startY, int chipsInLevel, int chipsRequired,
-                                   int width, int height, int timeLimit) {
+                                  int width, int height, int timeLimit) {
         JsonObject level = new JsonObject();
 
         level.addProperty("description", description);
@@ -199,13 +199,13 @@ public class PersistenceTest {
 
     private JsonArray createGrid(int width, int height, int chipsInLevel) {
         JsonArray grid = new JsonArray();
-        for (int i=0; i < width; i++) {
-            for (int j=0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 grid.add(createCell(i, j, null, null));
             }
         }
 
-        for (int i=0; i < chipsInLevel; i++){
+        for (int i = 0; i < chipsInLevel; i++) {
             JsonElement cell = grid.get(i);
             int x = cell.getAsJsonObject().get("x").getAsInt();
             int y = cell.getAsJsonObject().get("y").getAsInt();
