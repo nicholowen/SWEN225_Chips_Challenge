@@ -33,6 +33,9 @@ public class Assets
   public static BufferedImage[][]       MENUBARBG = loadGif(path, "menubarbg.gif", 876, 28);
   public static BufferedImage[][]       INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
   public static BufferedImage[][]            FONT = loadGif(path, "font.gif", 9, 12);
+  //energybar
+  public static BufferedImage      ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22)[0][0];
+  public static BufferedImage           ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22)[0][0];
 
   //load player spritesup
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
@@ -40,7 +43,7 @@ public class Assets
   //panel backgrounds
   public static BufferedImage                LOGO = loadGif(path, "logo.gif", 892, 576)[0][0];
   public static BufferedImage[][]   MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
-  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground2.gif", 300, 576);
+  public static BufferedImage[][] SCOREBACKGROUND = loadGif(path, "scorepanelbackground3.gif", 300, 576);
   public static BufferedImage                MENU = loadGif(path, "menu2.gif", 892, 576)[0][0];
   public static BufferedImage               LEVEL = loadGif(path, "levels.gif", 892, 576)[0][0];
   public static BufferedImage               PAUSE = loadGif(path, "pause.gif", 876, 576)[0][0];

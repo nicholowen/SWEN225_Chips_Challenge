@@ -29,6 +29,9 @@ public class ScorePanel extends JPanel {
 
   boolean onInfo;
 
+  private double total;
+  private double gathered;
+
   public ScorePanel() {
     setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
@@ -58,6 +61,8 @@ public class ScorePanel extends JPanel {
     this.inventory = tuple.getInventory();
     this.info = drawString(tuple.getInfo());
     this.onInfo = tuple.isPlayerOnInfo();
+    this.gathered = tuple.getTreasureCollected();
+    this.total = gathered + tuple.getTreasureLeft();
     repaint();
   }
 
@@ -84,6 +89,14 @@ public class ScorePanel extends JPanel {
   }
 
 
+  private BufferedImage getEnergyLevel(){
+    BufferedImage temp = Assets.ENERGYBARSHADE;
+      int length = temp.getWidth();
+      double x = (double)length * (gathered/total);
+    return temp.getSubimage((int)x, 0, temp.getWidth()-(int)x, temp.getHeight());
+  }
+
+
   /**
    * Converts the char array to numeric values which are then drawn on screen
    * with absolute values (dictated by the background graphic of the ScorePanel
@@ -93,6 +106,16 @@ public class ScorePanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.drawImage(background, 0, 0, this);
+
+    g.drawImage(Assets.ENERGYBAR, 74, 330, this);
+    if(Assets.ENERGYBARSHADE != null) {
+      if(total != gathered) {
+        double x = (double) Assets.ENERGYBARSHADE.getWidth() * (gathered / total);
+        System.out.println(x);
+        g.drawImage(getEnergyLevel(), 74 + (int) x, 330, this);
+      }
+    }
+
 
     int offset = 0;
     if (chars.length == 2) {
