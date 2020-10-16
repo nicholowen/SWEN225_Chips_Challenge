@@ -81,7 +81,7 @@ public class Render {
   // * @param cells
    */
   public void init(Maze maze){
-    gp.initAnimationObjects(maze.getBoard());
+    gp.initAnimationObjects(maze.getBoard(), maze.getActors());
   }
 
 }
