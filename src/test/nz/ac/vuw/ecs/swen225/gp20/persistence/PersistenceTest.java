@@ -263,6 +263,7 @@ public class PersistenceTest {
     private void testIncorrect(JsonObject level) {
         try {
             Persistence.read(level.toString());
+            throw new Error("Test should throw exception");
         } catch (Exception e) {
             e.printStackTrace();
         }
