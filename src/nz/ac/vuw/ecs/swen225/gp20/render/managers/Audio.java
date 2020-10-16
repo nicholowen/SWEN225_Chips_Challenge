@@ -25,7 +25,7 @@ public class Audio {
     if(action != null) {
       if(action.contains("hover")){
         action = "hover";
-      }else if(!action.contains("pressed")){
+      }else if(action.contains("pressed")){
         action = "pressed";
       }
       file = action + ".wav";
