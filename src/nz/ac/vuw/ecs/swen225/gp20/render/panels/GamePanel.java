@@ -31,6 +31,11 @@ public class GamePanel extends JPanel {
   private Cell[][] exitLock = new Cell[11][11];
   private Cell[][] info     = new Cell[11][11];
 
+  private HostileMob[] hostileMobs;
+  private HostileMob[][] visibleMobs = new HostileMob[11][11];
+
+  private Actor[] mobs;
+
   private Object[][] sprites;
 
   // HashMaps to store all rendered objects in the game
@@ -40,6 +45,8 @@ public class GamePanel extends JPanel {
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
+
+
   //Single Rendered object (only one per map)
   private Info infoOb;
   private ExitLock exitLockOb;
@@ -47,6 +54,8 @@ public class GamePanel extends JPanel {
   private Player playerSprite;
 
   private Actor player;
+
+
 
   //transition offset
   int offsetX = 0;
@@ -71,8 +80,18 @@ public class GamePanel extends JPanel {
    * Initialises all 'sprites' in game, based on the position of the cells.
    * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
    * @param cells The tiles of the game map.
+   * @param actors
    */
-  public void initAnimationObjects(Cell[][] cells) {
+  public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
+
+    // load mobs into their own array
+    hostileMobs = new HostileMob[actors.length-1];
+    for(int h = 1; h < actors.length; h++){
+      // may need to differentiate between mobs and player
+      HostileMob mob = new HostileMob(actors[h].getX(), actors[h].getY());
+      hostileMobs[h-1] = mob;
+    }
+
     sprites = new Object[cells.length][cells[0].length];
     this.playerSprite = new Player();
     for (int i = 0; i < cells.length; i++) {
@@ -178,16 +197,21 @@ public class GamePanel extends JPanel {
     Cell[][] ret = new Cell[11][11]; //a new array to store all the cells around the player
     Point playerPos = new Point(player.getX(), player.getY());
 
+    Point botRight = new Point(player.getX() + 5, player.getY() + 5);
 
     int x = (int)playerPos.getX() - 5;
-    int y;
 
     for (int i = 0; i < 11; i++) {
-      y = (int)playerPos.getY() - 5;
+      int y = (int)playerPos.getY() - 5;
       for (int j = 0; j < 11; j++) {
+        for(HostileMob actor : hostileMobs){
+          if(actor.getX() == botRight.getX() - i && actor.getY() == botRight.getY() -j){
+            visibleMobs[i][j] = actor;
+          }
+        }
+
         if((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
           ret[i][j] = cells[x][y];
-
         }else{
           ret[i][j] = null;
         }
@@ -205,10 +229,20 @@ public class GamePanel extends JPanel {
    * @param tuple tuple containing Cells and actors
    */
   public void update(RenderTuple tuple) {
+    //update player with direction
     player = tuple.getActors()[0];
+    playerSprite.update(player.getDirection());
+
+    //update all mobs with direction (this can probably be condensed as all actors)
+    mobs = new Actor[tuple.getActors().length - 1];
+    for(int m = 1; m < tuple.getActors().length; m++){
+      mobs[m-1] = tuple.getActors()[m];
+      hostileMobs[m-1].update(mobs[m-1].getDirection());
+    }
     Cell[][] surround = getSurround(tuple.getCells(), player);
 
-    playerSprite.update(player.getDirection());
+
+
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
         if(surround[i][j] != null) {
@@ -355,8 +389,15 @@ public class GamePanel extends JPanel {
         if(exitLock[i][j] != null){
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
         }
+
+        if(visibleMobs[i][j] != null){
+          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+        }
       }
     }
+
+
+
     //draws player last to remain on top (uses abolsute positioning.... for now)
     if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, this);
 

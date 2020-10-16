@@ -37,8 +37,9 @@ public class Assets
   public static BufferedImage      ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22)[0][0];
   public static BufferedImage           ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22)[0][0];
 
-  //load player spritesup
+  //mob sprites
   public static BufferedImage[][]          PLAYER = loadGif(path, "player.gif", 64, 64);
+  public static BufferedImage[][]      HOSTILEMOB = loadGif(path, "hostile_mob.gif", 64, 64);
 
   //panel backgrounds
   public static BufferedImage                LOGO = loadGif(path, "logo.gif", 892, 576)[0][0];
