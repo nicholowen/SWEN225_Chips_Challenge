@@ -30,10 +30,6 @@ public class Persistence {
     public static final Path recordings = Paths.get(resources.toString(), "recordings");
     public static final Path savedState = Paths.get(resources.toString(), "saved-state");
 
-    public Persistence() {
-
-    }
-
     /**
      * Reads a level from a file into an object
      *
@@ -47,6 +43,7 @@ public class Persistence {
         JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
         Level levelObj = gson.fromJson(reader, Level.class);
         levelObj.validate();
+
         return levelObj;
     }
 
