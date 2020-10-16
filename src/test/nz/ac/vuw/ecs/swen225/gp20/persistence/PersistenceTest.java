@@ -126,6 +126,7 @@ public class PersistenceTest {
     @Test
     public void persistenceTest09() {
         JsonObject level = createLevel(
+                "A Level",
                 9,
                 0,
                 1,
@@ -136,7 +137,7 @@ public class PersistenceTest {
 
         Level levelObj = Persistence.read(level.toString());
 
-        assertEquals(levelObj.getDescription(), "description");
+        assertEquals(levelObj.getDescription(), "A Level");
         assertEquals(levelObj.getStartX(), 9);
         assertEquals(levelObj.getStartY(), 0);
         assertEquals(levelObj.properties.chipsInLevel, 1);
