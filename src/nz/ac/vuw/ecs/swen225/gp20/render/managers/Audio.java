@@ -17,12 +17,17 @@ public class Audio {
 
   public void update(String soundEvent){
     play(soundEvent);
-
   }
 
   public void play(String action){
+
     String file = null;
     if(action != null) {
+      if(action.contains("hover")){
+        action = "hover";
+      }else if(!action.contains("pressed")){
+        action = "pressed";
+      }
       file = action + ".wav";
     }
     if(file != null){
