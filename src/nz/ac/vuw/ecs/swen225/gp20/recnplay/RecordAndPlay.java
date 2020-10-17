@@ -166,7 +166,7 @@ public class RecordAndPlay {
             remainingTimeAfterRun = obj != null
                     ? obj.getInt("timeRemaining") : 0;
 
-            game.updateGUI();
+//            game.updateGUI();
 
         } catch (IOException e) {
             System.out.println("Error: " + e);
@@ -211,9 +211,9 @@ public class RecordAndPlay {
 
                 if (moves.size() > 0) {
                     isRunning = false;
-                    game.setTimeRemaining(remainingTimeAfterRun);
+//                    game.setTimeRemaining(remainingTimeAfterRun);
                 }
-                game.updateGUI();
+//                game.updateGUI();
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
@@ -227,7 +227,7 @@ public class RecordAndPlay {
      */
     public static void runReplay(Main game) {
 
-        game.setFPS((int) (1000 / playbackSpeed));
+//        game.setFPS((int) (1000 / playbackSpeed));
 
         // anonymous class replaced with lambda for readability
         Runnable runnable = () -> {
@@ -241,7 +241,7 @@ public class RecordAndPlay {
                 }
             }
             isRunning = false;
-            game.setTimeRemaining(remainingTimeAfterRun);
+//            game.setTimeRemaining(remainingTimeAfterRun);
         };
         thread = new Thread(runnable);
         thread.start();
