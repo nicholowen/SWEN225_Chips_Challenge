@@ -1,8 +1,7 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.panels;
+package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -12,30 +11,30 @@ import java.awt.image.BufferedImage;
  * Fade algorithm credit: Zequnyu - https://github.com/zequnyu
  * @author Owen N
  */
-public class IntroPanel extends JPanel {
+public class IntroState {
 
   BufferedImage logo;
 
   private int alpha;
   private int tick;
 
-  public IntroPanel(){
+  public IntroState(){
     this.logo = Assets.LOGO;
   }
 
   /**
-   * Changes the alpha channel used by the paintComponent method.
+   * Changes the alpha channel used by the draw method.
    * Low alpha = transparent, high alpha = opaque
    * @return false if fade cycle has finished.
    */
-  public boolean update() {
+  public void update() {
     int fade = 120;
     int length = 190;
 
     tick++;
 
     if(tick < fade) {
-      alpha = (int)(255 - 255 * (1.0* tick / fade));
+      alpha = (int)(255 - 255 * (1.0 * tick / fade));
       if(alpha < 0) alpha = 0;
     }
 
@@ -43,14 +42,11 @@ public class IntroPanel extends JPanel {
       alpha = (int) (255 * (1.0 * tick - fade - length) / fade);
       if(alpha > 255) alpha = 255;
     }
-    return tick <= 2 * fade + length;
   }
 
-  @Override
-  public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-
-    g.drawImage(logo, 0, 0, this);
+  public void draw(Graphics g) {
+//    super.paintComponent(g);
+    g.drawImage(logo, 0, 0, null);
     //draws black transparent/opaque rectangle over the logo
     g.setColor(new Color(0, 0, 0, alpha));
     g.fillRect(0, 0, logo.getWidth(), logo.getHeight());

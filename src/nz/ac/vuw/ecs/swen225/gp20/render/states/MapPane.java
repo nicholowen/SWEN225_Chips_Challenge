@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.panels;
+package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
@@ -7,7 +7,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.sprites.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.HashMap;
  *
  * @author Owen N
  */
-public class GamePanel extends JPanel {
+public class MapPane {
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
   private Cell[][] floor    = new Cell[11][11];
@@ -62,9 +61,9 @@ public class GamePanel extends JPanel {
   int offsetY = 0;
 
 
-  public GamePanel() {
-    setPreferredSize(new Dimension(576, 576));
-    setBackground(Color.gray);
+  public MapPane() {
+//    setPreferredSize(new Dimension(576, 576));
+//    setBackground(Color.gray);
     init();
   }
 
@@ -297,7 +296,7 @@ public class GamePanel extends JPanel {
         }
       }
     }
-    repaint();
+//    repaint();
   }
 
   /**
@@ -323,9 +322,9 @@ public class GamePanel extends JPanel {
    * as the player moves.
    * @param g graphics object
    */
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
+//  @Override
+  public void draw(Graphics g) {
+//    super.paintComponent(g);
 
 
     // transition animation - draws all objects depending on offset (speed)
@@ -353,45 +352,45 @@ public class GamePanel extends JPanel {
     int x = 64;
     int y = 64;
 
-    g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, this);
+    g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, null);
     for(int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
 
         if (floor[i][j] != null) {
-          g.drawImage(Assets.FLOOR[0][0], x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(Assets.FLOOR[0][0], x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (wall[i][j] != null) {
-          g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (hole[i][j] != null) {
-          g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (door[i][j] != null && doorObjects != null) {
           if(doorObjects.get(door[i][j]).isVertical()){
-            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
           }
           else{
-            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, this);
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
           }
         }
         if (energy[i][j] != null) {
-          g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (key[i][j] != null) {
-          g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if(exit[i][j] != null){
-          g.drawImage(exitOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(exitOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if(info[i][j] != null){
-          g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if(exitLock[i][j] != null){
-          g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
         if(visibleMobs[i][j] != null){
-          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, this);
+          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
       }
     }
@@ -399,10 +398,34 @@ public class GamePanel extends JPanel {
 
 
     //draws player last to remain on top (uses abolsute positioning.... for now)
-    if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, this);
+    if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
 
     //clears lists for next frame
     clearLists();
 
+  }
+
+  public static class MenuPanel {
+  //button positions
+  // new game - 377, 280, 135, 21
+  // load - 377, 348, 135, 21
+  // replay - 377, 416, 135, 21
+  // exit - 377, 484, 135, 21
+
+    BufferedImage bg;
+
+    public MenuPanel(){
+      this.bg = Assets.MENU;
+    }
+
+    public void update(){
+
+    }
+
+
+    public void draw(Graphics g) {
+  //    super.paintComponent(g);
+      g.drawImage(bg, 0, 0, null);
+    }
   }
 }
