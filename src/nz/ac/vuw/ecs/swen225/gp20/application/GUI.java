@@ -2,26 +2,23 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
 
+
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
-import nz.ac.vuw.ecs.swen225.gp20.render.panels.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.panels.ScorePanel;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
  * listeners and buttons as user input.
  * 
- * @author Maiza
+ * @author Maiza Rehan 300472305
  */
 public class GUI extends JPanel implements KeyListener {
 
     JFrame frame;
-    GamePanel gamePanel;
-    ScorePanel scorePanel;
 
 
     //=========================
@@ -64,42 +61,6 @@ public class GUI extends JPanel implements KeyListener {
         mainPanel.setLayout(null);
         frame.setContentPane(mainPanel);
 
-//        gamePanel = new GamePanel();
-//        scorePanel = new ScorePanel();
-//        mainPanel.add(gamePanel);
-//        mainPanel.add(scorePanel);
-
-//        MenuBar menu = new MenuBar();
-//        menu.setOpaque(true);
-//        frame.setJMenuBar(menu);
-//
-//        pausenplay = new JButton("pause");
-//        JButton save = new JButton("save state");
-//        JButton load = new JButton("load state");
-//        menu.add(pausenplay);
-//        menu.add(save);
-//        menu.add(load);
-//        this.formatButton(pausenplay);
-//        this.formatButton(save);
-//        this.formatButton(load);
-//
-//        pausenplay.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent ev) {
-//                if (paused) {
-//                    paused = false;
-//                    pausenplay.setText("pause");
-//                } else {
-//                    paused = true;
-//                    pausenplay.setText("play");
-//                }
-//            }
-//        });
-//        pausenplay.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent ev) {
-//                saveState = true;
-//                loadingState = "resume";
-//            }
-//        });
         JButton    one = new JButton();
         JButton    two = new JButton();
         JButton  three = new JButton();
@@ -213,31 +174,6 @@ public class GUI extends JPanel implements KeyListener {
         g2.dispose();
     }
 
-    public void setGameState(int id){
-        this.gameState = id;
-    }
-
-    public int getGameState(){
-        return gameState;
-    }
-
-    // =======================================================.
-    // Utility Methods
-    // =======================================================.
-
-    /**
-     * Makes a button transparent and formats the text colour. This method makes it
-     * easier to format all buttons because it calls on the same functions.
-     *
-     * @param JButton to be formatted
-     */
-    public void formatButton(JButton button) {
-        button.setForeground(new Color(107, 201, 240));
-        button.setFont(new Font("Arial", Font.PLAIN, 18));
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(true);
-    }
 
     // =======================================================.
     // Key Listeners
@@ -341,26 +277,27 @@ public class GUI extends JPanel implements KeyListener {
     // ===================================================.
     // Getters and Setters
     // ===================================================.
-
     /**
-     * Gets the game panel.
-     * 
-     * @return the game panel
-     */
-
-    public GamePanel getGamePanel() {
-        return gamePanel;
-    }
-
-    /**
-     * Gets the score panel.
+     * Sets the current state of the game.
      *
-     * @return the score panel
      */
-    public ScorePanel getScorePanel() {
-        return scorePanel;
+    public void setGameState(int id){
+        this.gameState = id;
     }
 
+    /**
+     * Checks what state the game is currently in.
+     *
+     * @return int 0, if intro state
+     *             1 if menu state
+     *             2 if level select
+     *             3 if paused
+     *             4 if playing
+     */
+    public int getGameState(){
+        return gameState;
+    }
+    
     /**
      * Checks if is recording.
      *
@@ -400,7 +337,6 @@ public class GUI extends JPanel implements KeyListener {
     /**
      * Sets saving once saving is complete
      * 
-     *
      */
     public void saved(Boolean saved) {
         this.saveState = !saved;
