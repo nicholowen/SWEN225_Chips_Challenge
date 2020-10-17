@@ -1,10 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
-import nz.ac.vuw.ecs.swen225.gp20.render.panels.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.panels.ScorePanel;
+import nz.ac.vuw.ecs.swen225.gp20.render.states.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Audio;
 
+import java.awt.*;
 import java.util.HashMap;
 
 /**
@@ -14,34 +14,34 @@ import java.util.HashMap;
  */
 public class Render {
 
-  GamePanel  gp;
-  ScorePanel sp;
-//  IntroPanel ip;
-//  MenuPanel  mp;
-//  LevelPanel lp;
-//  PausePanel pp;
+  MapPane gp;
+  InfoPane sp;
+  IntroState ip;
+  MapPane.MenuPanel mp;
+  LevelSelectState lp;
+  PauseState pp;
 
 
   Audio audio;
 
   /**
    * Constuctor
-   * @param gp The Panel which the map is drawn
-   * @param sp The Panel on which the score (time inventory etc is drawn)
+//   * @param gp The Panel which the map is drawn
+//   * @param sp The Panel on which the score (time inventory etc is drawn)
    * * @param ip Intro Panel
    * * @param mp Menu Panel
    * * @param lp Level Panel (level select)
    * * @param pp Pause Panel
    */
-  public Render(GamePanel gp, ScorePanel sp/*, IntroPanel ip, MenuPanel mp, LevelPanel lp, PausePanel pp*/){
-    this.gp = gp;
-    this.sp = sp;
-    /*
-    this.ip = ip;
-    this.mp = mp;
-    this.lp = lp;
-    this.pp = pp;
-     */
+  public Render(){
+    gp = new MapPane();
+    sp = new InfoPane();
+
+    ip = new IntroState();
+    lp = new LevelSelectState();
+    mp = new MapPane.MenuPanel();
+    pp = new PauseState();
+
 
     audio = new Audio();
   }
@@ -57,20 +57,46 @@ public class Render {
   public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*, String button*/){
     gp.update(tuple);
     sp.update(timeRemaining, tuple/*, button*/);
-    /*
-    * will receive a string or enum to determine which button is being hovered over or clicked. Same with the score panel above.
-    ip.update(button);
-    mp.update(button);
-    lp.update(button);
-    pp.update(button);
-     */
 
     audio.update(tuple.getSoundEvent());
-    /*
-    if(button != null){
-      audio.update(button);
+  }
+
+  public void update(int gameState){
+    switch(gameState){
+      case 0:
+        ip.update();
+        break;
+      case 1:
+        mp.update();
+        break;
+      case 2:
+        lp.update();
+        break;
+      case 3:
+        pp.update();
+        break;
     }
-    */
+  }
+
+  public void draw(Graphics g, int gameState){
+    switch(gameState){
+      case 0:
+        ip.draw(g);
+        break;
+      case 1:
+        mp.draw(g);
+        break;
+      case 2:
+        lp.draw(g);
+        break;
+      case 3:
+        pp.draw(g);
+        break;
+      case 4:
+        gp.draw(g);
+        sp.draw(g);
+        break;
+    }
 
   }
 

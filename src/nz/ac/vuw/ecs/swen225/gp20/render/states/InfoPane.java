@@ -1,9 +1,8 @@
-package nz.ac.vuw.ecs.swen225.gp20.render.panels;
+package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import java.util.HashMap;
  *
  * TODO: Include a space for the 'treasure' items remaining
  */
-public class ScorePanel extends JPanel {
+public class InfoPane {
 
 
   private Image background;
@@ -32,10 +31,10 @@ public class ScorePanel extends JPanel {
   private double total;
   private double gathered;
 
-  public ScorePanel() {
-    setPreferredSize(new Dimension(300, 576));
+  public InfoPane() {
+//    setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
-    requestFocus();
+//    requestFocus();
     inventorySprites = Assets.INVENTORY;
     init();
   }
@@ -63,7 +62,7 @@ public class ScorePanel extends JPanel {
     this.onInfo = tuple.isPlayerOnInfo();
     this.gathered = tuple.getTreasureCollected();
     this.total = gathered + tuple.getTreasureLeft();
-    repaint();
+//    repaint();
   }
 
   /**
@@ -96,23 +95,23 @@ public class ScorePanel extends JPanel {
     return temp.getSubimage((int)x, 0, temp.getWidth()-(int)x, temp.getHeight());
   }
 
-
+int gameSize = 576;
   /**
    * Converts the char array to numeric values which are then drawn on screen
    * with absolute values (dictated by the background graphic of the ScorePanel
    * @param g Graphics object
    */
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    g.drawImage(background, 0, 0, this);
+//  @Override
+  public void draw(Graphics g) {
+//    super.paintComponent(g);
+    g.drawImage(background, gameSize , 0, null);
 
-    g.drawImage(Assets.ENERGYBAR, 74, 330, this);
+    g.drawImage(Assets.ENERGYBAR, gameSize + 74, 330, null);
     if(Assets.ENERGYBARSHADE != null) {
       if(total != gathered) {
         double x = (double) Assets.ENERGYBARSHADE.getWidth() * (gathered / total);
         System.out.println(x);
-        g.drawImage(getEnergyLevel(), 74 + (int) x, 330, this);
+        g.drawImage(getEnergyLevel(), gameSize + 74 + (int) x, 330, null);
       }
     }
 
@@ -120,17 +119,17 @@ public class ScorePanel extends JPanel {
     int offset = 0;
     if (chars.length == 2) {
       offset = 1;
-      g.drawImage(digits[0], 110, 133, this);
+      g.drawImage(digits[0], gameSize + 110, 133, null);
     } else if (chars.length == 1) {
       offset = 2;
-      g.drawImage(digits[0], 110, 133, this);
-      g.drawImage(digits[0], 142, 133, this);
+      g.drawImage(digits[0], gameSize + 110, 133, null);
+      g.drawImage(digits[0], gameSize + 142, 133, null);
     }
 
     for (int i = 0; i < chars.length; i++) {
       int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
       if (digit >= 0) { //to avoid null pointer
-        g.drawImage(digits[digit], 110 + ((i + offset) * 32), 133, this);
+        g.drawImage(digits[digit], gameSize + 110 + ((i + offset) * 32), 133, null);
       }
 
     }
@@ -163,8 +162,8 @@ public class ScorePanel extends JPanel {
             c = inventory.get(s);
             break;
         }
-        g.drawImage(inventorySprites[i][j], 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, this);
-        g.drawImage(inventorySprites[3][c-1], 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, this);
+        g.drawImage(inventorySprites[i][j], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
+        g.drawImage(inventorySprites[3][c-1], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
         countX++;
         if (countX == 4) {
           countY++;
@@ -176,7 +175,7 @@ public class ScorePanel extends JPanel {
     //can only handle a single line up to 22 characters (including spaces)
     if(onInfo && info != null){
       for(int f = 0; f < info.length; f++){
-        g.drawImage(info[f], 57 + (f * 9), 259, this);
+        g.drawImage(info[f], gameSize + 57 + (f * 9), 259, null);
       }
     }
 

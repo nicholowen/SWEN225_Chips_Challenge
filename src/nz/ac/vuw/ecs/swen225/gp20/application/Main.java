@@ -19,12 +19,16 @@ public class Main {
     private static final RecordAndPlay rnp = new RecordAndPlay();
     private static final Maze maze = new Maze();
     private static final GUI gui = new GUI();
-    private static final Render render = new Render(gui.getGamePanel(), gui.getScorePanel());
+    private static final Render render = new Render();
 
     private boolean gameEnded;
     private int timeRemaining;
     private Direction direction = null;
     private boolean paused = false;
+
+    private int fps = 30;
+    private int introCounter;
+    private int currentState;
 
     public Main() {
 
@@ -39,10 +43,25 @@ public class Main {
         timeRemaining = maze.loadMaze(1);
         render.init(maze);
         while (true) {
-            if (!gameEnded && !paused) {
-                checkUpdates();
-                render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
+            currentState = gui.getGameState();
+            if(currentState == 0) {
+//                render.update(0);
+                if (introCounter < 100) {
+                    introCounter++;
+                    System.out.println(introCounter + ":" + currentState);
+                } else {
+                    gui.setGameState(1);
+                }
+            }
 
+            if (!gameEnded && !paused) {
+                if(currentState == 4) gui.frame.requestFocusInWindow();
+                checkUpdates();
+                if(currentState == 4) render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
+                else render.update(currentState);
+                render.draw(gui.getImageGraphics(), currentState);
+                gui.drawToScreen();
+                
                 long startTick = System.currentTimeMillis();
                 while (true) {
                     int tickDelay = 33;
@@ -55,6 +74,7 @@ public class Main {
                 }
             } else {
                 checkUpdates();
+               
             }
         }
     }
@@ -103,6 +123,14 @@ public class Main {
 //        }
 
     }
+    public static void main(String[] args) {
+        Main game = new Main();
+        game.play();
+    }
+
+    // =======================================================.
+    // Utility Methods for Persistence and RecnPlay
+    // =======================================================.
 
     /**
      * Gets the maze.
@@ -113,9 +141,23 @@ public class Main {
         return maze;
     }
 
-    public static void main(String[] args) {
-        Main game = new Main();
-        game.play();
+    
+    /**
+     * Set refresh-rate of replay in frames per second.
+     *
+     * @param fps frames per second.
+     */
+    public void setFPS(int fps) {
+      this.fps = fps;
+    }
+    
+    /**
+     * Set the time remaining.
+     *
+     * @param timeRemaining the time remaining.
+     */
+    public void setTimeRemaining(int timeRemaining) {
+      this.timeRemaining = timeRemaining;
     }
 
     // ======================================
