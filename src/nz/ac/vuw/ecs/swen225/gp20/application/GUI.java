@@ -1,22 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.Color;
+import java.awt.*;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
+import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.panels.GamePanel;
-import nz.ac.vuw.ecs.swen225.gp20.render.panels.MenuBar;
 import nz.ac.vuw.ecs.swen225.gp20.render.panels.ScorePanel;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
@@ -26,11 +17,21 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
  * 
  * @author Maiza
  */
-public class GUI implements KeyListener {
+public class GUI extends JPanel implements KeyListener {
 
     JFrame frame;
     GamePanel gamePanel;
     ScorePanel scorePanel;
+
+
+    //=========================
+    BufferedImage image;
+    Graphics2D g;
+
+    private int gameState = 0;
+    //=========================
+
+
 
     private boolean recording = false;
     private boolean paused = false;
@@ -39,67 +40,185 @@ public class GUI implements KeyListener {
     private String loadingState = null;
 
     JLayeredPane mainPanel;
-    JButton pausenplay;
-
     /**
      * Instantiates a new gui.
      */
     public GUI() {
+
+        this.isFocusable();
+
         frame = new JFrame("Indecision Games: Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setResizable(false);
-        frame.setMinimumSize(new Dimension(800, 500));
+        frame.setMinimumSize(new Dimension(892, 615));
 
         frame.setFocusable(true);
         frame.addKeyListener(this);
 
+        image = new BufferedImage(892, 576, 1);
+        g = (Graphics2D) image.getGraphics();
+
         mainPanel = new JLayeredPane();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+
+        mainPanel.setLayout(null);
         frame.setContentPane(mainPanel);
 
-        gamePanel = new GamePanel();
-        scorePanel = new ScorePanel();
-        mainPanel.add(gamePanel);
-        mainPanel.add(scorePanel);
+//        gamePanel = new GamePanel();
+//        scorePanel = new ScorePanel();
+//        mainPanel.add(gamePanel);
+//        mainPanel.add(scorePanel);
 
-        MenuBar menu = new MenuBar();
-        menu.setOpaque(true);
-        frame.setJMenuBar(menu);
+//        MenuBar menu = new MenuBar();
+//        menu.setOpaque(true);
+//        frame.setJMenuBar(menu);
+//
+//        pausenplay = new JButton("pause");
+//        JButton save = new JButton("save state");
+//        JButton load = new JButton("load state");
+//        menu.add(pausenplay);
+//        menu.add(save);
+//        menu.add(load);
+//        this.formatButton(pausenplay);
+//        this.formatButton(save);
+//        this.formatButton(load);
+//
+//        pausenplay.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent ev) {
+//                if (paused) {
+//                    paused = false;
+//                    pausenplay.setText("pause");
+//                } else {
+//                    paused = true;
+//                    pausenplay.setText("play");
+//                }
+//            }
+//        });
+//        pausenplay.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent ev) {
+//                saveState = true;
+//                loadingState = "resume";
+//            }
+//        });
+        JButton    one = new JButton();
+        JButton    two = new JButton();
+        JButton  three = new JButton();
+        JButton   four = new JButton();
 
-        pausenplay = new JButton("pause");
-        JButton save = new JButton("save state");
-        JButton load = new JButton("load state");
-        menu.add(pausenplay);
-        menu.add(save);
-        menu.add(load);
-        this.formatButton(pausenplay);
-        this.formatButton(save);
-        this.formatButton(load);
+        JButton  pause = new JButton();
+        JButton record = new JButton();
 
-        pausenplay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                if (paused) {
-                    paused = false;
-                    pausenplay.setText("pause");
-                } else {
-                    paused = true;
-                    pausenplay.setText("play");
-                }
-            }
-        });
-        pausenplay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                saveState = true;
-                loadingState = "resume";
-            }
-        });
+        one.setBounds  (377, 280, 135, 21);
+        two.setBounds  (377, 348, 135, 21);
+        three.setBounds(377, 416, 135, 21);
+        four.setBounds (377, 484, 135, 21);
+
+        record.setBounds(752, 35, 22, 27);
+        pause.setBounds(672, 539, 102, 22);
+
+        mainPanel.add(   one);
+        mainPanel.add(   two);
+        mainPanel.add( three);
+        mainPanel.add(  four);
+        mainPanel.add( pause);
+        mainPanel.add(record);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
 
+        //========================
+        // BUTTON ACTION LISTENERS
+        //========================
+
+        one.addActionListener(e -> {
+//            if(gameState == 1){
+//                setGameState(4);
+//            }
+            switch(gameState){
+                case 1: //menu state
+                    setGameState(2);
+                    break;
+                case 2: //level select state
+                    setGameState(4); // start at level 1
+                    break;
+                case 3: //pause state
+                    setGameState(4);
+                    break;
+            }
+        });
+
+        two.addActionListener(e -> {
+            switch(gameState){
+                case 1: //menu state
+                    //load from saved file
+                case 2: //level select state
+                    setGameState(4); // start at level 2
+                    break;
+                case 3://pause state
+                    setGameState(1); //return to main menu
+                    break;
+            }
+        });
+
+        three.addActionListener(e -> {
+            switch(gameState){
+                case 1: //menu state
+                    //load replay from saved file
+                case 2: //level select state
+                    // no button available
+                    break;
+                case 3://pause state
+                    // no button available
+                    break;
+            }
+        });
+
+        four.addActionListener(e -> {
+            switch(gameState){
+                case 1: //menu state
+                    System.exit(0);
+                case 2: //level select state
+                    //no button
+                    break;
+                case 3://pause state
+                    //no button
+                    break;
+            }
+        });
+
+        pause.addActionListener(e -> {
+            if(gameState == 4){
+                setGameState(3);
+            }
+        });
+
+        record.addActionListener(e ->{
+            if(gameState == 4){
+                //start recording
+            }
+        });
+
+
+    }
+
+    public Graphics2D getImageGraphics(){
+        return g;
+    }
+
+    public void drawToScreen(){
+        Graphics g2 = mainPanel.getGraphics();
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+    }
+
+    public void setGameState(int id){
+        this.gameState = id;
+    }
+
+    public int getGameState(){
+        return gameState;
     }
 
     // =======================================================.
@@ -131,19 +250,21 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_UP) {
-            this.direction = Direction.UP;
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_LEFT) {
-            this.direction = Direction.LEFT;
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_DOWN) {
-            this.direction = Direction.DOWN;
-            System.out.println(direction);
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
-            this.direction = Direction.RIGHT;
-            System.out.println(direction);
+        if(gameState == 4) {
+            int keyCode = e.getKeyCode();
+            if (keyCode == KeyEvent.VK_UP) {
+                this.direction = Direction.UP;
+                System.out.println(direction);
+            } else if (keyCode == KeyEvent.VK_LEFT) {
+                this.direction = Direction.LEFT;
+                System.out.println(direction);
+            } else if (keyCode == KeyEvent.VK_DOWN) {
+                this.direction = Direction.DOWN;
+                System.out.println(direction);
+            } else if (keyCode == KeyEvent.VK_RIGHT) {
+                this.direction = Direction.RIGHT;
+                System.out.println(direction);
+            }
         }
     }
 
@@ -181,15 +302,13 @@ public class GUI implements KeyListener {
         else if ((keyCode == KeyEvent.VK_1) && ctrl) {
             loadingState = "lvl 1";
         }
-        // pause the game and display a “game is paused” dialog
+        // pause the game and display a game is paused dialog
         else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
-            pausenplay.setText("play");
         }
-        // close the “game is paused” dialog and resume the game
+        // close the œgame is paused dialog and resume the game
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
-            pausenplay.setText("pause");
         }
 
     }
@@ -201,19 +320,21 @@ public class GUI implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
-        char key = e.getKeyChar();
-        if (key == 'w') {
-            this.direction = Direction.UP;
-            System.out.println(direction);
-        } else if (key == 'a') {
-            this.direction = Direction.LEFT;
-            System.out.println(direction);
-        } else if (key == 's') {
-            this.direction = Direction.DOWN;
-            System.out.println(direction);
-        } else if (key == 'd') {
-            this.direction = Direction.RIGHT;
-            System.out.println(direction);
+        if (gameState == 4) {
+            char key = e.getKeyChar();
+            if (key == 'w') {
+                this.direction = Direction.UP;
+                System.out.println(direction);
+            } else if (key == 'a') {
+                this.direction = Direction.LEFT;
+                System.out.println(direction);
+            } else if (key == 's') {
+                this.direction = Direction.DOWN;
+                System.out.println(direction);
+            } else if (key == 'd') {
+                this.direction = Direction.RIGHT;
+                System.out.println(direction);
+            }
         }
     }
 
