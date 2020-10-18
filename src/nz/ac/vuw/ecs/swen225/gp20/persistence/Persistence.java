@@ -162,6 +162,15 @@ public class Persistence {
         }
     }
 
+    public static int getHighestLevel() {
+        try {
+            Maze maze = loadGameState();
+            return maze.getLevel();
+        } catch (IOException e) {
+            return 1;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         System.out.println(Persistence.getRecentSave());
     }
