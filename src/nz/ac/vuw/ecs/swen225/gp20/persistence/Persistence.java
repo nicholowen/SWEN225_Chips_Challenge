@@ -12,9 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class to handle reading of json level files and
@@ -87,6 +86,19 @@ public class Persistence {
     }
 
     /**
+     * Helper method to check if a directory exists,
+     * creates a new directory if it doesn't
+     *
+     * @param file the filepath to check
+     * @throws IOException if there is an error creating the new directory
+     */
+    private static void checkDirectory(File file) throws IOException {
+        if (!file.exists() && !file.mkdirs()) {
+            throw new IOException("Error creating directory, check that you have permission");
+        }
+    }
+
+    /**
      * Gets a file object from the levels directory & checks that file exists.
      */
     private static File getLevelFile(int level) throws FileNotFoundException {
@@ -103,14 +115,16 @@ public class Persistence {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String filename = dateFormat.format(Calendar.getInstance().getTime()) + "-game-state.json";
 
-        if (!savedState.toFile().exists() && !savedState.toFile().mkdirs()) {
-            throw new IOException("Error creating directory, check that you have permission");
-        }
+        saveJson(savedState.toFile(), filename, maze);
+    }
 
-        OutputStream outputStream = new FileOutputStream(Paths.get(savedState.toString(), filename).toFile());
+    private static  <T> void saveJson(File file, String filename, T toSave) throws IOException {
+        checkDirectory(file);
+
+        OutputStream outputStream = new FileOutputStream(Paths.get(file.getPath(), filename).toFile());
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
 
-        gson.toJson(maze, bufferedWriter);
+        gson.toJson(toSave, bufferedWriter);
         bufferedWriter.close();
     }
 
@@ -156,16 +170,23 @@ public class Persistence {
         if (directoryList == null || directoryList.length == 0){
             throw new FileNotFoundException("Directory '" + savedState + "' is empty.");
         } else {
-            Arrays.sort(directoryList, Comparator.comparing(File::getName).reversed());
-            assert directoryList[0] != null;
-            return directoryList[0];
+            List<File> sortedFiles = Arrays.stream(directoryList)
+                    .filter(file -> file.getName().matches("\\d{8}-\\d{6}-game-state.json"))
+                    .sorted(Comparator.comparing(File::getName).reversed()).collect(Collectors.toList());
+
+            assert sortedFiles.get(0) != null;
+            return sortedFiles.get(0);
         }
+    }
+
+    public static void saveHighestLevel(int level) throws IOException {
+        saveJson(savedState.toFile(), "highest-level.json", level);
     }
 
     public static int getHighestLevel() {
         try {
-            Maze maze = loadGameState();
-            return maze.getLevel();
+            File file = Paths.get(savedState.toString(), "highest-level.json").toFile();
+            return readJsonFromFile(file, Integer.class);
         } catch (IOException e) {
             return 1;
         }
