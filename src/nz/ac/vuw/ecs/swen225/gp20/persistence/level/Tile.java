@@ -3,10 +3,18 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence.level;
 import java.util.Objects;
 
 public class Tile extends Coordinate {
-    private String terrain;
-    private String object;
-    private String color;
-    private String help;
+    private final String terrain;
+    private final String object;
+    private final String color;
+    private final String help;
+
+    Tile(int x, int y, String terrain, String object, String color, String help) {
+        super(x, y);
+        this.terrain = terrain;
+        this.object = object;
+        this.color = color;
+        this.help = help;
+    }
 
     private String toLowerCaseSafe(String s) {
         if (s == null) return null;
