@@ -2,39 +2,42 @@ package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
+import nz.ac.vuw.ecs.swen225.gp20.render.sprites.KeyCard;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allows the current status of the game to be displayed - this includes the Level information,
- * timer, and inventory.
+ * timer, and inventory. Although being drawn at the same time as the Map Pane, separated
+ * to make it easier to work on.
  *
- * @author Owen N
+ * @author Owen Nicholson 300130653
  *
- * TODO: Include a space for the 'treasure' items remaining
  */
 public class InfoPane {
 
 
   private Image background;
   private BufferedImage[] digits;
-  char[] chars = {0, 0, 0};
-  BufferedImage[][] inventorySprites;
+  private char[] chars = {0, 0, 0}; //array of numbers to print out - represents time remaining
+  private BufferedImage[][] inventorySprites;
   private HashMap<String, Integer> inventory;
 
-  BufferedImage[] info;
+  private BufferedImage[] info; //array of font images to print out on the information read-out
 
-  boolean onInfo;
+  boolean onInfo; //true if the player is on an info tile
 
-  private double total;
-  private double gathered;
+  private int total; //total amount of energy
+  private int gathered; //energy picked up
+  private int energyFilled; //amount of energy filled (an x coordinate to draw the energy bar)
+
+  int gameSize = 576; // the width of the MapPane image (to draw this pane in the correct place)
 
   public InfoPane() {
-//    setPreferredSize(new Dimension(300, 576));
     this.background = loadBackground();
-//    requestFocus();
     inventorySprites = Assets.INVENTORY;
     init();
   }
@@ -62,13 +65,12 @@ public class InfoPane {
     this.onInfo = tuple.isPlayerOnInfo();
     this.gathered = tuple.getTreasureCollected();
     this.total = gathered + tuple.getTreasureLeft();
-//    repaint();
   }
 
   /**
-   * Constructs an array of images based on the input
-   * @param s A string to be converted
-   * @return a BufferedImage array of the string converted to images (custom font)
+   * Constructs an array of images based on the input.
+   * @param s A string to be converted.
+   * @return a BufferedImage array of the string converted to images (custom font).
    */
   private BufferedImage[] drawString(String s){
     if(s == null) return null;
@@ -76,7 +78,7 @@ public class InfoPane {
 
     for(int i = 0; i < s.length(); i++){
       char ch = s.charAt(i);
-      int c = 0;
+
       if(ch >= 65 && ch <= 90) {
         string[i] = Assets.FONT[0][ch - 65];
       }
@@ -87,18 +89,23 @@ public class InfoPane {
     return string;
   }
 
-
+  /**
+   * Gets a sub-image of the energybar that is greyed out. The greyed out image
+   * represents the percentage of energy not collected.
+   * Sets 'energyFilled' which represents the position to draw the greyed out sub-image.
+   * @return The image representing the percentage of energy remaining.
+   */
   private BufferedImage getEnergyLevel(){
     BufferedImage temp = Assets.ENERGYBARSHADE;
       int length = temp.getWidth();
-      double x = (double)length * (gathered/total);
-    return temp.getSubimage((int)x, 0, temp.getWidth()-(int)x, temp.getHeight());
+      energyFilled = (int) (length * (gathered/(double)total));
+    return temp.getSubimage(energyFilled, 0, temp.getWidth() - energyFilled, temp.getHeight());
   }
 
-int gameSize = 576;
+
   /**
    * Converts the char array to numeric values which are then drawn on screen
-   * with absolute values (dictated by the background graphic of the ScorePanel
+   * with absolute values (dictated by the background graphic of the ScorePanel.
    * @param g Graphics object
    */
 //  @Override
@@ -109,9 +116,7 @@ int gameSize = 576;
     g.drawImage(Assets.ENERGYBAR, gameSize + 74, 330, null);
     if(Assets.ENERGYBARSHADE != null) {
       if(total != gathered) {
-        double x = (double) Assets.ENERGYBARSHADE.getWidth() * (gathered / total);
-        System.out.println(x);
-        g.drawImage(getEnergyLevel(), gameSize + 74 + (int) x, 330, null);
+        g.drawImage(getEnergyLevel(), gameSize + 74 + energyFilled, 330, null);
       }
     }
 
@@ -138,31 +143,32 @@ int gameSize = 576;
     // renders each inventory item.
     //TODO: Add other inventory items.
     int countX = 0; //columns of the inventory panel
-    int countY = 0; //for the each row of the inventory panel
-    int i = 0;
-    int j = 0;
-    int c = 0;
+    int countY = 0; //for each row of the inventory panel
+    int j = 0; //position of the colored key in the array
+    int c = 0; //the count of the inventory item
     if (inventory != null) {
-      for (String s : inventory.keySet()) {
-        switch (s) {
+      for (Map.Entry<String, Integer> s : inventory.entrySet()) {
+        switch (s.getKey()) {
           case "redkey":
             j = 0;
-            c = inventory.get(s);
+            c = s.getValue();
             break;
           case "greenkey":
             j = 1;
-            c = inventory.get(s);
+            c = s.getValue();
             break;
           case "bluekey":
             j = 2;
-            c = inventory.get(s);
+            c = s.getValue();
             break;
           case "yellowkey":
             j = 3;
-            c = inventory.get(s);
+            c = s.getValue();
+            break;
+          default:
             break;
         }
-        g.drawImage(inventorySprites[i][j], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
+        g.drawImage(inventorySprites[0][j], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
         g.drawImage(inventorySprites[3][c-1], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
         countX++;
         if (countX == 4) {

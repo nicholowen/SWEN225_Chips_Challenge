@@ -7,14 +7,9 @@ import java.awt.image.BufferedImage;
 
 /**
  * Handles the level selection screen.
- * @author Owen N
+ * @author Owen Nicholson 300130653
  */
 public class LevelSelectState {
-//button positions
-// new game - 377, 280, 135, 21
-// load -     377, 348, 135, 21
-// replay -   377, 416, 135, 21
-// exit -     377, 484, 135, 21
 
   BufferedImage bg;
 

@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  * Represents the exit portal. This Class contains the animation frames of the object,
  * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
  *
- * @author Owen N
+ * @author Owen Nicholson 300120635
  */
 public class Exit extends Sprite {
 

@@ -8,17 +8,14 @@ import java.awt.image.BufferedImage;
 /**
  * Represents a wall tile. The wall type will depend on adjacent cells and if there are walls there.
  *
- *
+ * @author Owen Nicholson 300120635
  */
 public class WallTile extends Sprite{
 
-  BufferedImage image;
-  BufferedImage[] sprites;
 
   public WallTile(){
 
     super();
-    sprites = Assets.WALL[0];
     animation.setDelay(-1);
 
   }

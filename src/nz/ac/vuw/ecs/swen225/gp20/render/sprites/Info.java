@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
  * Represents the Information screen on the 'score panel'.
  * Get's updated and information rendered when the player is on the info cell.
  *
- * @author Owen N
+ * @author Owen Nicholson 300120635
  */
 public class Info {
   private BufferedImage image;

@@ -4,14 +4,9 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-//================
-//button positions
-// continue - 377, 280, 135, 21
-// save - 377, 348, 135, 21
-
 /**
  * Handles the pause screen.
- * @author Owen N
+ * @author Owen Nicholson 300130653
  */
 public class PauseState {
 

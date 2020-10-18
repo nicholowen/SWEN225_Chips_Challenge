@@ -6,19 +6,16 @@ import java.awt.image.BufferedImage;
 /**
  * Represents a Key Card. This Class contains the animation frames of the object,
  * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
+ *
+ * @author Owen Nicholson 300120635
  */
 public class KeyCard extends Sprite{
 
-  BufferedImage[] sprites;
-  String color;
+
 
   public KeyCard(String c) {
     super();
 
-    int width = 64;
-    int height = 64;
-
-    this.color = c;
     int index = 0;
     switch (c) {
       case "red":
@@ -33,9 +30,11 @@ public class KeyCard extends Sprite{
       case "yellow":
         index = 3;
         break;
+      default:
+        break;
 
     }
-
+    BufferedImage[] sprites;
     // calls on asset class to get the frames for this object.
     sprites = Assets.KEYCARD_G[index];
     animation.setFrames(sprites);

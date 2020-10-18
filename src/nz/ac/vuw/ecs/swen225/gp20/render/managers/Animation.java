@@ -3,22 +3,22 @@ package nz.ac.vuw.ecs.swen225.gp20.render.managers;
 import java.awt.image.BufferedImage;
 
 /**
+ * Each sprite object gets one of these classes.
  * Sets the frame of the image depending on the counter (updated every tick).
  * Delay represents the number of ticks it will take to set the next frame.
  *
  * Credit: Zequnyu - https://github.com/zequnyu
- * @author Owen N
+ * @author Owen Nicholosn 300130635
  */
 public class Animation {
 
-  BufferedImage[] frames;
-  BufferedImage image;
+  private BufferedImage[] frames;
+  private BufferedImage image;
   private int delay;
   private int currentFrame;
   private int numFrames;
 
   private boolean singleAnimation;
-
 
   int count = 0;
 
@@ -27,7 +27,7 @@ public class Animation {
    * @param frames BufferedImage array which contains all images frames in the animation.
    */
   public void setFrames(BufferedImage[] frames){
-    this.frames = frames;
+    this.frames = frames.clone();
     currentFrame = 0;
     numFrames = frames.length;
   }
