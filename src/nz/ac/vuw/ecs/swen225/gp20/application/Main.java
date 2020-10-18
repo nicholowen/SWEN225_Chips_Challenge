@@ -26,8 +26,8 @@ public class Main {
     private Direction direction = null;
     private boolean paused = false;
 
+    private int fps = 30;
     private int introCounter;
-
     private int currentState;
 
     public Main() {
@@ -123,6 +123,14 @@ public class Main {
 //        }
 
     }
+    public static void main(String[] args) {
+        Main game = new Main();
+        game.play();
+    }
+
+    // =======================================================.
+    // Utility Methods for Persistence and RecnPlay
+    // =======================================================.
 
     /**
      * Gets the maze.
@@ -133,9 +141,23 @@ public class Main {
         return maze;
     }
 
-    public static void main(String[] args) {
-        Main game = new Main();
-        game.play();
+    
+    /**
+     * Set refresh-rate of replay in frames per second.
+     *
+     * @param fps frames per second.
+     */
+    public void setFPS(int fps) {
+      this.fps = fps;
+    }
+    
+    /**
+     * Set the time remaining.
+     *
+     * @param timeRemaining the time remaining.
+     */
+    public void setTimeRemaining(int timeRemaining) {
+      this.timeRemaining = timeRemaining;
     }
 
     // ======================================
