@@ -4,6 +4,11 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents the exit lock of the level.
+ *
+ * @author Owen Nicholson 300120635
+ */
 public class ExitLock extends Sprite {
 
   BufferedImage[] sprites;
@@ -13,8 +18,6 @@ public class ExitLock extends Sprite {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
-    int width = 64;
-    int height = 64;
 
     this.x = x;
     this.y = y;
@@ -27,7 +30,7 @@ public class ExitLock extends Sprite {
   }
 
   /**
-   * Updates the frame of the object by progressing the counter in it's animation object.
+   * Updates the frame of the object by progressing the counter in its animation object.
    */
   public void update() { animation.update(); }
 

@@ -16,11 +16,6 @@ public class Sprite {
     animation = new Animation();
   }
 
-  //public abstract void update();
-  //public abstract BufferedImage getImage();
-//  public void update(){}
-
-
   /**
    * Gets meta data from cell
    * @param identifier determines which part of the metadata to extract

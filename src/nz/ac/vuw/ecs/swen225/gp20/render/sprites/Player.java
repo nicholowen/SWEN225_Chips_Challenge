@@ -11,20 +11,16 @@ import java.awt.image.BufferedImage;
  * player.
  * TODO: Include the animation frames for movement (running or jumping).
  *
- * @author Owen N
+ * @author Owen Nicholson 300120635
  */
 public class Player extends Sprite {
 
   BufferedImage[] sprites;
   Direction direction = Direction.DOWN;
-  Cell[][] cell;
 
   public Player(){
 
       super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
-
-      int width = 64;
-      int height = 64;
 
       // calls on asset class to get the frames for this object.
       sprites = Assets.PLAYER[0];
@@ -58,6 +54,8 @@ public class Player extends Sprite {
         break;
       case RIGHT:
         frame = 3;
+        break;
+      default:
         break;
     }
 

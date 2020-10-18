@@ -4,20 +4,24 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents a door object. There are two types of doors, vertical and not vertical.
+ * Normal doors are when there are walls next to the door.
+ * Vertical doors are when there are walls above and below the door.
+ *
+ * @author Owen Nicholson 300120635
+ */
 public class Door extends Sprite {
 
   // TODO: Make this similar to the other animated objects, including update()
   //  method. Animate door opening or closing depending on when it was opened/closed.
 
-  private String color;
-  private BufferedImage[] sprites;
-  boolean vertical = false;
+  boolean vertical;
 
   public Door(String c, boolean vertical){
 
     super();
 
-    this.color = c;
     int index = 0;
       switch (c) {
         case "red":
@@ -32,10 +36,13 @@ public class Door extends Sprite {
         case "yellow":
           index = 3;
           break;
+        default:
+          break;
 
     }
     this.vertical = vertical;
-      if(!vertical){
+    BufferedImage[] sprites;
+    if(!vertical){
         sprites = Assets.VDOOR[index];
       }else{
         sprites = Assets.DOOR[index];

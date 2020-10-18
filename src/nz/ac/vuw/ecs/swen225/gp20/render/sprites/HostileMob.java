@@ -17,7 +17,6 @@ public class HostileMob extends Sprite {
 
   BufferedImage[] sprites;
   Direction direction = Direction.DOWN;
-  Cell[][] cell;
 
   int x;
   int y;
@@ -61,6 +60,8 @@ public class HostileMob extends Sprite {
         break;
       case RIGHT:
         frame = 0;
+        break;
+      default:
         break;
     }
 
