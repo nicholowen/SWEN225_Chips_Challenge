@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  * Handles the intro fade in - fade out screen with team logo.
  *
  * Fade algorithm credit: Zequnyu - https://github.com/zequnyu
- * @author Owen N
+ * @author Owen Nicholson 300130653
  */
 public class IntroState {
 

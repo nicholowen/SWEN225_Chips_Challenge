@@ -15,7 +15,7 @@ import java.util.HashMap;
  * Allows the game map to be rendered and animated in a 9 x 9 grid around the player.
  * This class initialises all render-able objects and updates them (if they need to be animated) every tick.
  *
- * @author Owen N
+ * @author Owen Nicholson 300130653
  */
 public class MapPane {
 
@@ -54,26 +54,12 @@ public class MapPane {
 
   private Actor player;
 
-
-
   //transition offset
   int offsetX = 0;
   int offsetY = 0;
 
 
-  public MapPane() {
-//    setPreferredSize(new Dimension(576, 576));
-//    setBackground(Color.gray);
-    init();
-  }
-
-  /**
-   * Initialises the main graphics object that will be drawn to.
-   */
-  private void init() {
-    BufferedImage image = new BufferedImage(500, 500, 1);
-    Graphics g = image.getGraphics();
-  }
+  public MapPane() { }
 
   /**
    * Initialises all 'sprites' in game, based on the position of the cells.
@@ -103,22 +89,26 @@ public class MapPane {
               wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]); //wall object initialised with cells at each cardinal direction
               sprites[i][j] = wt;
               wallObjects.put(cells[i][j], wt);
+              break;
             case "water":
               HoleTile ht = new HoleTile();
               Cell[] holeNeighbours = getWallNeighbours(cells, j, i);
               ht.setWallType(holeNeighbours[0], holeNeighbours[1], holeNeighbours[2], holeNeighbours[3]);
               sprites[i][j] = ht;
               holeObjects.put(cells[i][j], ht);
+              break;
             case "treasure":
               EnergyBall eb = new EnergyBall();
               sprites[i][j] = eb;
               energyObjects.put(cells[i][j], eb);
+              break;
             case "key":
               if (cells[i][j] instanceof CellKey) {
                 KeyCard kc = new KeyCard(cells[i][j].getColor());
                 sprites[i][j] = kc;
                 keyObjects.put(cells[i][j], kc);
               }
+              break;
             case "door":
               if (cells[i][j] instanceof CellDoor) {
                 Door door;
@@ -130,23 +120,30 @@ public class MapPane {
                 sprites[i][j] = door;
                 doorObjects.put(cells[i][j], door);
               }
+              break;
             case "exit":
               if (cells[i][j] instanceof CellExit) {
                 Exit e = new Exit(i, j);
                 sprites[i][j] = e;
                 exitOb = e;
               }
+              break;
             case "exit lock":
               if (cells[i][j] instanceof CellExitLocked) {
                 ExitLock el = new ExitLock(i, j);
                 sprites[i][j] = el;
                 exitLockOb = el;
               }
+              break;
             case "info":
               if (cells[i][j] instanceof CellInfo) {
                 Info in = new Info(i, j, Assets.INFO[0][0]);
                 infoOb = in;
               }
+              break;
+
+            default:
+              break;
 
           }
         }
@@ -231,6 +228,8 @@ public class MapPane {
     //update player with direction
     player = tuple.getActors()[0];
     playerSprite.update(player.getDirection());
+
+    //TODO: add player animation - might need to combine mobs and player together.
 
     //update all mobs with direction (this can probably be condensed as all actors)
     mobs = new Actor[tuple.getActors().length - 1];
@@ -343,6 +342,9 @@ public class MapPane {
           break;
         case RIGHT:
           offsetX -= speed;
+          break;
+
+        default:
           break;
       }
     }else{
