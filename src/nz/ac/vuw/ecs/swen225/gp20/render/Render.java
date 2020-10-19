@@ -51,13 +51,12 @@ public class Render {
    * @param tuple         Contains the current state of the cells and the player
    * @param timeRemaining self explanatory
    */
-  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*String event*/) {
+  public void update(RenderTuple tuple, int timeRemaining, String event) {
     gp.update(tuple);
     sp.update(timeRemaining, tuple);
 
-//    audio.update(tuple.getSoundEvent());
     audio.updateGame(tuple.getSoundEvent());
-//    audio.updateButtons(event);
+    audio.updateButtons(event);
   }
 
   /**
@@ -65,9 +64,7 @@ public class Render {
    *
    * @param gameState Integer representing the state
    */
-  public void update(int gameState/*, String event*/) {
-    //temporary value
-    String event = null;
+  public void update(int gameState, String event) {
     switch (gameState) {
       case 0:
         is.update();
@@ -85,7 +82,7 @@ public class Render {
         break;
     }
 
-//    audio.updateButtons(event);
+    audio.updateButtons(event);
   }
 
   /**
@@ -122,7 +119,7 @@ public class Render {
   /**
    * Initialises all the assets in the game.
    * This is required so the renderer has knowledge of what graphics are where at the start of the game.
-   * // * @param cells
+   * @param maze This game board - able to access the cells to check against.
    */
   public void init(Maze maze) {
     gp.initAnimationObjects(maze.getBoard(), maze.getActors());
