@@ -73,40 +73,20 @@ public class GUI extends JPanel implements KeyListener {
         frame.setContentPane(mainPanel);
 
         one = new JButton();
-        one.setName("one");
         two = new JButton();
-        two.setName("two");
         three = new JButton();
-        three.setName("three");
         four = new JButton();
-        four.setName("four");
-
         pause = new JButton();
-        pause.setName("pause");
         record = new JButton();
-        record.setName("record");
 
         mm = new MouseManager(this);
-        one.setBounds  (377, 280, 135, 21);
-        one.addMouseListener(mm);
-        two.setBounds  (377, 348, 135, 21);
-        two.addMouseListener(mm);
-        three.setBounds(377, 416, 135, 21);
-        three.addMouseListener(mm);
-        four.setBounds (377, 484, 135, 21);
-        four.addMouseListener(mm);
+        this.formatButton(one, "one", 377, 280, 135, 21);
+        this.formatButton(two, "two", 377, 348, 135, 21);
+        this.formatButton(three, "three", 377, 416, 135, 21);
+        this.formatButton(four, "four", 377, 484, 135, 21);
 
-        record.setBounds(752, 35, 22, 27);
-        record.addMouseListener(mm);
-        pause.setBounds(672, 539, 102, 22);
-        pause.addMouseListener(mm);
-
-        mainPanel.add(   one);
-        mainPanel.add(   two);
-        mainPanel.add( three);
-        mainPanel.add(  four);
-        mainPanel.add( pause);
-        mainPanel.add(record);
+        this.formatButton(record, "record", 752, 35, 22, 27);
+        this.formatButton(pause, "pause", 672, 539, 102, 22);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -189,15 +169,36 @@ public class GUI extends JPanel implements KeyListener {
 
 
     }
-
-    public Graphics2D getImageGraphics(){
-        return g;
-    }
+    
+    // =======================================================.
+    // Utility Methods
+    // =======================================================.
 
     public void drawToScreen(){
         Graphics g2 = mainPanel.getGraphics();
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
+    }
+    
+
+    /**
+     * Called to format buttons and to add them to the main panel. 
+     * 
+     * @param button
+     * @param name of the button
+     * @param x coordinate for button
+     * @param y coordinate for button
+     * @param w width of button
+     * @param h height of button
+     */
+    public void formatButton(JButton button, String name, int x, int y, int w, int h) {
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.addMouseListener(mm);
+        button.setName(name);
+        button.setBounds(x, y, w, h);
+        mainPanel.add(button);
     }
 
 
@@ -268,7 +269,7 @@ public class GUI extends JPanel implements KeyListener {
         else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
         }
-        // close the œgame is paused dialog and resume the game
+        // close the game is paused dialog and resume the game
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
         }
@@ -300,50 +301,19 @@ public class GUI extends JPanel implements KeyListener {
         }
     }
 
-    //=======
-    //mouse
-    //=======
-
-
-
     // ===================================================.
     // Getters and Setters
     // ===================================================.
+    public Graphics2D getImageGraphics(){
+        return g;
+    }
+    
     /**
      * Sets the current state of the game.
      *
      */
     public void setGameState(int id){
         this.gameState = id;
-//        if(gameState == 4){
-//
-//            one.removeMouseListener(mm);
-//            two.removeMouseListener(mm);
-//            three.removeMouseListener(mm);
-//            four.removeMouseListener(mm);
-//            pause.addMouseListener(mm);
-//            record.addMouseListener(mm);
-
-//            one.setEnabled(false);
-//            two.setEnabled(false);
-//            three.setEnabled(false);
-//            four.setEnabled(false);
-//            pause.setEnabled(true);
-//            record.setEnabled(true);
-//        }else{
-//            one.setEnabled(true);
-//            two.setEnabled(true);
-//            three.setEnabled(true);
-//            four.setEnabled(true);
-//            pause.setEnabled(false);
-//            record.setEnabled(false);
-//            one.addMouseListener(mm);
-//            two.addMouseListener(mm);
-//            three.addMouseListener(mm);
-//            four.addMouseListener(mm);
-//            pause.removeMouseListener(mm);
-//            record.removeMouseListener(mm);
-//        }
     }
 
     /**
