@@ -166,7 +166,7 @@ public class RecordAndPlay {
             remainingTimeAfterRun = obj != null
                     ? obj.getInt("timeRemaining") : 0;
 
-//            game.updateGUI();
+//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
 
         } catch (IOException e) {
             System.out.println("Error: " + e);
@@ -195,14 +195,27 @@ public class RecordAndPlay {
      *
      * @param game Game object
      */
+
+    /*
+        to run this, have a button in GUI or somewhere where main can call
+        Recordnplay.setPlaybackSpeed(time) where
+        time:
+            100  = 0.1s
+            200  = 0.2s
+            500  = 0.5s
+            1000 = 1.0s
+     */
     public static void playByStep(Main game) {
         try {
             if (isRunning && moves.size() > 0) {
                 if (actors.get(0) == 0) {
+
                     // if the first actor is the player
                     game.movePlayer(moves.get(0));
                     moves.remove(0);
                     actors.remove(0);
+                    // no use for saving popped/removed moves into another
+                    // temp list because we don't need back stepping.
 
                 } else {
                     // in the future for level 2 mob movement
@@ -211,9 +224,9 @@ public class RecordAndPlay {
 
                 if (moves.size() > 0) {
                     isRunning = false;
-//                    game.setTimeRemaining(remainingTimeAfterRun);
+                    game.setTimeRemaining(remainingTimeAfterRun);
                 }
-//                game.updateGUI();
+//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
@@ -227,7 +240,7 @@ public class RecordAndPlay {
      */
     public static void runReplay(Main game) {
 
-//        game.setFPS((int) (1000 / playbackSpeed));
+        game.setFPS((int) (1000 / playbackSpeed));
 
         // anonymous class replaced with lambda for readability
         Runnable runnable = () -> {
@@ -241,7 +254,7 @@ public class RecordAndPlay {
                 }
             }
             isRunning = false;
-//            game.setTimeRemaining(remainingTimeAfterRun);
+            game.setTimeRemaining(remainingTimeAfterRun);
         };
         thread = new Thread(runnable);
         thread.start();
