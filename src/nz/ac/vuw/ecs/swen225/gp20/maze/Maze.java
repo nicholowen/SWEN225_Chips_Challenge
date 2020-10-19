@@ -153,6 +153,7 @@ public class Maze {
 		}
 		player.tick();
 		//TODO: Tick all NPCs once they're implemented.
+
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		
 		//Collision check - see what's under the player's feet.
@@ -179,7 +180,7 @@ public class Maze {
 		//if(soundEvent!=null)
 		//System.out.println("DEBUG: Play sound:"+soundEvent);
 		if(shouldAdvanceLevel){//If the player should advance the level, IE, if they "win"
-			soundEvent="awinrarisyou";
+			soundEvent="awinrarisyou";//Sound signifying success
 			loadMaze(currentLevel+1);//Load with the new "current level". Maze updates the variable so it's fine.
 		}
 
