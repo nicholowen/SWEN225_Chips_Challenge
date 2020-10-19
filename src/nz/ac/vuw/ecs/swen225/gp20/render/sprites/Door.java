@@ -18,7 +18,7 @@ public class Door extends Sprite {
 
   boolean vertical;
 
-  public Door(String c, boolean vertical){
+  public Door(Assets assets, String c, boolean vertical){
 
     super();
 
@@ -43,9 +43,9 @@ public class Door extends Sprite {
     this.vertical = vertical;
     BufferedImage[] sprites;
     if(!vertical){
-        sprites = Assets.VDOOR[index];
+        sprites = assets.getAsset("door")[index];
       }else{
-        sprites = Assets.DOOR[index];
+        sprites = assets.getAsset("vdoor")[index];
       }
 
     animation.setFrames(sprites);

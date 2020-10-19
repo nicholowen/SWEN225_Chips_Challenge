@@ -15,7 +15,7 @@ public class Exit extends Sprite {
   BufferedImage[] sprites;
   int x, y;
 
-  public Exit(int x, int y) {
+  public Exit(Assets assets, int x, int y) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
@@ -26,7 +26,7 @@ public class Exit extends Sprite {
     this.y = y;
 
     // calls on asset class to get the frames for this object.
-    sprites = Assets.EXIT[0];
+    sprites = assets.getAsset("exit")[0];
     animation.setFrames(sprites);
     animation.setDelay(3);
 
@@ -43,8 +43,7 @@ public class Exit extends Sprite {
    * @return Current animation frame
    */
   public BufferedImage getImage() {
-    BufferedImage image = animation.getFrame();
-    return image;
+    return animation.getFrame();
   }
   /**
    * Get x coordinate of this object (same as the corresponding cell)

@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Handles the level selection screen.
+ * Represents the menu state (title screen) Will lead to other menu items or exit.
+ *
  * @author Owen Nicholson 300130653
  */
-public class LevelSelectState {
+public class MenuState {
 
   Assets assets;
   BufferedImage bg;
@@ -19,14 +20,14 @@ public class LevelSelectState {
   BufferedImage[] buttonOne;
   BufferedImage[] buttonTwo;
   BufferedImage[] buttonThree;
-//  BufferedImage[] buttonFour;
+  BufferedImage[] buttonFour;
   //current state
   BufferedImage currentStateOne;
   BufferedImage currentStateTwo;
   BufferedImage currentStateThree;
-//  BufferedImage currentStateFour;
+  BufferedImage currentStateFour;
 
-  public LevelSelectState(Assets assets){
+  public MenuState(Assets assets){
     this.assets = assets;
     init();
   }
@@ -35,17 +36,17 @@ public class LevelSelectState {
    * initialises all graphics for this state.
    */
   private void init(){
-    this.bg = assets.getAsset("levelSelectBackground")[0][0];
-    this.buttonGraphics = assets.getAsset("levelSelectButtons");
+    this.bg = assets.getAsset("menuBackground")[0][0];
+    this.buttonGraphics = assets.getAsset("menuButtons");
 
     this.buttonOne = buttonGraphics[0];
     this.buttonTwo = buttonGraphics[1];
     this.buttonThree = buttonGraphics[2];
-//    this.buttonThree = buttonGraphics[3];
+    this.buttonFour = buttonGraphics[3];
     this.currentStateOne = buttonOne[0];
     this.currentStateTwo = buttonTwo[0];
     this.currentStateThree = buttonThree[0];
-//    this.currentStateFour = buttonFour[0];
+    this.currentStateFour = buttonFour[0];
   }
 
   /**
@@ -55,7 +56,7 @@ public class LevelSelectState {
     this.currentStateOne = buttonOne[0];
     this.currentStateTwo = buttonTwo[0];
     this.currentStateThree = buttonThree[0];
-//    this.currentStateFour = buttonFour[0];
+    this.currentStateFour = buttonFour[0];
   }
 
   /**
@@ -73,11 +74,10 @@ public class LevelSelectState {
       }else if (buttonEvent.contains("three")){
         if (buttonEvent.contains("hover")) currentStateThree = buttonThree[1];
         else if (buttonEvent.contains("pressed")) currentStateThree = buttonThree[2];
+      }else if (buttonEvent.contains("four")){
+        if (buttonEvent.contains("hover")) currentStateFour = buttonFour[1];
+        else if (buttonEvent.contains("pressed")) currentStateFour = buttonFour[2];
       }
-//      else if (buttonEvent.contains("four")){
-//        if (buttonEvent.contains("hover")) currentStateFour = buttonFour[1];
-//        else if (buttonEvent.contains("pressed")) currentStateFour = buttonFour[2];
-//      }
     }else{
       resetButtonStates();
     }
@@ -88,6 +88,7 @@ public class LevelSelectState {
     g.drawImage(currentStateOne, 365, 268, null);
     g.drawImage(currentStateTwo, 365, 336, null);
     g.drawImage(currentStateThree, 365, 404, null);
-//    g.drawImage(currentStateFour, 365, 472, null);
+    g.drawImage(currentStateFour, 365, 472, null);
   }
+
 }

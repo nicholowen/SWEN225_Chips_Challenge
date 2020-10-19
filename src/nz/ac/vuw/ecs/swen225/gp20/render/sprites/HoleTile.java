@@ -12,11 +12,11 @@ import java.awt.image.BufferedImage;
  */
 public class HoleTile extends Sprite{
 
-  BufferedImage[] img;
+  BufferedImage[] sprites;
 
-  public HoleTile(){
+  public HoleTile(Assets assets){
     super();
-    img = Assets.HOLE[0];
+    sprites = assets.getAsset("hole")[0];
 
   }
 
@@ -39,18 +39,17 @@ public class HoleTile extends Sprite{
 
 
     //Only enough tiles to cover level 2
-    if(!n && !e &&  s &&  w) animation.setImage(img[0]);
-    if( n && !e && !s &&  w) animation.setImage(img[1]);
-    if(!n &&  e &&  s && !w) animation.setImage(img[2]);
-    if( n &&  e && !s && !w) animation.setImage(img[3]);
-    if(!n &&  e &&  s &&  w) animation.setImage(img[4]);
-    if( n &&  e && !s &&  w) animation.setImage(img[5]);
+    if(!n && !e &&  s &&  w) animation.setImage(sprites[0]);
+    if( n && !e && !s &&  w) animation.setImage(sprites[1]);
+    if(!n &&  e &&  s && !w) animation.setImage(sprites[2]);
+    if( n &&  e && !s && !w) animation.setImage(sprites[3]);
+    if(!n &&  e &&  s &&  w) animation.setImage(sprites[4]);
+    if( n &&  e && !s &&  w) animation.setImage(sprites[5]);
 
   }
 
   public BufferedImage getImage(){
-    BufferedImage image = animation.getImage();
-    return image;
+    return animation.getImage();
   }
   /* Index positions for wall orientation images
    * 0 - front

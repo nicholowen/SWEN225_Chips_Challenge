@@ -13,19 +13,25 @@ import java.awt.image.BufferedImage;
  */
 public class IntroState {
 
+  Assets assets;
+
   BufferedImage logo;
 
   private int alpha;
   private int tick;
 
-  public IntroState(){
-    this.logo = Assets.LOGO;
+  public IntroState(Assets assets){
+    this.assets = assets;
+    init();
+  }
+
+  private void init(){
+    this.logo = assets.getAsset("logo")[0][0];
   }
 
   /**
    * Changes the alpha channel used by the draw method.
    * Low alpha = transparent, high alpha = opaque
-   * @return false if fade cycle has finished.
    */
   public void update() {
     int fade = 120;

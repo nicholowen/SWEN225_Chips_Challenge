@@ -11,8 +11,8 @@ import java.io.IOException;
 public class Audio {
 
   File path = new File("resources/Assets/Audio/");
-  long time;
-  long themeLength;
+
+  String prevButtonEvent;
 
 
   public Audio(){
@@ -23,26 +23,41 @@ public class Audio {
    * Plays the sound effect.
    * @param soundEvent String representing the sound
    */
-  public void update(String soundEvent){
-    play(soundEvent);
+  public void updateButtons(String soundEvent){
+    buttonSounds(soundEvent);
   }
+  public void updateGame(String soundEvent) { gameSounds(soundEvent);}
 
   /**
    * Plays the sound for the particular sound event.
    * @param action String representing the sound
    */
-  public void play(String action){
+  public void buttonSounds(String action){
+//    System.out.println(action);
 
-    String file = null;
+    String file;
 
     //Checks to see if there is a hover or pressed tag - this is for button actions.
     if (action != null) {
-      if (action.contains("hover")){
-        action = "hover";
-      } else if (action.contains("pressed")){
+      if (action.contains("hover")) {
+        if (prevButtonEvent == null) {
+          action = "hover";
+          prevButtonEvent = "hover";
+        } else if (prevButtonEvent.equals("hover")) {
+          return;
+        }
+      }
+      else if (action.contains("pressed")){
+        if(prevButtonEvent != null && prevButtonEvent.equals("pressed")) {
+          return;
+        }
         action = "pressed";
+        prevButtonEvent = "pressed";
       }
       file = action + ".wav";
+    }else{
+      prevButtonEvent = null;
+      return;
     }
     if (file != null){
       try {
@@ -64,17 +79,49 @@ public class Audio {
     }
   }
 
+  public void gameSounds(String action){
+//    System.out.println(action);
+
+    String file = null;
+    System.out.println("GAMESOUND: " + action);
+    if (action != null) {
+
+      file = action + ".wav";
+      System.out.println("gamesound is " + action);
+    }
+    if (file != null){
+      try {
+
+        AudioInputStream audioIn;
+        System.out.println(file);
+        audioIn = AudioSystem.getAudioInputStream(new File(path, file));
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioIn);FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-20.0f); // reduce volume (decibels)
+
+        clip.start();
+
+      } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+        e.printStackTrace();
+        System.out.println("Audio not found for: " + action);
+      }
+
+    }
+  }
+
+
+
+
+
   /**
    * Dedicated method for playing the theme music. It loops continuously (until the game is exited).
    */
   public void playMusic() {
-    time = System.currentTimeMillis();
     try {
       AudioInputStream audioIn;
       audioIn = AudioSystem.getAudioInputStream(new File(path, "main_theme.wav"));
       Clip clip = AudioSystem.getClip();
       clip.open(audioIn);
-      themeLength = clip.getMicrosecondLength()/1000; //convert time from microseconds to milliseconds
       clip.loop(Clip.LOOP_CONTINUOUSLY);
 
       FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
