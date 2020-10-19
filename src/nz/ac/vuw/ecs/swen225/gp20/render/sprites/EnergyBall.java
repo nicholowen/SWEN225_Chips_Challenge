@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
+
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -11,9 +12,8 @@ import java.awt.image.BufferedImage;
  */
 public class EnergyBall extends Sprite{
 
-  BufferedImage[] sprites;
 
-  public EnergyBall(){
+  public EnergyBall(Assets assets){
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
@@ -21,8 +21,7 @@ public class EnergyBall extends Sprite{
     int height = 64;
 
     // calls on asset class to get the frames for this object.
-    sprites = Assets.ENERGYBALL[0];
-    animation.setFrames(sprites);
+    animation.setFrames(assets.getAsset("energy")[0]);
     animation.setDelay(6);
 
   }
@@ -39,8 +38,7 @@ public class EnergyBall extends Sprite{
    * @return Current animation frame
    */
   public BufferedImage getImage(){
-    BufferedImage image = animation.getFrame();
-    return image;
+    return animation.getFrame();
   }
 
 

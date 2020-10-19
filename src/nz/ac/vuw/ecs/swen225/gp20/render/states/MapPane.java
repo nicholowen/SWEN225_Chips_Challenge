@@ -9,6 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.sprites.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -18,6 +19,12 @@ import java.util.HashMap;
  * @author Owen Nicholson 300130653
  */
 public class MapPane {
+
+  private Assets assets;
+
+  BufferedImage bg;
+  BufferedImage infoAsset;
+  BufferedImage floorAsset;
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
   private Cell[][] floor    = new Cell[11][11];
@@ -30,10 +37,15 @@ public class MapPane {
   private Cell[][] exitLock = new Cell[11][11];
   private Cell[][] info     = new Cell[11][11];
 
-  private HostileMob[] hostileMobs;
-  private HostileMob[][] visibleMobs = new HostileMob[11][11];
+//  private HostileMob[] hostileMobs;
+  private ActorSprite[][] visibleMobs = new ActorSprite[11][11];
 
-  private Actor[] mobs;
+  private ActorSprite[] mobs;
+
+
+  private ActorSprite playerSprite;
+//  private ArrayList<ActorSprite> hostileSprites;
+//  private ArrayList<ActorSprite> pushable;
 
   private Object[][] sprites;
 
@@ -50,61 +62,72 @@ public class MapPane {
   private Info infoOb;
   private ExitLock exitLockOb;
   private Exit exitOb;
-  private Player playerSprite;
 
-  private Actor player;
+
+//  private Actor player;
 
   //transition offset
   int offsetX = 0;
   int offsetY = 0;
 
 
-  public MapPane() { }
+  public MapPane(Assets assets) {
+    this.assets = assets;
+    init();
+  }
+
+  private void init(){
+    this.bg = assets.getAsset("mapBackground")[0][0];
+    this.floorAsset = assets.getAsset("floor")[0][0];
+    this.infoAsset = assets.getAsset("info")[0][0];
+  }
 
   /**
    * Initialises all 'sprites' in game, based on the position of the cells.
    * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
    * @param cells The tiles of the game map.
-   * @param actors
+   * @param actors Array including the player and all other mobs in game (hostile/neutral)
    */
   public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
 
-    // load mobs into their own array
-    hostileMobs = new HostileMob[actors.length-1];
-    for(int h = 1; h < actors.length; h++){
-      // may need to differentiate between mobs and player
-      HostileMob mob = new HostileMob(actors[h].getX(), actors[h].getY());
-      hostileMobs[h-1] = mob;
+    this.playerSprite = new ActorSprite(actors[0], assets);
+
+    //creates array of actor array - player
+    mobs = new ActorSprite[actors.length-1];
+    //populates array with all other mobs
+    for(int m = 1; m < actors.length; m++){
+      ActorSprite mob = new ActorSprite(actors[m], assets);
+      mobs[m-1] = mob;
     }
 
     sprites = new Object[cells.length][cells[0].length];
-    this.playerSprite = new Player();
+
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
         if(cells[i][j] != null) {
           switch (cells[i][j].getName()) {
             case "wall":
-              WallTile wt = new WallTile();
+              WallTile wt = new WallTile(assets);
               Cell[] neighbours = getWallNeighbours(cells, j, i);
               wt.setWallType(neighbours[0], neighbours[1], neighbours[2], neighbours[3]); //wall object initialised with cells at each cardinal direction
               sprites[i][j] = wt;
               wallObjects.put(cells[i][j], wt);
               break;
             case "water":
-              HoleTile ht = new HoleTile();
+              HoleTile ht = new HoleTile(assets);
               Cell[] holeNeighbours = getWallNeighbours(cells, j, i);
               ht.setWallType(holeNeighbours[0], holeNeighbours[1], holeNeighbours[2], holeNeighbours[3]);
               sprites[i][j] = ht;
               holeObjects.put(cells[i][j], ht);
               break;
             case "treasure":
-              EnergyBall eb = new EnergyBall();
+              EnergyBall eb = new EnergyBall(assets);
               sprites[i][j] = eb;
               energyObjects.put(cells[i][j], eb);
               break;
             case "key":
               if (cells[i][j] instanceof CellKey) {
-                KeyCard kc = new KeyCard(cells[i][j].getColor());
+                KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
                 sprites[i][j] = kc;
                 keyObjects.put(cells[i][j], kc);
               }
@@ -112,10 +135,10 @@ public class MapPane {
             case "door":
               if (cells[i][j] instanceof CellDoor) {
                 Door door;
-                if (i > 0 && (cells[i + 1][j] instanceof CellWall || cells[i - 1][j] instanceof CellWall)) {
-                  door = new Door(cells[i][j].getColor(), true);
+                if (i > 0 && (cells[i][j+1] instanceof CellWall || cells[i][j-1] instanceof CellWall)) {
+                  door = new Door(assets, cells[i][j].getColor(), true);
                 } else {
-                  door = new Door(cells[i][j].getColor(), false);
+                  door = new Door(assets, cells[i][j].getColor(), false);
                 }
                 sprites[i][j] = door;
                 doorObjects.put(cells[i][j], door);
@@ -123,22 +146,21 @@ public class MapPane {
               break;
             case "exit":
               if (cells[i][j] instanceof CellExit) {
-                Exit e = new Exit(i, j);
+                Exit e = new Exit(assets, i, j);
                 sprites[i][j] = e;
                 exitOb = e;
               }
               break;
             case "exit lock":
               if (cells[i][j] instanceof CellExitLocked) {
-                ExitLock el = new ExitLock(i, j);
+                ExitLock el = new ExitLock(assets, i, j);
                 sprites[i][j] = el;
                 exitLockOb = el;
               }
               break;
             case "info":
               if (cells[i][j] instanceof CellInfo) {
-                Info in = new Info(i, j, Assets.INFO[0][0]);
-                infoOb = in;
+                infoOb = new Info(assets, i, j, infoAsset);
               }
               break;
 
@@ -189,7 +211,7 @@ public class MapPane {
    * @param player The player's character - for obtaining current position
    * @return 9x9 Cell array
    */
-  private Cell[][] getSurround(Cell[][] cells, Actor player) {
+  private Cell[][] getSurround(Cell[][] cells, ActorSprite player) {
     Cell[][] ret = new Cell[11][11]; //a new array to store all the cells around the player
     Point playerPos = new Point(player.getX(), player.getY());
 
@@ -200,7 +222,7 @@ public class MapPane {
     for (int i = 0; i < 11; i++) {
       int y = (int)playerPos.getY() - 5;
       for (int j = 0; j < 11; j++) {
-        for(HostileMob actor : hostileMobs){
+        for(ActorSprite actor : mobs){
           if(actor.getX() == botRight.getX() - i && actor.getY() == botRight.getY() -j){
             visibleMobs[i][j] = actor;
           }
@@ -226,18 +248,17 @@ public class MapPane {
    */
   public void update(RenderTuple tuple) {
     //update player with direction
-    player = tuple.getActors()[0];
-    playerSprite.update(player.getDirection());
+//    player = tuple.getActors()[0];
+    playerSprite.update();
 
     //TODO: add player animation - might need to combine mobs and player together.
 
     //update all mobs with direction (this can probably be condensed as all actors)
-    mobs = new Actor[tuple.getActors().length - 1];
-    for(int m = 1; m < tuple.getActors().length; m++){
-      mobs[m-1] = tuple.getActors()[m];
-      hostileMobs[m-1].update(mobs[m-1].getDirection());
+
+    for(ActorSprite as : mobs){
+      as.update();
     }
-    Cell[][] surround = getSurround(tuple.getCells(), player);
+    Cell[][] surround = getSurround(tuple.getCells(), playerSprite);
 
 
 
@@ -327,10 +348,10 @@ public class MapPane {
 
 
     // transition animation - draws all objects depending on offset (speed)
-    if(player != null && player.getIsMoving()){
+    if(playerSprite != null && playerSprite.getIsMoving()){
 
       int speed = 12;
-      switch(player.getDirection()){
+      switch(playerSprite.getDirection()){
         case UP:
           offsetY += speed;
           break;
@@ -354,12 +375,12 @@ public class MapPane {
     int x = 64;
     int y = 64;
 
-    g.drawImage(Assets.MAPBACKGROUND[0][0], 0, 0, null);
+    g.drawImage(bg, 0, 0, null);
     for(int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
 
         if (floor[i][j] != null) {
-          g.drawImage(Assets.FLOOR[0][0], x * i + offsetX - x, y * j + offsetY - y, null);
+          g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (wall[i][j] != null) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
@@ -369,10 +390,10 @@ public class MapPane {
         }
         if (door[i][j] != null && doorObjects != null) {
           if(doorObjects.get(door[i][j]).isVertical()){
-            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
           }
           else{
-            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
+            g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
           }
         }
         if (energy[i][j] != null) {
@@ -407,27 +428,4 @@ public class MapPane {
 
   }
 
-  public static class MenuPanel {
-  //button positions
-  // new game - 377, 280, 135, 21
-  // load - 377, 348, 135, 21
-  // replay - 377, 416, 135, 21
-  // exit - 377, 484, 135, 21
-
-    BufferedImage bg;
-
-    public MenuPanel(){
-      this.bg = Assets.MENU;
-    }
-
-    public void update(){
-
-    }
-
-
-    public void draw(Graphics g) {
-  //    super.paintComponent(g);
-      g.drawImage(bg, 0, 0, null);
-    }
-  }
 }

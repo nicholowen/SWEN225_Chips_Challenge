@@ -12,10 +12,12 @@ import java.awt.image.BufferedImage;
  */
 public class WallTile extends Sprite{
 
+  Assets assets;
 
-  public WallTile(){
+  public WallTile(Assets assets){
 
     super();
+    this.assets = assets;
     animation.setDelay(-1);
 
   }
@@ -31,7 +33,7 @@ public class WallTile extends Sprite{
   public void setWallType(Cell north, Cell east, Cell south, Cell west){
     boolean n, e, s, w;
     n = e = s = w = false;
-    BufferedImage[] img = Assets.WALL[0];
+    BufferedImage[] img = assets.getAsset("wall")[0];
     //checks to see if the neighbouring tile is a wall or a door (walls link up to doors)
     if(north != null && (getInfo("name", north).equals("wall") || getInfo("name", north).equals("door"))) n = true;
     if(east != null && (getInfo("name", east).equals("wall") || getInfo("name", east).equals("door"))) e = true;
@@ -57,8 +59,7 @@ public class WallTile extends Sprite{
   }
 
   public BufferedImage getImage(){
-    BufferedImage image = animation.getImage();
-    return image;
+    return animation.getImage();
   }
   /* Index positions for wall orientation images
    * 0 - front

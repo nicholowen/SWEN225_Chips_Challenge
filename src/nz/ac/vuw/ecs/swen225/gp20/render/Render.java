@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.states.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Audio;
 
@@ -10,38 +11,32 @@ import java.util.HashMap;
 /**
  * Main Render Module class. Simply stores the Drawing panels and performs updates to both every tick.
  *
- * @author Owen N
+ * @author Owen Nicholson 300130653
  */
 public class Render {
 
+  Assets assets;
+
   MapPane gp;
   InfoPane sp;
-  IntroState ip;
-  MapPane.MenuPanel mp;
-  LevelSelectState lp;
-  PauseState pp;
+  IntroState is;
+  MenuState ms;
+  LevelSelectState ls;
+  PauseState ps;
 
 
   Audio audio;
 
-  /**
-   * Constuctor
-//   * @param gp The Panel which the map is drawn
-//   * @param sp The Panel on which the score (time inventory etc is drawn)
-   * * @param ip Intro Panel
-   * * @param mp Menu Panel
-   * * @param lp Level Panel (level select)
-   * * @param pp Pause Panel
-   */
   public Render(){
-    gp = new MapPane();
-    sp = new InfoPane();
 
-    ip = new IntroState();
-    lp = new LevelSelectState();
-    mp = new MapPane.MenuPanel();
-    pp = new PauseState();
+    this.assets = new Assets();
 
+    gp = new MapPane(assets);
+    sp = new InfoPane(assets);
+    is = new IntroState(assets);
+    ls = new LevelSelectState(assets);
+    ms = new MenuState(assets);
+    ps = new PauseState(assets);
 
     audio = new Audio();
   }
@@ -50,51 +45,69 @@ public class Render {
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    * @param tuple Contains the current state of the cells and the player
    * @param timeRemaining self explanatory
-   * @param inventory **this is no longer needed - will remove when application module updates code.**
    *
-   * Will need another parameter fed by main that will give the button that is being hovered or pressed.
    */
-  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*, String button*/){
+  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*String event*/){
     gp.update(tuple);
-    sp.update(timeRemaining, tuple/*, button*/);
+    sp.update(timeRemaining, tuple);
 
-    audio.update(tuple.getSoundEvent());
+//    audio.update(tuple.getSoundEvent());
+    audio.updateGame(tuple.getSoundEvent());
+//    audio.updateButtons(event);
   }
 
-  public void update(int gameState){
+  /**
+   * sparate update method from above for states that don't reqire information from maze
+   * @param gameState Integer representing the state
+   */
+  public void update(int gameState/*, String event*/){
+    //temporary value
+    String event = null;
     switch(gameState){
       case 0:
-        ip.update();
+        is.update();
         break;
       case 1:
-        mp.update();
+        ms.update(event);
         break;
       case 2:
-        lp.update();
+        ls.update(event);
         break;
       case 3:
-        pp.update();
+        ps.update(event);
+        break;
+      default:
         break;
     }
+
+//    audio.updateButtons(event);
   }
 
+  /**
+   * Draws on the provided graphics objects.
+   *
+   * @param g Graphics object of the main drawing object.
+   * @param gameState Integer representing game state.
+   */
   public void draw(Graphics g, int gameState){
     switch(gameState){
       case 0:
-        ip.draw(g);
+        is.draw(g);
         break;
       case 1:
-        mp.draw(g);
+        ms.draw(g);
         break;
       case 2:
-        lp.draw(g);
+        ls.draw(g);
         break;
       case 3:
-        pp.draw(g);
+        ps.draw(g);
         break;
       case 4:
         gp.draw(g);
         sp.draw(g);
+        break;
+      default:
         break;
     }
 
