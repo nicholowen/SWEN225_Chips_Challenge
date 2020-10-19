@@ -40,6 +40,7 @@ public class MapPane {
   private ActorSprite[][] visibleMobs = new ActorSprite[11][11];
 
   private ActorSprite[] mobs;
+  private ActorSprite[][] mobsOnMap;
 
 
   private ActorSprite playerSprite;
@@ -89,14 +90,17 @@ public class MapPane {
    */
   public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
 
-    this.playerSprite = new ActorSprite(actors[0], assets);
+    mobsOnMap = new ActorSprite[cells.length][cells[0].length];
+
+    this.playerSprite = new ActorSprite(actors[actors.length-1], assets);
 
     //creates array of actor array - player
     mobs = new ActorSprite[actors.length - 1];
     //populates array with all other mobs
-    for (int m = 1; m < actors.length; m++) {
+    for (int m = 0; m < actors.length-1; m++) {
       ActorSprite mob = new ActorSprite(actors[m], assets);
-      mobs[m - 1] = mob;
+      mobsOnMap[mob.getX()][mob.getY()] = mob;
+      mobs[m] = mob;
     }
 
     sprites = new Object[cells.length][cells[0].length];
@@ -223,10 +227,15 @@ public class MapPane {
     for (int i = 0; i < 11; i++) {
       int y = (int) playerPos.getY() - 5;
       for (int j = 0; j < 11; j++) {
-        for (ActorSprite actor : mobs) {
-          if (actor.getX() == botRight.getX() - i && actor.getY() == botRight.getY() - j) {
-            visibleMobs[i][j] = actor;
-          }
+//        for (ActorSprite actor : mobs) {
+//          if (actor.getX() == botRight.getX() - (botRight.getX() - i) && actor.getY() == botRight.getY() - (botRight.getY() - j)) {
+//            visibleMobs[i][j] = actor;
+//          }
+//        }
+        if ((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
+          visibleMobs[i][j] = mobsOnMap[x][y];
+        } else {
+          visibleMobs[i][j] = null;
         }
 
         if ((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
@@ -256,10 +265,6 @@ public class MapPane {
     //TODO: add player animation - might need to combine mobs and player together.
 
     //update all mobs with direction (this can probably be condensed as all actors)
-
-    for (ActorSprite as : mobs) {
-      as.update();
-    }
     Cell[][] surround = getSurround(tuple.getCells(), playerSprite);
 
 
@@ -314,6 +319,13 @@ public class MapPane {
             default:
               break;
           }
+        }
+      }
+    }
+    for (ActorSprite[] actorSprites : mobsOnMap) {
+      for (ActorSprite actorSprite : actorSprites) {
+        if (actorSprite != null) {
+          actorSprite.update();
         }
       }
     }
@@ -416,6 +428,7 @@ public class MapPane {
         if (visibleMobs[i][j] != null) {
           g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
+
       }
     }
 
