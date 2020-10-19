@@ -7,8 +7,9 @@ import java.awt.image.BufferedImage;
 
 /**
  * Handles the intro fade in - fade out screen with team logo.
- *
+ * <p>
  * Fade algorithm credit: Zequnyu - https://github.com/zequnyu
+ *
  * @author Owen Nicholson 300130653
  */
 public class IntroState {
@@ -20,12 +21,12 @@ public class IntroState {
   private int alpha;
   private int tick;
 
-  public IntroState(Assets assets){
+  public IntroState(Assets assets) {
     this.assets = assets;
     init();
   }
 
-  private void init(){
+  private void init() {
     this.logo = assets.getAsset("logo")[0][0];
   }
 
@@ -39,14 +40,14 @@ public class IntroState {
 
     tick++;
 
-    if(tick < fade) {
-      alpha = (int)(255 - 255 * (1.0 * tick / fade));
-      if(alpha < 0) alpha = 0;
+    if (tick < fade) {
+      alpha = (int) (255 - 255 * (1.0 * tick / fade));
+      if (alpha < 0) alpha = 0;
     }
 
-    if(tick > fade + length) {
+    if (tick > fade + length) {
       alpha = (int) (255 * (1.0 * tick - fade - length) / fade);
-      if(alpha > 255) alpha = 255;
+      if (alpha > 255) alpha = 255;
     }
   }
 

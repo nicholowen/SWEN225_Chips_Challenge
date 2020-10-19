@@ -1,9 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
-import nz.ac.vuw.ecs.swen225.gp20.render.states.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Audio;
+import nz.ac.vuw.ecs.swen225.gp20.render.states.InfoPane;
+import nz.ac.vuw.ecs.swen225.gp20.render.states.IntroState;
+import nz.ac.vuw.ecs.swen225.gp20.render.states.MapPane;
+import nz.ac.vuw.ecs.swen225.gp20.render.states.State;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -20,34 +24,34 @@ public class Render {
   MapPane gp;
   InfoPane sp;
   IntroState is;
-  MenuState ms;
-  LevelSelectState ls;
-  PauseState ps;
+  State ms;
+  State ls;
+  State ps;
 
 
   Audio audio;
 
-  public Render(){
+  public Render() {
 
     this.assets = new Assets();
 
     gp = new MapPane(assets);
     sp = new InfoPane(assets);
     is = new IntroState(assets);
-    ls = new LevelSelectState(assets);
-    ms = new MenuState(assets);
-    ps = new PauseState(assets);
+    ms = new State(assets, 1, "menu");
+    ls = new State(assets, 2, "levelSelect");
+    ps = new State(assets, 3, "pause");
 
     audio = new Audio();
   }
 
   /**
    * Updates the graphics based on the player position and state of the game (time inventory etc)
-   * @param tuple Contains the current state of the cells and the player
-   * @param timeRemaining self explanatory
    *
+   * @param tuple         Contains the current state of the cells and the player
+   * @param timeRemaining self explanatory
    */
-  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*String event*/){
+  public void update(RenderTuple tuple, int timeRemaining, HashMap<String, Integer> inventory/*String event*/) {
     gp.update(tuple);
     sp.update(timeRemaining, tuple);
 
@@ -58,12 +62,13 @@ public class Render {
 
   /**
    * sparate update method from above for states that don't reqire information from maze
+   *
    * @param gameState Integer representing the state
    */
-  public void update(int gameState/*, String event*/){
+  public void update(int gameState/*, String event*/) {
     //temporary value
     String event = null;
-    switch(gameState){
+    switch (gameState) {
       case 0:
         is.update();
         break;
@@ -86,11 +91,11 @@ public class Render {
   /**
    * Draws on the provided graphics objects.
    *
-   * @param g Graphics object of the main drawing object.
+   * @param g         Graphics object of the main drawing object.
    * @param gameState Integer representing game state.
    */
-  public void draw(Graphics g, int gameState){
-    switch(gameState){
+  public void draw(Graphics g, int gameState) {
+    switch (gameState) {
       case 0:
         is.draw(g);
         break;
@@ -117,9 +122,9 @@ public class Render {
   /**
    * Initialises all the assets in the game.
    * This is required so the renderer has knowledge of what graphics are where at the start of the game.
-  // * @param cells
+   * // * @param cells
    */
-  public void init(Maze maze){
+  public void init(Maze maze) {
     gp.initAnimationObjects(maze.getBoard(), maze.getActors());
   }
 

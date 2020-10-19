@@ -10,10 +10,10 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class EnergyBall extends Sprite{
+public class EnergyBall extends Sprite {
 
 
-  public EnergyBall(Assets assets){
+  public EnergyBall(Assets assets) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
@@ -29,18 +29,18 @@ public class EnergyBall extends Sprite{
   /**
    * Updates the frame of the object by progressing the counter in it's animation object.
    */
-  public void update(){
+  public void update() {
     animation.update();
   }
 
   /**
    * retrieves the image for the current frame it's in
+   *
    * @return Current animation frame
    */
-  public BufferedImage getImage(){
+  public BufferedImage getImage() {
     return animation.getFrame();
   }
-
 
 
 }

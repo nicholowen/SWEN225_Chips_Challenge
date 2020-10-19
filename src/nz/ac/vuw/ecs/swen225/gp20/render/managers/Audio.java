@@ -15,24 +15,29 @@ public class Audio {
   String prevButtonEvent;
 
 
-  public Audio(){
+  public Audio() {
     playMusic();
   }
 
   /**
    * Plays the sound effect.
+   *
    * @param soundEvent String representing the sound
    */
-  public void updateButtons(String soundEvent){
+  public void updateButtons(String soundEvent) {
     buttonSounds(soundEvent);
   }
-  public void updateGame(String soundEvent) { gameSounds(soundEvent);}
+
+  public void updateGame(String soundEvent) {
+    gameSounds(soundEvent);
+  }
 
   /**
    * Plays the sound for the particular sound event.
+   *
    * @param action String representing the sound
    */
-  public void buttonSounds(String action){
+  public void buttonSounds(String action) {
 //    System.out.println(action);
 
     String file;
@@ -46,27 +51,27 @@ public class Audio {
         } else if (prevButtonEvent.equals("hover")) {
           return;
         }
-      }
-      else if (action.contains("pressed")){
-        if(prevButtonEvent != null && prevButtonEvent.equals("pressed")) {
+      } else if (action.contains("pressed")) {
+        if (prevButtonEvent != null && prevButtonEvent.equals("pressed")) {
           return;
         }
         action = "pressed";
         prevButtonEvent = "pressed";
       }
       file = action + ".wav";
-    }else{
+    } else {
       prevButtonEvent = null;
       return;
     }
-    if (file != null){
+    if (file != null) {
       try {
 
         AudioInputStream audioIn;
         System.out.println(file);
         audioIn = AudioSystem.getAudioInputStream(new File(path, file));
         Clip clip = AudioSystem.getClip();
-        clip.open(audioIn);FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        clip.open(audioIn);
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(-20.0f); // reduce volume (decibels)
 
         clip.start();
@@ -79,7 +84,7 @@ public class Audio {
     }
   }
 
-  public void gameSounds(String action){
+  public void gameSounds(String action) {
 //    System.out.println(action);
 
     String file = null;
@@ -89,14 +94,15 @@ public class Audio {
       file = action + ".wav";
       System.out.println("gamesound is " + action);
     }
-    if (file != null){
+    if (file != null) {
       try {
 
         AudioInputStream audioIn;
         System.out.println(file);
         audioIn = AudioSystem.getAudioInputStream(new File(path, file));
         Clip clip = AudioSystem.getClip();
-        clip.open(audioIn);FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        clip.open(audioIn);
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(-20.0f); // reduce volume (decibels)
 
         clip.start();
@@ -108,9 +114,6 @@ public class Audio {
 
     }
   }
-
-
-
 
 
   /**
@@ -132,7 +135,6 @@ public class Audio {
       e.printStackTrace();
     }
   }
-
 
 
 }

@@ -18,35 +18,35 @@ public class Door extends Sprite {
 
   boolean vertical;
 
-  public Door(Assets assets, String c, boolean vertical){
+  public Door(Assets assets, String c, boolean vertical) {
 
     super();
 
     int index = 0;
-      switch (c) {
-        case "red":
-          index = 0;
-          break;
-        case "green":
-          index = 1;
-          break;
-        case "blue":
-          index = 2;
-          break;
-        case "yellow":
-          index = 3;
-          break;
-        default:
-          break;
+    switch (c) {
+      case "red":
+        index = 0;
+        break;
+      case "green":
+        index = 1;
+        break;
+      case "blue":
+        index = 2;
+        break;
+      case "yellow":
+        index = 3;
+        break;
+      default:
+        break;
 
     }
     this.vertical = vertical;
     BufferedImage[] sprites;
-    if(!vertical){
-        sprites = assets.getAsset("door")[index];
-      }else{
-        sprites = assets.getAsset("vdoor")[index];
-      }
+    if (!vertical) {
+      sprites = assets.getAsset("door")[index];
+    } else {
+      sprites = assets.getAsset("vdoor")[index];
+    }
 
     animation.setFrames(sprites);
     animation.setSingleAnimation(true);
@@ -54,13 +54,15 @@ public class Door extends Sprite {
 
   }
 
-  public void update() { animation.update(); }
+  public void update() {
+    animation.update();
+  }
 
   public BufferedImage getImage() {
     return animation.getFrame();
   }
 
-  public boolean isVertical(){
+  public boolean isVertical() {
     return vertical;
   }
 

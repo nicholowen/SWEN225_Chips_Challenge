@@ -10,8 +10,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class KeyCard extends Sprite{
-
+public class KeyCard extends Sprite {
 
 
   public KeyCard(Assets assets, String c) {
@@ -44,15 +43,16 @@ public class KeyCard extends Sprite{
   /**
    * Updates the frame of the object
    */
-  public void update(){
+  public void update() {
     animation.update();
   }
 
   /**
    * retrieves the image for the current frame it's in
+   *
    * @return Current animation frame
    */
-  public BufferedImage getImage(){
+  public BufferedImage getImage() {
     return animation.getFrame();
   }
 }

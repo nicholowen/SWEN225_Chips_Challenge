@@ -3,65 +3,64 @@ package nz.ac.vuw.ecs.swen225.gp20.render.managers;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
  * Loads assets into 2D BufferedImage Arrays. This allows multiple states
  * of image to be loaded from a single sprite sheet.
- *
+ * <p>
  * Credit: Zequnyu - https://github.com/zequnyu
+ *
  * @author Owen N
  */
-public class Assets
-{
+public class Assets {
 
   private static File path = new File("resources/Assets/Images/");
 
   //Load gifs TODO: add floor tiles and door tiles/animations
   //Map/Game gifs
-  private static BufferedImage[][]             FLOOR;
-  private static BufferedImage[][]              WALL;
-  private static BufferedImage[][]              DOOR;
-  private static BufferedImage[][]              HOLE;
-  private static BufferedImage[][]             VDOOR;
-  private static BufferedImage[][]        ENERGYBALL;
-  private static BufferedImage[][]         KEYCARD_G;
-  private static BufferedImage[][]              INFO;
-  private static BufferedImage[][]          EXITLOCK;
-  private static BufferedImage[][]              EXIT;
+  private static BufferedImage[][] FLOOR;
+  private static BufferedImage[][] WALL;
+  private static BufferedImage[][] DOOR;
+  private static BufferedImage[][] HOLE;
+  private static BufferedImage[][] VDOOR;
+  private static BufferedImage[][] ENERGYBALL;
+  private static BufferedImage[][] KEYCARD_G;
+  private static BufferedImage[][] INFO;
+  private static BufferedImage[][] EXITLOCK;
+  private static BufferedImage[][] EXIT;
 
   //Score/info gifs
-  private static BufferedImage[][]             DIGITS;
-  private static BufferedImage[][]          INVENTORY;
-  private static BufferedImage[][]               FONT;
+  private static BufferedImage[][] DIGITS;
+  private static BufferedImage[][] INVENTORY;
+  private static BufferedImage[][] FONT;
   //energybar
-  private static BufferedImage[][]     ENERGYBARSHADE;
-  private static BufferedImage[][]          ENERGYBAR;
+  private static BufferedImage[][] ENERGYBARSHADE;
+  private static BufferedImage[][] ENERGYBAR;
 
   //mob sprites
-  private static BufferedImage[][]             PLAYER;
-  private static BufferedImage[][]         HOSTILEMOB;
+  private static BufferedImage[][] PLAYER;
+  private static BufferedImage[][] HOSTILEMOB;
 
   //panel backgrounds
-  private static BufferedImage[][]               LOGO;
-  private static BufferedImage[][]      MAPBACKGROUND;
-  private static BufferedImage[][]    SCOREBACKGROUND;
-  private static BufferedImage[][]               MENU;
-  private static BufferedImage[][]              LEVEL;
-  private static BufferedImage[][]              PAUSE;
+  private static BufferedImage[][] LOGO;
+  private static BufferedImage[][] MAPBACKGROUND;
+  private static BufferedImage[][] SCOREBACKGROUND;
+  private static BufferedImage[][] MENU;
+  private static BufferedImage[][] LEVEL;
+  private static BufferedImage[][] PAUSE;
 
   //State Buttons
-  private static BufferedImage[][]        MENUBUTTONS;
-  private static BufferedImage[][]       PAUSEBUTTONS;
+  private static BufferedImage[][] MENUBUTTONS;
+  private static BufferedImage[][] PAUSEBUTTONS;
   private static BufferedImage[][] LEVELSELECTBUTTONS;
-  private static BufferedImage[][]        DEADBUTTONS;
-  private static BufferedImage[][]    GAMEOVERBUTTONS;
+  private static BufferedImage[][] DEADBUTTONS;
+  private static BufferedImage[][] GAMEOVERBUTTONS;
 
-  public Assets(){
+  public Assets() {
     init();
   }
 
-  private void init(){
+  private void init() {
 
     FLOOR = loadGif(path, "floortile.gif", 64, 64);
     WALL = loadGif(path, "walltiles.gif", 64, 64);
@@ -95,27 +94,26 @@ public class Assets
   }
 
 
-
-
   /**
    * Gets a sprite sheet from the resources folder and splits them up into individual images.
+   *
    * @param path directory path
-   * @param f image file name
-   * @param w width of each image (px)
-   * @param h height of each image (px)
+   * @param f    image file name
+   * @param w    width of each image (px)
+   * @param h    height of each image (px)
    * @return 2D Image array - allows for allows for multiple state animation frames for single object - ie player up, down, left right etc.
    */
   public static BufferedImage[][] loadGif(File path, String f, int w, int h) {
     BufferedImage[][] gif;
-    try{
+    try {
       BufferedImage spriteSheet = ImageIO.read(new File(path, f));
 
       //Divides sprite sheet into individual images.
       int width = spriteSheet.getWidth() / w;
       int height = spriteSheet.getHeight() / h;
       gif = new BufferedImage[height][width];
-      for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++){
+      for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
           System.out.println(i + "" + j);
           gif[i][j] = spriteSheet.getSubimage(w * j, h * i, w, h); //adds portion of the image 'w x h'
         }
@@ -123,7 +121,7 @@ public class Assets
 
       return gif;
 
-    }catch(Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
       System.out.println("Error loading graphics.");
       System.exit(0);
@@ -133,84 +131,84 @@ public class Assets
 
   public BufferedImage[][] getAsset(String asset) {
     BufferedImage[][] ret;
-    switch(asset){
+    switch (asset) {
       case "floor":
-        ret =  FLOOR;
+        ret = FLOOR;
         break;
       case "wall":
-        ret =  WALL;
+        ret = WALL;
         break;
       case "hole":
-        ret =  HOLE;
+        ret = HOLE;
         break;
       case "door":
-        ret =  DOOR;
+        ret = DOOR;
         break;
       case "vdoor":
-        ret =  VDOOR;
+        ret = VDOOR;
         break;
       case "energy":
-        ret =  ENERGYBALL;
+        ret = ENERGYBALL;
         break;
       case "keycard":
-        ret =  KEYCARD_G;
+        ret = KEYCARD_G;
         break;
       case "info":
-        ret =  INFO;
+        ret = INFO;
         break;
       case "exitLock":
-        ret =  EXITLOCK;
+        ret = EXITLOCK;
         break;
       case "exit":
-        ret =  EXIT;
+        ret = EXIT;
         break;
       case "digits":
-        ret =  DIGITS;
+        ret = DIGITS;
         break;
       case "inventory":
-        ret =  INVENTORY;
+        ret = INVENTORY;
         break;
       case "font":
-        ret =  FONT;
+        ret = FONT;
         break;
       case "energyBarShade":
-        ret =  ENERGYBARSHADE;
+        ret = ENERGYBARSHADE;
         break;
       case "energyBar":
-        ret =  ENERGYBAR;
+        ret = ENERGYBAR;
         break;
       case "player":
-        ret =  PLAYER;
+        ret = PLAYER;
         break;
       case "hostileMob":
-        ret =  HOSTILEMOB;
+        ret = HOSTILEMOB;
         break;
       case "logo":
-        ret =  LOGO;
+        ret = LOGO;
         break;
       case "mapBackground":
-        ret =  MAPBACKGROUND;
+        ret = MAPBACKGROUND;
         break;
       case "infoBackground":
-        ret =  SCOREBACKGROUND;
+        ret = SCOREBACKGROUND;
         break;
       case "menuBackground":
-        ret =  MENU;
+        ret = MENU;
         break;
       case "levelSelectBackground":
-        ret =  LEVEL;
+        ret = LEVEL;
         break;
       case "pauseBackground":
-        ret =  PAUSE;
+        ret = PAUSE;
         break;
       case "levelSelectButtons":
-        ret =  LEVELSELECTBUTTONS;
+        ret = LEVELSELECTBUTTONS;
         break;
       case "menuButtons":
-        ret =  MENUBUTTONS;
+        ret = MENUBUTTONS;
         break;
       case "pauseButtons":
-        ret =  PAUSEBUTTONS;
+        ret = PAUSEBUTTONS;
         break;
       case "deadButtons":
         ret = DEADBUTTONS;
