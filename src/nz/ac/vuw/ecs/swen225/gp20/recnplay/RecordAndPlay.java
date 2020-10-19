@@ -29,7 +29,7 @@ import javax.json.JsonObjectBuilder;
 
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
-    private static ArrayList<String> moves = new ArrayList<>();
+    private static ArrayList<String>   moves = new ArrayList<>();
 
     private static long playbackSpeed = 123; // arbitrary number
     private static int remainingTimeAfterRun;
@@ -58,6 +58,8 @@ public class RecordAndPlay {
     /**
      * Method to save the recording of the game.
      * Main method calls this and passes the time in to record every tick.
+     *
+     * @param timeRemaining time remaining from the game
      */
     public static void save(int timeRemaining) {
         if (currentlyRecording) {
@@ -200,10 +202,10 @@ public class RecordAndPlay {
         to run this, have a button in GUI or somewhere where main can call
         Recordnplay.setPlaybackSpeed(time) where
         time:
-            100  = 0.1s
+            100  = 0.1s (slow)
             200  = 0.2s
             500  = 0.5s
-            1000 = 1.0s
+            1000 = 1.0s (fast)
      */
     public static void playByStep(Main game) {
         try {
@@ -303,7 +305,7 @@ public class RecordAndPlay {
     /**
      * Get state of the playback.
      *
-     * @return true if the recording is being played, false otherwise
+     * @return true if recoding is running, false if not.
      */
     public static boolean getIsRunning() {
         return isRunning;
