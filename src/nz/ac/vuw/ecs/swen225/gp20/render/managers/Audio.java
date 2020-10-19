@@ -11,7 +11,6 @@ import java.io.IOException;
 public class Audio {
 
   File path = new File("resources/Assets/Audio/");
-
   String prevButtonEvent;
 
 
@@ -63,55 +62,18 @@ public class Audio {
       prevButtonEvent = null;
       return;
     }
-    if (file != null) {
-      try {
-
-        AudioInputStream audioIn;
-        System.out.println(file);
-        audioIn = AudioSystem.getAudioInputStream(new File(path, file));
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioIn);
-        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(-20.0f); // reduce volume (decibels)
-
-        clip.start();
-
-      } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-        e.printStackTrace();
-        System.out.println("Audio not found for: " + action);
-      }
-
-    }
+    play(file);
   }
 
   public void gameSounds(String action) {
 //    System.out.println(action);
 
     String file = null;
-    System.out.println("GAMESOUND: " + action);
     if (action != null) {
-
       file = action + ".wav";
-      System.out.println("gamesound is " + action);
     }
     if (file != null) {
-      try {
-
-        AudioInputStream audioIn;
-        System.out.println(file);
-        audioIn = AudioSystem.getAudioInputStream(new File(path, file));
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioIn);
-        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(-20.0f); // reduce volume (decibels)
-
-        clip.start();
-
-      } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-        e.printStackTrace();
-        System.out.println("Audio not found for: " + action);
-      }
-
+      play(file);
     }
   }
 
@@ -134,6 +96,26 @@ public class Audio {
     } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
       e.printStackTrace();
     }
+  }
+
+  private void play(String file){
+
+    try {
+      AudioInputStream audioIn;
+      System.out.println(file);
+      audioIn = AudioSystem.getAudioInputStream(new File(path, file));
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioIn);
+      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+      gainControl.setValue(-20.0f); // reduce volume (decibels)
+
+      clip.start();
+
+    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+      e.printStackTrace();
+      System.out.println("Audio not found for: " + file);
+    }
+
   }
 
 
