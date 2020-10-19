@@ -35,7 +35,9 @@ public class Exit extends Sprite {
   /**
    * Updates the frame of the object by progressing the counter in it's animation object.
    */
-  public void update() { animation.update(); }
+  public void update() {
+    animation.update();
+  }
 
   /**
    * retrieves the image for the current frame it's in
@@ -45,16 +47,24 @@ public class Exit extends Sprite {
   public BufferedImage getImage() {
     return animation.getFrame();
   }
+
   /**
    * Get x coordinate of this object (same as the corresponding cell)
+   *
    * @return x
    */
-  public int getX(){ return x; }
+  public int getX() {
+    return x;
+  }
+
   /**
    * Get y coordinate of this object (same as the corresponding cell)
+   *
    * @return y
    */
-  public int getY(){ return y; }
+  public int getY() {
+    return y;
+  }
 
 }
 

@@ -14,21 +14,21 @@ public class Info {
   private BufferedImage image;
   private int x, y;
 
-  public Info(Assets assets, int x, int y, BufferedImage image){
+  public Info(Assets assets, int x, int y, BufferedImage image) {
     this.x = x;
     this.y = y;
     this.image = image;
   }
 
-  public int getX(){
+  public int getX() {
     return x;
   }
 
-  public int getY(){
+  public int getY() {
     return y;
   }
 
-  public BufferedImage getImage(){
+  public BufferedImage getImage() {
     return image;
   }
 
