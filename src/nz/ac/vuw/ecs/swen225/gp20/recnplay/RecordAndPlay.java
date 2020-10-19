@@ -334,7 +334,7 @@ public class RecordAndPlay {
         but also its history (i.e., each turn or Chap and any other actors).
 
             features implemented (manual tested):
-            1. step-by-step (80% done)
+            1. step-by-step (80% done, only mob left)
             2. auto-reply (done done) // call runReplay without setting playback speed.
             3. set replay speed (done) // call runReplay and set playback speed.
  */
