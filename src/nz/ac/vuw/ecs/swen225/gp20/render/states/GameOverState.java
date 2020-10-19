@@ -6,28 +6,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Represents the menu state (title screen) Will lead to other menu items or exit.
- *
- * @author Owen Nicholson 300130653
+ * Represents the game-over state - WINNING.
  */
-public class MenuState {
+public class GameOverState {
 
   Assets assets;
-  BufferedImage bg;
 
-  BufferedImage[][] buttonGraphics; //all button graphics
-  //the graphic row
+  BufferedImage bg;
   BufferedImage[] buttonOne;
   BufferedImage[] buttonTwo;
-  BufferedImage[] buttonThree;
-  BufferedImage[] buttonFour;
-  //current state
   BufferedImage currentStateOne;
   BufferedImage currentStateTwo;
-  BufferedImage currentStateThree;
-  BufferedImage currentStateFour;
 
-  public MenuState(Assets assets){
+  public GameOverState(Assets assets){
     this.assets = assets;
     init();
   }
@@ -36,17 +27,11 @@ public class MenuState {
    * Initialises all assets.
    */
   private void init(){
-    this.bg = assets.getAsset("menuBackground")[0][0];
-    this.buttonGraphics = assets.getAsset("menuButtons");
-
-    this.buttonOne = buttonGraphics[0];
-    this.buttonTwo = buttonGraphics[1];
-    this.buttonThree = buttonGraphics[2];
-    this.buttonFour = buttonGraphics[3];
+    this.bg = assets.getAsset("gameoverBackground")[0][0];
+    this.buttonOne = assets.getAsset("gameoverButtons")[0];
+    this.buttonTwo = assets.getAsset("gameoverButtons")[1];
     this.currentStateOne = buttonOne[0];
     this.currentStateTwo = buttonTwo[0];
-    this.currentStateThree = buttonThree[0];
-    this.currentStateFour = buttonFour[0];
   }
 
   /**
@@ -55,8 +40,6 @@ public class MenuState {
   private void resetButtonStates(){
     this.currentStateOne = buttonOne[0];
     this.currentStateTwo = buttonTwo[0];
-    this.currentStateThree = buttonThree[0];
-    this.currentStateFour = buttonFour[0];
   }
 
   /**
@@ -66,18 +49,12 @@ public class MenuState {
    */
   public void update(String buttonEvent){
     if(buttonEvent != null){
-      if(buttonEvent.contains("one")){
+      if(buttonEvent.contains("one")) {
         if (buttonEvent.contains("hover")) currentStateOne = buttonOne[1];
         else if (buttonEvent.contains("pressed")) currentStateOne = buttonOne[2];
       }else if (buttonEvent.contains("two")){
         if (buttonEvent.contains("hover")) currentStateTwo = buttonTwo[1];
         else if (buttonEvent.contains("pressed")) currentStateTwo = buttonTwo[2];
-      }else if (buttonEvent.contains("three")){
-        if (buttonEvent.contains("hover")) currentStateThree = buttonThree[1];
-        else if (buttonEvent.contains("pressed")) currentStateThree = buttonThree[2];
-      }else if (buttonEvent.contains("four")){
-        if (buttonEvent.contains("hover")) currentStateFour = buttonFour[1];
-        else if (buttonEvent.contains("pressed")) currentStateFour = buttonFour[2];
       }
     }else{
       resetButtonStates();
@@ -88,8 +65,7 @@ public class MenuState {
     g.drawImage(bg, 0, 0, null);
     g.drawImage(currentStateOne, 365, 268, null);
     g.drawImage(currentStateTwo, 365, 336, null);
-    g.drawImage(currentStateThree, 365, 404, null);
-    g.drawImage(currentStateFour, 365, 472, null);
   }
+
 
 }
