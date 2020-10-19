@@ -20,12 +20,23 @@ public class GUI extends JPanel implements KeyListener {
 
     JFrame frame;
 
+    MouseManager mm;
+
+    JButton    one;
+    JButton    two;
+    JButton  three;
+    JButton   four;
+    JButton  pause;
+    JButton record;
+
 
     //=========================
     BufferedImage image;
     Graphics2D g;
 
     private int gameState = 0;
+
+    private String buttonSoundEvent;
     //=========================
 
 
@@ -61,21 +72,34 @@ public class GUI extends JPanel implements KeyListener {
         mainPanel.setLayout(null);
         frame.setContentPane(mainPanel);
 
-        JButton    one = new JButton();
-        JButton    two = new JButton();
-        JButton  three = new JButton();
-        JButton   four = new JButton();
+        one = new JButton();
+        one.setName("one");
+        two = new JButton();
+        two.setName("two");
+        three = new JButton();
+        three.setName("three");
+        four = new JButton();
+        four.setName("four");
 
-        JButton  pause = new JButton();
-        JButton record = new JButton();
+        pause = new JButton();
+        pause.setName("pause");
+        record = new JButton();
+        record.setName("record");
 
+        mm = new MouseManager(this);
         one.setBounds  (377, 280, 135, 21);
+        one.addMouseListener(mm);
         two.setBounds  (377, 348, 135, 21);
+        two.addMouseListener(mm);
         three.setBounds(377, 416, 135, 21);
+        three.addMouseListener(mm);
         four.setBounds (377, 484, 135, 21);
+        four.addMouseListener(mm);
 
         record.setBounds(752, 35, 22, 27);
+        record.addMouseListener(mm);
         pause.setBounds(672, 539, 102, 22);
+        pause.addMouseListener(mm);
 
         mainPanel.add(   one);
         mainPanel.add(   two);
@@ -106,6 +130,8 @@ public class GUI extends JPanel implements KeyListener {
                     break;
                 case 3: //pause state
                     setGameState(4);
+                    break;
+                default:
                     break;
             }
         });
@@ -274,6 +300,12 @@ public class GUI extends JPanel implements KeyListener {
         }
     }
 
+    //=======
+    //mouse
+    //=======
+
+
+
     // ===================================================.
     // Getters and Setters
     // ===================================================.
@@ -283,6 +315,35 @@ public class GUI extends JPanel implements KeyListener {
      */
     public void setGameState(int id){
         this.gameState = id;
+//        if(gameState == 4){
+//
+//            one.removeMouseListener(mm);
+//            two.removeMouseListener(mm);
+//            three.removeMouseListener(mm);
+//            four.removeMouseListener(mm);
+//            pause.addMouseListener(mm);
+//            record.addMouseListener(mm);
+
+//            one.setEnabled(false);
+//            two.setEnabled(false);
+//            three.setEnabled(false);
+//            four.setEnabled(false);
+//            pause.setEnabled(true);
+//            record.setEnabled(true);
+//        }else{
+//            one.setEnabled(true);
+//            two.setEnabled(true);
+//            three.setEnabled(true);
+//            four.setEnabled(true);
+//            pause.setEnabled(false);
+//            record.setEnabled(false);
+//            one.addMouseListener(mm);
+//            two.addMouseListener(mm);
+//            three.addMouseListener(mm);
+//            four.addMouseListener(mm);
+//            pause.removeMouseListener(mm);
+//            record.removeMouseListener(mm);
+//        }
     }
 
     /**
@@ -361,5 +422,19 @@ public class GUI extends JPanel implements KeyListener {
      */
     public void setLoadState(String loaded) {
         this.loadingState = loaded;
+    }
+
+
+
+    public void setButtonSoundEvent(String event){
+        buttonSoundEvent = event;
+    }
+
+    public String getButtonSoundEvent(){
+        return buttonSoundEvent;
+    }
+
+    public void resetButtonEvent(){
+        buttonSoundEvent = null;
     }
 }
