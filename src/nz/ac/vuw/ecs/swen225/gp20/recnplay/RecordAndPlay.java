@@ -29,7 +29,7 @@ import javax.json.JsonObjectBuilder;
 
 public class RecordAndPlay {
     private static ArrayList<Integer> actors = new ArrayList<>();
-    private static ArrayList<String> moves = new ArrayList<>();
+    private static ArrayList<String>   moves = new ArrayList<>();
 
     private static long playbackSpeed = 123; // arbitrary number
     private static int remainingTimeAfterRun;
@@ -58,6 +58,8 @@ public class RecordAndPlay {
     /**
      * Method to save the recording of the game.
      * Main method calls this and passes the time in to record every tick.
+     *
+     * @param timeRemaining time remaining from the game
      */
     public static void save(int timeRemaining) {
         if (currentlyRecording) {
@@ -166,7 +168,7 @@ public class RecordAndPlay {
             remainingTimeAfterRun = obj != null
                     ? obj.getInt("timeRemaining") : 0;
 
-//            game.updateGUI();
+//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
 
         } catch (IOException e) {
             System.out.println("Error: " + e);
@@ -195,14 +197,27 @@ public class RecordAndPlay {
      *
      * @param game Game object
      */
+
+    /*
+        to run this, have a button in GUI or somewhere where main can call
+        Recordnplay.setPlaybackSpeed(time) where
+        time:
+            100  = 0.1s (slow)
+            200  = 0.2s
+            500  = 0.5s
+            1000 = 1.0s (fast)
+     */
     public static void playByStep(Main game) {
         try {
             if (isRunning && moves.size() > 0) {
                 if (actors.get(0) == 0) {
+
                     // if the first actor is the player
                     game.movePlayer(moves.get(0));
                     moves.remove(0);
                     actors.remove(0);
+                    // no use for saving popped/removed moves into another
+                    // temp list because we don't need back stepping.
 
                 } else {
                     // in the future for level 2 mob movement
@@ -211,9 +226,9 @@ public class RecordAndPlay {
 
                 if (moves.size() > 0) {
                     isRunning = false;
-//                    game.setTimeRemaining(remainingTimeAfterRun);
+                    game.setTimeRemaining(remainingTimeAfterRun);
                 }
-//                game.updateGUI();
+//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
@@ -227,7 +242,7 @@ public class RecordAndPlay {
      */
     public static void runReplay(Main game) {
 
-//        game.setFPS((int) (1000 / playbackSpeed));
+        game.setFPS((int) (1000 / playbackSpeed));
 
         // anonymous class replaced with lambda for readability
         Runnable runnable = () -> {
@@ -241,7 +256,7 @@ public class RecordAndPlay {
                 }
             }
             isRunning = false;
-//            game.setTimeRemaining(remainingTimeAfterRun);
+            game.setTimeRemaining(remainingTimeAfterRun);
         };
         thread = new Thread(runnable);
         thread.start();
@@ -290,7 +305,7 @@ public class RecordAndPlay {
     /**
      * Get state of the playback.
      *
-     * @return true if the recording is being played, false otherwise
+     * @return true if recoding is running, false if not.
      */
     public static boolean getIsRunning() {
         return isRunning;
@@ -319,7 +334,7 @@ public class RecordAndPlay {
         but also its history (i.e., each turn or Chap and any other actors).
 
             features implemented (manual tested):
-            1. step-by-step (80% done)
+            1. step-by-step (80% done, only mob left)
             2. auto-reply (done done) // call runReplay without setting playback speed.
             3. set replay speed (done) // call runReplay and set playback speed.
  */
