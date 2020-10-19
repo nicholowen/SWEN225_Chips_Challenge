@@ -9,7 +9,6 @@ import nz.ac.vuw.ecs.swen225.gp20.render.sprites.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -27,17 +26,17 @@ public class MapPane {
   BufferedImage floorAsset;
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
-  private Cell[][] floor    = new Cell[11][11];
-  private Cell[][] wall     = new Cell[11][11];
-  private Cell[][] hole     = new Cell[11][11];
-  private Cell[][] door     = new Cell[11][11];
-  private Cell[][] energy   = new Cell[11][11];
-  private Cell[][] key      = new Cell[11][11];
-  private Cell[][] exit     = new Cell[11][11];
+  private Cell[][] floor = new Cell[11][11];
+  private Cell[][] wall = new Cell[11][11];
+  private Cell[][] hole = new Cell[11][11];
+  private Cell[][] door = new Cell[11][11];
+  private Cell[][] energy = new Cell[11][11];
+  private Cell[][] key = new Cell[11][11];
+  private Cell[][] exit = new Cell[11][11];
   private Cell[][] exitLock = new Cell[11][11];
-  private Cell[][] info     = new Cell[11][11];
+  private Cell[][] info = new Cell[11][11];
 
-//  private HostileMob[] hostileMobs;
+  //  private HostileMob[] hostileMobs;
   private ActorSprite[][] visibleMobs = new ActorSprite[11][11];
 
   private ActorSprite[] mobs;
@@ -55,7 +54,6 @@ public class MapPane {
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
-
 
 
   //Single Rendered object (only one per map)
@@ -76,7 +74,7 @@ public class MapPane {
     init();
   }
 
-  private void init(){
+  private void init() {
     this.bg = assets.getAsset("mapBackground")[0][0];
     this.floorAsset = assets.getAsset("floor")[0][0];
     this.infoAsset = assets.getAsset("info")[0][0];
@@ -85,7 +83,8 @@ public class MapPane {
   /**
    * Initialises all 'sprites' in game, based on the position of the cells.
    * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
-   * @param cells The tiles of the game map.
+   *
+   * @param cells  The tiles of the game map.
    * @param actors Array including the player and all other mobs in game (hostile/neutral)
    */
   public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
@@ -93,18 +92,18 @@ public class MapPane {
     this.playerSprite = new ActorSprite(actors[0], assets);
 
     //creates array of actor array - player
-    mobs = new ActorSprite[actors.length-1];
+    mobs = new ActorSprite[actors.length - 1];
     //populates array with all other mobs
-    for(int m = 1; m < actors.length; m++){
+    for (int m = 1; m < actors.length; m++) {
       ActorSprite mob = new ActorSprite(actors[m], assets);
-      mobs[m-1] = mob;
+      mobs[m - 1] = mob;
     }
 
     sprites = new Object[cells.length][cells[0].length];
 
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
-        if(cells[i][j] != null) {
+        if (cells[i][j] != null) {
           switch (cells[i][j].getName()) {
             case "wall":
               WallTile wt = new WallTile(assets);
@@ -135,7 +134,7 @@ public class MapPane {
             case "door":
               if (cells[i][j] instanceof CellDoor) {
                 Door door;
-                if (i > 0 && (cells[i][j+1] instanceof CellWall || cells[i][j-1] instanceof CellWall)) {
+                if (i > 0 && (cells[i][j + 1] instanceof CellWall || cells[i][j - 1] instanceof CellWall)) {
                   door = new Door(assets, cells[i][j].getColor(), true);
                 } else {
                   door = new Door(assets, cells[i][j].getColor(), false);
@@ -175,31 +174,32 @@ public class MapPane {
 
   /**
    * Finds the neighbouring cells of a wall (all cardinal directions).
+   *
    * @param cells All map cells.
-   * @param x the x coordinate of the main cell being checked.
-   * @param y the y coordinate of the main cell being checked.
+   * @param x     the x coordinate of the main cell being checked.
+   * @param y     the y coordinate of the main cell being checked.
    * @return A cell array containing between 1 and 4 cells which are adjacent to the main cell in north, east, south, west order..
    */
-  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y){
-    Cell[] neighbours  = new Cell[4];
+  private Cell[] getWallNeighbours(Cell[][] cells, int x, int y) {
+    Cell[] neighbours = new Cell[4];
     int lengthX = cells[0].length;
     int lengthY = cells.length;
 
-    if(x != 0){
-      neighbours[1] = cells[y][x-1];
-      if(x < lengthX-1)neighbours[3] = cells[y][x+1];
+    if (x != 0) {
+      neighbours[1] = cells[y][x - 1];
+      if (x < lengthX - 1) neighbours[3] = cells[y][x + 1];
       else neighbours[3] = null;
-    }else{
+    } else {
       neighbours[1] = null;
-      neighbours[3] = cells[y][x+1];
+      neighbours[3] = cells[y][x + 1];
     }
-    if(y != 0){
-      neighbours[0] = cells[y-1][x];
-      if(y < lengthY-1) neighbours[2] = cells[y+1][x];
+    if (y != 0) {
+      neighbours[0] = cells[y - 1][x];
+      if (y < lengthY - 1) neighbours[2] = cells[y + 1][x];
       else neighbours[2] = null;
-    }else{
+    } else {
       neighbours[0] = null;
-      neighbours[2] = cells[y+1][x];
+      neighbours[2] = cells[y + 1][x];
     }
 
     return neighbours;
@@ -207,7 +207,8 @@ public class MapPane {
 
   /**
    * Gets an 11x11 grid around the player. Will keep the player centered on the screen.
-   * @param cells All cells for entire maze
+   *
+   * @param cells  All cells for entire maze
    * @param player The player's character - for obtaining current position
    * @return 9x9 Cell array
    */
@@ -217,20 +218,20 @@ public class MapPane {
 
     Point botRight = new Point(player.getX() + 5, player.getY() + 5);
 
-    int x = (int)playerPos.getX() - 5;
+    int x = (int) playerPos.getX() - 5;
 
     for (int i = 0; i < 11; i++) {
-      int y = (int)playerPos.getY() - 5;
+      int y = (int) playerPos.getY() - 5;
       for (int j = 0; j < 11; j++) {
-        for(ActorSprite actor : mobs){
-          if(actor.getX() == botRight.getX() - i && actor.getY() == botRight.getY() -j){
+        for (ActorSprite actor : mobs) {
+          if (actor.getX() == botRight.getX() - i && actor.getY() == botRight.getY() - j) {
             visibleMobs[i][j] = actor;
           }
         }
 
-        if((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
+        if ((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
           ret[i][j] = cells[x][y];
-        }else{
+        } else {
           ret[i][j] = null;
         }
         y++;
@@ -244,6 +245,7 @@ public class MapPane {
    * Iterates through an 11x11 grid around the player. Adds them to an appropriate list
    * which is used for drawing in order. Also updates all updatable items
    * (things with animation)
+   *
    * @param tuple tuple containing Cells and actors
    */
   public void update(RenderTuple tuple) {
@@ -255,16 +257,15 @@ public class MapPane {
 
     //update all mobs with direction (this can probably be condensed as all actors)
 
-    for(ActorSprite as : mobs){
+    for (ActorSprite as : mobs) {
       as.update();
     }
     Cell[][] surround = getSurround(tuple.getCells(), playerSprite);
 
 
-
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
-        if(surround[i][j] != null) {
+        if (surround[i][j] != null) {
           switch (surround[i][j].getName()) {
             case "free":
               floor[i][j] = surround[i][j];
@@ -277,7 +278,7 @@ public class MapPane {
               break;
             case "door":
               door[i][j] = surround[i][j];
-              if(doorObjects.containsKey(surround[i][j])){
+              if (doorObjects.containsKey(surround[i][j])) {
                 doorObjects.get(surround[i][j]).update();
               }
               break;
@@ -300,13 +301,13 @@ public class MapPane {
               break;
             case "exit":
               exit[i][j] = surround[i][j];
-              if(exitOb != null){
+              if (exitOb != null) {
                 exitOb.update();
               }
               break;
             case "exit lock":
               exitLock[i][j] = surround[i][j];
-              if(exitLockOb != null){
+              if (exitLockOb != null) {
                 exitLockOb.update();
               }
               break;
@@ -322,16 +323,16 @@ public class MapPane {
   /**
    * Clears all lists ready for next frame
    */
-  private void clearLists(){
-    floor    = new Cell[11][11];
-    wall     = new Cell[11][11];
-    hole     = new Cell[11][11];
-    door     = new Cell[11][11];
-    energy   = new Cell[11][11];
-    key      = new Cell[11][11];
-    exit     = new Cell[11][11];
+  private void clearLists() {
+    floor = new Cell[11][11];
+    wall = new Cell[11][11];
+    hole = new Cell[11][11];
+    door = new Cell[11][11];
+    energy = new Cell[11][11];
+    key = new Cell[11][11];
+    exit = new Cell[11][11];
     exitLock = new Cell[11][11];
-    info     = new Cell[11][11];
+    info = new Cell[11][11];
 
   }
 
@@ -340,6 +341,7 @@ public class MapPane {
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
    * The extra lines are for transition frames  - they are drawn off-screen and transition in
    * as the player moves.
+   *
    * @param g graphics object
    */
 //  @Override
@@ -348,10 +350,10 @@ public class MapPane {
 
 
     // transition animation - draws all objects depending on offset (speed)
-    if(playerSprite != null && playerSprite.getIsMoving()){
+    if (playerSprite != null && playerSprite.getIsMoving()) {
 
       int speed = 12;
-      switch(playerSprite.getDirection()){
+      switch (playerSprite.getDirection()) {
         case UP:
           offsetY += speed;
           break;
@@ -368,7 +370,7 @@ public class MapPane {
         default:
           break;
       }
-    }else{
+    } else {
       offsetX = offsetY = 0;
     }
 
@@ -376,7 +378,7 @@ public class MapPane {
     int y = 64;
 
     g.drawImage(bg, 0, 0, null);
-    for(int i = 0; i < 11; i++) {
+    for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
 
         if (floor[i][j] != null) {
@@ -389,10 +391,9 @@ public class MapPane {
           g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
         if (door[i][j] != null && doorObjects != null) {
-          if(doorObjects.get(door[i][j]).isVertical()){
+          if (doorObjects.get(door[i][j]).isVertical()) {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
-          }
-          else{
+          } else {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
           }
         }
@@ -402,26 +403,25 @@ public class MapPane {
         if (key[i][j] != null) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if(exit[i][j] != null){
+        if (exit[i][j] != null) {
           g.drawImage(exitOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if(info[i][j] != null){
+        if (info[i][j] != null) {
           g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if(exitLock[i][j] != null){
+        if (exitLock[i][j] != null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
-        if(visibleMobs[i][j] != null){
+        if (visibleMobs[i][j] != null) {
           g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
       }
     }
 
 
-
     //draws player last to remain on top (uses abolsute positioning.... for now)
-    if(playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
+    if (playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
 
     //clears lists for next frame
     clearLists();

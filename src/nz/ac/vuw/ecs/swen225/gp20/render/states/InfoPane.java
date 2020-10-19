@@ -14,7 +14,6 @@ import java.util.Map;
  * to make it easier to work on.
  *
  * @author Owen Nicholson 300130653
- *
  */
 public class InfoPane {
 
@@ -48,7 +47,7 @@ public class InfoPane {
   /**
    * Initialises the background - more coming soon...
    */
-  private void init(){
+  private void init() {
     this.bg = assets.getAsset("infoBackground")[0][0];
     this.inventorySprites = assets.getAsset("inventory");
     this.digits = assets.getAsset("digits")[0];
@@ -60,9 +59,10 @@ public class InfoPane {
 
   /**
    * Gets a time and converts to char array to be converted into an int
+   *
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple){
+  public void update(int timeLimit, RenderTuple tuple) {
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = tuple.getInventory();
@@ -74,20 +74,21 @@ public class InfoPane {
 
   /**
    * Constructs an array of images based on the input.
+   *
    * @param s A string to be converted.
    * @return a BufferedImage array of the string converted to images (custom font).
    */
-  private BufferedImage[] drawString(String s){
-    if(s == null) return null;
+  private BufferedImage[] drawString(String s) {
+    if (s == null) return null;
     BufferedImage[] string = new BufferedImage[s.length()];
 
-    for(int i = 0; i < s.length(); i++){
+    for (int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
 
-      if(ch >= 65 && ch <= 90) {
+      if (ch >= 65 && ch <= 90) {
         string[i] = font[0][ch - 65];
       }
-      if(ch >= 97 && ch <= 122){
+      if (ch >= 97 && ch <= 122) {
         string[i] = font[1][ch - 97];
       }
     }
@@ -98,11 +99,12 @@ public class InfoPane {
    * Gets a sub-image of the energybar that is greyed out. The greyed out image
    * represents the percentage of energy not collected.
    * Sets 'energyFilled' which represents the position to draw the greyed out sub-image.
+   *
    * @return The image representing the percentage of energy remaining.
    */
-  private BufferedImage getEnergyLevel(){
+  private BufferedImage getEnergyLevel() {
     int length = energyBarShade.getWidth();
-    energyFilled = (int) (length * (gathered/(double)total));
+    energyFilled = (int) (length * (gathered / (double) total));
     return energyBarShade.getSubimage(energyFilled, 0, energyBarShade.getWidth() - energyFilled, energyBarShade.getHeight());
   }
 
@@ -110,16 +112,17 @@ public class InfoPane {
   /**
    * Converts the char array to numeric values which are then drawn on screen
    * with absolute values (dictated by the background graphic of the ScorePanel.
+   *
    * @param g Graphics object
    */
 //  @Override
   public void draw(Graphics g) {
 //    super.paintComponent(g);
-    g.drawImage(bg, gameSize , 0, null);
+    g.drawImage(bg, gameSize, 0, null);
 
     g.drawImage(energyBar, gameSize + 74, 330, null);
-    if(energyBarShade != null) {
-      if(total != gathered) {
+    if (energyBarShade != null) {
+      if (total != gathered) {
         g.drawImage(getEnergyLevel(), gameSize + 74 + energyFilled, 330, null);
       }
     }
@@ -173,7 +176,7 @@ public class InfoPane {
             break;
         }
         g.drawImage(inventorySprites[0][j], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
-        g.drawImage(inventorySprites[3][c-1], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
+        g.drawImage(inventorySprites[3][c - 1], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
         countX++;
         if (countX == 4) {
           countY++;
@@ -183,12 +186,11 @@ public class InfoPane {
 
     }
     //can only handle a single line up to 22 characters (including spaces)
-    if(onInfo && info != null){
-      for(int f = 0; f < info.length; f++){
+    if (onInfo && info != null) {
+      for (int f = 0; f < info.length; f++) {
         g.drawImage(info[f], gameSize + 57 + (f * 9), 259, null);
       }
     }
-
 
 
   }

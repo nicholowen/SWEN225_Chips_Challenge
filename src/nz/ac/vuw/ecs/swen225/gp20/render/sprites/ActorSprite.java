@@ -6,20 +6,20 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
-public class ActorSprite extends Sprite{
+public class ActorSprite extends Sprite {
 
   private BufferedImage[] sprites;
   private Actor actor;
 
-  public ActorSprite(Actor actor, Assets assets){
+  public ActorSprite(Actor actor, Assets assets) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
     this.actor = actor;
     // calls on asset class to get the frames for this object.
-    if (actor.getName().equals("player")) { sprites = assets.getAsset("player")[0]; }
-    else if (actor.isPushable()) { /*add moveable assets here */}
-    else sprites = assets.getAsset("hostileMob")[0];
+    if (actor.getName().equals("player")) {
+      sprites = assets.getAsset("player")[0];
+    } else if (actor.isPushable()) { /*add moveable assets here */} else sprites = assets.getAsset("hostileMob")[0];
 
     animation.setFrames(sprites);
     animation.setDelay(6);
@@ -28,6 +28,7 @@ public class ActorSprite extends Sprite{
 
   /**
    * Gets X coordinate of actor
+   *
    * @return int - coordinate on map
    */
   public int getX() {
@@ -36,6 +37,7 @@ public class ActorSprite extends Sprite{
 
   /**
    * Gets Y coordinate of actor
+   *
    * @return int - coordinate on map
    */
   public int getY() {
@@ -45,31 +47,31 @@ public class ActorSprite extends Sprite{
   /**
    * Updates the frame of the object
    */
-  public void update(){
+  public void update() {
 //    this.direction = direction;
-    if(actor.isPushable()) {
+    if (actor.isPushable()) {
       animation.update();
-    }
-    else if (actor.getIsMoving()) {
+    } else if (actor.getIsMoving()) {
       animation.update();
     }
   }
 
-  public boolean getIsMoving(){
+  public boolean getIsMoving() {
     return actor.getIsMoving();
   }
 
-  public Direction getDirection(){
+  public Direction getDirection() {
     return actor.getDirection();
   }
 
   /**
    * retrieves the image for the current frame it's in
+   *
    * @return Current animation frame
    */
   public BufferedImage getImage() {
     int frame = 1;
-    switch(actor.getDirection()) {
+    switch (actor.getDirection()) {
       case UP:
         frame = 0;
         break;
@@ -86,6 +88,7 @@ public class ActorSprite extends Sprite{
         break;
     }
 
-    return animation.getFrame(frame);  }
+    return animation.getFrame(frame);
+  }
 
 }
