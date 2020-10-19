@@ -57,8 +57,8 @@ public class Main {
             if (!gameEnded && !paused) {
                 if(currentState == 4) gui.frame.requestFocusInWindow();
                 checkUpdates();
-                if(currentState == 4) render.update(maze.tick(direction), timeRemaining, maze.getPlayerInventory());
-                else render.update(currentState);
+                if(currentState == 4) render.update(maze.tick(direction), timeRemaining, gui.getButtonSoundEvent());
+                else render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
                 gui.drawToScreen();
                 
