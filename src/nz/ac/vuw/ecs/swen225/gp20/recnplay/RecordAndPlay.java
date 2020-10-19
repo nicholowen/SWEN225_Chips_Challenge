@@ -48,7 +48,7 @@ public class RecordAndPlay {
      * @param maze     the maze state
      * @param saveName file to be saved into
      */
-    public static void newSaveOfRecording(Maze maze, String saveName) {
+    public static void startNewRecording(Maze maze, String saveName) {
         moves.clear();
         saveFile = saveName;
         currentlyRecording = true;
