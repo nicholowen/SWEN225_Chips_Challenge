@@ -20,12 +20,23 @@ public class GUI extends JPanel implements KeyListener {
 
     JFrame frame;
 
+    MouseManager mm;
+
+    JButton    one;
+    JButton    two;
+    JButton  three;
+    JButton   four;
+    JButton  pause;
+    JButton record;
+
 
     //=========================
     BufferedImage image;
     Graphics2D g;
 
     private int gameState = 0;
+
+    private String buttonSoundEvent;
     //=========================
 
 
@@ -61,28 +72,21 @@ public class GUI extends JPanel implements KeyListener {
         mainPanel.setLayout(null);
         frame.setContentPane(mainPanel);
 
-        JButton    one = new JButton();
-        JButton    two = new JButton();
-        JButton  three = new JButton();
-        JButton   four = new JButton();
+        one = new JButton();
+        two = new JButton();
+        three = new JButton();
+        four = new JButton();
+        pause = new JButton();
+        record = new JButton();
 
-        JButton  pause = new JButton();
-        JButton record = new JButton();
+        mm = new MouseManager(this);
+        this.formatButton(one, "one", 377, 280, 135, 21);
+        this.formatButton(two, "two", 377, 348, 135, 21);
+        this.formatButton(three, "three", 377, 416, 135, 21);
+        this.formatButton(four, "four", 377, 484, 135, 21);
 
-        one.setBounds  (377, 280, 135, 21);
-        two.setBounds  (377, 348, 135, 21);
-        three.setBounds(377, 416, 135, 21);
-        four.setBounds (377, 484, 135, 21);
-
-        record.setBounds(752, 35, 22, 27);
-        pause.setBounds(672, 539, 102, 22);
-
-        mainPanel.add(   one);
-        mainPanel.add(   two);
-        mainPanel.add( three);
-        mainPanel.add(  four);
-        mainPanel.add( pause);
-        mainPanel.add(record);
+        this.formatButton(record, "record", 752, 35, 22, 27);
+        this.formatButton(pause, "pause", 672, 539, 102, 22);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -106,6 +110,8 @@ public class GUI extends JPanel implements KeyListener {
                     break;
                 case 3: //pause state
                     setGameState(4);
+                    break;
+                default:
                     break;
             }
         });
@@ -163,15 +169,36 @@ public class GUI extends JPanel implements KeyListener {
 
 
     }
-
-    public Graphics2D getImageGraphics(){
-        return g;
-    }
+    
+    // =======================================================.
+    // Utility Methods
+    // =======================================================.
 
     public void drawToScreen(){
         Graphics g2 = mainPanel.getGraphics();
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
+    }
+    
+
+    /**
+     * Called to format buttons and to add them to the main panel. 
+     * 
+     * @param button
+     * @param name of the button
+     * @param x coordinate for button
+     * @param y coordinate for button
+     * @param w width of button
+     * @param h height of button
+     */
+    public void formatButton(JButton button, String name, int x, int y, int w, int h) {
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.addMouseListener(mm);
+        button.setName(name);
+        button.setBounds(x, y, w, h);
+        mainPanel.add(button);
     }
 
 
@@ -242,7 +269,7 @@ public class GUI extends JPanel implements KeyListener {
         else if (keyCode == KeyEvent.VK_SPACE) {
             paused = true;
         }
-        // close the œgame is paused dialog and resume the game
+        // close the game is paused dialog and resume the game
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             paused = false;
         }
@@ -277,6 +304,10 @@ public class GUI extends JPanel implements KeyListener {
     // ===================================================.
     // Getters and Setters
     // ===================================================.
+    public Graphics2D getImageGraphics(){
+        return g;
+    }
+    
     /**
      * Sets the current state of the game.
      *
@@ -361,5 +392,19 @@ public class GUI extends JPanel implements KeyListener {
      */
     public void setLoadState(String loaded) {
         this.loadingState = loaded;
+    }
+
+
+
+    public void setButtonSoundEvent(String event){
+        buttonSoundEvent = event;
+    }
+
+    public String getButtonSoundEvent(){
+        return buttonSoundEvent;
+    }
+
+    public void resetButtonEvent(){
+        buttonSoundEvent = null;
     }
 }
