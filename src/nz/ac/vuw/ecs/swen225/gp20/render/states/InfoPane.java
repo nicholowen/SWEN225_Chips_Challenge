@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
-import nz.ac.vuw.ecs.swen225.gp20.render.sprites.KeyCard;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,8 +18,9 @@ import java.util.Map;
  */
 public class InfoPane {
 
+  Assets assets;
 
-  private Image background;
+  private Image bg;
   private BufferedImage[] digits;
   private char[] chars = {0, 0, 0}; //array of numbers to print out - represents time remaining
   private BufferedImage[][] inventorySprites;
@@ -30,15 +30,18 @@ public class InfoPane {
 
   boolean onInfo; //true if the player is on an info tile
 
+  private BufferedImage[][] font;
+
   private int total; //total amount of energy
   private int gathered; //energy picked up
   private int energyFilled; //amount of energy filled (an x coordinate to draw the energy bar)
+  private BufferedImage energyBarShade;
+  private BufferedImage energyBar;
 
   int gameSize = 576; // the width of the MapPane image (to draw this pane in the correct place)
 
-  public InfoPane() {
-    this.background = loadBackground();
-    inventorySprites = Assets.INVENTORY;
+  public InfoPane(Assets assets) {
+    this.assets = assets;
     init();
   }
 
@@ -46,12 +49,14 @@ public class InfoPane {
    * Initialises the background - more coming soon...
    */
   private void init(){
-    digits = Assets.DIGITS[0];
+    this.bg = assets.getAsset("infoBackground")[0][0];
+    this.inventorySprites = assets.getAsset("inventory");
+    this.digits = assets.getAsset("digits")[0];
+    this.font = assets.getAsset("font");
+    this.energyBarShade = assets.getAsset("energyBarShade")[0][0];
+    this.energyBar = assets.getAsset("energyBar")[0][0];
   }
 
-  private BufferedImage loadBackground(){
-    return Assets.SCOREBACKGROUND[0][0];
-  }
 
   /**
    * Gets a time and converts to char array to be converted into an int
@@ -80,10 +85,10 @@ public class InfoPane {
       char ch = s.charAt(i);
 
       if(ch >= 65 && ch <= 90) {
-        string[i] = Assets.FONT[0][ch - 65];
+        string[i] = font[0][ch - 65];
       }
       if(ch >= 97 && ch <= 122){
-        string[i] = Assets.FONT[1][ch - 97];
+        string[i] = font[1][ch - 97];
       }
     }
     return string;
@@ -96,10 +101,9 @@ public class InfoPane {
    * @return The image representing the percentage of energy remaining.
    */
   private BufferedImage getEnergyLevel(){
-    BufferedImage temp = Assets.ENERGYBARSHADE;
-      int length = temp.getWidth();
-      energyFilled = (int) (length * (gathered/(double)total));
-    return temp.getSubimage(energyFilled, 0, temp.getWidth() - energyFilled, temp.getHeight());
+    int length = energyBarShade.getWidth();
+    energyFilled = (int) (length * (gathered/(double)total));
+    return energyBarShade.getSubimage(energyFilled, 0, energyBarShade.getWidth() - energyFilled, energyBarShade.getHeight());
   }
 
 
@@ -111,10 +115,10 @@ public class InfoPane {
 //  @Override
   public void draw(Graphics g) {
 //    super.paintComponent(g);
-    g.drawImage(background, gameSize , 0, null);
+    g.drawImage(bg, gameSize , 0, null);
 
-    g.drawImage(Assets.ENERGYBAR, gameSize + 74, 330, null);
-    if(Assets.ENERGYBARSHADE != null) {
+    g.drawImage(energyBar, gameSize + 74, 330, null);
+    if(energyBarShade != null) {
       if(total != gathered) {
         g.drawImage(getEnergyLevel(), gameSize + 74 + energyFilled, 330, null);
       }

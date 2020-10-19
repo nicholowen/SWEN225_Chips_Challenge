@@ -14,7 +14,7 @@ public class ExitLock extends Sprite {
   BufferedImage[] sprites;
   int x, y;
 
-  public ExitLock(int x, int y) {
+  public ExitLock(Assets assets, int x, int y) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
 
@@ -23,7 +23,7 @@ public class ExitLock extends Sprite {
     this.y = y;
 
     // calls on asset class to get the frames for this object.
-    sprites = Assets.EXITLOCK[0];
+    sprites = assets.getAsset("exitLock")[0];
     animation.setFrames(sprites);
     animation.setDelay(2);
 
@@ -40,8 +40,7 @@ public class ExitLock extends Sprite {
    * @return Current animation frame
    */
   public BufferedImage getImage() {
-    BufferedImage image = animation.getFrame();
-    return image;
+    return animation.getFrame();
   }
   /**
    * Get x coordinate of this object (same as the corresponding cell)

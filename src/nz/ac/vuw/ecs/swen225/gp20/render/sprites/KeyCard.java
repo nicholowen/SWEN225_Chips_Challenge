@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
+
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -13,7 +14,7 @@ public class KeyCard extends Sprite{
 
 
 
-  public KeyCard(String c) {
+  public KeyCard(Assets assets, String c) {
     super();
 
     int index = 0;
@@ -34,10 +35,8 @@ public class KeyCard extends Sprite{
         break;
 
     }
-    BufferedImage[] sprites;
     // calls on asset class to get the frames for this object.
-    sprites = Assets.KEYCARD_G[index];
-    animation.setFrames(sprites);
+    animation.setFrames(assets.getAsset("keycard")[index]);
     animation.setDelay(4);
 
   }
