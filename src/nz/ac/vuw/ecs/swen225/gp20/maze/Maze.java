@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.actors.ActorHostileMonster;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.NonPlayableCharacter;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Tile;
 
 public class Maze {
@@ -49,6 +51,7 @@ public class Maze {
 	 * @return Time limit in seconds of the level in question. -1 if an error occurred while loading.
 	 */
 	public int loadMaze(int levelToLoad) {
+		System.out.println("Loadmaze was called, trying to load maze:"+levelToLoad);
 		Level toLoad;
 		try {
 			toLoad=Persistence.read(levelToLoad);
@@ -57,6 +60,7 @@ public class Maze {
 			return -1;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		//Resetting/initializing
+		System.out.println("Managed to read the file successfully!");
 		gameOver=false;
 		currentTreasureLeft=toLoad.properties.chipsInLevel;
 		currentTreasureCollected=0;
@@ -65,19 +69,21 @@ public class Maze {
 		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
 		oomphCounter=0;
-		//helpMessage=toLoad.getHelp(); //TODO: Have getHelp implemented in Persistence/Level
+		System.out.println("Loaded arbitrary values");
 		
 		//Load board
 		board = toLoad.getBoard();
+		System.out.println("Loaded board");
 
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
+		System.out.println("Loaded player");
 
-		/*//Load NPCs
-		for(Character c:toLoad.getCharacters()){
-				creatures.add(new Actor(false, c.getName(), c.getX(), c.getY()));
+		//Load NPCs
+		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
+				creatures.add(new ActorHostileMonster(c.getType(), c.x, c.y, c.getPath()));
 		}
-		*/
+		System.out.println("Loaded NPCs!");
 
 		return toLoad.properties.timeLimit;
 	}
@@ -119,6 +125,7 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
+		boolean shouldAdvanceLevel=false;//Change to true if player completes the level this tick.
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
 			oomphCounter--;
 		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
@@ -153,6 +160,8 @@ public class Maze {
 		if(stoodOn.killsPlayer(playerInventory)) {
 			soundEvent="dyingnoises";
 			gameOver=true;
+		} else if(stoodOn instanceof CellExit){//Win! Kind of.
+			shouldAdvanceLevel=true;
 		}
 		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
 			if(stoodOn.isTreasure()) {//If treasure, increment counters, ignore inventory.
@@ -169,6 +178,11 @@ public class Maze {
 		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);//Check if the player's standing on an info tile
 		//if(soundEvent!=null)
 		//System.out.println("DEBUG: Play sound:"+soundEvent);
+		if(shouldAdvanceLevel){//If the player should advance the level, IE, if they "win"
+			soundEvent="awinrarisyou";
+			loadMaze(currentLevel+1);//Load with the new "current level". Maze updates the variable so it's fine.
+		}
+
 		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, gameOver);
 	}
 	
@@ -232,12 +246,13 @@ public class Maze {
 			return false;//Out-of-bounds, cannot walk through.
 		
 		Cell toCheck=board[xToCheck][yToCheck];
-		if(toCheck.isOpenable()) {//If the checked tile is a door
+		if(toCheck.isOpenable()&&toCheck.isSolid) {//If the checked tile is a door (And solid - meaning it's closed)
 			String keycardName = (toCheck.getColor()+"key");
 			if(playerInventory.containsKey(keycardName)) {//If true, then it means there's at least one matching keycard
 				removeFromInventory(keycardName);
-				board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
-				return true;//Immediately walk onto the space where the door used to be. Will be FALSE once doors are animated.
+				//board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);//TODO: Once animated door frames are available, make the door open slowly rather than instantly.
+				toCheck.isSolid=false;//Make it so that the door's no longer solid, meaning that it acts as if it's "open" but can be walked through.
+				return true;//Immediately walk onto the space where the door used to be. Will be FALSE if doors have animations which force the player to wait.
 			}
 			return false;//If there was no matching keycard, return false.
 			

@@ -3,17 +3,17 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import java.awt.Point;
 
 public class Actor {
-	private String name;
-	private boolean isPlayer;
-	private Direction direction;
-	private boolean isMoving;
-	private int x;
-	private int y;
-	private int moveProgress;//Number of ticks the actor's been moving
-	private int ticksToMove;//Total number of ticks it takes to move
-	private boolean killsPlayer;
-	private boolean blocksMovement;
-	private boolean isPushable;
+	protected String name;
+	protected boolean isPlayer;
+	protected Direction direction;
+	protected boolean isMoving;
+	protected int x;
+	protected int y;
+	protected int moveProgress;//Number of ticks the actor's been moving
+	protected int ticksToMove;//Total number of ticks it takes to move
+	protected boolean killsPlayer;
+	protected boolean blocksMovement;
+	protected boolean isPushable;
 	
 	/**
 	 * This constructor should be used for the player and the player alone - anything else should have a custom class.
@@ -30,9 +30,14 @@ public class Actor {
 		if(isPlayer) {
 			this.killsPlayer=false;
 		}
+
+		//All of these are simply the "default" values.
+		isMoving=false;
 		name=nameReference;
 		ticksToMove=speed;
 		direction=Direction.DOWN;//Generic starting direction
+		isPushable=false;
+		blocksMovement=false;
 	}
 	
 	public boolean getIsMoving(){
