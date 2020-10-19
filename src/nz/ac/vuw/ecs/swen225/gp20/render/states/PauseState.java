@@ -23,6 +23,9 @@ public class PauseState {
     init();
   }
 
+  /**
+   * Initialises all assets.
+   */
   private void init(){
     this.bg = assets.getAsset("pauseBackground")[0][0];
     this.buttonOne = assets.getAsset("pauseButtons")[0];
@@ -31,16 +34,19 @@ public class PauseState {
     this.currentStateTwo = buttonTwo[0];
   }
 
+  /**
+   * Returns the button graphics back to the default state.
+   */
   private void resetButtonStates(){
     this.currentStateOne = buttonOne[0];
     this.currentStateTwo = buttonTwo[0];
   }
 
   /**
-   * Updates, thus repaints the graphics object.
-   * TODO: include button detection so the button can be animated (highlighted and/or depressed)
+   * Checks to see if any of the buttons are being hovered over pressed and
+   * updates the graphics accordingly.
+   * @param buttonEvent String that contains the button number and the state it is in.
    */
-
   public void update(String buttonEvent){
     if(buttonEvent != null){
       if(buttonEvent.contains("one")) {
