@@ -34,8 +34,8 @@ public class IntroState {
    * Low alpha = transparent, high alpha = opaque
    */
   public void update() {
-    int fade = 120;
-    int length = 190;
+    int fade = 30;
+    int length = 40;
 
     tick++;
 
