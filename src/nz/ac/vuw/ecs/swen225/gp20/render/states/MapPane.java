@@ -384,32 +384,32 @@ public class MapPane {
         if (floor[i][j] != null) {
           g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (wall[i][j] != null) {
+        if (wall[i][j] != null && wallObjects.size() > 0) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (hole[i][j] != null) {
+        if (hole[i][j] != null && holeObjects.size() > 0) {
           g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (door[i][j] != null && doorObjects != null) {
+        if (door[i][j] != null && doorObjects.size() > 0) {
           if (doorObjects.get(door[i][j]).isVertical()) {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
           } else {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
           }
         }
-        if (energy[i][j] != null) {
+        if (energy[i][j] != null && energyObjects.size() > 0) {
           g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (key[i][j] != null) {
+        if (key[i][j] != null && keyObjects.size() > 0) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (exit[i][j] != null) {
+        if (exit[i][j] != null && exitOb != null) {
           g.drawImage(exitOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (info[i][j] != null) {
+        if (info[i][j] != null && infoOb != null) {
           g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (exitLock[i][j] != null) {
+        if (exitLock[i][j] != null && exitLockOb !=null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
