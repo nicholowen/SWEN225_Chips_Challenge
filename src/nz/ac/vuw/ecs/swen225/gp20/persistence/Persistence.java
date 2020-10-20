@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
@@ -146,8 +145,12 @@ public class Persistence {
      * @return the saved maze object
      */
     public static Maze loadGameState() throws IOException {
-        File recentSave = getRecentSave();
-        return readJsonFromFile(recentSave, Maze.class);
+        try {
+            File recentSave = getRecentSave();
+            return readJsonFromFile(recentSave, Maze.class);
+        } catch (FileNotFoundException e) {
+            return new Maze();
+        }
     }
 
     /**
@@ -166,14 +169,15 @@ public class Persistence {
      * @return the most recent file, cannot be null
      */
     private static File getRecentSave() throws FileNotFoundException {
-        File[] directoryList= savedState.toFile().listFiles();
+        File[] directoryList= savedState.toFile()
+                .listFiles((dir, name) -> name.matches("\\d{8}-\\d{6}-game-state.json"));
 
         if (directoryList == null || directoryList.length == 0){
             throw new FileNotFoundException("Directory '" + savedState + "' is empty.");
         } else {
             List<File> sortedFiles = Arrays.stream(directoryList)
-                    .filter(file -> file.getName().matches("\\d{8}-\\d{6}-game-state.json"))
-                    .sorted(Comparator.comparing(File::getName).reversed()).collect(Collectors.toList());
+                    .sorted(Comparator.comparing(File::getName).reversed())
+                    .collect(Collectors.toList());
 
             assert sortedFiles.get(0) != null;
             return sortedFiles.get(0);
