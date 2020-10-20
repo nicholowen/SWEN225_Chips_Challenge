@@ -40,7 +40,14 @@ public class Main {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
 //        Maze maze = new Maze(Persistence.getHighestLevel());
-
+        
+        try {
+            Persistence.setSaveType("resume");
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
         if (Persistence.getSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
         }
@@ -85,8 +92,10 @@ public class Main {
                 if ((System.currentTimeMillis() >= start + delay) && currentState == 4) {
                     start = System.currentTimeMillis();
                     timeRemaining--; // timeRemaining goes down every second
-                    gui.setTimeRemaining(timeRemaining);
                 }
+            }
+            else {
+                break;
             }
         }
     }
@@ -136,6 +145,7 @@ public class Main {
     public void loadCurrentState() {
         try {
             maze = Persistence.loadGameState();
+            render.init(maze);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,7 +155,7 @@ public class Main {
     // Recording and Replaying Methods
     // =======================================================.
     public void startRecord() {
-        RecordAndPlay.startNewRecording(maze, "lol.txt");
+        RecordAndPlay.startNewRecording(maze, "lol");
     }
 
     public void stopRecord() {
@@ -154,12 +164,12 @@ public class Main {
     }
 
     public void replay() {
-        RecordAndPlay.load("lol.txt", this);
+        RecordAndPlay.load("lol", this);
         RecordAndPlay.setPlaybackSpeed(fps);
         RecordAndPlay.runReplay(this);
     }
 
-    public void runMove() {
+    private void runMove() {
         // Go UP
         if (direction.equals("UP")) {
             render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
