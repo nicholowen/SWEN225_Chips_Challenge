@@ -55,7 +55,11 @@ public class Assets {
   private static BufferedImage[][] LEVELSELECTBUTTONS;
   private static BufferedImage[][] DEADBUTTONS;
   private static BufferedImage[][] GAMEOVERBUTTONS;
+
   private static BufferedImage[][] INFOPAUSEBUTTON;
+  private static BufferedImage[][] RECORDBUTTON;
+  private static BufferedImage[][] CONTROLBUTTONS;
+
 
   public Assets() {
     init();
@@ -92,6 +96,9 @@ public class Assets {
     DEADBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
     GAMEOVERBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
     INFOPAUSEBUTTON = loadGif(path, "infoPauseButton.gif", 102, 22);
+    RECORDBUTTON = loadGif(path, "recordButton.gif", 26, 38);
+    CONTROLBUTTONS = loadGif(path, "controlButtons.gif", 18, 18);
+
 
   }
 
@@ -196,6 +203,10 @@ public class Assets {
       case "gameoverButtons": ret = GAMEOVERBUTTONS;
         break;
       case "infoPauseButton": ret = INFOPAUSEBUTTON;
+        break;
+      case "recordButton": ret = RECORDBUTTON;
+        break;
+      case "controlButtons": ret = CONTROLBUTTONS;
         break;
       default:
         return null;

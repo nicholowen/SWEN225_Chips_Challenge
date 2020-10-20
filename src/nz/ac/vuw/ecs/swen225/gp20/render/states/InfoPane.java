@@ -5,6 +5,8 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ public class InfoPane {
   private BufferedImage[] info; //array of font images to print out on the information read-out
 
   boolean onInfo; //true if the player is on an info tile
+  boolean recording;
 
   private BufferedImage[][] font;
 
@@ -36,6 +39,10 @@ public class InfoPane {
   private int energyFilled; //amount of energy filled (an x coordinate to draw the energy bar)
   private BufferedImage energyBarShade;
   private BufferedImage energyBar;
+
+  private ArrayList<BufferedImage[]> buttonGraphics;
+  private BufferedImage[] buttonStates;
+
 
   int gameSize = 576; // the width of the MapPane image (to draw this pane in the correct place)
 
@@ -54,6 +61,22 @@ public class InfoPane {
     this.font = assets.getAsset("font");
     this.energyBarShade = assets.getAsset("energyBarShade")[0][0];
     this.energyBar = assets.getAsset("energyBar")[0][0];
+    buttonGraphics = new ArrayList<>();
+    BufferedImage[][] controlButtons = assets.getAsset("controlButtons");
+    buttonGraphics.add(assets.getAsset("infoPauseButton")[0]);
+    buttonGraphics.add(assets.getAsset("recordButton")[0]);
+    buttonGraphics.add(controlButtons[0]);
+    buttonGraphics.add(controlButtons[1]);
+    buttonGraphics.add(controlButtons[2]);
+    buttonGraphics.add(controlButtons[3]);
+    buttonGraphics.add(controlButtons[4]);
+
+    buttonStates = new BufferedImage[buttonGraphics.size()];
+
+    for(int i = 0; i < buttonStates.length; i++) {
+      buttonStates[i] = buttonGraphics.get(i)[0];
+    }
+
   }
 
 
@@ -62,7 +85,7 @@ public class InfoPane {
    *
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple) {
+  public void update(int timeLimit, RenderTuple tuple, String buttonEvent) {
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.inventory = tuple.getInventory();
@@ -70,7 +93,52 @@ public class InfoPane {
     this.onInfo = tuple.isPlayerOnInfo();
     this.gathered = tuple.getTreasureCollected();
     this.total = gathered + tuple.getTreasureLeft();
+
+
+    if (buttonEvent != null) {
+      int b;
+      String[] BE = buttonEvent.split("_");
+      switch (BE[1]) {
+        case "pause": b = 0;
+          break;
+        case "record": b = 1;
+          break;
+        case "slow": b = 2;
+          break;
+        case "fast": b = 3;
+          break;
+        case "stop": b = 4;
+          break;
+        case "play": b = 5;
+          break;
+        case "step": b = 6;
+          break;
+        default:
+          b = 100;
+      }
+      buttonStates[b] = checkState(BE[0], buttonGraphics.get(b));
+      if(BE[1].equals("record") && recording){
+        resetButtonStates();
+      }
+    } else {
+      resetButtonStates();
+    }
+
   }
+
+  public BufferedImage checkState(String buttonEvent, BufferedImage[] sheet){
+    if (buttonEvent.contains("hover")) return sheet[1];
+    else if (buttonEvent.contains("pressed")) return sheet[2];
+    else return null;
+  }
+
+  private void resetButtonStates(){
+    for(int i = 0; i < buttonStates.length; i ++){
+      buttonStates[i] = buttonGraphics.get(i)[0];
+      if(i == 1 && recording) buttonStates[i] = buttonGraphics.get(i)[3];
+    }
+  }
+
 
   /**
    * Constructs an array of images based on the input.
@@ -120,10 +188,10 @@ public class InfoPane {
 //    super.paintComponent(g);
     g.drawImage(bg, gameSize, 0, null);
 
-    g.drawImage(energyBar, gameSize + 74, 330, null);
+    g.drawImage(energyBar, gameSize + 74, 353, null);
     if (energyBarShade != null) {
       if (total != gathered) {
-        g.drawImage(getEnergyLevel(), gameSize + 74 + energyFilled, 330, null);
+        g.drawImage(getEnergyLevel(), gameSize + 74 + energyFilled, 353, null);
       }
     }
 
@@ -131,17 +199,17 @@ public class InfoPane {
     int offset = 0;
     if (chars.length == 2) {
       offset = 1;
-      g.drawImage(digits[0], gameSize + 110, 133, null);
+      g.drawImage(digits[0], gameSize + 110, 178, null);
     } else if (chars.length == 1) {
       offset = 2;
-      g.drawImage(digits[0], gameSize + 110, 133, null);
-      g.drawImage(digits[0], gameSize + 142, 133, null);
+      g.drawImage(digits[0], gameSize + 110, 178, null);
+      g.drawImage(digits[0], gameSize + 142, 178, null);
     }
 
     for (int i = 0; i < chars.length; i++) {
       int digit = Character.getNumericValue(chars[i]); // converts char to the interger value.
       if (digit >= 0) { //to avoid null pointer
-        g.drawImage(digits[digit], gameSize + 110 + ((i + offset) * 32), 133, null);
+        g.drawImage(digits[digit], gameSize + 110 + ((i + offset) * 32), 178, null);
       }
 
     }
@@ -175,20 +243,28 @@ public class InfoPane {
           default:
             break;
         }
-        g.drawImage(inventorySprites[0][j], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
-        g.drawImage(inventorySprites[3][c - 1], gameSize + 92 + (countX * 32) + 3, 437 + (countY * 32) + 3, null);
+        g.drawImage(inventorySprites[0][j], gameSize + 89 + (countX * 32) + 3, 440 + (countY * 32) + 3, null);
+        g.drawImage(inventorySprites[3][c - 1], gameSize + 89 + (countX * 32) + 3, 440 + (countY * 32) + 3, null);
         countX++;
         if (countX == 4) {
           countY++;
           countX = 0;
         }
       }
-
     }
+    //draw buttons
+    g.drawImage(buttonStates[0], gameSize + 96, 539, null);
+    g.drawImage(buttonStates[1], gameSize + 174, 33, null);
+    g.drawImage(buttonStates[2], gameSize + 39, 80, null);
+    g.drawImage(buttonStates[3], gameSize + 69, 80, null);
+    g.drawImage(buttonStates[4], gameSize + 99, 80, null);
+    g.drawImage(buttonStates[5], gameSize + 129, 80, null);
+    g.drawImage(buttonStates[6], gameSize + 159, 80, null);
+
     //can only handle a single line up to 22 characters (including spaces)
     if (onInfo && info != null) {
       for (int f = 0; f < info.length; f++) {
-        g.drawImage(info[f], gameSize + 57 + (f * 9), 259, null);
+        g.drawImage(info[f], gameSize + 57 + (f * 9), 298, null);
       }
     }
 

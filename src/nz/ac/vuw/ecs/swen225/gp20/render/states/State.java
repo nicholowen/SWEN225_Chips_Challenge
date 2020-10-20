@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 /**
  * Represents the menu states the game can be in.
@@ -74,6 +75,7 @@ public class State {
 
   /**
    * Returns the button graphics back to the default state.
+   * Has to check if it's null since different states have different number of buttons.
    */
   private void resetButtonStates() {
     if (currentStateOne != null) this.currentStateOne = buttonOne[0];
@@ -89,23 +91,26 @@ public class State {
    * @param buttonEvent String that contains the button number and the state it is in.
    */
   public void update(String buttonEvent) {
+
     if (buttonEvent != null) {
       if (currentStateOne != null && buttonEvent.contains("one")) {
-        if (buttonEvent.contains("hover")) currentStateOne = buttonOne[1];
-        else if (buttonEvent.contains("pressed")) currentStateOne = buttonOne[2];
+        currentStateOne =  checkState(buttonEvent, buttonOne);
       } else if (currentStateTwo != null && buttonEvent.contains("two")) {
-        if (buttonEvent.contains("hover")) currentStateTwo = buttonTwo[1];
-        else if (buttonEvent.contains("pressed")) currentStateTwo = buttonTwo[2];
+        currentStateTwo = checkState(buttonEvent, buttonTwo);
       } else if (currentStateThree != null && buttonEvent.contains("three")) {
-        if (buttonEvent.contains("hover")) currentStateThree = buttonThree[1];
-        else if (buttonEvent.contains("pressed")) currentStateThree = buttonThree[2];
+         currentStateThree = checkState(buttonEvent, buttonThree);
       } else if (currentStateFour != null && buttonEvent.contains("four")) {
-        if (buttonEvent.contains("hover")) currentStateFour = buttonFour[1];
-        else if (buttonEvent.contains("pressed")) currentStateFour = buttonFour[2];
+        currentStateFour = checkState(buttonEvent, buttonFour);
       }
     } else {
       resetButtonStates();
     }
+  }
+
+  public BufferedImage checkState(String buttonEvent, BufferedImage[] sheet){
+    if (buttonEvent.contains("hover")) return sheet[1];
+    else if (buttonEvent.contains("pressed")) return sheet[2];
+    else return null;
   }
 
   /**
