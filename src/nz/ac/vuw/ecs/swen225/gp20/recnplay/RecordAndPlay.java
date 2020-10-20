@@ -168,7 +168,7 @@ public class RecordAndPlay {
         remainingTimeAfterRun = obj != null
                 ? obj.getInt("timeRemaining") : 0;
 
-//        game.runMoves();
+       game.runMove();
 
     }
 
@@ -225,8 +225,7 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
-                //here
-//                game.runMove();
+               game.runMove();
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
