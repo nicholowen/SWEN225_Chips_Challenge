@@ -125,42 +125,35 @@ public class MapPane {
               energyObjects.put(cells[i][j], eb);
               break;
             case "key":
-              if (cells[i][j] instanceof CellKey) {
                 KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
                 sprites[i][j] = kc;
                 keyObjects.put(cells[i][j], kc);
-              }
               break;
             case "door":
-              if (cells[i][j] instanceof CellDoor) {
+                System.out.println("DOOR");
                 Door door;
-                if (i > 0 && (cells[i][j + 1] instanceof CellWall || cells[i][j - 1] instanceof CellWall)) {
+                if (i > 0 && (cells[i][j + 1].getName().equals("wall") || cells[i][j - 1].getName().equals("wall"))) {
                   door = new Door(assets, cells[i][j].getColor(), true);
+                  System.out.println("HERE");
                 } else {
                   door = new Door(assets, cells[i][j].getColor(), false);
+                  System.out.println("Or HERE");
                 }
                 sprites[i][j] = door;
                 doorObjects.put(cells[i][j], door);
-              }
               break;
             case "exit":
-              if (cells[i][j] instanceof CellExit) {
                 Exit e = new Exit(assets, i, j);
                 sprites[i][j] = e;
                 exitOb = e;
-              }
               break;
             case "exit lock":
-              if (cells[i][j] instanceof CellExitLocked) {
                 ExitLock el = new ExitLock(assets, i, j);
                 sprites[i][j] = el;
                 exitLockOb = el;
-              }
               break;
             case "info":
-              if (cells[i][j] instanceof CellInfo) {
                 infoOb = new Info(assets, i, j, infoAsset);
-              }
               break;
 
             default:
@@ -384,32 +377,32 @@ public class MapPane {
         if (floor[i][j] != null) {
           g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (wall[i][j] != null) {
+        if (wall[i][j] != null && wallObjects.size() > 0) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (hole[i][j] != null) {
+        if (hole[i][j] != null && holeObjects.size() > 0) {
           g.drawImage(holeObjects.get(hole[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (door[i][j] != null && doorObjects != null) {
+        if (door[i][j] != null && doorObjects.size() > 0) {
           if (doorObjects.get(door[i][j]).isVertical()) {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y - 42, null);
           } else {
             g.drawImage(doorObjects.get(door[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
           }
         }
-        if (energy[i][j] != null) {
+        if (energy[i][j] != null && energyObjects.size() > 0) {
           g.drawImage(energyObjects.get(energy[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (key[i][j] != null) {
+        if (key[i][j] != null && keyObjects.size() > 0) {
           g.drawImage(keyObjects.get(key[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (exit[i][j] != null) {
+        if (exit[i][j] != null && exitOb != null) {
           g.drawImage(exitOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (info[i][j] != null) {
+        if (info[i][j] != null && infoOb != null) {
           g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (exitLock[i][j] != null) {
+        if (exitLock[i][j] != null && exitLockOb != null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
