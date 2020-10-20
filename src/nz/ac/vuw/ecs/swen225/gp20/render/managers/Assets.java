@@ -55,6 +55,7 @@ public class Assets {
   private static BufferedImage[][] LEVELSELECTBUTTONS;
   private static BufferedImage[][] DEADBUTTONS;
   private static BufferedImage[][] GAMEOVERBUTTONS;
+  private static BufferedImage[][] INFOPAUSEBUTTON;
 
   public Assets() {
     init();
@@ -90,6 +91,7 @@ public class Assets {
     LEVELSELECTBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
     DEADBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
     GAMEOVERBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
+    INFOPAUSEBUTTON = loadGif(path, "infoPauseButton.gif", 102, 22);
 
   }
 
@@ -129,92 +131,71 @@ public class Assets {
     return null;
   }
 
+  /**
+   * Gets the image array for the asset, given a description string.
+   * @param asset String describing the asset.
+   * @return 2D Array of the required asset.
+   */
   public BufferedImage[][] getAsset(String asset) {
     BufferedImage[][] ret;
     switch (asset) {
-      case "floor":
-        ret = FLOOR;
+      case "floor": ret = FLOOR;
         break;
-      case "wall":
-        ret = WALL;
+      case "wall": ret = WALL;
         break;
-      case "hole":
-        ret = HOLE;
+      case "hole": ret = HOLE;
         break;
-      case "door":
-        ret = DOOR;
+      case "door": ret = DOOR;
         break;
-      case "vdoor":
-        ret = VDOOR;
+      case "vdoor": ret = VDOOR;
         break;
-      case "energy":
-        ret = ENERGYBALL;
+      case "energy": ret = ENERGYBALL;
         break;
-      case "keycard":
-        ret = KEYCARD_G;
+      case "keycard": ret = KEYCARD_G;
         break;
-      case "info":
-        ret = INFO;
+      case "info": ret = INFO;
         break;
-      case "exitLock":
-        ret = EXITLOCK;
+      case "exitLock": ret = EXITLOCK;
         break;
-      case "exit":
-        ret = EXIT;
+      case "exit": ret = EXIT;
         break;
-      case "digits":
-        ret = DIGITS;
+      case "digits": ret = DIGITS;
         break;
-      case "inventory":
-        ret = INVENTORY;
+      case "inventory": ret = INVENTORY;
         break;
-      case "font":
-        ret = FONT;
+      case "font": ret = FONT;
         break;
-      case "energyBarShade":
-        ret = ENERGYBARSHADE;
+      case "energyBarShade": ret = ENERGYBARSHADE;
         break;
-      case "energyBar":
-        ret = ENERGYBAR;
+      case "energyBar": ret = ENERGYBAR;
         break;
-      case "player":
-        ret = PLAYER;
+      case "player": ret = PLAYER;
         break;
-      case "hostileMob":
-        ret = HOSTILEMOB;
+      case "hostileMob": ret = HOSTILEMOB;
         break;
-      case "logo":
-        ret = LOGO;
+      case "logo": ret = LOGO;
         break;
-      case "mapBackground":
-        ret = MAPBACKGROUND;
+      case "mapBackground": ret = MAPBACKGROUND;
         break;
-      case "infoBackground":
-        ret = SCOREBACKGROUND;
+      case "infoBackground": ret = SCOREBACKGROUND;
         break;
-      case "menuBackground":
-        ret = MENU;
+      case "menuBackground": ret = MENU;
         break;
-      case "levelSelectBackground":
-        ret = LEVEL;
+      case "levelSelectBackground": ret = LEVEL;
         break;
-      case "pauseBackground":
-        ret = PAUSE;
+      case "pauseBackground": ret = PAUSE;
         break;
-      case "levelSelectButtons":
-        ret = LEVELSELECTBUTTONS;
+      case "levelSelectButtons": ret = LEVELSELECTBUTTONS;
         break;
-      case "menuButtons":
-        ret = MENUBUTTONS;
+      case "menuButtons": ret = MENUBUTTONS;
         break;
-      case "pauseButtons":
-        ret = PAUSEBUTTONS;
+      case "pauseButtons": ret = PAUSEBUTTONS;
         break;
-      case "deadButtons":
-        ret = DEADBUTTONS;
+      case "deadButtons": ret = DEADBUTTONS;
         break;
-      case "gameoverButtons":
-        ret = GAMEOVERBUTTONS;
+      case "gameoverButtons": ret = GAMEOVERBUTTONS;
+        break;
+      case "infoPauseButton": ret = INFOPAUSEBUTTON;
         break;
       default:
         return null;
