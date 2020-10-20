@@ -70,6 +70,7 @@ public class Animation {
     if (currentFrame == numFrames) {
       if (singleAnimation) {
         delay = -1;
+        currentFrame = numFrames-1;
         return;
       }
       currentFrame = 0;

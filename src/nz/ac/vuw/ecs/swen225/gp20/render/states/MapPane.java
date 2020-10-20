@@ -129,35 +129,32 @@ public class MapPane {
               energyObjects.put(cells[i][j], eb);
               break;
             case "key":
-                KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
-                sprites[i][j] = kc;
-                keyObjects.put(cells[i][j], kc);
+              KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
+              sprites[i][j] = kc;
+              keyObjects.put(cells[i][j], kc);
               break;
             case "door":
-                System.out.println("DOOR");
-                Door door;
-                if (i > 0 && (cells[i][j + 1].getName().equals("wall") || cells[i][j - 1].getName().equals("wall"))) {
-                  door = new Door(assets, cells[i][j].getColor(), true);
-                  System.out.println("HERE");
-                } else {
-                  door = new Door(assets, cells[i][j].getColor(), false);
-                  System.out.println("Or HERE");
-                }
-                sprites[i][j] = door;
-                doorObjects.put(cells[i][j], door);
+              Door door;
+              if (i > 0 && (cells[i][j + 1].getName().equals("wall") || cells[i][j - 1].getName().equals("wall"))) {
+                door = new Door(assets, cells[i][j].getColor(), true, true);
+              } else {
+                door = new Door(assets, cells[i][j].getColor(), false, true);
+              }
+              sprites[i][j] = door;
+              doorObjects.put(cells[i][j], door);
               break;
             case "exit":
-                Exit e = new Exit(assets, i, j);
-                sprites[i][j] = e;
-                exitOb = e;
+              Exit e = new Exit(assets, i, j);
+              sprites[i][j] = e;
+              exitOb = e;
               break;
             case "exit lock":
-                ExitLock el = new ExitLock(assets, i, j);
-                sprites[i][j] = el;
-                exitLockOb = el;
+              ExitLock el = new ExitLock(assets, i, j);
+              sprites[i][j] = el;
+              exitLockOb = el;
               break;
             case "info":
-                infoOb = new Info(assets, i, j, infoAsset);
+              infoOb = new Info(assets, i, j, infoAsset);
               break;
 
             default:
@@ -277,6 +274,9 @@ public class MapPane {
             case "door":
               door[i][j] = surround[i][j];
               if (doorObjects.containsKey(surround[i][j])) {
+                if(!surround[i][j].getIsSolid()) {
+                  doorObjects.get(surround[i][j]).setIsSolid(false);
+                }
                 doorObjects.get(surround[i][j]).update();
               }
               break;

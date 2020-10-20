@@ -17,10 +17,13 @@ public class Door extends Sprite {
   //  method. Animate door opening or closing depending on when it was opened/closed.
 
   boolean vertical;
+  boolean isSolid;
 
-  public Door(Assets assets, String c, boolean vertical) {
+  public Door(Assets assets, String c, boolean vertical, boolean isSolid) {
 
     super();
+
+    this.isSolid = isSolid;
 
     int index = 0;
     switch (c) {
@@ -47,7 +50,7 @@ public class Door extends Sprite {
     } else {
       sprites = assets.getAsset("vdoor")[index];
     }
-
+    System.out.println(sprites.length);
     animation.setFrames(sprites);
     animation.setSingleAnimation(true);
     animation.setDelay(-1);
@@ -55,6 +58,11 @@ public class Door extends Sprite {
   }
 
   public void update() {
+
+    if (!isSolid) {
+      animation.setDelay(1);
+      animation.setSingleAnimation(true);
+    }
     animation.update();
   }
 
@@ -64,6 +72,10 @@ public class Door extends Sprite {
 
   public boolean isVertical() {
     return vertical;
+  }
+
+  public void setIsSolid(boolean isSolid){
+    this.isSolid = isSolid;
   }
 
 
