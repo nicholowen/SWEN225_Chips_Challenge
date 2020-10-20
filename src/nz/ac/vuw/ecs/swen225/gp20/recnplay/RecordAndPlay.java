@@ -12,6 +12,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -28,6 +30,9 @@ import javax.json.JsonObjectBuilder;
  */
 
 public class RecordAndPlay {
+    public static final Path resources = Paths.get("resources");
+    public static final Path recordings = Paths.get(resources.toString(), "recordings");
+
     private static ArrayList<Integer> actors = new ArrayList<>();
     private static ArrayList<String>   moves = new ArrayList<>();
 
@@ -50,7 +55,7 @@ public class RecordAndPlay {
      */
     public static void startNewRecording(Maze maze, String saveName) {
         moves.clear();
-        saveFile = saveName;
+        saveFile = saveName+".txt";
         currentlyRecording = true;
         gameState = Persistence.getGameState(maze); // save the current state the game is currently in during recoding
     }
@@ -90,14 +95,17 @@ public class RecordAndPlay {
                 Json.createWriter(w).write(builder.build());
 
                 try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(Paths.get(recordings.toFile().getPath(), saveFile).toFile()));
+//                    System.out.println(bw);
                     bw.write(w.toString());
                     bw.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                     throw new Error("Writing failed for movements");
                 }
 
             } catch (IOException e) {
+                e.printStackTrace();
                 throw new Error("Saving failed for movements");
             }
             currentlyRecording = false;
@@ -121,7 +129,6 @@ public class RecordAndPlay {
         moves.clear();
 
         try {
-
             BufferedReader r = new BufferedReader(new FileReader(saveFileName));
             JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
             r.close();
@@ -168,7 +175,7 @@ public class RecordAndPlay {
         remainingTimeAfterRun = obj != null
                 ? obj.getInt("timeRemaining") : 0;
 
-       game.runMove();
+//        game.runMoves();
 
     }
 
@@ -225,7 +232,7 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
-               game.runMove();
+//                game.runMove();
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
@@ -318,6 +325,10 @@ public class RecordAndPlay {
             moves.add(dir);
             actors.add(0); // add the player
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }
 
