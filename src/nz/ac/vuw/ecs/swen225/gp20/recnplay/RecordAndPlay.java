@@ -32,7 +32,7 @@ public class RecordAndPlay {
     private static ArrayList<String>   moves = new ArrayList<>();
 
     private static long playbackSpeed = 123; // arbitrary number
-    private static int remainingTimeAfterRun;
+    private static int  remainingTimeAfterRun;
 
     private static String saveFile;
     private static String gameState;
@@ -59,9 +59,9 @@ public class RecordAndPlay {
      * Method to save the recording of the game.
      * Main method calls this and passes the time in to record every tick.
      *
-     * @param timeRemaining time remaining from the game
+     * @param game get the time remaining from the game
      */
-    public static void save(int timeRemaining) {
+    public static void save(Main game) {
         if (currentlyRecording) {
 
             JsonArrayBuilder array = Json.createArrayBuilder();
@@ -82,7 +82,7 @@ public class RecordAndPlay {
                     .add("moves", array)
                     // example output: {"moves": ["North", "East", "East", "North", "West"]}
 
-                    .add("timeRemaining", timeRemaining);
+                    .add("timeRemaining", game.getTimeRemaining());
             // time passed from Main (the final time after running all the moves)
 
             // save moves -> file
@@ -113,66 +113,63 @@ public class RecordAndPlay {
     public static void load(String saveFileName, Main game) {
         JsonObject obj = null;
 
+//        Maze loaded =
+        Persistence.loadGameState(gameState);
+
+        // load moves of player into array
+        actors.clear();
+        moves.clear();
+
         try {
-            Persistence.loadGameState();
 
-            // load moves of player into array
-            actors.clear();
-            moves.clear();
-
-            try {
-
-                BufferedReader r = new BufferedReader(new FileReader(saveFileName));
-                JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
-                r.close();
-                obj = jReader.readObject();
-
-            } catch (IOException e) {
-                System.out.println("File reading error: " + e);
-                return;
-            }
-
-            JsonArray allMoves = obj != null ? obj.getJsonArray("moves") : null;
-
-            if (allMoves != null) {
-                for (int i = 0; i < allMoves.size(); i++) {
-                    JsonObject obj2 = allMoves.getJsonObject(i);
-                    String dir = obj2.getString("moves");
-
-                    int actor = obj2.getInt("actor");
-                    actors.add(actor);
-
-                    switch (dir) {
-                        case "up":
-                            moves.add("UP");
-                            break;
-                        case "down":
-                            moves.add("DOWN");
-                            break;
-                        case "left":
-                            moves.add("LEFT");
-                            break;
-                        case "right":
-                            moves.add("RIGHT");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            // if there are moves left to be played, that means the replaying is still running
-            if (moves.size() > 0) isRunning = true;
-
-            // update the time remaining after run
-            remainingTimeAfterRun = obj != null
-                    ? obj.getInt("timeRemaining") : 0;
-
-//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
+            BufferedReader r = new BufferedReader(new FileReader(saveFileName));
+            JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
+            r.close();
+            obj = jReader.readObject();
 
         } catch (IOException e) {
-            System.out.println("Error: " + e);
+            System.out.println("File reading error: " + e);
+            return;
         }
+
+        JsonArray allMoves = obj != null ? obj.getJsonArray("moves") : null;
+
+        if (allMoves != null) {
+            for (int i = 0; i < allMoves.size(); i++) {
+                JsonObject obj2 = allMoves.getJsonObject(i);
+                String dir = obj2.getString("moves");
+
+                int actor = obj2.getInt("actor");
+                actors.add(actor);
+
+                switch (dir) {
+                    case "UP":
+                        moves.add("UP");
+                        break;
+                    case "DOWN":
+                        moves.add("DOWN");
+                        break;
+                    case "LEFT":
+                        moves.add("LEFT");
+                        break;
+                    case "RIGHT":
+                        moves.add("RIGHT");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // if there are moves left to be played, that means the replaying is still running
+        if (moves.size() > 0) isRunning = true;
+
+        // update the time remaining after run
+        remainingTimeAfterRun = obj != null
+                ? obj.getInt("timeRemaining") : 0;
+
+//        game.runMoves();
+
     }
 
 
@@ -228,7 +225,7 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
-//            somehow update the moves from GUI. could have a game.runReplay() as well where the main just applies the moves
+//                game.runMove();
             }
         } catch (IndexOutOfBoundsException ignore) {
             // swallowed
@@ -255,8 +252,8 @@ public class RecordAndPlay {
                     System.out.println("Interrupted: " + e);
                 }
             }
-            isRunning = false;
             game.setTimeRemaining(remainingTimeAfterRun);
+            isRunning = false;
         };
         thread = new Thread(runnable);
         thread.start();
