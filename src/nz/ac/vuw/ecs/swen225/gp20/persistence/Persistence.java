@@ -149,7 +149,7 @@ public class Persistence {
             File recentSave = getRecentSave();
             return readJsonFromFile(recentSave, Maze.class);
         } catch (FileNotFoundException e) {
-            return new Maze();
+            return new Maze(1);
         }
     }
 

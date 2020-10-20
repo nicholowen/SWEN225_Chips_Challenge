@@ -5,7 +5,7 @@ import java.io.IOException;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
+//import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 /**
@@ -16,12 +16,11 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
  *
  */
 public class Main {
-    private static Maze maze = new Maze();
+    private static Maze maze;
     private final GUI gui = new GUI(this);
     private static final Render render = new Render();
 
     private boolean gameEnded;
-    private int timeRemaining;
     private Direction direction = null;
     private boolean paused = false;
 
@@ -72,12 +71,12 @@ public class Main {
             if (!gameEnded) {
                 direction = gui.getDirection();
                 if (gui.isRecording() && direction != null) {
-                    RecordAndPlay.addMovement(direction.toString());
+                    //RecordAndPlay.addMovement(direction.toString());
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(maze.tick(direction), timeRemaining, gui.getButtonSoundEvent());
+                    render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -91,7 +90,7 @@ public class Main {
                 }
                 if ((System.currentTimeMillis() >= start + delay) && currentState == 4) {
                     start = System.currentTimeMillis();
-                    timeRemaining--; // timeRemaining goes down every second
+                    maze.tickTimeRemaining(); // timeRemaining goes down every second
                 }
             }
             else {
@@ -135,17 +134,16 @@ public class Main {
     }
 
     public void loadUnfinished() {
-        timeRemaining = maze.loadMaze(Persistence.getHighestLevel());
+        maze = new Maze(Persistence.getHighestLevel());
     }
 
     public void loadLvl1() {
-        timeRemaining = maze.loadMaze(1);
+        maze = new Maze(1);
     }
 
     public void loadCurrentState() {
         try {
             maze = Persistence.loadGameState();
-            render.init(maze);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -154,37 +152,37 @@ public class Main {
     // =======================================================.
     // Recording and Replaying Methods
     // =======================================================.
-    public void startRecord() {
-        RecordAndPlay.startNewRecording(maze, "lol");
-    }
-
-    public void stopRecord() {
-        RecordAndPlay.stopRecording();
-        RecordAndPlay.save(this);
-    }
-
-    public void replay() {
-        RecordAndPlay.load("lol", this);
-        RecordAndPlay.setPlaybackSpeed(fps);
-        RecordAndPlay.runReplay(this);
-    }
+    //public void startRecord() {
+    //    RecordAndPlay.startNewRecording(maze, "lol");
+    //}
+    //
+    //public void stopRecord() {
+    //    RecordAndPlay.stopRecording();
+    //    RecordAndPlay.save(this);
+    //}
+    //
+    //public void replay() {
+    //    RecordAndPlay.load("lol", this);
+    //    RecordAndPlay.setPlaybackSpeed(fps);
+    //    RecordAndPlay.runReplay(this);
+    //}
 
     public void runMove() {
         // Go UP
-        if (direction.equals("UP")) {
-            render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
+        if (direction == Direction.UP) {
+            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         // Go DOWN
-        if (direction.equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
+        if (direction == Direction.DOWN) {
+            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         // Go LEFT
-        if (direction.equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
+        if (direction == Direction.LEFT) {
+            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         // Go RIGHT
-        if (direction.equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
+        if (direction == Direction.RIGHT) {
+            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
     }
 
@@ -210,24 +208,11 @@ public class Main {
         this.fps = fps;
     }
 
-    /**
-     * Set the time remaining.
-     *
-     * @param timeRemaining the time remaining.
-     */
-    public void setTimeRemaining(int timeRemaining) {
-        this.timeRemaining = timeRemaining;
-    }
-
     // ======================================
     // ONLY FOR RECNPLAY TESTING PURPOSES
     // ======================================
 
     public void movePlayer(String direction) {
-        RecordAndPlay.addMovement(direction);
-    }
-
-    public int getTimeRemaining() {
-        return timeRemaining;
+        //RecordAndPlay.addMovement(direction);
     }
 }
