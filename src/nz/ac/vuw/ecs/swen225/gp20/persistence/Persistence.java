@@ -92,7 +92,6 @@ public class Persistence {
      * @throws IOException if there is an error creating the new directory
      */
     private static void checkDirectory(File path) throws IOException {
-        Preconditions.checkArgument(path.isDirectory(), "File '" + path.toString() + "' must be a directory");
         if (!path.exists() && !path.mkdirs()) {
             throw new IOException("Error creating directory, check that you have permission");
         }
@@ -137,7 +136,6 @@ public class Persistence {
      * @return json string of the maze
      */
     public static String getGameState(Maze maze) {
-        // return JsonParser.parseString(gson.toJson(maze)).getAsJsonObject();
         return gson.toJson(maze);
     }
 
@@ -231,12 +229,7 @@ public class Persistence {
         return 1;
     }
 
-    public static void main(String[] args) throws IOException {
-        Persistence.setHighestLevel(-1);
-        Persistence.setSaveType(null);
-        int highest = Persistence.getHighestLevel();
-        String type = Persistence.getSaveType();
-        System.out.println(highest);
-        System.out.println(type);
+    public static void main(String[] args) {
+
     }
 }
