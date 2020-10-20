@@ -149,6 +149,15 @@ public class Cell {
 	public String getInfo() {
 		return infoMessage;
 	}
+
+	/**
+	 * Nullifies the threat. In other words, makes this tile unable to kill the player.
+	 * ONLY TO BE USED IN SPECIFIC CIRCUMSTANCES. THIS CHANGE IS PERMANENT TO THE CELL.
+	 * Nullifying boots and similar things should work seperately, not using this function.
+	 */
+	public void nullify(){
+		killsPlayer=false;
+	}
 	
 	/**
 	 * Checks whether or not a certain tile kills the player based on their inventory.
@@ -157,6 +166,8 @@ public class Cell {
 	 * @return
 	 */
 	public boolean killsPlayer(HashMap<String, Integer> inventory) {
+		if(inventory==null)//If no inventory is sent, this is likely an internal check (IE, noe trying to kill the player)
+			return killsPlayer;
 		if(protectiveItem!=null) {//If there's a protective item associated with this (meaning it's lethal otherwise)
 			return(!inventory.containsKey(protectiveItem));//Return false if the protective item is in the inventory, true if it's not.
 		}

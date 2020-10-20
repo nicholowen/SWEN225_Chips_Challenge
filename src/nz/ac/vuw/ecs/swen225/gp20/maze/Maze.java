@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.actors.ActorHostileMonster;
+import nz.ac.vuw.ecs.swen225.gp20.maze.actors.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.level.NonPlayableCharacter;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.*;
 
 public class Maze {
 	private Cell[][] board;
@@ -154,6 +152,28 @@ public class Maze {
 		player.tick();
 		//TODO: Tick all NPCs once they're implemented.
 
+		for(Actor npc:creatures){//For every NPC (All actors except the player)
+			if(npc instanceof ActorNeutralDirt){
+				ActorNeutralDirt castedToDirt = (ActorNeutralDirt) npc;
+				if(castedToDirt.isPushable()){//If currently not "settled" or "filled in"
+					Cell cellOver=board[castedToDirt.getX()][castedToDirt.getY()];
+					if(cellOver instanceof CellWater){//If it's hovering over water at present
+						if(cellOver.killsPlayer(null)){//And finally, if the water is in "lethal mode"
+							cellOver.nullify();//Make the water not lethal
+							castedToDirt.fillInMode();//Make the dirt block unmoveable. This has now successfully made a bridge!
+						}
+					}
+				}
+			}//End of dirt filling water logic
+
+			if(npc instanceof ActorHostileMonster){//If it's a "spider"
+
+
+
+
+			}
+		}
+
 		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
 		
 		//Collision check - see what's under the player's feet.
@@ -181,7 +201,7 @@ public class Maze {
 		//System.out.println("DEBUG: Play sound:"+soundEvent);
 		if(shouldAdvanceLevel){//If the player should advance the level, IE, if they "win"
 			soundEvent="awinrarisyou";//Sound signifying success
-			loadMaze(currentLevel+1);//Load with the new "current level". Maze updates the variable so it's fine.
+			//TODO: Indicate to Application/Main to load the next level!
 		}
 
 		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, gameOver);

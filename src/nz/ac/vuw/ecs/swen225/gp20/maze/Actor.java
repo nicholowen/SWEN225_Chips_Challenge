@@ -37,7 +37,7 @@ public class Actor {
 		ticksToMove=speed;
 		direction=Direction.DOWN;//Generic starting direction
 		isPushable=false;
-		blocksMovement=false;
+		blocksMovement=false;//Creatures should be able to move into the player - players should be able to move into creatures. Both result in death.
 	}
 	
 	public boolean getIsMoving(){
