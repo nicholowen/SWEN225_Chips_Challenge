@@ -110,6 +110,10 @@ public class Maze {
 	public int getLevel() {
 		return currentLevel;
 	}
+
+	public Actor getPlayer(){
+		return player;
+	}
 	
 	public HashMap<String, Integer> getPlayerInventory() {
 		return playerInventory;
