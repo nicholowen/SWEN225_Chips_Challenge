@@ -169,26 +169,22 @@ public class Main {
         RecordAndPlay.runReplay(this);
     }
 
-    private void runMove() {
+    public void runMove() {
         // Go UP
         if (direction.equals("UP")) {
             render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
-            ;
         }
         // Go DOWN
         if (direction.equals("DOWN")) {
             render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
-            ;
         }
         // Go LEFT
         if (direction.equals("LEFT")) {
             render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
-            ;
         }
         // Go RIGHT
         if (direction.equals("RIGHT")) {
             render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
-            ;
         }
     }
 
