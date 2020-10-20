@@ -1,9 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
 
@@ -184,20 +182,61 @@ public class Persistence {
         }
     }
 
-    public static void saveHighestLevel(int level) throws IOException {
-        saveJson(savedState.toFile(), "highest-level.json", level);
+    private static class Settings {
+        int highestLevel;
+        String saveType;
+
+        Settings(int highestLevel, String saveType) {
+            this.highestLevel = highestLevel;
+            this.saveType = saveType;
+        }
+    }
+
+    public static Settings loadSaveSettings() throws IOException {
+        File file = Paths.get(savedState.toString(), "save-settings.json").toFile();
+        return readJsonFromFile(file, Settings.class);
+    }
+
+    public static void setSaveSettings(Settings settings) throws IOException {
+        saveJson(savedState.toFile(), "save-settings.json", settings);
+    }
+
+    public static void setHighestLevel(int highestLevel) throws IOException {
+        Settings settings = new Settings(highestLevel, getSaveType());
+        setSaveSettings(settings);
+    }
+
+    public static void setSaveType(String saveType) throws IOException {
+        Settings settings = new Settings(getHighestLevel(), saveType);
+        setSaveSettings(settings);
+    }
+
+    public static String getSaveType() {
+        try {
+            Settings settings = loadSaveSettings();
+            if (settings != null && settings.saveType != null) {
+                return settings.saveType;
+            }
+        } catch (IOException ignored) {}
+        return "default";
     }
 
     public static int getHighestLevel() {
         try {
-            File file = Paths.get(savedState.toString(), "highest-level.json").toFile();
-            return readJsonFromFile(file, Integer.class);
-        } catch (IOException e) {
-            return 1;
-        }
+            Settings settings = loadSaveSettings();
+            if (settings != null && settings.highestLevel >= 1){
+                return settings.highestLevel;
+            }
+        } catch (IOException ignored) {}
+        return 1;
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println(Persistence.getRecentSave());
+        Persistence.setHighestLevel(-1);
+        Persistence.setSaveType(null);
+        int highest = Persistence.getHighestLevel();
+        String type = Persistence.getSaveType();
+        System.out.println(highest);
+        System.out.println(type);
     }
 }
