@@ -4,10 +4,14 @@ import java.awt.*;
 
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
@@ -18,6 +22,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 public class GUI extends JPanel implements KeyListener {
 
     JFrame frame;
+    private Graphics2D g;
+    private JLayeredPane mainPanel;
+    // =======================================.
     private MouseManager mm;
     private JButton one;
     private JButton two;
@@ -27,21 +34,21 @@ public class GUI extends JPanel implements KeyListener {
     private JButton record;
     // =======================================.
     private BufferedImage image;
-    private Graphics2D g;
-    private int gameState = 0;
     private String buttonSoundEvent;
+    private int gameState = 0;
     // =======================================.
-    private boolean recording = false;
-    private boolean paused = false;
     private Direction direction = null;
-    private boolean saveState = false;
-    private String loadingState = null;
-    private JLayeredPane mainPanel;
+    private int timeRemaining = 0;
+    private boolean recording = false;
+    
+    private Main main;
 
     /**
      * Instantiates a new gui.
      */
-    public GUI() {
+    public GUI(Main main) {
+        
+        this.main = main;
 
         this.isFocusable();
 
@@ -153,7 +160,11 @@ public class GUI extends JPanel implements KeyListener {
 
         record.addActionListener(e -> {
             if (gameState == 4) {
-                // start recording
+                recording = !recording;
+                if(recording) {
+                    main.stopRecord();;
+                }
+                else main.startRecord();
             }
         });
 
@@ -236,34 +247,40 @@ public class GUI extends JPanel implements KeyListener {
             // exit the game, the current game state will be lost, the next time the game is
             // started, it will resume from the last unfinished level
             if ((keyCode == KeyEvent.VK_X) && ctrl) {
-                saveState = true;
-                loadingState = "unfinished";
+                main.saveUnfinished();
+                System.exit(0);
             }
             // exit the game, saves the game state, game will resume next time the
             // application will be started
             else if ((keyCode == KeyEvent.VK_S) && ctrl) {
-                saveState = true;
-                loadingState = "resume";
+                main.saveCurrentState();
+                System.exit(0);
             }
             // resume saved game
             else if ((keyCode == KeyEvent.VK_R) && ctrl) {
-                loadingState = "resume";
+                main.loadCurrentState();
             }
             // start a new game at the last unfinished level
             else if ((keyCode == KeyEvent.VK_P) && ctrl) {
-                loadingState = "unfinished";
+                main.loadUnfinished();
             }
             // start a new game at level 1
             else if ((keyCode == KeyEvent.VK_1) && ctrl) {
-                loadingState = "lvl 1";
+                main.loadLvl1();
             }
             // pause the game and display a game is paused dialog
             else if (keyCode == KeyEvent.VK_SPACE) {
-                paused = true;
+                setGameState(3);
             }
             // close the game is paused dialog and resume the game
             else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                paused = false;
+                setGameState(4);
+            }
+            // replay recording
+            else if (keyCode == KeyEvent.VK_R) {
+                System.out.println("REPLAYINHGGYGGH");
+                recording = false;
+                main.replay();
             }
         }
     }
@@ -290,6 +307,7 @@ public class GUI extends JPanel implements KeyListener {
                 this.direction = Direction.RIGHT;
                 System.out.println(direction);
             }
+                
         }
     }
 
@@ -336,14 +354,13 @@ public class GUI extends JPanel implements KeyListener {
     public boolean isRecording() {
         return recording;
     }
-
+    
     /**
-     * Checks if is paused.
+     * Sets recording to false, when user wants to stoprecording.
      *
-     * @return true, if is recording
      */
-    public boolean isPaused() {
-        return paused;
+    public void stopRecording() {
+        recording = false;
     }
 
     /**
@@ -356,45 +373,14 @@ public class GUI extends JPanel implements KeyListener {
     }
 
     /**
-     * Checks if is user wants to save state.
+     * Sets time remaining.
      *
-     * @return true, if is saving
+     * @param int time remaining
      */
-    public boolean isSaving() {
-        return saveState;
+    public void setTimeRemaining(int tr) {
+        this.timeRemaining = tr;
     }
-
-    /**
-     * Sets saving once saving is complete.
-     *
-     * @param saved, once game is saved, set saving to false. while game is still
-     *               saving, set saved to true.
-     */
-    public void saved(Boolean saved) {
-        this.saveState = !saved;
-    }
-
-    /**
-     * Checks what state the game is to be loaded in.
-     *
-     * @return unfinished, if is last unfinished 
-     *         level lvl 1, if is first level
-     *         resume, if is resuming a game 
-     *         null, if is no need to load
-     */
-    public String getLoadState() {
-        return loadingState;
-    }
-
-    /**
-     * Sets saving once loading is complete.
-     *
-     * @param loaded, the new load state
-     */
-    public void setLoadState(String loaded) {
-        this.loadingState = loaded;
-    }
-
+    
     /**
      * Sets the button sound event.
      *
