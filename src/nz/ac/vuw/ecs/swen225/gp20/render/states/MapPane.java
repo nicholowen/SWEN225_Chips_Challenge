@@ -125,42 +125,35 @@ public class MapPane {
               energyObjects.put(cells[i][j], eb);
               break;
             case "key":
-              if (cells[i][j] instanceof CellKey) {
                 KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
                 sprites[i][j] = kc;
                 keyObjects.put(cells[i][j], kc);
-              }
               break;
             case "door":
-              if (cells[i][j] instanceof CellDoor) {
+                System.out.println("DOOR");
                 Door door;
-                if (i > 0 && (cells[i][j + 1] instanceof CellWall || cells[i][j - 1] instanceof CellWall)) {
+                if (i > 0 && (cells[i][j + 1].getName().equals("wall") || cells[i][j - 1].getName().equals("wall"))) {
                   door = new Door(assets, cells[i][j].getColor(), true);
+                  System.out.println("HERE");
                 } else {
                   door = new Door(assets, cells[i][j].getColor(), false);
+                  System.out.println("Or HERE");
                 }
                 sprites[i][j] = door;
                 doorObjects.put(cells[i][j], door);
-              }
               break;
             case "exit":
-              if (cells[i][j] instanceof CellExit) {
                 Exit e = new Exit(assets, i, j);
                 sprites[i][j] = e;
                 exitOb = e;
-              }
               break;
             case "exit lock":
-              if (cells[i][j] instanceof CellExitLocked) {
                 ExitLock el = new ExitLock(assets, i, j);
                 sprites[i][j] = el;
                 exitLockOb = el;
-              }
               break;
             case "info":
-              if (cells[i][j] instanceof CellInfo) {
                 infoOb = new Info(assets, i, j, infoAsset);
-              }
               break;
 
             default:
@@ -409,7 +402,7 @@ public class MapPane {
         if (info[i][j] != null && infoOb != null) {
           g.drawImage(infoOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-        if (exitLock[i][j] != null && exitLockOb !=null) {
+        if (exitLock[i][j] != null && exitLockOb != null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
