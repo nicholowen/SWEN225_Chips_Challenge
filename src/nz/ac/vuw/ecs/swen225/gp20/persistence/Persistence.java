@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -89,13 +90,16 @@ public class Persistence {
      * Helper method to check if a directory exists,
      * creates a new directory if it doesn't
      *
-     * @param file the filepath to check
+     * @param path the filepath to check
      * @throws IOException if there is an error creating the new directory
      */
-    private static void checkDirectory(File file) throws IOException {
-        if (!file.exists() && !file.mkdirs()) {
+    private static void checkDirectory(File path) throws IOException {
+        Preconditions.checkArgument(path.isDirectory(), "File '" + path.toString() + "' must be a directory");
+        if (!path.exists() && !path.mkdirs()) {
             throw new IOException("Error creating directory, check that you have permission");
         }
+
+        assert path.exists();
     }
 
     /**
@@ -135,6 +139,7 @@ public class Persistence {
      * @return json string of the maze
      */
     public static String getGameState(Maze maze) {
+        // return JsonParser.parseString(gson.toJson(maze)).getAsJsonObject();
         return gson.toJson(maze);
     }
 
