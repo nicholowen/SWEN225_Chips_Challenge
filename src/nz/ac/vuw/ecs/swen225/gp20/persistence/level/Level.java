@@ -68,6 +68,10 @@ public class Level {
                     case "key":
                         board[tile.x][tile.y] = new CellKey(tile.x, tile.y, tile.getColor());
                         break;
+                    case "dirt":
+                        board[tile.x][tile.y] = new CellFree(tile.x, tile.y);
+                        nonPlayableCharacters.add(new NonPlayableCharacter(tile.x, tile.y, "dirt", null));
+                        break;
                     default:
                         break;
                 }
@@ -116,7 +120,7 @@ public class Level {
 
     /* METHODS TO VALIDATE JSON */
     private void validateCharacter(NonPlayableCharacter character) {
-        List<String> allowed = List.of("spider");
+        List<String> allowed = List.of("spider", "dirt");
         Preconditions.checkArgument(allowed.contains(character.getType()),
                 "NonPlayableCharacter 'type' cannot be " + character.getType() + " or null must be one of " + allowed);
 

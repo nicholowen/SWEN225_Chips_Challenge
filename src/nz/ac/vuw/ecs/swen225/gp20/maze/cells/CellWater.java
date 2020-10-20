@@ -15,4 +15,6 @@ public class CellWater extends Cell{
 		animated=false;
 		killsPlayer=true;
 		}
+
+
 }
