@@ -225,6 +225,7 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
+                //here
 //                game.runMove();
             }
         } catch (IndexOutOfBoundsException ignore) {
