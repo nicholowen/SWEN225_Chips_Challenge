@@ -6,6 +6,9 @@ import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents an moving object. I.e. player, hostile mob, movable block etc.
+ */
 public class ActorSprite extends Sprite {
 
   private BufferedImage[] sprites;

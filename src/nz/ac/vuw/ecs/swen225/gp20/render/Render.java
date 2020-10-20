@@ -53,14 +53,14 @@ public class Render {
    */
   public void update(RenderTuple tuple, int timeRemaining, String event) {
     gp.update(tuple);
-    sp.update(timeRemaining, tuple);
+    sp.update(timeRemaining, tuple, event);
 
     audio.updateGame(tuple.getSoundEvent());
     audio.updateButtons(event);
   }
 
   /**
-   * sparate update method from above for states that don't reqire information from maze
+   * Separate update method from above for states that don't require information from maze
    *
    * @param gameState Integer representing the state
    */
