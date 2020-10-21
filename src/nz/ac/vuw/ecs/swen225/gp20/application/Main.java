@@ -6,6 +6,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 //import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Recording;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 /**
@@ -27,6 +29,8 @@ public class Main {
     private int fps = 200;
     private int introCounter;
     private int currentState;
+    private long tickCounter = 0;
+    private Recording recording;
 
     public Main() {
 
@@ -71,14 +75,17 @@ public class Main {
             if (!gameEnded) {
                 direction = gui.getDirection();
                 if (gui.isRecording() && direction != null) {
+                    recording.addMove(tickCounter, direction);
                     //RecordAndPlay.addMovement(direction.toString());
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
-                if (currentState == 4)
+                if (currentState == 4) {
+                    tickCounter ++;
                     render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-                else
+                } else {
                     render.update(currentState, gui.getButtonSoundEvent());
+                }
                 render.draw(gui.getImageGraphics(), currentState);
                 gui.drawToScreen();
 
@@ -215,5 +222,17 @@ public class Main {
 
     public void movePlayer(String direction) {
         //RecordAndPlay.addMovement(direction);
+    }
+
+    public void startRecording(){
+        recording = new Recording(maze);
+    }
+
+    public void stopRecording(){
+        try {
+            RecordAndPlay.save(recording);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

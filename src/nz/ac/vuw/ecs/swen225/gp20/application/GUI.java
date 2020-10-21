@@ -162,9 +162,9 @@ public class GUI extends JPanel implements KeyListener {
             if (gameState == 4) {
                 recording = !recording;
                 if(recording) {
-                    //main.stopRecord();;
+                    main.startRecording();
                 }
-                //else main.startRecord();
+                else main.stopRecording();
             }
         });
 

@@ -59,7 +59,7 @@ public class Persistence {
         return levelObj;
     }
 
-    private static <T> T readJsonFromFile(File file, Class<T> type) throws IOException {
+    public static <T> T readJsonFromFile(File file, Class<T> type) throws IOException {
         InputStream inputStream = new FileInputStream(file.getAbsoluteFile());
         InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 
@@ -119,7 +119,7 @@ public class Persistence {
         saveJson(savedState.toFile(), filename, maze);
     }
 
-    private static <T> void saveJson(File file, String filename, T toSave) throws IOException {
+    public static <T> void saveJson(File file, String filename, T toSave) throws IOException {
         checkDirectory(file);
 
         OutputStream outputStream = new FileOutputStream(Paths.get(file.getPath(), filename).toFile());
