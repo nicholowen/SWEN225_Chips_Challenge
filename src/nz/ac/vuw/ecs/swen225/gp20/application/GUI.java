@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
 
-
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -39,6 +38,7 @@ public class GUI extends JPanel implements KeyListener {
     private int gameState = 0;
     // =======================================.
     private Direction direction = null;
+    private int timeRemaining = 0;
     private boolean recording = false;
     
     private Main main;
@@ -164,10 +164,9 @@ public class GUI extends JPanel implements KeyListener {
                 if(recording) {
                     try {
                         main.stopRecord();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    ;
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    };
                 }
                 else main.startRecord();
             }
@@ -235,6 +234,9 @@ public class GUI extends JPanel implements KeyListener {
                 this.direction = Direction.RIGHT;
                 System.out.println(direction);
             }
+            if(recording) {
+                main.movePlayer(direction.toString());
+            }
         }
     }
 
@@ -287,10 +289,10 @@ public class GUI extends JPanel implements KeyListener {
                 recording = false;
                 try {
                     main.replay();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
                 }
             }
         }
@@ -318,7 +320,9 @@ public class GUI extends JPanel implements KeyListener {
                 this.direction = Direction.RIGHT;
                 System.out.println(direction);
             }
-
+            if(recording) {
+                main.movePlayer(direction.toString());
+            } 
         }
     }
 
@@ -383,6 +387,15 @@ public class GUI extends JPanel implements KeyListener {
         return direction;
     }
 
+    /**
+     * Sets time remaining.
+     *
+     * @param int time remaining
+     */
+    public void setTimeRemaining(int tr) {
+        this.timeRemaining = tr;
+    }
+    
     /**
      * Sets the button sound event.
      *
