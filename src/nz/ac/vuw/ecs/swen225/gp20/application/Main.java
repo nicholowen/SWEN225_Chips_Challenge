@@ -40,12 +40,12 @@ public class Main {
         int delay = 1000; // 1 Second
 //        Maze maze = new Maze(Persistence.getHighestLevel());
         
-        try {
-            Persistence.setSaveType("resume");
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        //try {
+        //    Persistence.setSaveType("resume");
+        //} catch (IOException e1) {
+        //    // TODO Auto-generated catch block
+        //    e1.printStackTrace();
+        //}
         
         if (Persistence.getSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
@@ -129,7 +129,7 @@ public class Main {
             Persistence.setSaveType("resume");
             Persistence.saveGameState(maze);
         } catch (IOException e) {
-            e.printStackTrace();
+            maze = new Maze(1);
         }
     }
 
@@ -145,7 +145,7 @@ public class Main {
         try {
             maze = Persistence.loadGameState();
         } catch (IOException e) {
-            maze = new Maze();
+            maze = new Maze(1);
         }
         render.init(maze);
     }

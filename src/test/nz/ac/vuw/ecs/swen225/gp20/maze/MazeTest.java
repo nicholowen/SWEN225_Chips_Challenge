@@ -11,8 +11,7 @@ public class MazeTest {
     @Test
     public void mazeTest01() {
         // tests that player cant move through wall
-        Maze maze = new Maze();
-        maze.loadMaze(1);
+        Maze maze = new Maze(1);
 
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
@@ -28,8 +27,7 @@ public class MazeTest {
     @Test
     public void mazeTest02() {
         // tests that player cant open door without key
-        Maze maze = new Maze();
-        maze.loadMaze(1);
+        Maze maze = new Maze(1);
 
         moveActor(maze, Direction.DOWN);
         moveActor(maze, Direction.LEFT);
@@ -45,8 +43,7 @@ public class MazeTest {
     @Test
     public void mazeTest03() {
         // tests that player can pickup key
-        Maze maze = new Maze();
-        maze.loadMaze(1);
+        Maze maze = new Maze(1);
 
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.UP);
@@ -58,8 +55,7 @@ public class MazeTest {
     @Test
     public void mazeTest04() {
         // tests that player can open all doors and finish
-        Maze maze = new Maze();
-        maze.loadMaze(1);
+        Maze maze = new Maze(1);
         Actor player = maze.getPlayer();
 
         moveActor(maze, Direction.RIGHT);
