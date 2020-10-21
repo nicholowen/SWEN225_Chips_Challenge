@@ -40,6 +40,8 @@ public class Assets {
   //mob sprites
   private static BufferedImage[][] PLAYER;
   private static BufferedImage[][] HOSTILEMOB;
+  private static BufferedImage[][] HOVERINACTIVE;
+  private static BufferedImage[][] HOVERACTIVE;
 
   //panel backgrounds
   private static BufferedImage[][] LOGO;
@@ -74,6 +76,8 @@ public class Assets {
     VDOOR = loadGif(path, "vertdoorsheet.gif", 64, 106);
     ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
     KEYCARD_G = loadGif(path, "keycardsprites.gif", 64, 64);
+    HOVERINACTIVE = loadGif(path, "hover_inactive.gif", 64, 64);
+    HOVERACTIVE = loadGif(path, "hover_active.gif", 64, 64);
     INFO = loadGif(path, "info.gif", 64, 64);
     EXITLOCK = loadGif(path, "exitlock.gif", 64, 64);
     EXIT = loadGif(path, "exit.gif", 64, 64);
@@ -179,6 +183,10 @@ public class Assets {
       case "player": ret = PLAYER;
         break;
       case "hostileMob": ret = HOSTILEMOB;
+        break;
+      case "dirt": ret = HOVERINACTIVE;
+        break;
+      case "dirtInactive": ret = HOVERACTIVE;
         break;
       case "logo": ret = LOGO;
         break;

@@ -86,7 +86,14 @@ public class Maze {
 
 		//Load NPCs
 		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
+			if(c.getType().equals("spider")){
+				System.out.println("Debug found creature of type spider");
 				creatures.add(new ActorHostileMonster(c.getType(), c.x, c.y, c.getPath()));
+
+			} else{//For now, if it's not a spider, then it's a dirt block
+				System.out.println("Debug found creature which wasn't a spider but instead was:"+c.getType());
+				creatures.add(new ActorNeutralDirt(c.getType(), c.x, c.y));
+			}
 		}
 		System.out.println("Loaded NPCs!");
 	}
@@ -333,6 +340,5 @@ public class Maze {
 	public Direction getPlayerMovementForRecording(){
 		return recordedMove;
 	}
-
 
 }
