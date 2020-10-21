@@ -171,28 +171,28 @@ public class Main {
 
     public void runMove() {
         if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-            render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
     }
 
     public void runMove(String dir) {
         if (dir.equals("UP")) {
-            render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         if (dir.equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         if (dir.equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
         if (dir.equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
+            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
     }
 
