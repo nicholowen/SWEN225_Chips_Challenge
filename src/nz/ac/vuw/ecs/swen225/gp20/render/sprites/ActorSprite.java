@@ -14,6 +14,9 @@ public class ActorSprite extends Sprite {
   private BufferedImage[][] sprites;
   private Actor actor;
 
+  private int offsetX;
+  private int offsetY;
+
   public ActorSprite(Actor actor, Assets assets) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
@@ -22,12 +25,20 @@ public class ActorSprite extends Sprite {
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player");
-    } else if (actor.isPushable()) {
-      sprites = assets.getAsset("dirt");
+    } else if (actor.getName().equals("dirt")){
+      if (actor.isPushable()) {
+        sprites = assets.getAsset("dirt");
+      }else{
+        sprites = assets.getAsset("dirtInactive");
+      }
     } else sprites = assets.getAsset("hostileMob");
 
     animation.setFrames(sprites[0]);
-    animation.setDelay(6);
+    if (actor.getName().equals("dirt")) {
+      animation.setDelay(6);
+    } else {
+      animation.setDelay(2);
+    }
 
   }
 
@@ -54,7 +65,7 @@ public class ActorSprite extends Sprite {
    */
   public void update() {
 
-    if (!actor.isPushable()){
+    if (!actor.getName().equals("dirt")){
       switch (actor.getDirection()) {
         case UP:
           animation.setNewFrames(sprites[0]);
@@ -72,9 +83,9 @@ public class ActorSprite extends Sprite {
           break;
       }
     }
-      animation.update();
-//    }
+    animation.update();
   }
+
 
   public boolean getIsMoving() {
     return actor.getIsMoving();
@@ -93,4 +104,18 @@ public class ActorSprite extends Sprite {
     return animation.getFrame();
   }
 
+  public void setOffsetX(int x){
+    this.offsetX = x;
+  }
+
+  public void setOffsetY(int y){
+    this.offsetY = y;
+  }
+
+  public int getOffsetX(){
+    return offsetX;
+  }
+  public int getOffsetY(){
+    return offsetY;
+  }
 }

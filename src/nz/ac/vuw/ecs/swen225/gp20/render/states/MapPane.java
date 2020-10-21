@@ -38,14 +38,9 @@ public class MapPane {
 
   //  private HostileMob[] hostileMobs;
   private ActorSprite[][] visibleMobs = new ActorSprite[11][11];
-
-  private ActorSprite[] mobs;
   private ActorSprite[][] mobsOnMap;
 
-
   private ActorSprite playerSprite;
-//  private ArrayList<ActorSprite> hostileSprites;
-//  private ArrayList<ActorSprite> pushable;
 
   private Object[][] sprites;
 
@@ -55,6 +50,7 @@ public class MapPane {
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
+
 
 
   //Single Rendered object (only one per map)
@@ -81,6 +77,8 @@ public class MapPane {
     this.infoAsset = assets.getAsset("info")[0][0];
   }
 
+
+
   /**
    * Initialises all 'sprites' in game, based on the position of the cells.
    * Makes it easy to locate each render object and to avoid assigning them to the cells themselves.
@@ -95,12 +93,10 @@ public class MapPane {
     this.playerSprite = new ActorSprite(actors[actors.length-1], assets);
 
     //creates array of actor array - player
-    mobs = new ActorSprite[actors.length - 1];
     //populates array with all other mobs
     for (int m = 0; m < actors.length-1; m++) {
       ActorSprite mob = new ActorSprite(actors[m], assets);
       mobsOnMap[mob.getX()][mob.getY()] = mob;
-      mobs[m] = mob;
     }
 
     sprites = new Object[cells.length][cells[0].length];
@@ -209,6 +205,7 @@ public class MapPane {
    */
   private Cell[][] getSurround(Cell[][] cells, ActorSprite player) {
     Cell[][] ret = new Cell[11][11]; //a new array to store all the cells around the player
+    visibleMobs = new ActorSprite[11][11];
     Point playerPos = new Point(player.getX(), player.getY());
 
     Point botRight = new Point(player.getX() + 5, player.getY() + 5);
@@ -218,11 +215,6 @@ public class MapPane {
     for (int i = 0; i < 11; i++) {
       int y = (int) playerPos.getY() - 5;
       for (int j = 0; j < 11; j++) {
-//        for (ActorSprite actor : mobs) {
-//          if (actor.getX() == botRight.getX() - (botRight.getX() - i) && actor.getY() == botRight.getY() - (botRight.getY() - j)) {
-//            visibleMobs[i][j] = actor;
-//          }
-//        }
         if ((x >= 0 && x < cells.length) && (y >= 0 && y < cells[0].length)) {
           visibleMobs[i][j] = mobsOnMap[x][y];
         } else {
@@ -241,6 +233,16 @@ public class MapPane {
     return ret;
   }
 
+
+  public void updateVisibleMobs(Cell[][] cells, Actor[] actors) {
+    mobsOnMap = new ActorSprite[cells.length][cells[0].length];
+    //populates array with all other mobs
+    for (int m = 0; m < actors.length - 1; m++) {
+      ActorSprite mob = new ActorSprite(actors[m], assets);
+      mobsOnMap[mob.getX()][mob.getY()] = mob;
+    }
+  }
+
   /**
    * Iterates through an 11x11 grid around the player. Adds them to an appropriate list
    * which is used for drawing in order. Also updates all updatable items
@@ -252,6 +254,7 @@ public class MapPane {
     //update player with direction
 //    player = tuple.getActors()[0];
     playerSprite.update();
+    updateVisibleMobs(tuple.getCells(), tuple.getActors());
 
     //TODO: add player animation - might need to combine mobs and player together.
 
@@ -323,7 +326,6 @@ public class MapPane {
         }
       }
     }
-//    repaint();
   }
 
   /**
@@ -342,10 +344,6 @@ public class MapPane {
 
   }
 
-  int mobOffsetX = 0;
-  int mobOffsetY = 0;
-
-
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
    * The extra lines are for transition frames  - they are drawn off-screen and transition in
@@ -360,8 +358,6 @@ public class MapPane {
     int speed = 12;
     // transition animation - draws all objects depending on offset (speed)
     if (playerSprite != null && playerSprite.getIsMoving()) {
-
-
       switch (playerSprite.getDirection()) {
         case UP:
           offsetY += speed;
@@ -383,6 +379,7 @@ public class MapPane {
       offsetX = offsetY = 0;
     }
 
+
     int x = 64;
     int y = 64;
 
@@ -393,6 +390,7 @@ public class MapPane {
         if (floor[i][j] != null) {
           g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
+
         if (wall[i][j] != null && wallObjects.size() > 0) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
@@ -422,34 +420,48 @@ public class MapPane {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
-        if (visibleMobs[i][j] != null) {
 
+
+      }
+    }
+    for (int i = 0; i < 11; i++) {
+      for (int j = 0; j < 11; j++) {
+        if (visibleMobs[i][j] != null) {
+//          int mobOffsetX = 0, mobOffsetY = 0;
           if(visibleMobs[i][j].getIsMoving()){
             ActorSprite mob = visibleMobs[i][j];
 
             if(mob.getIsMoving()){
               Direction dir = mob.getDirection();
+              int xoffset = mob.getOffsetX();
+              int yoffset = mob.getOffsetY();
               switch(dir){
                 case UP:
-                  mobOffsetY -= speed;
+                  mob.setOffsetY(yoffset -= speed);
+//                  mobOffsetY = mob.getOffsetY();
                   break;
                 case DOWN:
-                  mobOffsetY += speed;
+                  mob.setOffsetY(yoffset += speed);
+//                  mobOffsetY = mob.getOffsetY();
                   break;
                 case LEFT:
-                  mobOffsetX -= speed;
+                  mob.setOffsetX(xoffset -= speed);
+//                  mobOffsetX = mob.getOffsetX();
                   break;
                 case RIGHT:
-                  mobOffsetX += speed;
+                  mob.setOffsetX(xoffset += speed);
+//                  mobOffsetX = mob.getOffsetX();
                   break;
                 default:
                   break;
               }
             }else{
-              mobOffsetX = mobOffsetY = 0;
+              mob.setOffsetX(0);
+              mob.setOffsetY(0);
             }
           }
-          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX + mobOffsetX - x, y * j + offsetY + mobOffsetY - y, null);
+
+          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX + visibleMobs[i][j].getOffsetX() - x, y * j + offsetY + visibleMobs[i][j].getOffsetY() - y, null);
         }
 
       }
