@@ -32,6 +32,9 @@ public class Maze {
 	//Sound logic
 	private int oomphCounter;//Forces a small delay between "oomph" sounds to stop them from stacking up in a deafening way.
 	private final int oomphDelay=10;//Time in ticks between each "oomph" sound if the player repeatedly tries to cause it.
+
+	//Recording
+	private Direction recordedMove;
 	
 	
 	/**
@@ -70,6 +73,7 @@ public class Maze {
 		currentLevel=levelToLoad;
 		timeRemaining = toLoad.properties.timeLimit;
 		oomphCounter=0;
+		recordedMove=null;
 		System.out.println("Loaded arbitrary values");
 		
 		//Load board
@@ -132,7 +136,7 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
-		boolean shouldAdvanceLevel=false;//Change to true if player completes the level this tick.
+		recordedMove=null;
 
 		//Sound-and-movement relatedcode
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
@@ -160,6 +164,7 @@ public class Maze {
 					soundEvent="move";
 				}
 			player.move(movementDirection);
+			recordedMove=movementDirection;
 		} else if(movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
 			if(isWalkingIntoDoor) 
 				soundEvent="whawhaa";
@@ -298,7 +303,6 @@ public class Maze {
 			if(currentTreasureLeft==0) {//If all treasure's been collected
 				board[xToCheck][yToCheck]=new Cell("free",xToCheck,yToCheck);
 				return true;//Immediately walk onto the space where the lock used to be!
-				
 			} else {//Not all treasure's been collected, so it's solid.
 				return false;
 			}
@@ -320,6 +324,14 @@ public class Maze {
 
 	public void setTimeRemaining(int timeRemaining) {
 		this.timeRemaining = timeRemaining;
+	}
+
+	/**
+	 * Returns the direction the player successfully started to move in, or null if they didn't.
+	 * @return
+	 */
+	public Direction getPlayerMovementForRecording(){
+		return recordedMove;
 	}
 
 
