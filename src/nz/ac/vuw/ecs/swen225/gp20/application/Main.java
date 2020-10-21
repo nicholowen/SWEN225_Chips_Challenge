@@ -217,12 +217,20 @@ public class Main {
     public void setFPS(int fps) {
         this.fps = fps;
     }
-
-    // ======================================
-    // ONLY FOR RECNPLAY TESTING PURPOSES
-    // ======================================
-
+    
     public void movePlayer(String direction) {
-        // RecordAndPlay.addMovement(direction);
+         RecordAndPlay.addPlayerMovement(direction);
+    }
+    
+    public void setTimeRemaining(int timeRemaining) {
+        maze.setTimeRemaining(timeRemaining);
+    }
+    
+    public int getTimeRemaining() {
+        return maze.getTimeRemaining();
+    }
+
+    public void setSpeed(int speed) {
+        this.fps = speed;
     }
 }
