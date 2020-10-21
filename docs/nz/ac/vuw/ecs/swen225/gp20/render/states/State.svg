@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="141px" preserveAspectRatio="none" style="width:303px;height:141px;" version="1.1" viewBox="0 0 303 141" width="303px" zoomAndPan="magnify"><defs><filter height="300%" id="f5teeuplwgeft" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[fabe13c37f0d1fb0f09ce424dc0ebff0]
+class nz.ac.vuw.ecs.swen225.gp20.render.states.State--><a href="State.html" target="_top" title="State.html" xlink:actuate="onRequest" xlink:href="State.html" xlink:show="new" xlink:title="State.html" xlink:type="simple"><rect codeLine="5" fill="#FEFECE" filter="url(#f5teeuplwgeft)" height="103.5313" id="nz.ac.vuw.ecs.swen225.gp20.render.states.State" style="stroke: #A80036; stroke-width: 1.5;" width="277" x="7" y="7"/><ellipse cx="41.8" cy="27.0938" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M44.5656,22.9688 Q44.7219,22.75 44.9094,22.6406 Q45.0969,22.5313 45.3156,22.5313 Q45.6906,22.5313 45.925,22.7969 Q46.1594,23.0469 46.1594,23.6563 L46.1594,25.1094 Q46.1594,25.7188 45.925,25.9844 Q45.6906,26.25 45.3156,26.25 Q44.9719,26.25 44.7688,26.0469 Q44.5656,25.8594 44.4563,25.3438 Q44.4094,24.9844 44.2219,24.7969 Q43.8938,24.4219 43.2844,24.2031 Q42.675,23.9844 42.05,23.9844 Q41.2844,23.9844 40.6438,24.3125 Q40.0188,24.6406 39.5188,25.3906 Q39.0344,26.1406 39.0344,27.1719 L39.0344,28.2656 Q39.0344,29.5 39.925,30.3281 Q40.8156,31.1406 42.4094,31.1406 Q43.3469,31.1406 44.0031,30.8906 Q44.3938,30.7344 44.8156,30.2969 Q45.0813,30.0313 45.2219,29.9531 Q45.3781,29.875 45.5813,29.875 Q45.9094,29.875 46.1594,30.1406 Q46.425,30.3906 46.425,30.7344 Q46.425,31.0781 46.0813,31.4844 Q45.5813,32.0625 44.7844,32.3906 Q43.7063,32.8438 42.4094,32.8438 Q40.8938,32.8438 39.6906,32.2188 Q38.7063,31.7188 38.0188,30.6563 Q37.3313,29.5781 37.3313,28.2969 L37.3313,27.1406 Q37.3313,25.8125 37.9406,24.6719 Q38.5656,23.5156 39.6594,22.9063 Q40.7531,22.2813 41.9875,22.2813 Q42.7219,22.2813 43.3625,22.4531 Q44.0188,22.6094 44.5656,22.9688 Z "/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="33" x="144.2" y="26.5332">State</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="201" x="60.2" y="39.9902">nz.ac.vuw.ecs.swen225.gp20.render.states</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="8" x2="283" y1="47.1875" y2="47.1875"/><ellipse cx="18" cy="58.1875" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="118" x="27" y="62.6064">State(Assets, int, String)</text><ellipse cx="18" cy="72.0234" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="95" x="27" y="76.4424">update(String): void</text><ellipse cx="18" cy="85.8594" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="251" x="27" y="90.2783">checkState(String, BufferedImage[]): BufferedImage</text><ellipse cx="18" cy="99.6953" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="103" x="27" y="104.1143">draw(Graphics): void</text></a><text fill="#888888" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="185" x="53" y="127.9121">UMLDoclet 2.0.12, PlantUML 1.2020.16</text><!--MD5=[ce2a19e424f7e425150d2cee7bc8df0b]
+@startuml
+    set namespaceSeparator none
+    hide empty fields
+    hide empty methods
+
+    class "<size:14>State\n<size:10>nz.ac.vuw.ecs.swen225.gp20.render.states" as nz.ac.vuw.ecs.swen225.gp20.render.states.State [[State.html]] {
+        +State(Assets, int, String)
+        +update(String): void
+        +checkState(String, BufferedImage[]): BufferedImage
+        +draw(Graphics): void
+    }
+
+    center footer UMLDoclet 2.0.12, PlantUML 1.2020.16
+@enduml
+
+PlantUML version 1.2020.16(Mon Aug 24 08:20:43 NZST 2020)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: NZ
+--></g></svg>
