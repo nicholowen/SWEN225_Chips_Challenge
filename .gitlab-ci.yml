@@ -36,6 +36,8 @@ test:
 
 generate-doc:
   allow_failure: true
+  tags:
+    - shell
   script:
     - mvn javadoc:javadoc
   artifacts:
