@@ -12,6 +12,7 @@ cache:
 stages:
   - build
   - test
+  - generate-doc
 
 build:
   stage: build
@@ -32,3 +33,10 @@ test:
     reports:
       junit:
         - target/surefire-reports/TEST-*.xml
+
+generate-doc:
+  allow_failure: true
+  script:
+    - mvn javadoc:javadoc
+  artifacts:
+    when: always
