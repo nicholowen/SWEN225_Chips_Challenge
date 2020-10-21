@@ -22,7 +22,9 @@ public class ActorSprite extends Sprite {
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player")[0];
-    } else if (actor.isPushable()) { /*add moveable assets here */} else sprites = assets.getAsset("hostileMob")[0];
+    } else if (actor.isPushable()) {
+      sprites = assets.getAsset("dirt")[0];
+    } else sprites = assets.getAsset("hostileMob")[0];
 
     animation.setFrames(sprites);
     animation.setDelay(6);
@@ -52,11 +54,11 @@ public class ActorSprite extends Sprite {
    */
   public void update() {
 //    this.direction = direction;
-    if (actor.isPushable()) {
+//    if (actor.isPushable()) {
+//      animation.update();
+//    } else if (actor.getIsMoving()) {
       animation.update();
-    } else if (actor.getIsMoving()) {
-      animation.update();
-    }
+//    }
   }
 
   public boolean getIsMoving() {
@@ -73,22 +75,24 @@ public class ActorSprite extends Sprite {
    * @return Current animation frame
    */
   public BufferedImage getImage() {
-    int frame = 1;
-    switch (actor.getDirection()) {
-      case UP:
-        frame = 0;
-        break;
-      case DOWN:
-        frame = 1;
-        break;
-      case LEFT:
-        frame = 2;
-        break;
-      case RIGHT:
-        frame = 3;
-        break;
-      default:
-        break;
+    int frame = 0;
+    if (!actor.isPushable()){
+      switch (actor.getDirection()) {
+        case UP:
+          frame = 0;
+          break;
+        case DOWN:
+          frame = 1;
+          break;
+        case LEFT:
+          frame = 2;
+          break;
+        case RIGHT:
+          frame = 3;
+          break;
+        default:
+          break;
+      }
     }
 
     return animation.getFrame(frame);
