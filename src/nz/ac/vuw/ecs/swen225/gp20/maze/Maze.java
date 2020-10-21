@@ -12,7 +12,8 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.level.*;
 public class Maze {
 	private Cell[][] board;
 	private int timeRemaining;
-	private boolean gameOver;//If true, the player is dead or the level is otherwise failed.
+	private boolean gameLost;//If true, the player is dead or the level is otherwise failed.
+	private boolean gameWon;//If true, the player's succeeded and completed the level.
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
@@ -59,7 +60,8 @@ public class Maze {
 		}
 		//Resetting/initializing
 		System.out.println("Managed to read the file successfully!");
-		gameOver=false;
+		gameLost=false;
+		gameWon=false;
 		currentTreasureLeft=toLoad.properties.chipsInLevel;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
@@ -113,6 +115,10 @@ public class Maze {
 	public Actor getPlayer(){
 		return player;
 	}
+
+	public boolean getGameWon(){return gameWon;}
+
+	public boolean getGameLost(){return gameLost;}
 	
 	public HashMap<String, Integer> getPlayerInventory() {
 		return playerInventory;
@@ -187,9 +193,9 @@ public class Maze {
 		Cell stoodOn=board[player.getX()][player.getY()];
 		if(stoodOn.killsPlayer(playerInventory)) {
 			soundEvent="dyingnoises";
-			gameOver=true;
+			gameLost=true;
 		} else if(stoodOn.getName().equals("exit")){//Win! Kind of.
-			shouldAdvanceLevel=true;
+			gameWon=true;
 		}
 		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
 			if(stoodOn.isTreasure()) {//If treasure, increment counters, ignore inventory.
@@ -204,14 +210,13 @@ public class Maze {
 			board[player.getX()][player.getY()] = new Cell("free", player.getX(), player.getY());
 		}
 		boolean playerStandingOnInfo = (stoodOn.getName().equals("info"));//Check if the player's standing on an info tile
-		//if(soundEvent!=null)
-		//System.out.println("DEBUG: Play sound:"+soundEvent);
-		if(shouldAdvanceLevel){//If the player should advance the level, IE, if they "win"
+		if(gameWon && oomphCounter==0){//If the player should advance the level, IE, if they "win"
 			soundEvent="awinrarisyou";//Sound signifying success
-			//TODO: Indicate to Application/Main to load the next level!
+			//Small check to ensure that the sound doesn't repeat at unpleasant speed
+			oomphCounter=oomphDelay;
 		}
 
-		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, gameOver);
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent);
 	}
 	
 	/**
