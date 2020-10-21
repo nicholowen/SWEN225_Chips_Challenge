@@ -140,17 +140,22 @@ public class Maze {
 		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
 		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
 		boolean isWalkingIntoDoor=false;
+		boolean isWalkingIntoExitDoor=false;
 		boolean isCellSolid=false;
 		if(movementDirection!=null && getCellFromDir(player,movementDirection.getDirection())!=null) {
-			isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()).getName().equals("door"))
-				|| (getCellFromDir(player,movementDirection.getDirection()).getName().equals("cell exit"));//True if the player's about to walk into a door or exitLock
+			isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()).getName().equals("door"));
+			isWalkingIntoExitDoor= (getCellFromDir(player,movementDirection.getDirection()).getName().equals("exit lock"));//True if the player's about to walk into a door or exitLock
 			isCellSolid = getCellFromDir(player,movementDirection.getDirection()).getIsSolid();
 		}
 		
 		if(movementDirection!=null && isMoveValid(player, movementDirection.getDirection())) {//If there's movement input and it's valid, move. Also unlocks doors.
 			if(!player.getIsMoving()) {//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
-				if(isWalkingIntoDoor && isCellSolid)
-					soundEvent="unlock";
+				if((isWalkingIntoExitDoor || isWalkingIntoDoor) && isCellSolid){
+					if(isWalkingIntoDoor)
+						soundEvent="unlock";
+					else
+						soundEvent="exitlock";
+				}
 				else
 					soundEvent="move";
 				}
@@ -213,7 +218,7 @@ public class Maze {
 		if(gameWon && oomphCounter==0){//If the player should advance the level, IE, if they "win"
 			soundEvent="awinrarisyou";//Sound signifying success
 			//Small check to ensure that the sound doesn't repeat at unpleasant speed
-			oomphCounter=oomphDelay;
+			oomphCounter=-1;//Sound only plays once, then level changes. This ensures the sound won't play more than once.
 		}
 
 		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent);
