@@ -161,7 +161,7 @@ public class GUI extends JPanel implements KeyListener {
         record.addActionListener(e -> {
             if (gameState == 4) {
                 recording = !recording;
-                if(recording) {
+                if(!recording) {
                     try {
                         main.stopRecord();
                     } catch (IOException e1) {
