@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.actors.*;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.*;
 
@@ -136,9 +135,9 @@ public class Maze {
 		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
 		boolean isWalkingIntoDoor=false;
 		boolean isCellSolid=false;
-		if(movementDirection!=null) {
-			isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()) instanceof CellDoor)
-				|| (getCellFromDir(player,movementDirection.getDirection()) instanceof CellExitLocked);//True if the player's about to walk into a door or exitLock
+		if(movementDirection!=null && getCellFromDir(player,movementDirection.getDirection())!=null) {
+			isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()).getName().equals("door"))
+				|| (getCellFromDir(player,movementDirection.getDirection()).getName().equals("cell exit"));//True if the player's about to walk into a door or exitLock
 			isCellSolid = getCellFromDir(player,movementDirection.getDirection()).getIsSolid();
 		}
 		
@@ -165,7 +164,7 @@ public class Maze {
 				ActorNeutralDirt castedToDirt = (ActorNeutralDirt) npc;
 				if(castedToDirt.isPushable()){//If currently not "settled" or "filled in"
 					Cell cellOver=board[castedToDirt.getX()][castedToDirt.getY()];
-					if(cellOver instanceof CellWater){//If it's hovering over water at present
+					if(cellOver.getName().equals("water")){//If it's hovering over water at present
 						if(cellOver.killsPlayer(null)){//And finally, if the water is in "lethal mode"
 							cellOver.nullify();//Make the water not lethal
 							castedToDirt.fillInMode();//Make the dirt block unmoveable. This has now successfully made a bridge!
@@ -189,7 +188,7 @@ public class Maze {
 		if(stoodOn.killsPlayer(playerInventory)) {
 			soundEvent="dyingnoises";
 			gameOver=true;
-		} else if(stoodOn instanceof CellExit){//Win! Kind of.
+		} else if(stoodOn.getName().equals("exit")){//Win! Kind of.
 			shouldAdvanceLevel=true;
 		}
 		if(stoodOn.hasPickup()) {//The tile has a pickup. Could be a treasure or a keycard.
@@ -202,9 +201,9 @@ public class Maze {
 				soundEvent="pickup";
 			}
 			//Nomatter what the pickup was, replace it with an empty tile
-			board[player.getX()][player.getY()] = new CellFree(player.getX(), player.getY());
+			board[player.getX()][player.getY()] = new Cell("free", player.getX(), player.getY());
 		}
-		boolean playerStandingOnInfo = (stoodOn instanceof CellInfo);//Check if the player's standing on an info tile
+		boolean playerStandingOnInfo = (stoodOn.getName().equals("info"));//Check if the player's standing on an info tile
 		//if(soundEvent!=null)
 		//System.out.println("DEBUG: Play sound:"+soundEvent);
 		if(shouldAdvanceLevel){//If the player should advance the level, IE, if they "win"
@@ -285,9 +284,9 @@ public class Maze {
 			}
 			return false;//If there was no matching keycard, return false.
 			
-		} else if(toCheck instanceof CellExitLocked){//If it's an exit door/lock, see if the player has enough chips.
+		} else if(toCheck.getName().equals("exit lock")){//If it's an exit door/lock, see if the player has enough chips.
 			if(currentTreasureLeft==0) {//If all treasure's been collected
-				board[xToCheck][yToCheck]=new CellFree(xToCheck,yToCheck);
+				board[xToCheck][yToCheck]=new Cell("free",xToCheck,yToCheck);
 				return true;//Immediately walk onto the space where the lock used to be!
 				
 			} else {//Not all treasure's been collected, so it's solid.
