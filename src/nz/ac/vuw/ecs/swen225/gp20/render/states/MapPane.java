@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.states;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 import nz.ac.vuw.ecs.swen225.gp20.render.sprites.*;
@@ -155,6 +156,7 @@ public class MapPane {
             case "info":
               infoOb = new Info(assets, i, j, infoAsset);
               break;
+
 
             default:
               break;
@@ -340,6 +342,9 @@ public class MapPane {
 
   }
 
+  int mobOffsetX = 0;
+  int mobOffsetY = 0;
+
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
@@ -352,11 +357,11 @@ public class MapPane {
   public void draw(Graphics g) {
 //    super.paintComponent(g);
 
-
+    int speed = 12;
     // transition animation - draws all objects depending on offset (speed)
     if (playerSprite != null && playerSprite.getIsMoving()) {
 
-      int speed = 12;
+
       switch (playerSprite.getDirection()) {
         case UP:
           offsetY += speed;
@@ -418,7 +423,33 @@ public class MapPane {
         }
 
         if (visibleMobs[i][j] != null) {
-          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
+
+          if(visibleMobs[i][j].getIsMoving()){
+            ActorSprite mob = visibleMobs[i][j];
+
+            if(mob.getIsMoving()){
+              Direction dir = mob.getDirection();
+              switch(dir){
+                case UP:
+                  mobOffsetY -= speed;
+                  break;
+                case DOWN:
+                  mobOffsetY += speed;
+                  break;
+                case LEFT:
+                  mobOffsetX -= speed;
+                  break;
+                case RIGHT:
+                  mobOffsetX += speed;
+                  break;
+                default:
+                  break;
+              }
+            }else{
+              mobOffsetX = mobOffsetY = 0;
+            }
+          }
+          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX + mobOffsetX - x, y * j + offsetY + mobOffsetY - y, null);
         }
 
       }

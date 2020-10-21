@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  */
 public class ActorSprite extends Sprite {
 
-  private BufferedImage[] sprites;
+  private BufferedImage[][] sprites;
   private Actor actor;
 
   public ActorSprite(Actor actor, Assets assets) {
@@ -21,12 +21,12 @@ public class ActorSprite extends Sprite {
     this.actor = actor;
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
-      sprites = assets.getAsset("player")[0];
+      sprites = assets.getAsset("player");
     } else if (actor.isPushable()) {
-      sprites = assets.getAsset("dirt")[0];
-    } else sprites = assets.getAsset("hostileMob")[0];
+      sprites = assets.getAsset("dirt");
+    } else sprites = assets.getAsset("hostileMob");
 
-    animation.setFrames(sprites);
+    animation.setFrames(sprites[0]);
     animation.setDelay(6);
 
   }
@@ -53,10 +53,25 @@ public class ActorSprite extends Sprite {
    * Updates the frame of the object
    */
   public void update() {
-//    this.direction = direction;
-//    if (actor.isPushable()) {
-//      animation.update();
-//    } else if (actor.getIsMoving()) {
+
+    if (!actor.isPushable()){
+      switch (actor.getDirection()) {
+        case UP:
+          animation.setNewFrames(sprites[0]);
+          break;
+        case DOWN:
+          animation.setNewFrames(sprites[1]);
+          break;
+        case LEFT:
+          animation.setNewFrames(sprites[2]);
+          break;
+        case RIGHT:
+          animation.setNewFrames(sprites[3]);
+          break;
+        default:
+          break;
+      }
+    }
       animation.update();
 //    }
   }
@@ -75,27 +90,7 @@ public class ActorSprite extends Sprite {
    * @return Current animation frame
    */
   public BufferedImage getImage() {
-    int frame = 0;
-    if (!actor.isPushable()){
-      switch (actor.getDirection()) {
-        case UP:
-          frame = 0;
-          break;
-        case DOWN:
-          frame = 1;
-          break;
-        case LEFT:
-          frame = 2;
-          break;
-        case RIGHT:
-          frame = 3;
-          break;
-        default:
-          break;
-      }
-    }
-
-    return animation.getFrame(frame);
+    return animation.getFrame();
   }
 
 }

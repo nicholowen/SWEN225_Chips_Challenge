@@ -268,7 +268,8 @@
     {
       "x": 2,
       "y": 2,
-      "terrain": "exit lock"
+      "terrain": "door",
+      "color": "yellow"
     },
     {
       "x": 3,
@@ -521,7 +522,8 @@
     },
     {
       "x": 1,
-      "y": 5
+      "y": 5,
+      "terrain": "exit lock"
     },
     {
       "x": 2,
@@ -921,7 +923,7 @@
       "x": 12,
       "y": 9,
       "object": "key",
-      "color": "green"
+      "color": "yellow"
     },
     {
       "x": 13,

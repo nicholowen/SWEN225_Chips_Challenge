@@ -37,6 +37,7 @@
                     <configuration>
                         <show>private</show>
                         <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                        <doclint>none</doclint>
                     </configuration>
                     <executions>
                         <execution>
@@ -51,9 +52,6 @@
                                     <artifactId>umldoclet</artifactId>
                                     <version>2.x</version>
                                 </docletArtifact>
-                                <additionalOptions>
-                                    <!--<additionalOption>...</additionalOption>-->
-                                </additionalOptions>
                             </configuration>
                         </execution>
                     </executions>

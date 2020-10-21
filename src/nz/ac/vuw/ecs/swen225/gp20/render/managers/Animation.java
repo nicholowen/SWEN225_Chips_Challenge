@@ -35,6 +35,15 @@ public class Animation {
   }
 
   /**
+   * Sets new frames without changing the current frame.
+   * This changes the row position of the animation.
+   * @param frames The row of the image array (usually a different direction).
+   */
+  public void setNewFrames(BufferedImage[] frames){
+    this.frames = frames.clone();
+  }
+
+  /**
    * Sets the image explicitly. Used for non-animated objects.
    *
    * @param image single image.
@@ -86,10 +95,6 @@ public class Animation {
     return frames[currentFrame];
   }
 
-  public BufferedImage getFrame(int i) {
-    return frames[i];
-  }
-
   /**
    * Gets the image set by the setImage(), a singular image for non-animated objects
    *
@@ -98,6 +103,7 @@ public class Animation {
   public BufferedImage getImage() {
     return image;
   }
+
 
 
 }
