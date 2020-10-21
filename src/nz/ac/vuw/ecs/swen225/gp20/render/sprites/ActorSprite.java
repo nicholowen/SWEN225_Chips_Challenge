@@ -65,7 +65,7 @@ public class ActorSprite extends Sprite {
    */
   public void update() {
 
-    if (!actor.getName().equals("dirt")){
+    if (!actor.getName().equals("dirt") && !actor.isPushable()){
       switch (actor.getDirection()) {
         case UP:
           animation.setNewFrames(sprites[0]);
