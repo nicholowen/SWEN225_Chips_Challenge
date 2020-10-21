@@ -267,7 +267,9 @@
     },
     {
       "x": 2,
-      "y": 2
+      "y": 2,
+      "terrain": "door",
+      "color": "yellow"
     },
     {
       "x": 3,
@@ -530,9 +532,7 @@
     },
     {
       "x": 3,
-      "y": 5,
-      "terrain": "door",
-      "color": "yellow"
+      "y": 5
     },
     {
       "x": 4,
