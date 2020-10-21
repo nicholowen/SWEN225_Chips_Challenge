@@ -86,8 +86,8 @@ public class Assets {
     FONT = loadGif(path, "font.gif", 9, 12);
     ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22);
     ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22);
-    PLAYER = loadGif(path, "player.gif", 64, 64);
-    HOSTILEMOB = loadGif(path, "hostile_mob.gif", 64, 64);
+    PLAYER = loadGif(path, "playersheet.gif", 64, 64);
+    HOSTILEMOB = loadGif(path, "hostilesheet.gif", 64, 64);
     LOGO = loadGif(path, "logo.gif", 892, 576);
     MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
     SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
