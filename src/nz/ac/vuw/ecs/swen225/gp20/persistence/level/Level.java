@@ -6,7 +6,6 @@ import java.util.ListIterator;
 
 import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
-import nz.ac.vuw.ecs.swen225.gp20.maze.cells.*;
 
 /**
  * Class to handle loading of json files into objects
@@ -76,20 +75,20 @@ public class Level {
             String object = tile.getObject();
 
             if (terrain == null && object == null) {
-                board[tile.x][tile.y] = new CellFree(tile.x, tile.y);
+                board[tile.x][tile.y] = new Cell("free", tile.x, tile.y);
                 continue;
             }
 
             if (terrain == null) {
                 switch (object) {
                     case "treasure":
-                        board[tile.x][tile.y] = new CellTreasure(tile.x, tile.y);
+                        board[tile.x][tile.y] = new Cell("treasure", tile.x, tile.y);
                         break;
                     case "key":
-                        board[tile.x][tile.y] = new CellKey(tile.x, tile.y, tile.getColor());
+                        board[tile.x][tile.y] = new Cell("key", tile.x, tile.y, tile.getColor());
                         break;
                     case "dirt":
-                        board[tile.x][tile.y] = new CellFree(tile.x, tile.y);
+                        board[tile.x][tile.y] = new Cell("free", tile.x, tile.y);
                         nonPlayableCharacters.add(new NonPlayableCharacter(tile.x, tile.y, "dirt", null));
                         break;
                     default:
@@ -101,24 +100,24 @@ public class Level {
 
             switch (terrain) {
                 case "wall":
-                    board[tile.x][tile.y] = new CellWall(tile.x, tile.y);
+                    board[tile.x][tile.y] = new Cell("wall", tile.x, tile.y);
                     break;
                 case "door":
-                    board[tile.x][tile.y] = new CellDoor(tile.x, tile.y, tile.getColor());
+                    board[tile.x][tile.y] = new Cell("door", tile.x, tile.y, tile.getColor());
                     break;
                 case "info":
-                    board[tile.x][tile.y] = new CellInfo(tile.x, tile.y, tile.getHelp());
+                    board[tile.x][tile.y] = new Cell("info", tile.x, tile.y, tile.getHelp());
                     break;
                 case "exit":
-                    CellExit exit = new CellExit(tile.x, tile.y);
+                    Cell exit = new Cell("exit", tile.x, tile.y);
                     board[tile.x][tile.y] = exit;
                     break;
                 case "exit lock":
-                    CellExitLocked exitLocked = new CellExitLocked(tile.x, tile.y);
+                    Cell exitLocked = new Cell("exit lock", tile.x, tile.y);
                     board[tile.x][tile.y] = exitLocked;
                     break;
                 case "water":
-                    board[tile.x][tile.y] = new CellWater(tile.x, tile.y);
+                    board[tile.x][tile.y] = new Cell("water", tile.x, tile.y);
                     break;
                 default:
                     break;
