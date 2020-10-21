@@ -145,10 +145,10 @@ public class Main {
     public void loadCurrentState() {
         try {
             maze = Persistence.loadGameState();
-            render.init(maze);
         } catch (IOException e) {
-            e.printStackTrace();
+            maze = new Maze();
         }
+        render.init(maze);
     }
 
     // =======================================================.

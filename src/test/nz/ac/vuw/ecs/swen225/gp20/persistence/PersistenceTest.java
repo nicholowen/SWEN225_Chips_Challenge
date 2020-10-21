@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -163,7 +164,7 @@ public class PersistenceTest {
     @Test
     public void persistenceTest12() {
         File path = new File("resources/saved-state");
-        File[] directoryList= path.listFiles();
+        File[] directoryList= path.listFiles((dir, name) -> name.matches("\\d{8}-\\d{6}-game-state.json"));
 
         if (directoryList == null || directoryList.length == 0) {
             assertThrows(IOException.class, Persistence::loadGameState);

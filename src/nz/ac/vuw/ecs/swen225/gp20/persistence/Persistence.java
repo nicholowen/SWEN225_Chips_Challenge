@@ -143,14 +143,11 @@ public class Persistence {
      * from a json file into a Maze object
      *
      * @return the saved maze object
+     * @throws IOException if there is an error reading from file
      */
     public static Maze loadGameState() throws IOException {
-        try {
-            File recentSave = getRecentSave();
-            return readJsonFromFile(recentSave, Maze.class);
-        } catch (FileNotFoundException e) {
-            return new Maze();
-        }
+        File recentSave = getRecentSave();
+        return readJsonFromFile(recentSave, Maze.class);
     }
 
     /**
