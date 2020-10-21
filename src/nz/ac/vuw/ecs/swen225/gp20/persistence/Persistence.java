@@ -59,7 +59,7 @@ public class Persistence {
         return levelObj;
     }
 
-    private static <T> T readJsonFromFile(File file, Class<T> type) throws IOException {
+    public static <T> T readJsonFromFile(File file, Class<T> type) throws IOException {
         InputStream inputStream = new FileInputStream(file.getAbsoluteFile());
         InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 

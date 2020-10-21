@@ -5,7 +5,7 @@ import java.io.IOException;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-//import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 /**
@@ -13,14 +13,14 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
  * info needed to different classes every tick.
  *
  * @author Maiza Rehan 300472305
- *
  */
 public class Main {
-    private static Maze maze;
+    private static final Maze maze = new Maze();
     private final GUI gui = new GUI(this);
     private static final Render render = new Render();
 
     private boolean gameEnded;
+    private int timeRemaining;
     private Direction direction = null;
     private boolean paused = false;
 
@@ -39,22 +39,9 @@ public class Main {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
 //        Maze maze = new Maze(Persistence.getHighestLevel());
-        
-        //try {
-        //    Persistence.setSaveType("resume");
-        //} catch (IOException e1) {
-        //    // TODO Auto-generated catch block
-        //    e1.printStackTrace();
-        //}
-        
-        if (Persistence.getSaveType().equalsIgnoreCase("unfinished")) {
-            this.loadUnfinished();
-        }
-        if (Persistence.getSaveType().equalsIgnoreCase("resume")) {
-            this.loadCurrentState();
-        } else {
-            this.loadLvl1();
-        }
+
+        timeRemaining = maze.loadMaze(Persistence.getHighestLevel());
+        ;
         render.init(maze);
         while (true) {
             currentState = gui.getGameState();
@@ -70,13 +57,10 @@ public class Main {
 
             if (!gameEnded) {
                 direction = gui.getDirection();
-                if (gui.isRecording() && direction != null) {
-                    //RecordAndPlay.addMovement(direction.toString());
-                }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                    render.update(maze.tick(direction), timeRemaining, gui.getButtonSoundEvent());
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -90,11 +74,9 @@ public class Main {
                 }
                 if ((System.currentTimeMillis() >= start + delay) && currentState == 4) {
                     start = System.currentTimeMillis();
-                    maze.tickTimeRemaining(); // timeRemaining goes down every second
+                    timeRemaining--; // timeRemaining goes down every second
+//                    gui.setTimeRemaining(timeRemaining);
                 }
-            }
-            else {
-                break;
             }
         }
     }
@@ -108,84 +90,88 @@ public class Main {
     // Saving and Loading Methods
     // =======================================================.
     public void saveUnfinished() {
-        try {
-            Persistence.setSaveType("unfinished");
-            Persistence.setHighestLevel(maze.getLevel());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Persistence.saveHighestLevel(maze.getLevel());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void saveLvl1() {
-        try {
-            Persistence.setSaveType("lvl1");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // just let persistence know that we need start at
+        //level 1 next time somehow? idk
     }
 
     public void saveCurrentState() {
         try {
-            Persistence.setSaveType("resume");
             Persistence.saveGameState(maze);
         } catch (IOException e) {
-            maze = new Maze(1);
+            e.printStackTrace();
         }
     }
 
     public void loadUnfinished() {
-        maze = new Maze(Persistence.getHighestLevel());
+        maze.loadMaze(Persistence.getHighestLevel());
     }
 
     public void loadLvl1() {
-        maze = new Maze(1);
+        maze.loadMaze(1);
     }
 
     public void loadCurrentState() {
         try {
-            maze = Persistence.loadGameState();
+            Persistence.loadGameState();
         } catch (IOException e) {
-            maze = new Maze(1);
+            e.printStackTrace();
         }
-        render.init(maze);
     }
 
     // =======================================================.
     // Recording and Replaying Methods
     // =======================================================.
-    //public void startRecord() {
-    //    RecordAndPlay.startNewRecording(maze, "lol");
-    //}
-    //
-    //public void stopRecord() {
-    //    RecordAndPlay.stopRecording();
-    //    RecordAndPlay.save(this);
-    //}
-    //
-    //public void replay() {
-    //    RecordAndPlay.load("lol", this);
-    //    RecordAndPlay.setPlaybackSpeed(fps);
-    //    RecordAndPlay.runReplay(this);
-    //}
+    public void startRecord() {
+        RecordAndPlay.startNewRecording(maze, "recording");
+    }
+
+    public void stopRecord() throws IOException {
+        RecordAndPlay.save(this);
+        System.out.println("saved");
+    }
+
+    public void replay() throws IOException, InterruptedException {
+        RecordAndPlay.load("recording", this);
+//        RecordAndPlay.setPlaybackSpeed(fps);
+        RecordAndPlay.runReplay(this);
+        RecordAndPlay.resetRecording();
+    }
 
     public void runMove() {
-        // Go UP
-        if (direction == Direction.UP) {
-            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        // Go DOWN
-        if (direction == Direction.DOWN) {
-            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        // Go LEFT
-        if (direction == Direction.LEFT) {
-            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        // Go RIGHT
-        if (direction == Direction.RIGHT) {
-            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+        if (RecordAndPlay.getMoves().get(0).equals("UP")) {
+            render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
+        } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
+            render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
+        }else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
+            render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
+        }else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
+            render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
         }
     }
+
+    public void runMove(String dir) {
+        if (dir.equals("UP")) {
+            render.update(maze.tick(Direction.UP), timeRemaining, gui.getButtonSoundEvent());
+        }
+        if (dir.equals("DOWN")) {
+            render.update(maze.tick(Direction.DOWN), timeRemaining, gui.getButtonSoundEvent());
+        }
+        if (dir.equals("LEFT")) {
+            render.update(maze.tick(Direction.LEFT), timeRemaining, gui.getButtonSoundEvent());
+        }
+        if (dir.equals("RIGHT")) {
+            render.update(maze.tick(Direction.RIGHT), timeRemaining, gui.getButtonSoundEvent());
+        }
+    }
+
 
     // =======================================================.
     // Utility Methods for Persistence and RecnPlay
@@ -205,8 +191,17 @@ public class Main {
      *
      * @param fps frames per second.
      */
-    public void setFPS(int fps) {
+    public void setSpeed(int fps) {
         this.fps = fps;
+    }
+
+    /**
+     * Set the time remaining.
+     *
+     * @param timeRemaining the time remaining.
+     */
+    public void setTimeRemaining(int timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
     // ======================================
@@ -214,6 +209,10 @@ public class Main {
     // ======================================
 
     public void movePlayer(String direction) {
-        //RecordAndPlay.addMovement(direction);
+        RecordAndPlay.addPlayerMovement(direction);
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
     }
 }
