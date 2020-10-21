@@ -43,7 +43,7 @@ public class Maze {
 	 * @author Lex Ashurst 300431928
 	 */
 	public Maze(int level) {
-		loadMaze(level);
+		loadMaze(2);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class Maze {
 	public RenderTuple tick(Direction movementDirection) {
 		recordedMove=null;
 
-		//Sound-and-movement relatedcode
+		//Sound-and-movement related code
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
 			oomphCounter--;
 		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
@@ -159,7 +159,7 @@ public class Maze {
 			isCellSolid = getCellFromDir(player,movementDirection.getDirection()).getIsSolid();
 		}
 		
-		if(movementDirection!=null && isMoveValid(player, movementDirection.getDirection())) {//If there's movement input and it's valid, move. Also unlocks doors.
+		if(movementDirection!=null && isMoveValid(player, movementDirection.getDirection()) && playerCanPushOnto(getCellFromDir(player,movementDirection.getDirection()), movementDirection)) {//If there's movement input and it's valid, move. Also unlocks doors and pushes dirt.
 			if(!player.getIsMoving()) {//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
 				if((isWalkingIntoExitDoor || isWalkingIntoDoor) && isCellSolid){
 					if(isWalkingIntoDoor)
@@ -180,9 +180,10 @@ public class Maze {
 			oomphCounter=oomphDelay;
 		}
 		player.tick();
-		//TODO: Tick all NPCs once they're implemented.
 
 		for(Actor npc:creatures){//For every NPC (All actors except the player)
+			npc.tick();//If necessary, tick them forward.
+
 			if(npc instanceof ActorNeutralDirt){
 				ActorNeutralDirt castedToDirt = (ActorNeutralDirt) npc;
 				if(castedToDirt.isPushable()){//If currently not "settled" or "filled in"
@@ -197,7 +198,7 @@ public class Maze {
 			}//End of dirt filling water logic
 
 			if(npc instanceof ActorHostileMonster){//If it's a "spider"
-
+				//TODO: Implement movement logic
 
 
 
@@ -319,6 +320,56 @@ public class Maze {
 		
 		return !toCheck.getIsSolid();
 		}
+	}
+
+	/**
+	 * Checks through the list of all NPCs to see if there's an NPC infront of the player which might block their movement.
+	 * Then checks if that NPC can be pushed by the player.
+	 * If it can be pushed by the player, then they push it. If it blocks them, then player doesn't move. If for whatever the reason it doesn't block them, carry on.
+	 * NOTE! This needs to be checked repeatedly. Some NPCs go into "background mode", which is to say, the "sunk dirt". Those need to be ignored by this.
+	 * @param c The cell that the player's attempting to move to
+	 * @param d The direction of the movement!
+	 * @return
+	 */
+	public boolean playerCanPushOnto(Cell c, Direction d){
+		if(NPCBlocksPath(new Point(c.getX(),c.getY()))){//If anything's in the way, then
+			for(Actor a:creatures) {//For every NPC - we need to check all of them after all.
+				if (a.getX() == c.getX() && a.getY() == c.getY()){//If it's on the tile we're looking at
+					System.out.println("[DEBUG]Found an NPC blocking our path on the tile x:"+a.getX()+", y:"+a.getY()+", name:"+a.getName());
+					if (a.blocksMovement() && !a.isPushable)
+						return false;//If we can't get past it, immediately return false.
+					else if (a.isPushable()) {
+						System.out.println("[DEBUG]We know that the NPC is pushable! Checking if the space behind it is clear");
+						Cell farSide = getCellFromDir(a, d.getDirection());//Cell on the far side of the one we're pushing.
+						if(farSide.isSolid || NPCBlocksPath(new Point(farSide.getX(), farSide.getY()))) {
+							System.out.println("[DEBUG]We were unable to push the NPC!");
+							return false;//If there's no empty space on the far side, then don't push it.
+						}
+						//Else, we move what we're pushing!
+						System.out.println("[DEBUG]Pushing NPC!");
+						a.move(d);
+						return true;
+					}
+				}
+			}
+
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if an NPC which can't be immediately walked on is at a particular point.
+	 * This doesn't check anything as to whether or not it's pushable.
+	 * Returns true if so, false otherwise. Not to be used directly by the player!
+	 * @param p
+	 * @return
+	 */
+	public boolean NPCBlocksPath(Point p){
+		for(Actor a:creatures){
+			if( (a.getX()==p.getX()) && (a.getY()==p.getY()) && a.blocksMovement())
+				return true;
+		}
+		return false;//Only return false if absoloutely nothing could block the movement here.
 	}
 
 	public void tickTimeRemaining() {

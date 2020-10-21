@@ -51,7 +51,7 @@ public class Actor {
 	public void tick(){
 		if(!isMoving)
 			return;
-		
+
 		moveProgress++;
 		if(moveProgress>=ticksToMove) {
 			isMoving=false;
@@ -80,7 +80,7 @@ public class Actor {
 	public void move(Direction dir){
 		if(isMoving)
 			return;//If already moving, then ignore the suggestion to move again.
-		
+
 		direction=dir;
 		isMoving=true;
 		moveProgress=0;//Reset move progress.
