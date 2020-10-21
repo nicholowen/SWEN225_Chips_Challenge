@@ -64,7 +64,7 @@
     "chipsRequired": 2,
     "width": 20,
     "height": 11,
-    "timeLimit": 360
+    "timeLimit": 60
   },
   "grid": [
     {
