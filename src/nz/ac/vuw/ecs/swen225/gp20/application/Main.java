@@ -5,8 +5,7 @@ import java.io.IOException;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
-//import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 
 /**
@@ -25,7 +24,7 @@ public class Main {
     private Direction direction = null;
     private boolean paused = false;
 
-    private int fps = 200;
+    private int fps = 40;
     private int introCounter;
     private int currentState;
 
