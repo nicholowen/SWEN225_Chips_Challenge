@@ -12,7 +12,7 @@ import javax.swing.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
+//import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
@@ -162,9 +162,9 @@ public class GUI extends JPanel implements KeyListener {
             if (gameState == 4) {
                 recording = !recording;
                 if(recording) {
-                    main.stopRecord();;
+                    //main.stopRecord();;
                 }
-                else main.startRecord();
+                //else main.startRecord();
             }
         });
 
@@ -280,7 +280,7 @@ public class GUI extends JPanel implements KeyListener {
             else if (keyCode == KeyEvent.VK_R) {
                 System.out.println("REPLAYINHGGYGGH");
                 recording = false;
-                main.replay();
+                //main.replay();
             }
         }
     }

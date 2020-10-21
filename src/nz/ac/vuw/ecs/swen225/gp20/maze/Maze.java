@@ -11,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.level.*;
 
 public class Maze {
 	private Cell[][] board;
+	private int timeRemaining;
 	private boolean gameOver;//If true, the player is dead or the level is otherwise failed.
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
@@ -37,8 +38,8 @@ public class Maze {
 	 * Loads maze "1" by default. Completely resets every time a maze is loaded.
 	 * @author Lex Ashurst 300431928
 	 */
-	public Maze() {
-		loadMaze(1);
+	public Maze(int level) {
+		loadMaze(level);
 	}
 
 	/**
@@ -47,14 +48,14 @@ public class Maze {
 	 * @param levelToLoad Number of the level to load.
 	 * @return Time limit in seconds of the level in question. -1 if an error occurred while loading.
 	 */
-	public int loadMaze(int levelToLoad) {
+	private void loadMaze(int levelToLoad) {
 		System.out.println("Loadmaze was called, trying to load maze:"+levelToLoad);
 		Level toLoad;
 		try {
 			toLoad=Persistence.read(levelToLoad);
 		} catch(IOException e) {
 			System.out.println("CRITICAL ERROR LOADING LEVEL "+levelToLoad+" :"+e);
-			return -1;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
+			return;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		//Resetting/initializing
 		System.out.println("Managed to read the file successfully!");
@@ -65,6 +66,7 @@ public class Maze {
 		exitList=new ArrayList<>();
 		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
+		timeRemaining = toLoad.properties.timeLimit;
 		oomphCounter=0;
 		System.out.println("Loaded arbitrary values");
 		
@@ -81,8 +83,6 @@ public class Maze {
 				creatures.add(new ActorHostileMonster(c.getType(), c.x, c.y, c.getPath()));
 		}
 		System.out.println("Loaded NPCs!");
-
-		return toLoad.properties.timeLimit;
 	}
 	
 	public Cell[][] getBoard(){
@@ -298,6 +298,18 @@ public class Maze {
 		
 		return !toCheck.getIsSolid();
 		}
+	}
+
+	public void tickTimeRemaining() {
+		timeRemaining--;
+	}
+
+	public int getTimeRemaining() {
+		return timeRemaining;
+	}
+
+	public void setTimeRemaining(int timeRemaining) {
+		this.timeRemaining = timeRemaining;
 	}
 
 
