@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Level;
@@ -181,6 +182,9 @@ public class Persistence {
         }
     }
 
+    /**
+     * Utility class for saving and loading game state
+     */
     private static class Settings {
         int highestLevel;
         String saveType;
@@ -191,25 +195,55 @@ public class Persistence {
         }
     }
 
-    public static Settings loadSaveSettings() throws IOException {
+    /**
+     * Helper method to load a settings object from json
+     *
+     * @return the gamed saved game settings
+     * @throws IOException {@inheritDoc}
+     */
+    private static Settings loadSaveSettings() throws IOException {
         File file = Paths.get(savedState.toString(), "save-settings.json").toFile();
         return readJsonFromFile(file, Settings.class);
     }
 
-    public static void setSaveSettings(Settings settings) throws IOException {
+    /**
+     * Helper method to save a settings object to json
+     *
+     * @param settings the settings object to save
+     * @throws IOException {@inheritDoc}
+     */
+    private static void setSaveSettings(Settings settings) throws IOException {
         saveJson(savedState.toFile(), "save-settings.json", settings);
     }
 
+    /**
+     * Sets the highest level in json
+     *
+     * @param highestLevel the level number
+     * @throws IOException {@inheritDoc}
+     */
     public static void setHighestLevel(int highestLevel) throws IOException {
+        Preconditions.checkArgument(highestLevel > 0, "Level cannot be null");
         Settings settings = new Settings(highestLevel, getSaveType());
         setSaveSettings(settings);
     }
 
+    /**
+     * Sets the
+     *
+     * @param saveType a String to set the last save type to
+     * @throws IOException {@inheritDoc}
+     */
     public static void setSaveType(String saveType) throws IOException {
         Settings settings = new Settings(getHighestLevel(), saveType);
         setSaveSettings(settings);
     }
 
+    /**
+     * Get the type of the last save from json file
+     *
+     * @return the type of save, if doesn't exist returns "default"
+     */
     public static String getSaveType() {
         try {
             Settings settings = loadSaveSettings();
@@ -221,6 +255,9 @@ public class Persistence {
         return "default";
     }
 
+    /**
+     * Get the highest level that has been reached from json
+     */
     public static int getHighestLevel() {
         try {
             Settings settings = loadSaveSettings();

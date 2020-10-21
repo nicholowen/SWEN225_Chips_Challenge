@@ -18,32 +18,52 @@ public class Level {
     private String description;
     private Coordinate start;
     public Properties properties;
-    private ArrayList<Tile> grid = new ArrayList<>();
-    private ArrayList<NonPlayableCharacter> nonPlayableCharacters = new ArrayList<>();
+    private final ArrayList<Tile> grid = new ArrayList<>();
+    private final ArrayList<NonPlayableCharacter> nonPlayableCharacters = new ArrayList<>();
 
     private Cell[][] board;
 
-    /* GETTERS */
+    /**
+     * Gets a list of the non playable characters in the level
+     *
+     * @return Arraylist of NonPlayableCharacter
+     */
     public ArrayList<NonPlayableCharacter> getNonPlayableCharacters() {
         return nonPlayableCharacters;
     }
 
+    /**
+     * Gets the level description
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
-    public ArrayList<Tile> getGrid() {
-        return grid;
-    }
-
+    /**
+     * Gets the starting x coordinate of the player
+     *
+     * @return the x coordinate
+     */
     public int getStartX() {
         return start.x;
     }
 
+    /**
+     * Gets the starting y coordinate of the player
+     *
+     * @return the y coordinate
+     */
     public int getStartY() {
         return start.y;
     }
 
+    /**
+     * Get the board inthe level
+     *
+     * @return 2D array of the board object
+     */
     public Cell[][] getBoard() {
         if (board == null) loadBoard();
         return board;
@@ -200,7 +220,7 @@ public class Level {
     }
 
     /**
-     * Method to check if the json is valid
+     * Method to check if the json level file is valid
      */
     public void validate() {
         Preconditions.checkNotNull(description, "Level must contain description");
