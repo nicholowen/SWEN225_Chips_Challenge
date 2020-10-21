@@ -25,12 +25,20 @@ public class ActorSprite extends Sprite {
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player");
-    } else if (actor.isPushable()) {
-      sprites = assets.getAsset("dirt");
+    } else if (actor.getName().equals("dirt")){
+      if (actor.isPushable()) {
+        sprites = assets.getAsset("dirt");
+      }else{
+        sprites = assets.getAsset("dirtInactive");
+      }
     } else sprites = assets.getAsset("hostileMob");
 
     animation.setFrames(sprites[0]);
-    animation.setDelay(6);
+    if (actor.getName().equals("dirt")) {
+      animation.setDelay(6);
+    } else {
+      animation.setDelay(2);
+    }
 
   }
 
@@ -57,7 +65,7 @@ public class ActorSprite extends Sprite {
    */
   public void update() {
 
-    if (!actor.isPushable()){
+    if (!actor.getName().equals("dirt")){
       switch (actor.getDirection()) {
         case UP:
           animation.setNewFrames(sprites[0]);
@@ -75,9 +83,9 @@ public class ActorSprite extends Sprite {
           break;
       }
     }
-      animation.update();
-//    }
+    animation.update();
   }
+
 
   public boolean getIsMoving() {
     return actor.getIsMoving();
