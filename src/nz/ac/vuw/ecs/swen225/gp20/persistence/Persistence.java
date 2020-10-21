@@ -32,8 +32,8 @@ public class Persistence {
      *
      * @param level the level number
      * @return a Level object
-     * @throws IOException if the level is not found
-     * @throws JsonSyntaxException   {@inheritDoc}
+     * @throws IOException         if the level is not found
+     * @throws JsonSyntaxException {@inheritDoc}
      */
     public static Level read(int level) throws IOException, JsonSyntaxException {
         File file = getLevelFile(level);
@@ -118,7 +118,7 @@ public class Persistence {
         saveJson(savedState.toFile(), filename, maze);
     }
 
-    private static  <T> void saveJson(File file, String filename, T toSave) throws IOException {
+    private static <T> void saveJson(File file, String filename, T toSave) throws IOException {
         checkDirectory(file);
 
         OutputStream outputStream = new FileOutputStream(Paths.get(file.getPath(), filename).toFile());
@@ -165,14 +165,14 @@ public class Persistence {
     /**
      * Gets the most recent save from the save game state directory.
      *
-     * @throws FileNotFoundException if the directory is empty
      * @return the most recent file, cannot be null
+     * @throws FileNotFoundException if the directory is empty
      */
     private static File getRecentSave() throws FileNotFoundException {
-        File[] directoryList= savedState.toFile()
+        File[] directoryList = savedState.toFile()
                 .listFiles((dir, name) -> name.matches("\\d{8}-\\d{6}-game-state.json"));
 
-        if (directoryList == null || directoryList.length == 0){
+        if (directoryList == null || directoryList.length == 0) {
             throw new FileNotFoundException("Directory '" + savedState + "' is empty.");
         } else {
             List<File> sortedFiles = Arrays.stream(directoryList)
@@ -219,21 +219,19 @@ public class Persistence {
             if (settings != null && settings.saveType != null) {
                 return settings.saveType;
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         return "default";
     }
 
     public static int getHighestLevel() {
         try {
             Settings settings = loadSaveSettings();
-            if (settings != null && settings.highestLevel >= 1){
+            if (settings != null && settings.highestLevel >= 1) {
                 return settings.highestLevel;
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         return 1;
-    }
-
-    public static void main(String[] args) {
-
     }
 }
