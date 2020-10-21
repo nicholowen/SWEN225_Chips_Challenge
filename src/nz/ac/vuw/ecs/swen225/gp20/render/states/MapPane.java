@@ -342,10 +342,6 @@ public class MapPane {
 
   }
 
-  int mobOffsetX = 0;
-  int mobOffsetY = 0;
-
-
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
    * The extra lines are for transition frames  - they are drawn off-screen and transition in
@@ -393,6 +389,7 @@ public class MapPane {
         if (floor[i][j] != null) {
           g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
+
         if (wall[i][j] != null && wallObjects.size() > 0) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
@@ -422,34 +419,48 @@ public class MapPane {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
 
-        if (visibleMobs[i][j] != null) {
 
+
+      }
+    }
+    for (int i = 0; i < 11; i++) {
+      for (int j = 0; j < 11; j++) {
+        if (visibleMobs[i][j] != null) {
+//          int mobOffsetX = 0, mobOffsetY = 0;
           if(visibleMobs[i][j].getIsMoving()){
             ActorSprite mob = visibleMobs[i][j];
 
             if(mob.getIsMoving()){
               Direction dir = mob.getDirection();
+              int xoffset = mob.getOffsetX();
+              int yoffset = mob.getOffsetY();
               switch(dir){
                 case UP:
-                  mobOffsetY -= speed;
+                  mob.setOffsetY(yoffset -= speed);
+//                  mobOffsetY = mob.getOffsetY();
                   break;
                 case DOWN:
-                  mobOffsetY += speed;
+                  mob.setOffsetY(yoffset += speed);
+//                  mobOffsetY = mob.getOffsetY();
                   break;
                 case LEFT:
-                  mobOffsetX -= speed;
+                  mob.setOffsetX(xoffset -= speed);
+//                  mobOffsetX = mob.getOffsetX();
                   break;
                 case RIGHT:
-                  mobOffsetX += speed;
+                  mob.setOffsetX(xoffset += speed);
+//                  mobOffsetX = mob.getOffsetX();
                   break;
                 default:
                   break;
               }
             }else{
-              mobOffsetX = mobOffsetY = 0;
+              mob.setOffsetX(0);
+              mob.setOffsetY(0);
             }
           }
-          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX + mobOffsetX - x, y * j + offsetY + mobOffsetY - y, null);
+
+          g.drawImage(visibleMobs[i][j].getImage(), x * i + offsetX + visibleMobs[i][j].getOffsetX() - x, y * j + offsetY + visibleMobs[i][j].getOffsetY() - y, null);
         }
 
       }

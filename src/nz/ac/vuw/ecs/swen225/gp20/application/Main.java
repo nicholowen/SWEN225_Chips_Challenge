@@ -55,6 +55,7 @@ public class Main {
         } else {
             this.loadLvl1();
         }
+        maze = new Maze(2);
         render.init(maze);
         while (true) {
             currentState = gui.getGameState();

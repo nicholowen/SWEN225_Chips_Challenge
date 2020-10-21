@@ -14,6 +14,9 @@ public class ActorSprite extends Sprite {
   private BufferedImage[][] sprites;
   private Actor actor;
 
+  private int offsetX;
+  private int offsetY;
+
   public ActorSprite(Actor actor, Assets assets) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
@@ -93,4 +96,18 @@ public class ActorSprite extends Sprite {
     return animation.getFrame();
   }
 
+  public void setOffsetX(int x){
+    this.offsetX = x;
+  }
+
+  public void setOffsetY(int y){
+    this.offsetY = y;
+  }
+
+  public int getOffsetX(){
+    return offsetX;
+  }
+  public int getOffsetY(){
+    return offsetY;
+  }
 }
