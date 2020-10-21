@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class ActorNeutralDirt extends Actor {
 
-    public ActorNeutralDirt(int x, int y){
-        super(false, "dirt", x, y, 0);
+    public ActorNeutralDirt(String name, int x, int y){
+        super(false, "name", x, y, 0);
         killsPlayer=false;
         blocksMovement=true;//By default, until it's pushed over "water", it blocks movement
         isPushable=true;//Can be moved by the player!
