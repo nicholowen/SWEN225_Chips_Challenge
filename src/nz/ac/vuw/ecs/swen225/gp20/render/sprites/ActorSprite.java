@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.*;
@@ -19,12 +20,12 @@ public class ActorSprite extends Sprite {
   private int offsetY;
   private boolean isPushable;
   private Assets assets;
+  private RenderTuple tuple;
 
   public int x;
   public int y;
 
   public ActorSprite(Actor actor, Assets assets) {
-
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
     this.isPushable = actor.isPushable();
     this.actor = actor;
@@ -33,12 +34,10 @@ public class ActorSprite extends Sprite {
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player");
     } else if (actor.getName().equals("dirt")){
-      if (actor.isPushable()) {
-        sprites = assets.getAsset("dirt");
-      }else{
-        sprites = assets.getAsset("dirtInactive");
-      }
-    } else sprites = assets.getAsset("hostileMob");
+      sprites = assets.getAsset("dirt");
+    } else {
+      sprites = assets.getAsset("hostileMob");
+    }
 
     animation.setFrames(sprites[0]);
     if (actor.getName().equals("dirt")) {
@@ -47,11 +46,6 @@ public class ActorSprite extends Sprite {
       animation.setDelay(2);
     }
 
-  }
-
-  public void setVisiblePos(int x, int y){
-    this.x = x;
-    this.y = y;
   }
 
   /**
@@ -72,12 +66,47 @@ public class ActorSprite extends Sprite {
     return actor.getY();
   }
 
-
   public void checkStateChange(){
     if(isPushable && !actor.isPushable()){
       isPushable = false;
       sprites = assets.getAsset("dirtInactive");
     }
+  }
+
+  public boolean getIsMoving() {
+    return actor.getIsMoving();
+  }
+
+  public Direction getDirection() {
+    return actor.getDirection();
+  }
+
+  public void setTuple(RenderTuple tuple){
+    this.tuple = tuple;
+  }
+
+  public void setOffsetX(int x){
+    this.offsetX = x;
+  }
+
+  public void setOffsetY(int y){
+    this.offsetY = y;
+  }
+
+  public int getOffsetX(){
+    return offsetX;
+  }
+  public int getOffsetY(){
+    return offsetY;
+  }
+
+  /**
+   * retrieves the image for the current frame it's in
+   *
+   * @return Current animation frame
+   */
+  public BufferedImage getImage() {
+    return animation.getFrame();
   }
 
   /**
@@ -106,44 +135,15 @@ public class ActorSprite extends Sprite {
     animation.update();
   }
 
-
-  public boolean getIsMoving() {
-    return actor.getIsMoving();
-  }
-
-  public Direction getDirection() {
-    return actor.getDirection();
-  }
-
-  /**
-   * retrieves the image for the current frame it's in
-   *
-   * @return Current animation frame
-   */
-  public BufferedImage getImage() {
-    return animation.getFrame();
-  }
-
-  public void setOffsetX(int x){
-    this.offsetX = x;
-  }
-
-  public void setOffsetY(int y){
-    this.offsetY = y;
-  }
-
-  public int getOffsetX(){
-    return offsetX;
-  }
-  public int getOffsetY(){
-    return offsetY;
-  }
-
   public void draw(Graphics g, int x, int y){
     int speed;
+    if(tuple.creatureMoved()){
+      offsetX = 0;
+      offsetY = 0;
+    }
     if(getIsMoving()) {
-      if(actor.isPushable()) speed = 12;
-      else speed = 5;
+      if (actor.isPushable()) speed = 12;
+      else speed = 4;
       switch (getDirection()) {
         case UP:
           offsetY -= speed;
@@ -160,9 +160,10 @@ public class ActorSprite extends Sprite {
         default:
           break;
       }
-
     }else{
-      offsetX = offsetY = 0;
+        offsetX = 0;
+        offsetY = 0;
+
     }
     g.drawImage(getImage(), x + offsetX, y + offsetY, null);
   }

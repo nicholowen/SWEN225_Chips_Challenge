@@ -51,7 +51,7 @@ public class MapPane {
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
-  private HashMap<Actor, ActorSprite> actorObjects = new HashMap<>();
+  private HashMap<Actor, ActorSprite> actorObjects;
 
   //Single Rendered object (only one per map)
   private Info infoOb;
@@ -87,17 +87,11 @@ public class MapPane {
 //    mobMazePosition = new Actor[cells.length][cells[0].length];
     System.out.println("ACTOR LENGTH: " + actors.length);
     this.playerSprite = new ActorSprite(actors[actors.length-1], assets);
+    actorObjects = new HashMap<>(); // SAFEGUARD: need to initialise it here in case this method gets called multiple times
     for(int m = 0; m < actors.length - 1; m++){
       actorObjects.put(actors[m], new ActorSprite(actors[m], assets));
     }
 
-
-//    for(Actor test : actors){
-//      if(!test.getName().equals("player")){
-//        actorObjects.put(test, new ActorSprite(test, assets));
-//      }
-//    }
-//    }
 
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
@@ -146,8 +140,6 @@ public class MapPane {
 
           }
         }
-        //
-
       }
     }
   }
@@ -214,12 +206,10 @@ public class MapPane {
     return ret;
   }
 
-  private Actor[][] getVisibleMobs(RenderTuple tuple, ActorSprite player) {
+  private void setVisibleMobs(RenderTuple tuple, ActorSprite player) {
     Actor[][] ret = new Actor[11][11];
     int posX = player.getX();
     int posY = player.getY();
-
-    int count = 0;
 
     int x = posX - 5;
     for (int i = 0; i < 11; i++) {
@@ -232,42 +222,12 @@ public class MapPane {
               mobs[i][j] = actor;
             }
           }
-        } else {
-          ret[i][j] = null;
         }
         y++;
       }
       x++;
     }
-    return ret;
   }
-
-//  private void refreshActorPositions(RenderTuple tuple){
-//    mobMazePosition = new Actor[tuple.getCells().length][tuple.getCells()[0].length];
-//    for(int i = 0; i < mobMazePosition.length; i++){
-//      for(int j = 0; j < mobMazePosition[i].length; j++){
-//        for(Actor test : tuple.getActors()){
-//          if(!test.getName().equals("player")){
-//            if(test.getX() == i && test.getY() == j) {
-//              mobMazePosition[i][j] = test;
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
-
-
-//  public void updateVisibleMobs(RenderTuple tuple) {
-//    refreshActorPositions(tuple);
-//      for (int m = 0; m < tuple.getActors().length-1; m++) {
-//        Actor temp = tuple.getActors()[m];
-//        if(!temp.getIsMoving()) {
-//          actorObjects.put(temp, new ActorSprite(temp, assets));
-//        }
-//      }
-//  }
-//  }
 
   /**
    * Iterates through an 11x11 grid around the player. Adds them to an appropriate list
@@ -282,6 +242,7 @@ public class MapPane {
     playerSprite.update();
 
     for(ActorSprite sprites : actorObjects.values()){
+      sprites.setTuple(tuple);
       sprites.update();
     }
 
@@ -289,8 +250,7 @@ public class MapPane {
 
     //update all mobs with direction (this can probably be condensed as all actors)
     Cell[][] surround = getSurround(tuple, playerSprite);
-    Actor[][] visibleM = getVisibleMobs(tuple, playerSprite);
-
+    setVisibleMobs(tuple, playerSprite);
 
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
@@ -347,16 +307,8 @@ public class MapPane {
               break;
           }
         }
-//        if(visibleM[i][j] != null){
-////          if (actorObjects.containsKey(visibleM[i][j])){
-////            actorObjects.get(visibleM[i][j]).update();
-////            testing[i][j] = actorObjects.get(visibleM[i][j]);
-////          }
-////        }
-
-        }
       }
-
+    }
   }
 
 
@@ -437,9 +389,6 @@ public class MapPane {
         if (exitLock[i][j] != null && exitLockOb != null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-
-
-
       }
     }
     for (int i = 0; i < 11; i++) {
@@ -449,17 +398,6 @@ public class MapPane {
         }
       }
     }
-//    for (int i = 0; i < 11; i++) {
-//      for (int j = 0; j < 11; j++) {
-//        if (testing[i][j] != null) {
-//          testing[i][j].draw(g, x * i + offsetX - x, y * j + offsetY - y);
-//        }
-//
-//      }
-//    }
-//    for(ActorSprite sprites : actorObjects.values()){
-//      sprites.draw(g, x * sprites.x + offsetX - x, y * sprites.y + offsetY - y );
-//    }
 
     //draws player last to remain on top and center of screen (uses absolute positioning)
     if (playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
