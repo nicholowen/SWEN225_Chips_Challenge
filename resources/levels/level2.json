@@ -5,11 +5,11 @@
     "y": 5
   },
   "properties": {
-    "chipsInLevel": 7,
-    "chipsRequired": 7,
+    "chipsInLevel": 8,
+    "chipsRequired": 8,
     "width": 20,
     "height": 11,
-    "timeLimit": 60
+    "timeLimit": 100
   },
   "nonPlayableCharacters": [
     {
@@ -95,6 +95,21 @@
         },
         {
           "x": 11,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "type": "spider",
+      "path": [
+        {
+          "x": 5,
+          "y": 9
+        },
+        {
+          "x": 5,
           "y": 1
         }
       ]
@@ -316,7 +331,8 @@
     },
     {
       "x": 5,
-      "y": 2
+      "y": 2,
+      "object": "treasure"
     },
     {
       "x": 6,
@@ -330,11 +346,13 @@
     },
     {
       "x": 8,
-      "y": 2
+      "y": 2,
+      "object": "dirt"
     },
     {
       "x": 9,
-      "y": 2
+      "y": 2,
+      "object": "dirt"
     },
     {
       "x": 10,
@@ -591,13 +609,11 @@
     },
     {
       "x": 8,
-      "y": 5,
-      "object": "dirt"
+      "y": 5
     },
     {
       "x": 9,
-      "y": 5,
-      "object": "dirt"
+      "y": 5
     },
     {
       "x": 10,
@@ -857,11 +873,13 @@
     },
     {
       "x": 8,
-      "y": 8
+      "y": 8,
+      "object": "dirt"
     },
     {
       "x": 9,
-      "y": 8
+      "y": 8,
+      "object": "dirt"
     },
     {
       "x": 10,
