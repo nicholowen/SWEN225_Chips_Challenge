@@ -38,7 +38,9 @@ public class MapPane {
   private Cell[][] info = new Cell[11][11];
   private Actor[][] mobs = new Actor[11][11];
 
-  private Actor[][] mobMazePosition;
+  private ActorSprite[][] testing = new ActorSprite[11][11];
+
+//  private Actor[][] mobMazePosition;
 
   private ActorSprite playerSprite;
 
@@ -49,7 +51,7 @@ public class MapPane {
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
   private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
 
-  private HashMap<Actor, ActorSprite> actorObjects = new HashMap<>();
+  private HashMap<Actor, ActorSprite> actorObjects;
 
   //Single Rendered object (only one per map)
   private Info infoOb;
@@ -59,6 +61,7 @@ public class MapPane {
   //transition offset
   int offsetX = 0;
   int offsetY = 0;
+
 
 
   public MapPane(Assets assets) {
@@ -81,14 +84,14 @@ public class MapPane {
    */
   public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
 
-    mobMazePosition = new Actor[cells.length][cells[0].length];
-
+//    mobMazePosition = new Actor[cells.length][cells[0].length];
+    System.out.println("ACTOR LENGTH: " + actors.length);
     this.playerSprite = new ActorSprite(actors[actors.length-1], assets);
-
-    //populates array with all other mobs
-    for (int m = 0; m < actors.length-1; m++) {
+    actorObjects = new HashMap<>(); // SAFEGUARD: need to initialise it here in case this method gets called multiple times
+    for(int m = 0; m < actors.length - 1; m++){
       actorObjects.put(actors[m], new ActorSprite(actors[m], assets));
     }
+
 
     for (int i = 0; i < cells.length; i++) {
       for (int j = 0; j < cells[i].length; j++) {
@@ -135,14 +138,6 @@ public class MapPane {
             default:
               break;
 
-          }
-        }
-        //
-        for(Actor test : actors){
-          if(!test.getName().equals("player")){
-            if(test.getX() == i && test.getY() == j) {
-              mobMazePosition[i][j] = test;
-            }
           }
         }
       }
@@ -211,63 +206,28 @@ public class MapPane {
     return ret;
   }
 
-  private Actor[][] getVisibleMobs(RenderTuple tuple, ActorSprite player) {
+  private void setVisibleMobs(RenderTuple tuple, ActorSprite player) {
     Actor[][] ret = new Actor[11][11];
     int posX = player.getX();
     int posY = player.getY();
 
     int x = posX - 5;
-
     for (int i = 0; i < 11; i++) {
       int y = posY - 5;
       for (int j = 0; j < 11; j++) {
-        if ((x >= 0 && x < tuple.getCells().length) && (y >= 0 && y < tuple.getCells()[0].length)) {
-//          for (int k = 0; k < tuple.getActors().length - 1; k++) {
-//            if (tuple.getActors()[k].getX() == x && tuple.getActors()[k].getY() == y) {
-//              ret[i][j] = tuple.getActors()[k];
-//              System.out.println("found a mob at " + x+"X : " + y+"Y");
-//            }
-//            else{
-//              ret[i][j] = null;
-//            }
-//          }
-          ret[i][j] = mobMazePosition[x][y];
-        } else {
-          ret[i][j] = null;
+        if ((x >= 0 && x <= tuple.getCells().length) && (y >= 0 && y <= tuple.getCells()[0].length)) {
+          for(Actor actor : actorObjects.keySet()){
+            if(actor.getX() == x && actor.getY() == y){
+//              actorObjects.get(actor).setVisiblePos(i, j);
+              mobs[i][j] = actor;
+            }
+          }
         }
         y++;
       }
       x++;
     }
-    return ret;
   }
-
-  private void refreshActorPositions(RenderTuple tuple){
-    mobMazePosition = new Actor[tuple.getCells().length][tuple.getCells()[0].length];
-    for(int i = 0; i < mobMazePosition.length; i++){
-      for(int j = 0; j < mobMazePosition[i].length; j++){
-        for(Actor test : tuple.getActors()){
-          if(!test.getName().equals("player")){
-            if(test.getX() == i && test.getY() == j) {
-              mobMazePosition[i][j] = test;
-            }
-          }
-        }
-      }
-    }
-  }
-
-
-  public void updateVisibleMobs(RenderTuple tuple) {
-    refreshActorPositions(tuple);
-      for (int m = 0; m < tuple.getActors().length-1; m++) {
-        Actor temp = tuple.getActors()[m];
-        if(!temp.getIsMoving()) {
-          actorObjects.put(temp, new ActorSprite(temp, assets));
-        }
-      }
-  }
-//  }
 
   /**
    * Iterates through an 11x11 grid around the player. Adds them to an appropriate list
@@ -280,16 +240,17 @@ public class MapPane {
     //update player with direction
 //    player = tuple.getActors()[0];
     playerSprite.update();
-    updateVisibleMobs(tuple);
 
-//    updateVisibleMobs(tuple.getCells(), tuple.getActors());/
+    for(ActorSprite sprites : actorObjects.values()){
+      sprites.setTuple(tuple);
+      sprites.update();
+    }
 
     //TODO: add player animation - might need to combine mobs and player together.
 
     //update all mobs with direction (this can probably be condensed as all actors)
     Cell[][] surround = getSurround(tuple, playerSprite);
-    Actor[][] visibleM = getVisibleMobs(tuple, playerSprite);
-
+    setVisibleMobs(tuple, playerSprite);
 
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
@@ -346,32 +307,11 @@ public class MapPane {
               break;
           }
         }
-        if(visibleM[i][j] != null){
-          mobs[i][j] = visibleM[i][j];
-          if (actorObjects.containsKey(visibleM[i][j])){
-            actorObjects.get(visibleM[i][j]).update();
-          }
-        }
       }
     }
   }
 
-  /**
-   * Clears all lists ready for next frame
-   */
-  private void clearLists() {
-    floor = new Cell[11][11];
-    wall = new Cell[11][11];
-    hole = new Cell[11][11];
-    door = new Cell[11][11];
-    energy = new Cell[11][11];
-    key = new Cell[11][11];
-    exit = new Cell[11][11];
-    exitLock = new Cell[11][11];
-    info = new Cell[11][11];
-    mobs = new Actor[11][11];
 
-  }
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
@@ -449,51 +389,39 @@ public class MapPane {
         if (exitLock[i][j] != null && exitLockOb != null) {
           g.drawImage(exitLockOb.getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
         }
-
       }
     }
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
-        ActorSprite mob;
         if (mobs[i][j] != null) {
-          mob = actorObjects.get(mobs[i][j]);
-          if(mobs[i][j].getIsMoving()){
-            if(mob.getIsMoving()){
-              Direction dir = mob.getDirection();
-              switch(dir){
-                case UP:
-                  mob.setOffsetY(mob.getOffsetY() - speed);
-                  break;
-                case DOWN:
-                  mob.setOffsetY(mob.getOffsetY() + speed);
-                  break;
-                case LEFT:
-                  mob.setOffsetX(mob.getOffsetX() - speed);
-                  break;
-                case RIGHT:
-                  mob.setOffsetX(mob.getOffsetX() + speed);
-                  break;
-                default:
-                  break;
-              }
-            }else{
-              mob.setOffsetX(0);
-              mob.setOffsetY(0);
-            }
-          }
-
-          g.drawImage(mob.getImage(), x * i + offsetX + mob.getOffsetX() - x, y * j + offsetY + mob.getOffsetY() - y, null);
+          actorObjects.get(mobs[i][j]).draw(g, x * i + offsetX - x, y * j + offsetY - y);
         }
-
       }
     }
-
 
     //draws player last to remain on top and center of screen (uses absolute positioning)
     if (playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
 
     //clears lists for next frame
     clearLists();
+
+  }
+
+  /**
+   * Clears all lists ready for next frame
+   */
+  private void clearLists() {
+    floor = new Cell[11][11];
+    wall = new Cell[11][11];
+    hole = new Cell[11][11];
+    door = new Cell[11][11];
+    energy = new Cell[11][11];
+    key = new Cell[11][11];
+    exit = new Cell[11][11];
+    exitLock = new Cell[11][11];
+    info = new Cell[11][11];
+    mobs = new Actor[11][11];
+    testing = new ActorSprite[11][11];
 
   }
 
