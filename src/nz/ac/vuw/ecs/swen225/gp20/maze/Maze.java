@@ -34,7 +34,10 @@ public class Maze {
 
 	//Recording
 	private Direction recordedMove;
-	
+
+	//Loading/Saving/Progressing-through-levels
+	private boolean isLastLevel;
+
 	
 	/**
 	 * This module handles the maze, collision, actors and inventory.
@@ -95,6 +98,13 @@ public class Maze {
 			}
 		}
 		System.out.println("Loaded NPCs!");
+
+		try{//TODO Make sure this is temporary - implement a better way of doing this working with Persistence
+		Persistence.read(levelToLoad+1);//If there's another level then this isn't the last level.
+			isLastLevel=false;
+		} catch(IOException e){
+			isLastLevel=true;//If there's an exception, then that means this *IS* the last level
+		}
 	}
 	
 	public Cell[][] getBoard(){
@@ -142,7 +152,7 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
-		recordedMove=null;//For Mel's original method of recording - scrap?
+		recordedMove=null;//For Mel's original method of recording - Deprecate if moving to another method.
 		Direction playerActuallyMoved=null;
 		boolean creatureMoved=false;
 
@@ -420,6 +430,10 @@ public class Maze {
 
 	public int getTimeRemaining() {
 		return timeRemaining;
+	}
+
+	public boolean isLastLevel(){
+		return isLastLevel;
 	}
 
 	public void setTimeRemaining(int timeRemaining) {
