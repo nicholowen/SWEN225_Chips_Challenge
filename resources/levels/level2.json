@@ -617,7 +617,9 @@
     },
     {
       "x": 10,
-      "y": 5
+      "y": 5,
+      "terrain": "info",
+      "help": "push the hovercraft"
     },
     {
       "x": 11,
