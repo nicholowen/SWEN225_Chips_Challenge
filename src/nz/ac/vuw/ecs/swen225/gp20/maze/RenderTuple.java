@@ -11,6 +11,8 @@ public class RenderTuple {
 	private String info;
 	private int treasureTaken;
 	private int treasureLeft;
+	private Direction playerMoved;
+	private boolean creatureMoved;
 	private String soundToPlay;
 	
 	/**
@@ -23,8 +25,10 @@ public class RenderTuple {
 	 * @param treasureCollected The current amount of treasure the player has collected.
 	 * @param treasureLeft The current amount of treasure that is left for the player to collect.
 	 * @param soundEvent The name of the sound, if any, which should be played on this current tick, decided by the user's actions (picking up items, moving, etc), null if no sound.
+	 * @param creatureMoved If true, a creature moved this tick
+	 * @param playerMoved The direction the player moved, or null if they didn't move.
 	 */
-	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft, String soundEvent) {
+	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft, String soundEvent, Direction playerMoved, boolean creatureMoved) {
 		actorList=aList;
 		board=b;
 		playerStandingOnInfo=playerOnInfo;
@@ -33,6 +37,8 @@ public class RenderTuple {
 		treasureTaken=treasureCollected;
 		this.treasureLeft=treasureLeft;
 		this.soundToPlay=soundEvent;
+		this.playerMoved=playerMoved;
+		this.creatureMoved=creatureMoved;
 	}
 	
 	public Actor[] getActors() {
@@ -42,7 +48,13 @@ public class RenderTuple {
 	public Cell[][] getCells(){
 		return board;
 	}
-	
+
+	/**
+	 * Returns null if there was no movement, otherwise return the direction the player moved
+	 * @return
+	 */
+	public Direction playerMoved(){return playerMoved;}
+
 	public HashMap<String, Integer> getInventory() {
 		return inventory;
 	}
@@ -64,5 +76,7 @@ public class RenderTuple {
 	public String getSoundEvent() {
 		return soundToPlay;
 	}
+
+	public boolean creatureMoved(){return creatureMoved;}
 	
 }

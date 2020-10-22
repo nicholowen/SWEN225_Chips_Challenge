@@ -142,7 +142,9 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
-		recordedMove=null;
+		recordedMove=null;//For Mel's original method of recording - scrap?
+		Direction playerActuallyMoved=null;
+		boolean creatureMoved=false;
 
 		//Sound-and-movement related code
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
@@ -158,8 +160,8 @@ public class Maze {
 			isCellSolid = getCellFromDir(player,movementDirection.getDirection()).getIsSolid();
 		}
 		
-		if(movementDirection!=null && isMoveValid(player, movementDirection.getDirection()) && playerCanPushOnto(getCellFromDir(player,movementDirection.getDirection()), movementDirection)) {//If there's movement input and it's valid, move. Also unlocks doors and pushes dirt.
-			if(!player.getIsMoving()) {//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
+		if(!player.getIsMoving() && movementDirection!=null && isMoveValid(player, movementDirection.getDirection()) && playerCanPushOnto(getCellFromDir(player,movementDirection.getDirection()), movementDirection)) {//If there's movement input and it's valid, move. Also unlocks doors and pushes dirt.
+			//Checks that the player isn't already moving when updating the sound so that it doesn't stack.
 				if((isWalkingIntoExitDoor || isWalkingIntoDoor) && isCellSolid){
 					if(isWalkingIntoDoor)
 						soundEvent="unlock";
@@ -168,10 +170,11 @@ public class Maze {
 				}
 				else
 					soundEvent="move";
-				}
+
 			player.move(movementDirection);
 			recordedMove=movementDirection;
-		} else if(movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
+			playerActuallyMoved=movementDirection;
+		} else if(!player.getIsMoving() && movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
 			if(isWalkingIntoDoor) 
 				soundEvent="whawhaa";
 			else
@@ -203,6 +206,7 @@ public class Maze {
 			if(npc.getName().equals("spider")){//If it's a "spider"
 				//Low complexity: simple, just patrol north-to-south and turn around if you hit something.
 				if(!npc.getIsMoving()){//If not moving,
+					creatureMoved=true;
 					if(isMoveValid(npc, npc.getDirection().getDirection()) && !NPCBlocksPath(getCoordinateFromDir(npc, npc.getDirection().getDirection()))){//If the move's valid (checks terrain AND NPCs)
 						npc.move(npc.getDirection());//Keep moving if it's clear!
 					} else{//If it's not clear, turn the other way!
@@ -242,7 +246,7 @@ public class Maze {
 			oomphCounter=-1;//Sound only plays once, then level changes. This ensures the sound won't play more than once.
 		}
 
-		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent);
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, playerActuallyMoved,creatureMoved);
 	}
 	
 	/**
