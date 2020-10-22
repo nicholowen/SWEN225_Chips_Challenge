@@ -55,11 +55,15 @@ public class RecordAndPlay {
      * @param maze     the maze state
      * @param saveName file to be saved into
      */
-    public static void startNewRecording(Maze maze, String saveName) {
+    public static void startNewRecording(Main game, String saveName) {
         moves.clear();
         saveFile = saveName + ".json";
         currentlyRecording = true;
-        gameState = Persistence.getGameState(maze); // save the current state the game is currently in during recoding
+//        gameState = Persistence.getGameState(maze); // save the current state the game is currently in during recoding
+
+        game.saveCurrentState();
+
+//        Persistence.saveGameState(Persistence.getGameState(maze));
     }
 
     /**
@@ -84,7 +88,7 @@ public class RecordAndPlay {
             // build the object and att it to every single tick using time remaining fed from Main
             JsonObjectBuilder builder = Json.createObjectBuilder()
                     // save the current game state as is
-                    .add("game", gameState)
+//                    .add("game", gameState)
 
                     // example output: {"moves": ["UP", "LEFT", "LEFT", "DOWN", "RIGHT"]}
                     .add("moves", array)
@@ -113,8 +117,9 @@ public class RecordAndPlay {
     public static void load(String saveFileName, Main game) throws IOException, InterruptedException {
         JsonObject obj;
 
-        Persistence.loadGameState(gameState);
-        Persistence.readJsonFromFile(Paths.get(recordings.toString(), "recording.json").toFile(), RecordAndPlay.class);
+//        Persistence.loadGameState(gameState);
+//        Persistence.readJsonFromFile(Paths.get(recordings.toString(), "recording.json").toFile(), RecordAndPlay.class);
+        game.loadCurrentState();
 
         // clear these lists, and add moves from load file
         actors.clear();
