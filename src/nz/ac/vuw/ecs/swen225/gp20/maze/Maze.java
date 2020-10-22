@@ -43,7 +43,7 @@ public class Maze {
 	 * @author Lex Ashurst 300431928
 	 */
 	public Maze(int level) {
-		loadMaze(2);
+		loadMaze(level);
 	}
 
 	/**
