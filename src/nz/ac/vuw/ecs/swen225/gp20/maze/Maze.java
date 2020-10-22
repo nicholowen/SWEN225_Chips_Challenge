@@ -86,11 +86,11 @@ public class Maze {
 		//Load NPCs
 		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
 			if(c.getType().equals("spider")){
-				System.out.println("Debug found creature of type spider");
+				System.out.println("[DEBUG] loaded creature of type spider");
 				creatures.add(new Actor(c.getType(), c.x, c.y, c.getPath()));
 
 			} else{//For now, if it's not a spider, then it's a dirt block
-				System.out.println("Debug found creature which wasn't a spider but instead was:"+c.getType());
+				System.out.println("[DEBUG] loaded creature which wasn't a spider but instead was:"+c.getType());
 				creatures.add(new Actor(c.getType(), c.x, c.y));
 			}
 		}
@@ -181,7 +181,6 @@ public class Maze {
 		player.tick();
 
 		for(Actor npc:creatures){//For every NPC (All actors except the player)
-			System.out.println("Ticking entity:"+npc+" whose formal name is:"+npc.getName());
 			npc.tick();//If necessary, tick them forward.
 
 			if(npc.getName().equals("dirt")){
@@ -198,8 +197,7 @@ public class Maze {
 
 			if(npc.getName().equals("spider")){//If it's a "spider"
 				//TODO: Implement movement logic
-				if(!npc.getIsMoving())
-				npc.move(Direction.UP);//JUST TO TEST THE RENDERING! This is temporary.sss
+
 			}
 		}
 
@@ -208,7 +206,7 @@ public class Maze {
 		//Collision check - see what's under the player's feet.
 		Cell stoodOn=board[player.getX()][player.getY()];
 		if(stoodOn.killsPlayer(playerInventory)) {
-			soundEvent="dyingnoises";
+			soundEvent="death_sound";
 			gameLost=true;
 		} else if(stoodOn.getName().equals("exit")){//Win! Kind of.
 			gameWon=true;
