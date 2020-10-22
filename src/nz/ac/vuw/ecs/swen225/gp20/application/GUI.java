@@ -118,6 +118,7 @@ public class GUI extends JPanel implements KeyListener {
             case 1: // menu state
                 // load from saved file
             case 2: // level select state
+                main.loadLvl(2);
                 setGameState(4); // start at level 2
                 break;
             case 3:// pause state
@@ -131,7 +132,7 @@ public class GUI extends JPanel implements KeyListener {
             case 1: // menu state
                 // load replay from saved file
             case 2: // level select state
-                // no button available
+                setGameState(1);
                 break;
             case 3:// pause state
                    // no button available
@@ -339,7 +340,7 @@ public class GUI extends JPanel implements KeyListener {
             }
             // start a new game at level 1
             else if ((keyCode == KeyEvent.VK_1) && ctrl) {
-                main.loadLvl1();
+                main.loadLvl(1);
             }
             // pause the game and display a game is paused dialog
             else if (keyCode == KeyEvent.VK_SPACE) {

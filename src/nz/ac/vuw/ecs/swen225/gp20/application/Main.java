@@ -18,7 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
 public class Main {
     private static Maze maze;
     private final GUI gui = new GUI(this);
-    private static final Render render = new Render();
+    private static Render render = new Render();
 
     private boolean gameEnded;
     private Direction direction = null;
@@ -53,9 +53,8 @@ public class Main {
         if (Persistence.getSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
-            this.loadLvl1();
+            this.loadLvl(1);
         }
-        render.init(maze);
         while (true) {
             currentState = gui.getGameState();
             if (currentState == 0) {
@@ -92,6 +91,9 @@ public class Main {
                     start = System.currentTimeMillis();
                     maze.tickTimeRemaining(); // timeRemaining goes down every second
                 }
+                if(maze.getGameWon()) {
+                    this.loadLvl(maze.getLevel() + 1);
+                }
             } else {
                 break;
             }
@@ -115,14 +117,6 @@ public class Main {
         }
     }
 
-    public void saveLvl1() {
-        try {
-            Persistence.setSaveType("lvl1");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveCurrentState() {
         try {
             Persistence.setSaveType("resume");
@@ -134,10 +128,12 @@ public class Main {
 
     public void loadUnfinished() {
         maze = new Maze(Persistence.getHighestLevel());
+        render.init(maze);
     }
 
-    public void loadLvl1() {
-        maze = new Maze(1);
+    public void loadLvl(int lvl) {
+        maze = new Maze(lvl);
+        render.init(maze);
     }
 
     public void loadCurrentState() {
