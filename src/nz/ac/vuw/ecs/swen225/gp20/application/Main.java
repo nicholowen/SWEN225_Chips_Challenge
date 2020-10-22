@@ -53,7 +53,7 @@ public class Main {
         if (Persistence.getSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
-            this.loadLvl1();
+            this.loadLvl(1);
         }
         render.init(maze);
         while (true) {
@@ -95,8 +95,6 @@ public class Main {
                 if(maze.getGameWon()) {
                     maze = new Maze(2);
                     render.init(maze);
-//                    gui = new GUI(this);
-//                    gui.setGameState(4);
                 }
             } else {
                 break;
@@ -121,14 +119,6 @@ public class Main {
         }
     }
 
-    public void saveLvl1() {
-        try {
-            Persistence.setSaveType("lvl1");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveCurrentState() {
         try {
             Persistence.setSaveType("resume");
@@ -143,8 +133,8 @@ public class Main {
         render.init(maze);
     }
 
-    public void loadLvl1() {
-        maze = new Maze(1);
+    public void loadLvl(int lvl) {
+        maze = new Maze(lvl);
         render.init(maze);
     }
 
