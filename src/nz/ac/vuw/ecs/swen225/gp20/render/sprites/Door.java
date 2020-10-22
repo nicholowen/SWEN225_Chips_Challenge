@@ -50,7 +50,6 @@ public class Door extends Sprite {
     } else {
       sprites = assets.getAsset("vdoor")[index];
     }
-    System.out.println(sprites.length);
     animation.setFrames(sprites);
     animation.setSingleAnimation(true);
     animation.setDelay(-1);

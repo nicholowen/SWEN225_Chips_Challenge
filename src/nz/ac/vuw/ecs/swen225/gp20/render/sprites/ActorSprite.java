@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -16,12 +17,18 @@ public class ActorSprite extends Sprite {
 
   private int offsetX;
   private int offsetY;
+  private boolean isPushable;
+  private Assets assets;
+
+  public int x;
+  public int y;
 
   public ActorSprite(Actor actor, Assets assets) {
 
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
-
+    this.isPushable = actor.isPushable();
     this.actor = actor;
+    this.assets = assets;
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player");
@@ -42,6 +49,11 @@ public class ActorSprite extends Sprite {
 
   }
 
+  public void setVisiblePos(int x, int y){
+    this.x = x;
+    this.y = y;
+  }
+
   /**
    * Gets X coordinate of actor
    *
@@ -60,11 +72,19 @@ public class ActorSprite extends Sprite {
     return actor.getY();
   }
 
+
+  public void checkStateChange(){
+    if(isPushable && !actor.isPushable()){
+      isPushable = false;
+      sprites = assets.getAsset("dirtInactive");
+    }
+  }
+
   /**
    * Updates the frame of the object
    */
   public void update() {
-
+    checkStateChange();
     if (!actor.getName().equals("dirt") && !actor.isPushable()){
       switch (actor.getDirection()) {
         case UP:
@@ -117,5 +137,33 @@ public class ActorSprite extends Sprite {
   }
   public int getOffsetY(){
     return offsetY;
+  }
+
+  public void draw(Graphics g, int x, int y){
+    int speed;
+    if(getIsMoving()) {
+      if(actor.isPushable()) speed = 12;
+      else speed = 5;
+      switch (getDirection()) {
+        case UP:
+          offsetY -= speed;
+          break;
+        case DOWN:
+          offsetY += speed;
+          break;
+        case LEFT:
+          offsetX -= speed;
+          break;
+        case RIGHT:
+          offsetX += speed;
+          break;
+        default:
+          break;
+      }
+
+    }else{
+      offsetX = offsetY = 0;
+    }
+    g.drawImage(getImage(), x + offsetX, y + offsetY, null);
   }
 }
