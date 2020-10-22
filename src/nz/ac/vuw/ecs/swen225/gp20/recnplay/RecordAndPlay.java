@@ -1,8 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
-
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import java.io.Writer;
 import java.io.FileReader;
@@ -39,7 +36,6 @@ public class RecordAndPlay {
 
     private static long playbackSpeed = 123; // arbitrary number
     private static int remainingTimeAfterRun;
-    private static int tick = 0;
 
     private static String saveFile;
     private static String gameState;
@@ -47,19 +43,17 @@ public class RecordAndPlay {
     private static boolean isRunning;
     private static boolean currentlyRecording;
 
-    public static Thread thread;
-
     /**
      * Called by main to start recording
      *
-     * @param maze     the maze state
+     * @param game     the game
      * @param saveName file to be saved into
      */
-    public static void startNewRecording(Maze maze, String saveName) {
+    public static void startNewRecording(Main game, String saveName) {
         moves.clear();
         saveFile = saveName + ".json";
         currentlyRecording = true;
-        gameState = Persistence.getGameState(maze); // save the current state the game is currently in during recoding
+        game.saveCurrentState();
     }
 
     /**
@@ -83,9 +77,6 @@ public class RecordAndPlay {
 
             // build the object and att it to every single tick using time remaining fed from Main
             JsonObjectBuilder builder = Json.createObjectBuilder()
-                    // save the current game state as is
-                    .add("game", gameState)
-
                     // example output: {"moves": ["UP", "LEFT", "LEFT", "DOWN", "RIGHT"]}
                     .add("moves", array)
 
@@ -112,13 +103,7 @@ public class RecordAndPlay {
      */
     public static void load(String saveFileName, Main game) throws IOException, InterruptedException {
         JsonObject obj;
-
-//        if (tick >= 6)
-
-//        Maze loaded =
-        Persistence.loadGameState(gameState);
-
-        Persistence.readJsonFromFile(Paths.get(recordings.toString(), "recording.json").toFile(), RecordAndPlay.class);
+        game.loadCurrentState();
 
         // clear these lists, and add moves from load file
         actors.clear();
@@ -172,7 +157,6 @@ public class RecordAndPlay {
      * Reset the recording.
      */
     public static void resetRecording() {
-        thread = null;
         saveFile = null;
         gameState = null;
 
@@ -209,8 +193,12 @@ public class RecordAndPlay {
 
                     moves.remove(0);
                     actors.remove(0);
-                    // no use for saving popped/removed moves into another
-                    // temp list because we don't need back stepping.
+
+                    // Make game wait as long as the playback speed
+                    // before continuing another move
+                    synchronized (RecordAndPlay.class) {
+                        RecordAndPlay.class.wait(playbackSpeed);
+                    }
 
 //            } else {
 //                // in the future for level 2 mob movement
@@ -221,9 +209,9 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
-//                game.runMove();
+                game.runMove();
             }
-        } catch (IndexOutOfBoundsException ignore) {
+        } catch (IndexOutOfBoundsException | InterruptedException ignore) {
         }
     }
 
@@ -234,9 +222,6 @@ public class RecordAndPlay {
      */
     public static void runReplay(Main game) {
         game.setSpeed((int) (1000 / playbackSpeed));
-
-        // anonymous class replaced with lambda for readability
-//        Runnable runnable = () -> {
         while (moves.size() > 0) {
             System.out.println(moves);
             if (actors.size() > 0 && actors.get(0) == 0) {
@@ -250,26 +235,11 @@ public class RecordAndPlay {
         }
         game.setTimeRemaining(remainingTimeAfterRun);
         isRunning = false;
-//        };
-//
-//        thread = new Thread(runnable);
-//        thread.start();
     }
-
-    // MIGHT BE LEX'S TICKS MESSING THE MOVES.
 
     //==================================================
     //            GETTERS, SETTERS & MISC
     //==================================================
-
-    /**
-     * Gets the thread
-     *
-     * @return thread of recnplay
-     */
-    public static Thread getThread() {
-        return thread;
-    }
 
     /**
      * Gets the moves of the actors
@@ -307,6 +277,10 @@ public class RecordAndPlay {
         return isRunning;
     }
 
+    public static boolean getRecording() {
+        return currentlyRecording;
+    }
+
     /**
      * Adds to the history of player actions.
      *
@@ -330,23 +304,6 @@ public class RecordAndPlay {
             moves.add(dir);
             actors.add(enemyNumber);
         }
-    }
-
-    /**
-     * Keep track of time syncing
-     */
-    public static void addOneTick() {
-        tick += 1;
-    }
-
-    public static void getDirection() {
-
-    }
-
-    public static void main(String[] args) {
-        Main stuff = new Main();
-        moves.add("UP");
-//        RecordAndPlay.load("testRecording.txt", stuff);
     }
 }
 
