@@ -18,7 +18,7 @@ public class Actor {
 	protected boolean blocksMovement;
 	protected boolean isPushable;
 
-	public static final int ACTOR_HOSTILE_MONSTER_SPEED=15;
+	public static final int ACTOR_HOSTILE_MONSTER_SPEED=6;//Should be 15!
 	public static final int PLAYER_SPEED=6;
 	
 	/**
@@ -150,6 +150,10 @@ public class Actor {
 
 	public String getName() {
 		return name;
+	}
+
+	public boolean isPlayer(){
+		return isPlayer;
 	}
 
 	public boolean killsPlayer() {

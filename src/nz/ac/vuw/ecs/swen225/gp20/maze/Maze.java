@@ -182,6 +182,11 @@ public class Maze {
 
 		for(Actor npc:creatures){//For every NPC (All actors except the player)
 			npc.tick();//If necessary, tick them forward.
+			if(npc.collidesWith(player)){
+				soundEvent="death_sound";
+				gameLost=true;//If they collide with the player and they'd kill the player, then kill the player.
+			}
+
 
 			if(npc.getName().equals("dirt")){
 				if(npc.isPushable()){//If currently not "settled" or "filled in"
@@ -196,13 +201,20 @@ public class Maze {
 			}//End of dirt filling water logic
 
 			if(npc.getName().equals("spider")){//If it's a "spider"
-				//TODO: Implement movement logic
-
+				//Low complexity: simple, just patrol north-to-south and turn around if you hit something.
+				if(!npc.getIsMoving()){//If not moving,
+					if(isMoveValid(npc, npc.getDirection().getDirection()) && !NPCBlocksPath(getCoordinateFromDir(npc, npc.getDirection().getDirection()))){//If the move's valid (checks terrain AND NPCs)
+						npc.move(npc.getDirection());//Keep moving if it's clear!
+					} else{//If it's not clear, turn the other way!
+						npc.move(reverseDir(npc.getDirection()));
+					}
+				}
+				//End of complexity 1. Passable, will improve upon.
+				//TODO: Implement high-complexity movement with movement paths!
 			}
 		}
 
-		//TODO:Run collision detection between player and NPCs, see if an NPC is colliding with the player. If so, game over. NPCs can collide with eachother harmlessly.
-		
+
 		//Collision check - see what's under the player's feet.
 		Cell stoodOn=board[player.getX()][player.getY()];
 		if(stoodOn.killsPlayer(playerInventory)) {
@@ -277,6 +289,31 @@ public class Maze {
 		
 		return(board[xToCheck][yToCheck]);
 	}
+
+	/**
+	 * From a given actor and a given direction (as a point) return a poitn signifying the coordinates of the new cell
+	 * @param a The actor whose coordinates are the starting point
+	 * @param p A Point representing the change in x/y coordinates from the actor's current position
+	 * @return
+	 */
+	public Point getCoordinateFromDir(Actor a, Point p){
+		Cell newCell=getCellFromDir(a,p);
+		return new Point(newCell.getX(),newCell.getY());
+	}
+
+	public Direction reverseDir(Direction d){
+		switch(d){
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
+			case UP:
+				return Direction.DOWN;
+			case DOWN:
+				return Direction.UP;
+		}
+		return null;//Should never get here!
+	}
 	
 	/**
 	 * Given a character and a direction, check if it's a valid or invalid move.
@@ -293,6 +330,11 @@ public class Maze {
 			return false;//Out-of-bounds, cannot walk through.
 		
 		Cell toCheck=board[xToCheck][yToCheck];
+
+		if(!a.isPlayer()){//If not the player, then they can't open or unlock anything, so just return the solidness. Else, attempt to unlock/open
+			return !toCheck.getIsSolid();
+		}
+
 		if(toCheck.isOpenable()&&toCheck.isSolid) {//If the checked tile is a door (And solid - meaning it's closed)
 			String keycardName = (toCheck.getColor()+"key");
 			if(playerInventory.containsKey(keycardName)) {//If true, then it means there's at least one matching keycard
