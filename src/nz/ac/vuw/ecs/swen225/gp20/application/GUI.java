@@ -218,11 +218,18 @@ public class GUI extends JPanel implements KeyListener {
 //            }
 //        });
 //
-//        play.addActionListener(e -> {
-//            if (gameState == 4) {
-//                replaying = 1;
-//            }
-//        });
+        play.addActionListener(e -> {
+            if (gameState == 4) {
+                recording = false;
+                try {
+                    main.replay();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         
         step.addActionListener(e -> {
             if (gameState == 4) {
@@ -352,7 +359,6 @@ public class GUI extends JPanel implements KeyListener {
             }
             // replay recording
             else if (keyCode == KeyEvent.VK_R) {
-                System.out.println("REPLAYINHGGYGGH");
                 recording = false;
                 try {
                     main.replay();
