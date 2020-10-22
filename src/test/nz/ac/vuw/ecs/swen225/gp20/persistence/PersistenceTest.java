@@ -214,7 +214,45 @@ public class PersistenceTest {
         testCorrect(level);
     }
 
+    @Test
+    public void persistenceTest14() throws IOException {
+        // check can save and load the maze from file
+        Maze mazeA = new Maze(1);
+        Persistence.saveGameState(mazeA);
+        Maze mazeB = Persistence.loadGameState();
 
+        // check mazeA.equals(mazeB) here
+    }
+
+    @Test
+    public void persistenceTest15() {
+        // check can save and load the maze from string
+        Maze mazeA = new Maze(1);
+        String mazeJson = Persistence.getGameState(mazeA);
+        Maze mazeB = Persistence.loadGameState(mazeJson);
+
+        // check mazeA.equals(mazeB) here
+    }
+
+    @Test
+    public void persistenceTest16() throws IOException {
+        // check saving highest level
+        Persistence.setHighestLevel(1);
+        assertEquals(1, Persistence.getHighestLevel());
+
+        assertThrows(IllegalArgumentException.class, () -> Persistence.setHighestLevel(-1));
+        assertEquals(1, Persistence.getHighestLevel());
+    }
+
+    @Test
+    public void persistenceTest17() throws IOException {
+        // check saving of save type
+        Persistence.setSaveType("some type");
+        assertEquals("some type", Persistence.getSaveType());
+
+        Persistence.setSaveType(null);
+        assertEquals("default", Persistence.getSaveType());
+    }
 
     private JsonObject createLevel(int startX, int startY, int chipsInLevel, int chipsRequired,
                                    int width, int height, int timeLimit) {
