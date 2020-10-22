@@ -55,7 +55,6 @@ public class Main {
         } else {
             this.loadLvl(1);
         }
-        render.init(maze);
         while (true) {
             currentState = gui.getGameState();
             if (currentState == 0) {
@@ -93,8 +92,7 @@ public class Main {
                     maze.tickTimeRemaining(); // timeRemaining goes down every second
                 }
                 if(maze.getGameWon()) {
-                    maze = new Maze(2);
-                    render.init(maze);
+                    this.loadLvl(maze.getLevel() + 1);
                 }
             } else {
                 break;
