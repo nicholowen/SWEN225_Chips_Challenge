@@ -91,8 +91,21 @@ public class Main {
                     start = System.currentTimeMillis();
                     maze.tickTimeRemaining(); // timeRemaining goes down every second
                 }
-                if(maze.getGameWon()) {
-                    this.loadLvl(maze.getLevel() + 1);
+                if (maze.getGameWon()) {
+                    if (!maze.isLastLevel()) {
+                        this.loadLvl(maze.getLevel() + 1);
+                    } else {
+                        System.out.println("GAME WON");
+                        // if game won, show game won state with buttons:
+                        // main menu
+                    }
+                }
+                if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
+                    this.saveUnfinished();
+                    System.out.println("GAME OVER");
+                    // game lost state with buttons:
+                    // main menu and retry
+                    // retry button will call main.loadUnfinished() in gui
                 }
             } else {
                 break;
@@ -170,7 +183,7 @@ public class Main {
             RecordAndPlay.load("recording", this);
         }
         RecordAndPlay.playByStep(this);
-        if(RecordAndPlay.getMoves().size() == 0) {
+        if (RecordAndPlay.getMoves().size() == 0) {
             replaying = false;
         }
     }
