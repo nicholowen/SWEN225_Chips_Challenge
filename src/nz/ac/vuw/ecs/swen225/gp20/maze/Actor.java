@@ -29,17 +29,21 @@ public class Actor {
 	 * @param ypos Starting y position
 	 */
 	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos) {
+		initDefaultValues();
 		x=xpos;
 		y=ypos;
-		this.isPlayer=isPlayer;
-		if(isPlayer) {
-			this.killsPlayer=false;
-		}
-
-		//All of these are simply the "default" values.
-		isMoving=false;
+		this.isPlayer=isPlayer;//Should never be false!
 		name=nameReference;
 		ticksToMove=PLAYER_SPEED;
+		}
+
+	/**
+	 * Would have been the abstract class's "constructor" called with super(), but for some reason they don't load properly.
+	 * Instead, bunch the default values into here.
+	 */
+	private void initDefaultValues(){
+		killsPlayer=false;
+		isMoving=false;
 		direction=Direction.DOWN;//Generic starting direction
 		isPushable=false;
 		blocksMovement=false;//Creatures should be able to move into the player - players should be able to move into creatures. Both result in death.
@@ -52,12 +56,12 @@ public class Actor {
 	 * @param y
 	 */
 	public Actor(String name, int x, int y){
+		initDefaultValues();
 		isPlayer=false;
 		this.x=x;
 		this.y=y;
 		this.name=name;
 		this.ticksToMove=PLAYER_SPEED;
-		killsPlayer=false;
 		blocksMovement=true;//By default, until it's pushed over "water", it blocks movement
 		isPushable=true;//Can be moved by the player!
 	}
@@ -70,6 +74,7 @@ public class Actor {
 	 * @param path
 	 */
 	public Actor(String name, int x, int y, ArrayList<Coordinate> path){
+		initDefaultValues();
 		isPlayer=false;
 		this.name=name;
 		this.x=x;
