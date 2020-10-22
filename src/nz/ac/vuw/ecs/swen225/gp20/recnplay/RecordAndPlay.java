@@ -113,11 +113,7 @@ public class RecordAndPlay {
     public static void load(String saveFileName, Main game) throws IOException, InterruptedException {
         JsonObject obj;
 
-//        if (tick >= 6)
-
-//        Maze loaded =
         Persistence.loadGameState(gameState);
-
         Persistence.readJsonFromFile(Paths.get(recordings.toString(), "recording.json").toFile(), RecordAndPlay.class);
 
         // clear these lists, and add moves from load file
@@ -172,7 +168,6 @@ public class RecordAndPlay {
      * Reset the recording.
      */
     public static void resetRecording() {
-        thread = null;
         saveFile = null;
         gameState = null;
 
@@ -209,6 +204,11 @@ public class RecordAndPlay {
 
                     moves.remove(0);
                     actors.remove(0);
+
+                    synchronized (RecordAndPlay.class) {
+                        RecordAndPlay.class.wait(playbackSpeed);
+                    }
+
                     // no use for saving popped/removed moves into another
                     // temp list because we don't need back stepping.
 
@@ -221,9 +221,9 @@ public class RecordAndPlay {
                     isRunning = false;
                     game.setTimeRemaining(remainingTimeAfterRun);
                 }
-//                game.runMove();
+                game.runMove();
             }
-        } catch (IndexOutOfBoundsException ignore) {
+        } catch (IndexOutOfBoundsException | InterruptedException ignore) {
         }
     }
 
@@ -234,9 +234,6 @@ public class RecordAndPlay {
      */
     public static void runReplay(Main game) {
         game.setSpeed((int) (1000 / playbackSpeed));
-
-        // anonymous class replaced with lambda for readability
-//        Runnable runnable = () -> {
         while (moves.size() > 0) {
             System.out.println(moves);
             if (actors.size() > 0 && actors.get(0) == 0) {
@@ -250,10 +247,6 @@ public class RecordAndPlay {
         }
         game.setTimeRemaining(remainingTimeAfterRun);
         isRunning = false;
-//        };
-//
-//        thread = new Thread(runnable);
-//        thread.start();
     }
 
     // MIGHT BE LEX'S TICKS MESSING THE MOVES.
@@ -261,15 +254,6 @@ public class RecordAndPlay {
     //==================================================
     //            GETTERS, SETTERS & MISC
     //==================================================
-
-    /**
-     * Gets the thread
-     *
-     * @return thread of recnplay
-     */
-    public static Thread getThread() {
-        return thread;
-    }
 
     /**
      * Gets the moves of the actors
@@ -305,6 +289,10 @@ public class RecordAndPlay {
      */
     public static boolean getIsRunning() {
         return isRunning;
+    }
+
+    public static boolean getRecording() {
+        return currentlyRecording;
     }
 
     /**
