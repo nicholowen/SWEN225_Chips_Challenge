@@ -153,7 +153,7 @@ public class Main {
     // Recording and Replaying Methods
     // =======================================================.
     public void startRecord() {
-        RecordAndPlay.startNewRecording(maze, "recording");
+        RecordAndPlay.startNewRecording(this, "recording");
     }
 
     public void stopRecord() throws IOException {
