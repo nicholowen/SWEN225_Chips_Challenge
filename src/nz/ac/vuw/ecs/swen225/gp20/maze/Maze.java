@@ -195,7 +195,7 @@ public class Maze {
 
 		for(Actor npc:creatures){//For every NPC (All actors except the player)
 			npc.tick();//If necessary, tick them forward.
-			if(npc.collidesWith(player)){
+			if(npc.collidesWith(player) && npc.killsPlayer()){
 				soundEvent="death_sound";
 				gameLost=true;//If they collide with the player and they'd kill the player, then kill the player.
 			}
