@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.actors.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.*;
 
@@ -39,7 +38,7 @@ public class Maze {
 	
 	/**
 	 * This module handles the maze, collision, actors and inventory.
-	 * Loads maze "1" by default. Completely resets every time a maze is loaded.
+	 * Loads a maze of the given number. Completely resets every time a maze is loaded.
 	 * @author Lex Ashurst 300431928
 	 */
 	public Maze(int level) {
@@ -81,18 +80,18 @@ public class Maze {
 		System.out.println("Loaded board");
 
 		//Load player
-		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY(), 6);//Player takes 6 ticks to move.
+		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY());
 		System.out.println("Loaded player");
 
 		//Load NPCs
 		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
 			if(c.getType().equals("spider")){
 				System.out.println("Debug found creature of type spider");
-				creatures.add(new ActorHostileMonster(c.getType(), c.x, c.y, c.getPath()));
+				creatures.add(new Actor(c.getType(), c.x, c.y, c.getPath()));
 
 			} else{//For now, if it's not a spider, then it's a dirt block
 				System.out.println("Debug found creature which wasn't a spider but instead was:"+c.getType());
-				creatures.add(new ActorNeutralDirt(c.getType(), c.x, c.y));
+				creatures.add(new Actor(c.getType(), c.x, c.y));
 			}
 		}
 		System.out.println("Loaded NPCs!");
@@ -182,26 +181,25 @@ public class Maze {
 		player.tick();
 
 		for(Actor npc:creatures){//For every NPC (All actors except the player)
+			System.out.println("Ticking entity:"+npc+" whose formal name is:"+npc.getName());
 			npc.tick();//If necessary, tick them forward.
 
-			if(npc instanceof ActorNeutralDirt){
-				ActorNeutralDirt castedToDirt = (ActorNeutralDirt) npc;
-				if(castedToDirt.isPushable()){//If currently not "settled" or "filled in"
-					Cell cellOver=board[castedToDirt.getX()][castedToDirt.getY()];
+			if(npc.getName().equals("dirt")){
+				if(npc.isPushable()){//If currently not "settled" or "filled in"
+					Cell cellOver=board[npc.getX()][npc.getY()];
 					if(cellOver.getName().equals("water")){//If it's hovering over water at present
 						if(cellOver.killsPlayer(null)){//And finally, if the water is in "lethal mode"
 							cellOver.nullify();//Make the water not lethal
-							castedToDirt.fillInMode();//Make the dirt block unmoveable. This has now successfully made a bridge!
+							npc.fillInMode();//Make the dirt block unmoveable. This has now successfully made a bridge!
 						}
 					}
 				}
 			}//End of dirt filling water logic
 
-			if(npc instanceof ActorHostileMonster){//If it's a "spider"
+			if(npc.getName().equals("spider")){//If it's a "spider"
 				//TODO: Implement movement logic
-
-
-
+				if(!npc.getIsMoving())
+				npc.move(Direction.UP);//JUST TO TEST THE RENDERING! This is temporary.sss
 			}
 		}
 

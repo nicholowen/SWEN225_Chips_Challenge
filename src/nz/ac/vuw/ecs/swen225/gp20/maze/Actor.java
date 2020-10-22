@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Coordinate;
+
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class Actor {
 	protected String name;
@@ -14,16 +17,18 @@ public class Actor {
 	protected boolean killsPlayer;
 	protected boolean blocksMovement;
 	protected boolean isPushable;
+
+	public static final int ACTOR_HOSTILE_MONSTER_SPEED=15;
+	public static final int PLAYER_SPEED=6;
 	
 	/**
-	 * This constructor should be used for the player and the player alone - anything else should have a custom class.
-	 * @param isPlayer
-	 * @param nameReference
-	 * @param xpos
-	 * @param ypos
-	 * @param speed
+	 * This constructor should be used for the player and the player alone. Creating more than one player may lead to issues.
+	 * @param isPlayer Used to specify this contructor and ensure that an incorrect NPC isn't made into a player.
+	 * @param nameReference name reference, if the player's given a unique name.
+	 * @param xpos Starting x position
+	 * @param ypos Starting y position
 	 */
-	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos, int speed) {
+	public Actor(boolean isPlayer, String nameReference, int xpos, int ypos) {
 		x=xpos;
 		y=ypos;
 		this.isPlayer=isPlayer;
@@ -34,10 +39,43 @@ public class Actor {
 		//All of these are simply the "default" values.
 		isMoving=false;
 		name=nameReference;
-		ticksToMove=speed;
+		ticksToMove=PLAYER_SPEED;
 		direction=Direction.DOWN;//Generic starting direction
 		isPushable=false;
 		blocksMovement=false;//Creatures should be able to move into the player - players should be able to move into creatures. Both result in death.
+	}
+
+	/**
+	 * Constructor for dirt, or other pushable entities. They have the same speed as the player.
+	 * @param name
+	 * @param x
+	 * @param y
+	 */
+	public Actor(String name, int x, int y){
+		isPlayer=false;
+		this.x=x;
+		this.y=y;
+		this.name=name;
+		this.ticksToMove=PLAYER_SPEED;
+		killsPlayer=false;
+		blocksMovement=true;//By default, until it's pushed over "water", it blocks movement
+		isPushable=true;//Can be moved by the player!
+	}
+
+	/**
+	 * Constructor for a hostile mob - likely the "spider". Includes a list of coordinates which is it's patrol path.
+	 * @param name
+	 * @param x
+	 * @param y
+	 * @param path
+	 */
+	public Actor(String name, int x, int y, ArrayList<Coordinate> path){
+		isPlayer=false;
+		this.name=name;
+		this.x=x;
+		this.y=y;
+		ticksToMove=ACTOR_HOSTILE_MONSTER_SPEED;
+		killsPlayer=true;
 	}
 	
 	public boolean getIsMoving(){
@@ -85,6 +123,21 @@ public class Actor {
 		isMoving=true;
 		moveProgress=0;//Reset move progress.
 	}
+
+	/**
+	 * The "fill in" mode, where this actor effectively becomes uninteractable with. Originally this would have been where it turned into a tile.
+	 * However, to ensure that the "gaps" or "water" end up rendered properly, this happens instead.
+	 * THIS INTERACTS WITH NOTHING OUTSIDE OF THE DIRT BLOCK.
+	 * WATER BLOCK MUST BE CHANGED SEPERATELY WITH NULLIFY!
+	 * Also make sure to check that the water hasn't already been "nullified"
+	 */
+	public void fillInMode(){
+		if(this.getName().equals("dirt")) {//Safeguard, just in case this is called on something which isn't dirt.
+			blocksMovement = false;
+			isPushable = false;
+		}
+	}
+
 
 	public Direction getDirection() {
 		return direction;
