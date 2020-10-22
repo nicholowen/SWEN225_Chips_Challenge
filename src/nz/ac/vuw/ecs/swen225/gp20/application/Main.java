@@ -22,7 +22,7 @@ public class Main {
 
     private boolean gameEnded;
     private Direction direction = null;
-    private boolean paused = false;
+    private boolean replaying = false;
 
     private int fps = 40;
     private int introCounter;
@@ -163,9 +163,20 @@ public class Main {
 
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
-//        RecordAndPlay.setPlaybackSpeed(fps);
+        RecordAndPlay.setPlaybackSpeed(fps);
         RecordAndPlay.runReplay(this);
         RecordAndPlay.resetRecording();
+    }
+
+    public void step() throws IOException, InterruptedException {
+        if (!replaying) {
+            replaying = true;
+            RecordAndPlay.load("recording", this);
+        }
+        RecordAndPlay.playByStep(this);
+        if(RecordAndPlay.getMoves().size() == 0) {
+            replaying = false;
+        }
     }
 
     public void runMove() {
@@ -216,15 +227,19 @@ public class Main {
     public void setFPS(int fps) {
         this.fps = fps;
     }
-    
-    public void movePlayer(String direction) {
-         RecordAndPlay.addPlayerMovement(direction);
+
+    public int getFPS() {
+        return this.fps;
     }
-    
+
+    public void movePlayer(String direction) {
+        RecordAndPlay.addPlayerMovement(direction);
+    }
+
     public void setTimeRemaining(int timeRemaining) {
         maze.setTimeRemaining(timeRemaining);
     }
-    
+
     public int getTimeRemaining() {
         return maze.getTimeRemaining();
     }

@@ -32,14 +32,19 @@ public class GUI extends JPanel implements KeyListener {
     private JButton four;
     private JButton pause;
     private JButton record;
+    private JButton slow;
+    private JButton fast;
+    private JButton pauseRecording;
+    private JButton play;
+    private JButton step;
     // =======================================.
     private BufferedImage image;
     private String buttonSoundEvent;
     private int gameState = 0;
     // =======================================.
     private Direction direction = null;
-    private int timeRemaining = 0;
     private boolean recording = false;
+    private int replaying = 0;
     
     private Main main;
 
@@ -68,32 +73,27 @@ public class GUI extends JPanel implements KeyListener {
 
         mainPanel.setLayout(null);
         frame.setContentPane(mainPanel);
+        mm = new MouseManager(this);
 
+        // =======================================.
+        // Menu Buttons
+        // =======================================.
+        
         one = new JButton();
         two = new JButton();
         three = new JButton();
         four = new JButton();
-        pause = new JButton();
-        record = new JButton();
-
-        mm = new MouseManager(this);
+        
         this.formatButton(one, "one", 377, 280, 135, 21);
         this.formatButton(two, "two", 377, 348, 135, 21);
         this.formatButton(three, "three", 377, 416, 135, 21);
         this.formatButton(four, "four", 377, 484, 135, 21);
 
-        this.formatButton(record, "record", 752, 35, 22, 27);
-        this.formatButton(pause, "pause", 672, 539, 102, 22);
-
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
-        frame.pack();
 
         // =======================================.
-        // Button Action Listeners
+        // Menu Button Action Listeners
         // =======================================.
-
+        
         one.addActionListener(e -> {
 //            if(gameState == 1){
 //                setGameState(4);
@@ -151,7 +151,34 @@ public class GUI extends JPanel implements KeyListener {
                 break;
             }
         });
-
+       
+        // =======================================.
+        // In-Game Buttons
+        // =======================================.
+        
+        pause = new JButton();
+        record = new JButton();
+        
+        // Recording "Panel" Buttons
+        slow = new JButton();
+        fast = new JButton();
+        pauseRecording = new JButton();
+        play = new JButton();
+        step = new JButton();
+        
+        this.formatButton(record, "record", 752, 35, 22, 27);
+        this.formatButton(pause, "pause", 672, 539, 102, 22);
+        
+        this.formatButton(slow, "slow", 615, 80, 18, 18);
+        this.formatButton(fast, "fast", 645, 80, 18, 18);
+        this.formatButton(pauseRecording, "pauseRecording", 675, 80, 18, 18);
+        this.formatButton(play, "play", 705, 80, 18, 18);
+        this.formatButton(step, "step", 735, 80, 18, 18);
+        
+        // =======================================.
+        // In-Game Button Action Listeners
+        // =======================================.
+        
         pause.addActionListener(e -> {
             if (gameState == 4) {
                 setGameState(3);
@@ -171,7 +198,49 @@ public class GUI extends JPanel implements KeyListener {
                 recording = !recording;
             }
         });
-
+//        
+//        slow.addActionListener(e -> {
+//            if (gameState == 4) {
+//                main.setFPS(main.getFPS() - 20);
+//            }
+//        });
+//
+//        fast.addActionListener(e -> {
+//            if (gameState == 4) {
+//                main.setFPS(main.getFPS() + 20);
+//            }
+//        });
+//        
+//        pauseRecording.addActionListener(e -> {
+//            if (gameState == 4) {
+//                replaying = 2;
+//            }
+//        });
+//
+//        play.addActionListener(e -> {
+//            if (gameState == 4) {
+//                replaying = 1;
+//            }
+//        });
+        
+        step.addActionListener(e -> {
+            if (gameState == 4) {
+                try {
+                    main.step();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                };
+            }
+        });
+        
+        
+        
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
+        frame.pack();
     }
 
     // =======================================================.
@@ -223,19 +292,16 @@ public class GUI extends JPanel implements KeyListener {
             int keyCode = e.getKeyCode();
             if (keyCode == KeyEvent.VK_UP) {
                 this.direction = Direction.UP;
-                System.out.println(direction);
             } else if (keyCode == KeyEvent.VK_LEFT) {
                 this.direction = Direction.LEFT;
-                System.out.println(direction);
             } else if (keyCode == KeyEvent.VK_DOWN) {
                 this.direction = Direction.DOWN;
-                System.out.println(direction);
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
-                System.out.println(direction);
             }
             if(recording) {
                 main.movePlayer(direction.toString());
+                System.out.println(direction);
             }
         }
     }
@@ -387,15 +453,6 @@ public class GUI extends JPanel implements KeyListener {
         return direction;
     }
 
-    /**
-     * Sets time remaining.
-     *
-     * @param int time remaining
-     */
-    public void setTimeRemaining(int tr) {
-        this.timeRemaining = tr;
-    }
-    
     /**
      * Sets the button sound event.
      *
