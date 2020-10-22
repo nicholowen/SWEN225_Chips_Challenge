@@ -23,10 +23,9 @@ import java.util.stream.Collectors;
 public class Persistence {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final Path resources = Paths.get("resources");
-    public static final Path levels = Paths.get(resources.toString(), "levels");
-    public static final Path recordings = Paths.get(resources.toString(), "recordings");
-    public static final Path savedState = Paths.get(resources.toString(), "saved-state");
+    public static final Path levels = Paths.get("resources", "levels");
+    public static final Path recordings = Paths.get("resources", "recordings");
+    public static final Path savedState = Paths.get("resources", "saved-state");
 
     /**
      * Reads a level from a file into an object
