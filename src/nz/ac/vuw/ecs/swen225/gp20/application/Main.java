@@ -154,7 +154,7 @@ public class Main {
     // Recording and Replaying Methods
     // =======================================================.
     public void startRecord() {
-        RecordAndPlay.startNewRecording(this, "recording");
+        RecordAndPlay.startNewRecording(game, "recording");
     }
 
     public void stopRecord() throws IOException {
