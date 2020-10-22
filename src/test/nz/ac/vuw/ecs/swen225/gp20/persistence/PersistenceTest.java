@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -237,21 +236,21 @@ public class PersistenceTest {
     @Test
     public void persistenceTest16() throws IOException {
         // check saving highest level
-        Persistence.setHighestLevel(1);
-        assertEquals(1, Persistence.getHighestLevel());
+        Persistence.setCurrentLevel(1);
+        assertEquals(1, Persistence.getCurrentLevel());
 
-        assertThrows(IllegalArgumentException.class, () -> Persistence.setHighestLevel(-1));
-        assertEquals(1, Persistence.getHighestLevel());
+        assertThrows(IllegalArgumentException.class, () -> Persistence.setCurrentLevel(-1));
+        assertEquals(1, Persistence.getCurrentLevel());
     }
 
     @Test
     public void persistenceTest17() throws IOException {
         // check saving of save type
         Persistence.setSaveType("some type");
-        assertEquals("some type", Persistence.getSaveType());
+        assertEquals("some type", Persistence.getLastSaveType());
 
         Persistence.setSaveType(null);
-        assertEquals("default", Persistence.getSaveType());
+        assertEquals("default", Persistence.getLastSaveType());
     }
 
     private JsonObject createLevel(int startX, int startY, int chipsInLevel, int chipsRequired,

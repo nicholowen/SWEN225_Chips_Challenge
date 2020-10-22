@@ -186,12 +186,12 @@ public class Persistence {
      * Utility class for saving and loading game state
      */
     private static class Settings {
-        int highestLevel;
-        String saveType;
+        int currentLevel;
+        String lastSaveType;
 
-        Settings(int highestLevel, String saveType) {
-            this.highestLevel = highestLevel;
-            this.saveType = saveType;
+        Settings(int currentLevel, String lastSaveType) {
+            this.currentLevel = currentLevel;
+            this.lastSaveType = lastSaveType;
         }
     }
 
@@ -219,12 +219,12 @@ public class Persistence {
     /**
      * Sets the highest level in json
      *
-     * @param highestLevel the level number
+     * @param currentLevel the level number
      * @throws IOException {@inheritDoc}
      */
-    public static void setHighestLevel(int highestLevel) throws IOException {
-        Preconditions.checkArgument(highestLevel > 0, "Level cannot be null");
-        Settings settings = new Settings(highestLevel, getSaveType());
+    public static void setCurrentLevel(int currentLevel) throws IOException {
+        Preconditions.checkArgument(currentLevel > 0, "Level cannot be null");
+        Settings settings = new Settings(currentLevel, getLastSaveType());
         setSaveSettings(settings);
     }
 
@@ -235,7 +235,7 @@ public class Persistence {
      * @throws IOException {@inheritDoc}
      */
     public static void setSaveType(String saveType) throws IOException {
-        Settings settings = new Settings(getHighestLevel(), saveType);
+        Settings settings = new Settings(getCurrentLevel(), saveType);
         setSaveSettings(settings);
     }
 
@@ -244,11 +244,11 @@ public class Persistence {
      *
      * @return the type of save, if doesn't exist returns "default"
      */
-    public static String getSaveType() {
+    public static String getLastSaveType() {
         try {
             Settings settings = loadSaveSettings();
-            if (settings != null && settings.saveType != null) {
-                return settings.saveType;
+            if (settings != null && settings.lastSaveType != null) {
+                return settings.lastSaveType;
             }
         } catch (IOException ignored) {
         }
@@ -258,14 +258,32 @@ public class Persistence {
     /**
      * Get the highest level that has been reached from json
      */
-    public static int getHighestLevel() {
+    public static int getCurrentLevel() {
         try {
             Settings settings = loadSaveSettings();
-            if (settings != null && settings.highestLevel >= 1) {
-                return settings.highestLevel;
+            if (settings != null && settings.currentLevel >= 1) {
+                return settings.currentLevel;
             }
         } catch (IOException ignored) {
         }
         return 1;
+    }
+
+    /**
+     * Gets the maximum number of levels in the game.
+     * Assumes all the levels are in sequential order
+     * e.g. 1, 2, 3 etc.
+     *
+     * @return the count of the levels in the game
+     */
+    public static int getNumberOfLevels() {
+        File[] directoryList = levels.toFile()
+                .listFiles((dir, name) -> name.matches("level\\d.*.json"));
+
+        if (directoryList == null) {
+            return 0;
+        } else {
+            return directoryList.length;
+        }
     }
 }

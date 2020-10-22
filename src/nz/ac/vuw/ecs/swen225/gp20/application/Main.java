@@ -47,10 +47,10 @@ public class Main {
         // e1.printStackTrace();
         // }
 
-        if (Persistence.getSaveType().equalsIgnoreCase("unfinished")) {
+        if (Persistence.getLastSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
         }
-        if (Persistence.getSaveType().equalsIgnoreCase("resume")) {
+        if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
             this.loadLvl(1);
@@ -126,7 +126,7 @@ public class Main {
     public void saveUnfinished() {
         try {
             Persistence.setSaveType("unfinished");
-            Persistence.setHighestLevel(maze.getLevel());
+            Persistence.setCurrentLevel(maze.getLevel());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,7 +142,7 @@ public class Main {
     }
 
     public void loadUnfinished() {
-        maze = new Maze(Persistence.getHighestLevel());
+        maze = new Maze(Persistence.getCurrentLevel());
         render.init(maze);
     }
 
