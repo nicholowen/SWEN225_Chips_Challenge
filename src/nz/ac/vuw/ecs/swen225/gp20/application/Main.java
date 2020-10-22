@@ -96,6 +96,7 @@ public class Main {
                         this.loadLvl(maze.getLevel() + 1);
                     } else {
                         System.out.println("GAME WON");
+                        gui.setGameState(1); // TEMPORARY!!! IF CAUSING ISSUES PLEASE COMMENT OUT
                         // if game won, show game won state with buttons:
                         // main menu
                     }
@@ -103,6 +104,7 @@ public class Main {
                 if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
                     this.saveUnfinished();
                     System.out.println("GAME OVER");
+                    gui.setGameState(2); // TEMPORARY!!! IF CAUSING ISSUES PLEASE COMMENT OUT
                     // game lost state with buttons:
                     // main menu and retry
                     // retry button will call main.loadUnfinished() in gui
