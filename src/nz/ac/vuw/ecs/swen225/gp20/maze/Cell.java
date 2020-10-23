@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.awt.*;
 import java.util.HashMap;
 
 import nz.ac.vuw.ecs.swen225.gp20.render.sprites.Sprite;
@@ -27,14 +28,8 @@ public class Cell {
 
 	
 	/**
-<<<<<<< Updated upstream
-	 * Constructor is no longer used as this class is a parent class - abstract in all but name.
-	 * The only reason this class is not still abstract is because saving/loading can't serialize abstract classes.
-	 * A default constructor here WOULD make it easier to work with other classes, but is not used to ensure that nobody accidentally initializes a "blank cell" now that it's not strictly abstract.
-=======
 	 * Constructor establishes a "basic" cell. It can be walked through, cannot kill the player, etc.
 	 * Can be used for: Exit, Exitlock, Free, Treasure, Wall, Water
->>>>>>> Stashed changes
 	 * @param n
 	 * @param xpos
 	 * @param ypos
@@ -192,6 +187,8 @@ public class Cell {
 	public String getInfo() {
 		return infoMessage;
 	}
+
+	public Point getCoordinate(){return new Point(x,y);}
 
 	/**
 	 * Nullifies the threat. In other words, makes this tile unable to kill the player.

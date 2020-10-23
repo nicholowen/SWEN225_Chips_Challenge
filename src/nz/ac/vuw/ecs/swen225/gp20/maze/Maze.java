@@ -27,6 +27,7 @@ public class Maze {
 	//Actor logic
 	private Actor player;//Player character, there is only one.
 	private ArrayList<Actor> creatures;//Hostile NPCs
+	private static final boolean MONSTERS_USE_PATHS=true;//If true, NPCs will use paths for movement. If false, they'll just move in straight lines.
 	
 	//Sound logic
 	private int oomphCounter;//Forces a small delay between "oomph" sounds to stop them from stacking up in a deafening way.
@@ -89,11 +90,9 @@ public class Maze {
 		//Load NPCs
 		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
 			if(c.getType().equals("spider")){
-				System.out.println("[DEBUG] loaded creature of type spider");
 				creatures.add(new Actor(c.getType(), c.x, c.y, c.getPath()));
 
-			} else{//For now, if it's not a spider, then it's a dirt block
-				System.out.println("[DEBUG] loaded creature which wasn't a spider but instead was:"+c.getType());
+			} else if(c.getType().equals("dirt")){
 				creatures.add(new Actor(c.getType(), c.x, c.y));
 			}
 		}
@@ -213,6 +212,7 @@ public class Maze {
 			}//End of dirt filling water logic
 
 			if(npc.getName().equals("spider")){//If it's a "spider"
+				if(!MONSTERS_USE_PATHS){
 				//Low complexity: simple, just patrol north-to-south and turn around if you hit something.
 				if(!npc.getIsMoving()){//If not moving,
 					creatureMoved=true;
@@ -222,8 +222,22 @@ public class Maze {
 						npc.move(reverseDir(npc.getDirection()));
 					}
 				}
-				//End of complexity 1. Passable, will improve upon.
-				//TODO: Implement high-complexity movement with movement paths!
+				} else {//High complexity - creatures will use "movement paths"!
+					if (!npc.getIsMoving()){//If not moving, we need to pick a new direction to move in.
+						if (npc.isAtEndOfSegment())
+							npc.advanceSegment();//If at the end of the segment, immediately proceed to the next
+
+					Cell toMoveTo = getCellFromDir(npc, npc.getNextMove().getDirection());//The cell we're trying to move to
+						creatureMoved=true;
+					if (isMoveValid(npc, npc.getNextMove().getDirection()) && !NPCBlocksPath(toMoveTo.getCoordinate())){//If the move IS valid
+						npc.move(npc.getNextMove());
+
+					}
+					else//If the next move isn't valid, then turn around 180 degrees!
+						npc.reverseMovementDirection();
+				}
+				}
+
 			}
 		}
 

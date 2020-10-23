@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Coordinate;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Actor {
@@ -94,7 +96,12 @@ public class Actor {
 	}
 
 
-
+	/**
+	 * Used when initializing an actor with a patrol path.
+	 * Turns the coordinate points into "patrol segments" which the NPC can use to figure out which was it should move.
+	 * @param path
+	 * @return The finished arrayList of patrol segments.
+	 */
 	private ArrayList<PatrolSegment> buildSegments(ArrayList<Coordinate> path){
 		ArrayList<PatrolSegment> toReturn = new ArrayList<>();
 		for(int i=0; i<path.size()-1; i++){//For every coordinate on the path, except the last one.
@@ -102,15 +109,56 @@ public class Actor {
 		}
 		//For the last coordinate of the path, link it to the first!
 		toReturn.add(new PatrolSegment(path.get(path.size()-1),path.get(0)));
-		//TODO Remove once done
+		//TODO Remove debug output once done
 		System.out.println("[DEBUG]Finished building segments! Segments for one mob are as follows:");
 		for(PatrolSegment s:toReturn){
 			System.out.println(" (x:"+s.getX1()+" y:"+s.getY1()+") -> (x:"+s.getX2()+" y:"+s.getY2()+")");
 		}
+		numberOfSegments=toReturn.size()-1;
 		return toReturn;
 	}
 
+	/**
+	 * Returns true if the actor is at the end of a given patrol segment, false if not.
+	 * @return
+	 */
+	public boolean isAtEndOfSegment(){
+		Point targetPos;
+		if(patrolingClockwise)
+			targetPos=segments.get(currentSegment).get2ndPoint();
+		else
+			targetPos=segments.get(currentSegment).get1stPoint();
+		return((x==(int)targetPos.getX()) && (y==(int)targetPos.getY()));
+	}
 
+	/**
+	 * Advances the patrol segment to the next one in line, dependant on whether or not the actor's going clockwise or anticlockwise.
+	 * To be used in conjunction with isAtEndOfSegment
+	 */
+	public void advanceSegment(){
+		if(patrolingClockwise){
+			currentSegment++;
+			if(currentSegment==numberOfSegments)//If we get past the end
+				currentSegment=0;//Instead loop around to the start
+
+		} else{//Patrolling anticlockwise, so go the other way!
+			currentSegment--;
+			if(currentSegment<0)//If we go below 0 (if we were at the "start")
+				currentSegment=numberOfSegments-1;//Loop around to the end.
+
+		}
+	}
+
+	/**
+	 * Flip the movement from clockwise to anticlockwise or vise-versa
+	 */
+	public void reverseMovementDirection(){
+		patrolingClockwise=!patrolingClockwise;
+	}
+
+	public Direction getNextMove(){
+		return segments.get(currentSegment).getNextMove(patrolingClockwise);
+	}
 	
 	public boolean getIsMoving(){
 		return isMoving;
