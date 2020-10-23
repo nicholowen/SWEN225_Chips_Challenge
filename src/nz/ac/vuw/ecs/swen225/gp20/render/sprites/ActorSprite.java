@@ -146,7 +146,7 @@ public class ActorSprite extends Sprite {
    */
   public void draw(Graphics g, int x, int y){
     //resets the offset when the character has started it's move cycle.
-    if(tuple != null && tuple.creatureMoved()){
+    if(actor.getName().equals("spider") && actor.hasJustMoved()){
       offsetX = 0;
       offsetY = 0;
     }
