@@ -28,7 +28,7 @@ public class Actor {
 	private boolean hasJustMoved;
 
 	//NPC speed
-	public static final int ACTOR_HOSTILE_MONSTER_SPEED=15;//Should be 15!
+	public static final int ACTOR_HOSTILE_MONSTER_SPEED=16;//Should be 16!
 	public static final int PLAYER_SPEED=6;
 	
 	/**
