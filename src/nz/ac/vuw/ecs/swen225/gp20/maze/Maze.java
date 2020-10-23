@@ -99,12 +99,11 @@ public class Maze {
 		}
 		System.out.println("Loaded NPCs!");
 
-		try{//TODO Make sure this is temporary - implement a better way of doing this working with Persistence
-		Persistence.read(levelToLoad+1);//If there's another level then this isn't the last level.
+		if(getLevel()==Persistence.getNumberOfLevels())
+			isLastLevel=true;
+		else
 			isLastLevel=false;
-		} catch(IOException e){
-			isLastLevel=true;//If there's an exception, then that means this *IS* the last level
-		}
+
 	}
 	
 	public Cell[][] getBoard(){
