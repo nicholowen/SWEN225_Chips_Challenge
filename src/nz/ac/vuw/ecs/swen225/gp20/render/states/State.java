@@ -22,11 +22,13 @@ public class State {
   private BufferedImage[] buttonTwo;
   private BufferedImage[] buttonThree;
   private BufferedImage[] buttonFour;
+  private BufferedImage[] buttonFive;
   //current state
   private BufferedImage currentStateOne;
   private BufferedImage currentStateTwo;
   private BufferedImage currentStateThree;
   private BufferedImage currentStateFour;
+  private BufferedImage currentStateFive;
 
   public State(Assets assets, int state, String stateName) {
     this.state = state;
@@ -36,7 +38,7 @@ public class State {
   }
 
   /**
-   * Initialises all assets.
+   * Initialises all assets. Depending on the state, it will add certain buttons.
    */
   private void init() {
     String background = stateName + "Background";
@@ -44,32 +46,32 @@ public class State {
     this.bg = assets.getAsset(background)[0][0];
     BufferedImage[][] buttonGraphics = assets.getAsset(buttonSet);
 
-    switch (state) {
-      case 1: //state 1 (menu) has 4 buttons
+    if(state == 1){ // 4 buttons active
         this.buttonOne = buttonGraphics[0];
         this.buttonTwo = buttonGraphics[1];
         this.buttonThree = buttonGraphics[2];
         this.buttonFour = buttonGraphics[3];
+        this.buttonFive = buttonGraphics[4];
         this.currentStateOne = buttonOne[0];
         this.currentStateTwo = buttonTwo[0];
         this.currentStateThree = buttonThree[0];
         this.currentStateFour = buttonFour[0];
-        break;
-      case 2: //state 2 (levelSelect) has 3 buttons
+        this.currentStateFive = buttonFive[0];
+    }else if (state == 2 || state == 5) { // 3 buttons active
         this.buttonOne = buttonGraphics[0];
         this.buttonTwo = buttonGraphics[1];
         this.buttonThree = buttonGraphics[2];
         this.currentStateOne = buttonOne[0];
         this.currentStateTwo = buttonTwo[0];
         this.currentStateThree = buttonThree[0];
-        break;
-      case 3: //state 1 (pause) has 2 buttons
+    }else if (state == 3 || state == 6) { // 2 buttons active
         this.buttonOne = buttonGraphics[0];
         this.buttonTwo = buttonGraphics[1];
         this.currentStateOne = buttonOne[0];
         this.currentStateTwo = buttonTwo[0];
-      default:
-        break;
+    }else if (state == 7) { // 1 button active (but specific position)
+        this.buttonFour = buttonGraphics[0];
+        this.currentStateOne = buttonOne[0];
     }
   }
 
@@ -101,6 +103,8 @@ public class State {
          currentStateThree = checkState(buttonEvent, buttonThree);
       } else if (currentStateFour != null && buttonEvent.contains("four")) {
         currentStateFour = checkState(buttonEvent, buttonFour);
+      } else if (currentStateFive != null && buttonEvent.contains("five")) {
+        currentStateFour = checkState(buttonEvent, buttonFour);
       }
     } else {
       resetButtonStates();
@@ -114,7 +118,7 @@ public class State {
   }
 
   /**
-   * Draws the background and buttons.
+   * Draws the background and buttons in known positions.
    *
    * @param g Graphics object.
    */
@@ -124,5 +128,6 @@ public class State {
     if (currentStateTwo != null) g.drawImage(currentStateTwo, 365, 336, null);
     if (currentStateThree != null) g.drawImage(currentStateThree, 365, 404, null);
     if (currentStateFour != null) g.drawImage(currentStateFour, 365, 472, null);
+    if (currentStateFive != null) g.drawImage(currentStateFive, 672, 539, null);
   }
 }
