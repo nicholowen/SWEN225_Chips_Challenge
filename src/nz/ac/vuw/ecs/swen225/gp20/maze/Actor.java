@@ -1,8 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.level.Coordinate;
-
-import java.awt.Point;
 import java.util.ArrayList;
 
 public class Actor {
@@ -18,6 +16,14 @@ public class Actor {
 	protected boolean blocksMovement;
 	protected boolean isPushable;
 
+	//Hostile NPC pathfinding
+	private int numberOfSegments;
+	private int currentSegment;
+	private ArrayList<PatrolSegment> segments;
+	private boolean patrolingClockwise;
+
+
+	//NPC speeds
 	public static final int ACTOR_HOSTILE_MONSTER_SPEED=15;//Should be 15!
 	public static final int PLAYER_SPEED=6;
 	
@@ -81,7 +87,30 @@ public class Actor {
 		this.y=y;
 		ticksToMove=ACTOR_HOSTILE_MONSTER_SPEED;
 		killsPlayer=true;
+
+		segments=buildSegments(path);
+		patrolingClockwise=true;
+		currentSegment=0;
 	}
+
+
+
+	private ArrayList<PatrolSegment> buildSegments(ArrayList<Coordinate> path){
+		ArrayList<PatrolSegment> toReturn = new ArrayList<>();
+		for(int i=0; i<path.size()-1; i++){//For every coordinate on the path, except the last one.
+			toReturn.add(new PatrolSegment(path.get(i),path.get(i+1)));
+		}
+		//For the last coordinate of the path, link it to the first!
+		toReturn.add(new PatrolSegment(path.get(path.size()-1),path.get(0)));
+		//TODO Remove once done
+		System.out.println("[DEBUG]Finished building segments! Segments for one mob are as follows:");
+		for(PatrolSegment s:toReturn){
+			System.out.println(" (x:"+s.getX1()+" y:"+s.getY1()+") -> (x:"+s.getX2()+" y:"+s.getY2()+")");
+		}
+		return toReturn;
+	}
+
+
 	
 	public boolean getIsMoving(){
 		return isMoving;
