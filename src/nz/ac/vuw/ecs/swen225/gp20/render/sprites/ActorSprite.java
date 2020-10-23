@@ -22,6 +22,8 @@ public class ActorSprite extends Sprite {
   private Assets assets;
   private RenderTuple tuple;
 
+  int speed = 0; //offset which draws the character a number of pixels in the direction it is facing/travelling
+
   public ActorSprite(Actor actor, Assets assets) {
     super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
     this.isPushable = actor.isPushable();
@@ -30,19 +32,19 @@ public class ActorSprite extends Sprite {
     // calls on asset class to get the frames for this object.
     if (actor.getName().equals("player")) {
       sprites = assets.getAsset("player");
+      animation.setDelay(6);
+      speed = 12;
     } else if (actor.getName().equals("dirt")){
       sprites = assets.getAsset("dirt");
+      animation.setDelay(6);
+      speed = 12;
     } else {
       sprites = assets.getAsset("hostileMob");
+      animation.setDelay(2);
+      speed = 4;
     }
 
     animation.setFrames(sprites[0]);
-    if (actor.getName().equals("dirt")) {
-      animation.setDelay(6);
-    } else {
-      animation.setDelay(2);
-    }
-
   }
 
   /**
@@ -113,7 +115,7 @@ public class ActorSprite extends Sprite {
    */
   public void update() {
     checkStateChange();
-    if (!actor.getName().equals("dirt") && !actor.isPushable()){
+    if (!actor.getName().equals("dirt")){
       switch (actor.getDirection()) {
         case UP:
           animation.setNewFrames(sprites[0]);
@@ -143,15 +145,12 @@ public class ActorSprite extends Sprite {
    * @param y Y value of the draw position
    */
   public void draw(Graphics g, int x, int y){
-    int speed; //offset which draws the character a number of pixels in the direction it is facing/travelling
     //resets the offset when the character has started it's move cycle.
-    if(tuple.creatureMoved()){
+    if(tuple != null && tuple.creatureMoved()){
       offsetX = 0;
       offsetY = 0;
     }
     if(getIsMoving()) {
-      if (actor.isPushable()) speed = 12; //dirt block draw speed
-      else speed = 4; // enemy draw speed
       switch (getDirection()) {
         case UP:
           offsetY -= speed;
@@ -174,6 +173,10 @@ public class ActorSprite extends Sprite {
         offsetY = 0;
 
     }
-    g.drawImage(getImage(), x + offsetX, y + offsetY, null);
+    if(!actor.getName().equals("player")) {
+      g.drawImage(getImage(), x + offsetX, y + offsetY, null);
+    }else{
+      g.drawImage(getImage(), x, y, null);
+    }
   }
 }

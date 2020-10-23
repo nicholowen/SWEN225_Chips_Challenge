@@ -357,7 +357,6 @@ public class MapPane {
 
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
-
         if (floor[i][j] != null) {
           g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
         }
@@ -391,6 +390,7 @@ public class MapPane {
         }
       }
     }
+    //needs separate loop to avoid drawing mobs underneath other tiles.
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
         if (mobs[i][j] != null) {
@@ -400,7 +400,7 @@ public class MapPane {
     }
 
     //draws player last to remain on top and center of screen (uses absolute positioning)
-    if (playerSprite != null) g.drawImage(playerSprite.getImage(), 4 * 64, 4 * 64, null);
+    if (playerSprite != null) playerSprite.draw(g, 4 * 64, 4 * 64);
 
     //clears lists for next frame
     clearLists();
