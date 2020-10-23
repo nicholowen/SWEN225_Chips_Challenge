@@ -38,14 +38,6 @@ public class Main {
     public void play() {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
-//        Maze maze = new Maze(Persistence.getHighestLevel());
-
-        // try {
-        // Persistence.setSaveType("resume");
-        // } catch (IOException e1) {
-        // // TODO Auto-generated catch block
-        // e1.printStackTrace();
-        // }
 
         if (Persistence.getLastSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
@@ -58,10 +50,8 @@ public class Main {
         while (true) {
             currentState = gui.getGameState();
             if (currentState == 0) {
-//                render.update(0);
                 if (introCounter < 100) {
                     introCounter++;
-                    System.out.println(introCounter + ":" + currentState);
                 } else {
                     gui.setGameState(1);
                 }
@@ -70,7 +60,6 @@ public class Main {
             if (!gameEnded) {
                 direction = gui.getDirection();
                 if (gui.isRecording() && direction != null) {
-                    // RecordAndPlay.addMovement(direction.toString());
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
@@ -93,21 +82,14 @@ public class Main {
                 }
                 if (maze.getGameWon()) {
                     if (!maze.isLastLevel()) {
-                        this.loadLvl(maze.getLevel() + 1);
+                        this.loadLvl(maze.getLevel() + 1); // load next level
                     } else {
-                        System.out.println("GAME WON");
-                        gui.setGameState(1); // TEMPORARY!!! IF CAUSING ISSUES PLEASE COMMENT OUT
-                        // if game won, show game won state with buttons:
-                        // main menu
+                        gui.setGameState(6); // no more levels to load - win state
                     }
                 }
                 if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
-                    this.saveUnfinished();
-                    System.out.println("GAME OVER");
-                    gui.setGameState(2); // TEMPORARY!!! IF CAUSING ISSUES PLEASE COMMENT OUT
-                    // game lost state with buttons:
-                    // main menu and retry
-                    // retry button will call main.loadUnfinished() in gui
+                    this.saveUnfinished();  // update last unfinished level
+                    gui.setGameState(5); // lost state
                 }
             } else {
                 break;
@@ -169,7 +151,6 @@ public class Main {
 
     public void stopRecord() throws IOException {
         RecordAndPlay.save(this);
-        System.out.println("saved");
     }
 
     public void replay() throws IOException, InterruptedException {
