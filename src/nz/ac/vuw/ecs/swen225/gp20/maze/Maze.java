@@ -212,6 +212,7 @@ public class Maze {
 			}//End of dirt filling water logic
 
 			if(npc.getName().equals("spider")){//If it's a "spider"
+				npc.setHasJustMoved(false);
 				if(!MONSTERS_USE_PATHS){
 				//Low complexity: simple, just patrol north-to-south and turn around if you hit something.
 				if(!npc.getIsMoving()){//If not moving,
@@ -231,7 +232,7 @@ public class Maze {
 						creatureMoved=true;
 					if (isMoveValid(npc, npc.getNextMove().getDirection()) && !NPCBlocksPath(toMoveTo.getCoordinate())){//If the move IS valid
 						npc.move(npc.getNextMove());
-
+						npc.setHasJustMoved(true);
 					}
 					else//If the next move isn't valid, then turn around 180 degrees!
 						npc.reverseMovementDirection();

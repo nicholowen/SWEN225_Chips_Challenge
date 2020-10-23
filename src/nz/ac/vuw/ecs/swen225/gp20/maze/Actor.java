@@ -24,8 +24,10 @@ public class Actor {
 	private ArrayList<PatrolSegment> segments;
 	private boolean patrolingClockwise;
 
+	//Rendering
+	private boolean hasJustMoved;
 
-	//NPC speeds
+	//NPC speed
 	public static final int ACTOR_HOSTILE_MONSTER_SPEED=15;//Should be 15!
 	public static final int PLAYER_SPEED=6;
 	
@@ -52,6 +54,7 @@ public class Actor {
 	private void initDefaultValues(){
 		killsPlayer=false;
 		isMoving=false;
+		hasJustMoved=false;//For rendering - may be better if it's true so it forces them all to be aligned on the first tick?
 		direction=Direction.DOWN;//Generic starting direction
 		isPushable=false;
 		blocksMovement=false;//Creatures should be able to move into the player - players should be able to move into creatures. Both result in death.
@@ -244,4 +247,11 @@ public class Actor {
 	public boolean isPushable() {
 		return isPushable;
 	}
+	public boolean hasJustMoved(){
+		return hasJustMoved;
+	}
+	public void setHasJustMoved(boolean input){
+		hasJustMoved=input;
+	}
+
 }
