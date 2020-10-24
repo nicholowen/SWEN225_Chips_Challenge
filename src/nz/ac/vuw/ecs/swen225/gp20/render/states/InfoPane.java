@@ -253,13 +253,13 @@ public class InfoPane {
       }
     }
     //draw buttons
-    g.drawImage(buttonStates[0], gameSize + 96, 539, null);
-    g.drawImage(buttonStates[1], gameSize + 174, 33, null);
-    g.drawImage(buttonStates[2], gameSize + 39, 80, null);
-    g.drawImage(buttonStates[3], gameSize + 69, 80, null);
-    g.drawImage(buttonStates[4], gameSize + 99, 80, null);
-    g.drawImage(buttonStates[5], gameSize + 129, 80, null);
-    g.drawImage(buttonStates[6], gameSize + 159, 80, null);
+    g.drawImage(buttonStates[0], gameSize + 96, 539, null); // pause button
+    g.drawImage(buttonStates[1], gameSize + 174, 33, null); // record button
+    g.drawImage(buttonStates[2], gameSize + 39, 80, null); // slow
+    g.drawImage(buttonStates[3], gameSize + 69, 80, null); // fast
+    g.drawImage(buttonStates[4], gameSize + 99, 80, null); // pause replay
+    g.drawImage(buttonStates[5], gameSize + 129, 80, null); // play replay
+    g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
 
     //can only handle a single line up to 22 characters (including spaces)
     if (onInfo && info != null) {

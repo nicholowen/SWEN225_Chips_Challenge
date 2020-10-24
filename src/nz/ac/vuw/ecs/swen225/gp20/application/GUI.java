@@ -45,14 +45,15 @@ public class GUI extends JPanel implements KeyListener {
     private Direction direction = null;
     private boolean recording = false;
     private int replaying = 0;
-    
+
+    private int lastState;
     private Main main;
 
     /**
      * Instantiates a new gui.
      */
     public GUI(Main main) {
-        
+
         this.main = main;
 
         this.isFocusable();
@@ -78,124 +79,169 @@ public class GUI extends JPanel implements KeyListener {
         // =======================================.
         // Menu Buttons
         // =======================================.
-        
+        // The name of these buttons represents the order in which they appear in each
+        // state (i.e. one is the first button in every state)
         one = new JButton();
         two = new JButton();
         three = new JButton();
         four = new JButton();
-        
+
         this.formatButton(one, "one", 377, 280, 135, 21);
         this.formatButton(two, "two", 377, 348, 135, 21);
         this.formatButton(three, "three", 377, 416, 135, 21);
         this.formatButton(four, "four", 377, 484, 135, 21);
 
-
         // =======================================.
         // Menu Button Action Listeners
         // =======================================.
-        
-        one.addActionListener(e -> {
-//            if(gameState == 1){
-//                setGameState(4);
-//            }
+        one.addActionListener(e -> { // Decides what the first button does in each state
             switch (gameState) {
             case 1: // menu state
-                setGameState(2);
+                setGameState(4);
                 break;
             case 2: // level select state
+                main.loadLvl(1);
                 setGameState(4); // start at level 1
                 break;
             case 3: // pause state
                 setGameState(4);
                 break;
-            default:
+            case 5: // loss state
+                main.loadUnfinished();
+                setGameState(4);
+                break;
+            case 6: // win state
+                main.loadUnfinished();
+                setGameState(1);
+                break;
+            case 7: // info state
+                // no button
                 break;
             }
         });
 
-        two.addActionListener(e -> {
+        two.addActionListener(e -> { // Decides what the second button does in each state
             switch (gameState) {
             case 1: // menu state
-                // load from saved file
+                setGameState(2);
+                break;
             case 2: // level select state
                 main.loadLvl(2);
                 setGameState(4); // start at level 2
                 break;
             case 3:// pause state
-                setGameState(1); // return to main menu
+                main.saveUnfinished();
+                main.loadUnfinished();
+                setGameState(4); // restart last unfinished level
+                break;
+            case 5: // loss state
+                main.loadUnfinished();
+                setGameState(1); // back to main menu
+                break;
+            case 6: // win state
+                System.exit(0); // exit the game
+            case 7: // info state
+                // no button
                 break;
             }
         });
 
-        three.addActionListener(e -> {
+        three.addActionListener(e -> { // Decides what the third button does in each state
             switch (gameState) {
             case 1: // menu state
-                // load replay from saved file
+                System.exit(0); // exit the game
             case 2: // level select state
                 setGameState(1);
                 break;
             case 3:// pause state
-                   // no button available
+                main.saveCurrentState(); // save state
+                break;
+            case 5: // loss state
+                System.exit(0); // exit the game
+            case 6: // win state
+                // no button
+                break;
+            case 7: // info state
+                // no button
                 break;
             }
         });
 
-        four.addActionListener(e -> {
+        four.addActionListener(e -> { // Decides what the fourth button does in each state
             switch (gameState) {
             case 1: // menu state
-                System.exit(0);
+                // no button
+                break;
             case 2: // level select state
                 // no button
                 break;
             case 3:// pause state
+                main.saveCurrentState();
+                setGameState(1); // go to main menu
+                break;
+            case 5:// loss state
                    // no button
+                break;
+            case 6:// win state
+                   // no button
+                break;
+            case 7:// info state
+                setGameState(lastState);
                 break;
             }
         });
-       
+
         // =======================================.
         // In-Game Buttons
         // =======================================.
-        
+
         pause = new JButton();
         record = new JButton();
-        
-        // Recording "Panel" Buttons
+
         slow = new JButton();
         fast = new JButton();
         pauseRecording = new JButton();
         play = new JButton();
         step = new JButton();
-        
+
         this.formatButton(record, "record", 752, 35, 22, 27);
         this.formatButton(pause, "pause", 672, 539, 102, 22);
-        
+
         this.formatButton(slow, "slow", 615, 80, 18, 18);
         this.formatButton(fast, "fast", 645, 80, 18, 18);
         this.formatButton(pauseRecording, "pauseRecording", 675, 80, 18, 18);
         this.formatButton(play, "play", 705, 80, 18, 18);
         this.formatButton(step, "step", 735, 80, 18, 18);
-        
+
         // =======================================.
         // In-Game Button Action Listeners
         // =======================================.
-        
+
         pause.addActionListener(e -> {
             if (gameState == 4) {
                 setGameState(3);
+            }
+            else if (gameState == 1) {
+                lastState = 1;
+                setGameState(7); // show game info (instructions)
+            }
+            else if (gameState == 3) {
+                lastState = 3;
+                setGameState(7); // show game info (instructions)
             }
         });
 
         record.addActionListener(e -> {
             if (gameState == 4) {
-                if(recording) {
+                if (recording) {
                     try {
                         main.stopRecord();
                     } catch (IOException e1) {
                         e1.printStackTrace();
-                    };
-                }
-                else main.startRecord();
+                    }
+                    ;
+                } else
+                    main.startRecord();
                 recording = !recording;
             }
         });
@@ -230,7 +276,7 @@ public class GUI extends JPanel implements KeyListener {
                 }
             }
         });
-        
+
         step.addActionListener(e -> {
             if (gameState == 4) {
                 try {
@@ -239,15 +285,13 @@ public class GUI extends JPanel implements KeyListener {
                     e1.printStackTrace();
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
-                };
+                }
+                ;
             }
         });
-        
-        
-        
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
     }
 
@@ -307,9 +351,8 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
-            if(recording) {
+            if (recording) {
                 main.movePlayer(direction.toString());
-                System.out.println(direction);
             }
         }
     }
@@ -324,7 +367,7 @@ public class GUI extends JPanel implements KeyListener {
         this.direction = null;
         int keyCode = e.getKeyCode();
         boolean ctrl = (e.getModifiers() & KeyEvent.CTRL_MASK) != 0;
-        if(this.gameState == 4) {
+        if (this.gameState == 4) {
             // exit the game, the current game state will be lost, the next time the game is
             // started, it will resume from the last unfinished level
             if ((keyCode == KeyEvent.VK_X) && ctrl) {
@@ -353,10 +396,6 @@ public class GUI extends JPanel implements KeyListener {
             else if (keyCode == KeyEvent.VK_SPACE) {
                 setGameState(3);
             }
-            // close the game is paused dialog and resume the game
-            else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                setGameState(4);
-            }
             // replay recording
             else if (keyCode == KeyEvent.VK_R) {
                 recording = false;
@@ -367,6 +406,13 @@ public class GUI extends JPanel implements KeyListener {
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
+            }
+        }
+        if (this.gameState == 3) {
+            // close the game is paused dialog and resume the game
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                System.out.println("ESCAPE");
+                setGameState(4);
             }
         }
     }
@@ -382,20 +428,16 @@ public class GUI extends JPanel implements KeyListener {
             char key = e.getKeyChar();
             if (key == 'w') {
                 this.direction = Direction.UP;
-                System.out.println(direction);
             } else if (key == 'a') {
                 this.direction = Direction.LEFT;
-                System.out.println(direction);
             } else if (key == 's') {
                 this.direction = Direction.DOWN;
-                System.out.println(direction);
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
-                System.out.println(direction);
             }
-            if(recording) {
+            if (recording) {
                 main.movePlayer(direction.toString());
-            } 
+            }
         }
     }
 
@@ -424,11 +466,8 @@ public class GUI extends JPanel implements KeyListener {
     /**
      * Checks what state the game is currently in.
      *
-     * @return int 0, if intro state 
-     *             1 if menu state 
-     *             2 if level select 
-     *             3 if paused 
-     *             4 if playing
+     * @return int 0, if intro state 1 if menu state 2 if level select 3 if paused 4
+     *         if playing
      */
     public int getGameState() {
         return gameState;
@@ -442,7 +481,7 @@ public class GUI extends JPanel implements KeyListener {
     public boolean isRecording() {
         return recording;
     }
-    
+
     /**
      * Sets recording to false, when user wants to stoprecording.
      *
