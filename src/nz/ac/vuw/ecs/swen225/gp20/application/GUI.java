@@ -396,10 +396,6 @@ public class GUI extends JPanel implements KeyListener {
             else if (keyCode == KeyEvent.VK_SPACE) {
                 setGameState(3);
             }
-            // close the game is paused dialog and resume the game
-            else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                setGameState(4);
-            }
             // replay recording
             else if (keyCode == KeyEvent.VK_R) {
                 recording = false;
@@ -410,6 +406,13 @@ public class GUI extends JPanel implements KeyListener {
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
+            }
+        }
+        if (this.gameState == 3) {
+            // close the game is paused dialog and resume the game
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                System.out.println("ESCAPE");
+                setGameState(4);
             }
         }
     }
