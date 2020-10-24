@@ -351,9 +351,9 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
+            /*if (recording) {
                 main.movePlayer(direction.toString());
-            }
+            }*/
         }
     }
 
@@ -435,9 +435,9 @@ public class GUI extends JPanel implements KeyListener {
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
+            /*if (recording) {
                 main.movePlayer(direction.toString());
-            }
+            }*/
         }
     }
 
