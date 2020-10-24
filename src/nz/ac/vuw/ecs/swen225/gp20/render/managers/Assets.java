@@ -19,6 +19,7 @@ public class Assets {
   //Load gifs TODO: add floor tiles and door tiles/animations
   //Map/Game gifs
   private static BufferedImage[][] FLOOR;
+  private static BufferedImage[][] GOOP;
   private static BufferedImage[][] WALL;
   private static BufferedImage[][] DOOR;
   private static BufferedImage[][] HOLE;
@@ -70,6 +71,7 @@ public class Assets {
   private void init() {
 
     FLOOR = loadGif(path, "floortile.gif", 64, 64);
+    GOOP = loadGif(path, "goop.gif", 64, 64);
     WALL = loadGif(path, "walltiles.gif", 64, 64);
     DOOR = loadGif(path, "doorsheet.gif", 64, 64);
     HOLE = loadGif(path, "hole.gif", 64, 64);
@@ -151,6 +153,8 @@ public class Assets {
     BufferedImage[][] ret;
     switch (asset) {
       case "floor": ret = FLOOR;
+        break;
+      case "goop": ret = GOOP;
         break;
       case "wall": ret = WALL;
         break;

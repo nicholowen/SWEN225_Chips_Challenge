@@ -25,6 +25,7 @@ public class MapPane {
   BufferedImage bg;
   BufferedImage infoAsset;
   BufferedImage floorAsset;
+  BufferedImage goopAsset;
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
   private Cell[][] floor = new Cell[11][11];
@@ -72,6 +73,7 @@ public class MapPane {
   private void init() {
     this.bg = assets.getAsset("mapBackground")[0][0];
     this.floorAsset = assets.getAsset("floor")[0][0];
+    this.goopAsset = assets.getAsset("goop")[0][0];
     this.infoAsset = assets.getAsset("info")[0][0];
   }
 
@@ -259,6 +261,9 @@ public class MapPane {
             case "free":
               floor[i][j] = surround[i][j];
               break;
+            case "goop":
+              floor[i][j] = surround[i][j];
+              break;
             case "wall":
               wall[i][j] = surround[i][j];
               break;
@@ -358,7 +363,11 @@ public class MapPane {
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
         if (floor[i][j] != null) {
-          g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
+          if(floor[i][j].getName().equals("goop")){
+            g.drawImage(goopAsset, x * i + offsetX - x, y * j + offsetY - y, null);
+          }else {
+            g.drawImage(floorAsset, x * i + offsetX - x, y * j + offsetY - y, null);
+          }
         }
         if (wall[i][j] != null && wallObjects.size() > 0) {
           g.drawImage(wallObjects.get(wall[i][j]).getImage(), x * i + offsetX - x, y * j + offsetY - y, null);
