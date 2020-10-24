@@ -9,9 +9,6 @@ import java.io.IOException;
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
@@ -44,7 +41,7 @@ public class GUI extends JPanel implements KeyListener {
     // =======================================.
     private Direction direction = null;
     private boolean recording = false;
-    private int replaying = 0;
+    private boolean replaying = false;
 
     private int lastState;
     private Main main;
@@ -272,7 +269,6 @@ public class GUI extends JPanel implements KeyListener {
                 } else {
                     return;
                 }
-                System.out.println(main.getSpeed());
             }
         });
 
@@ -285,6 +281,7 @@ public class GUI extends JPanel implements KeyListener {
         play.addActionListener(e -> {
             if (gameState == 4) {
                 recording = false;
+                replaying = true;
                 try {
                     main.replay();
                 } catch (IOException e1) {
@@ -369,9 +366,6 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
-                main.movePlayer(direction.toString());
-            }
         }
     }
 
@@ -453,9 +447,6 @@ public class GUI extends JPanel implements KeyListener {
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
-                main.movePlayer(direction.toString());
-            }
         }
     }
 
@@ -507,7 +498,7 @@ public class GUI extends JPanel implements KeyListener {
     }
 
     /**
-     * Sets recording to false, when user wants to stoprecording.
+     * Sets recording to false, when user wants to stop recording.
      *
      */
     public void stopRecording() {

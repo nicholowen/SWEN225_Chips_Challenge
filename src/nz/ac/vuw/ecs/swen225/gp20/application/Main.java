@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
@@ -56,13 +57,15 @@ public class Main {
             }
 
             if (!gameEnded) {
+                RenderTuple rt = maze.tick(direction);
                 direction = gui.getDirection();
-                if (gui.isRecording() && direction != null) {
+                if (gui.isRecording() && rt.playerMoved() != null) {
+                    movePlayer(rt.playerMoved().toString());
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent());
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -190,7 +193,7 @@ public class Main {
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
         RecordAndPlay.setPlaybackSpeed(speed);
-        RecordAndPlay.runReplay(this);
+        RecordAndPlay.runReplay(this, speed);
         RecordAndPlay.resetRecording();
     }
 
@@ -215,14 +218,17 @@ public class Main {
      * 
      */
     public void runMove() {
-        if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+
+        if (RecordAndPlay.getMoves().size() > 0) {
+            if (RecordAndPlay.getMoves().get(0).equals("UP")) {
+                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
+                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
+                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
+                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            }
         }
 
 //        if (RecordAndPlay.getMoves().equals()) {
@@ -259,23 +265,24 @@ public class Main {
     }
 
     /**
-     * Set speed used for replaying a recording. (higher number -> longer wait -> slower replay)
+     * Set speed used for replaying a recording. (higher number -> longer wait ->
+     * slower replay)
      *
-     * @param speed  - milliseconds to wait
+     * @param speed - milliseconds to wait
      */
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
     /**
-     * Get speed used for replaying a recording. (higher number -> longer wait -> slower replay)
+     * Get speed used for replaying a recording. (higher number -> longer wait ->
+     * slower replay)
      *
-     * @return speed - milliseconds to wait 
+     * @return speed - milliseconds to wait
      */
     public int getSpeed() {
         return this.speed;
     }
-
 
     /**
      * Records direction made by player while recording.
