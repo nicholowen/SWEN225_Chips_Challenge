@@ -65,7 +65,7 @@ public class Main {
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -221,36 +221,17 @@ public class Main {
 
         if (RecordAndPlay.getMoves().size() > 0) {
             if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
             } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
             } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
             } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
             }
         }
-
-//        if (RecordAndPlay.getMoves().equals()) {
-//            ;
-//        }
     }
-
-    public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
-        if (dir.equals("UP")) {
-            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-    }
-
+    
     // =======================================================.
     // Utility Methods for Persistence and RecnPlay
     // =======================================================.
