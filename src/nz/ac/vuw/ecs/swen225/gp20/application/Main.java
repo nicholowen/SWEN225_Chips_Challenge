@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
@@ -45,6 +46,7 @@ public class Main {
         } else {
             this.loadLvl(1);
         }
+        int ticks=0;
         while (true) {
             currentState = gui.getGameState();
             if (currentState == 0) {
@@ -56,13 +58,21 @@ public class Main {
             }
 
             if (!gameEnded) {
+
                 direction = gui.getDirection();
                 if (gui.isRecording() && direction != null) {
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
-                if (currentState == 4)
-                    render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                if (currentState == 4){
+                    RenderTuple tuple = maze.tick(direction);
+                    ticks++;
+                    if(tuple.playerMoved()!=null){//If player successfully started a move
+                        movePlayer(tuple.playerMoved().toString(), tuple.creatureMoved(), ticks);
+                    }
+                    render.update(tuple, maze.getTimeRemaining(), gui.getButtonSoundEvent());
+
+                }
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -258,7 +268,7 @@ public class Main {
      * Set refresh-rate of replay in frames per second, used to determine speed of
      * replaying a recording.
      *
-     * @param fps frames per second.
+     * @param speed frames per second.
      */
     public void setSpeed(int speed) {
         this.fps = speed;
@@ -278,7 +288,7 @@ public class Main {
      *
      * @param direction player has moved.
      */
-    public void movePlayer(String direction) {
+    public void movePlayer(String direction, boolean monsterMoved, int tickNumber) {
         RecordAndPlay.addPlayerMovement(direction);
     }
 
