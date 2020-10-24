@@ -8,6 +8,15 @@ import java.nio.Buffer;
 
 /**
  * Represents the menu states the game can be in.
+ * States:
+ *  0 - Intro
+ *  1 - Menu
+ *  2 - Levels
+ *  3 - Pause
+ *  4 - Play
+ *  5 - Dead
+ *  6 - Win
+ *  7 - Information
  *
  * @author Owen Nicholson 3001130635
  */
@@ -50,12 +59,10 @@ public class State {
       this.buttonOne = buttonGraphics[0];
       this.buttonTwo = buttonGraphics[1];
       this.buttonThree = buttonGraphics[2];
-      this.buttonFour = buttonGraphics[3];
       this.buttonFive = buttonGraphics[4];
       this.currentStateOne = buttonOne[0];
       this.currentStateTwo = buttonTwo[0];
       this.currentStateThree = buttonThree[0];
-      this.currentStateFour = buttonFour[0];
       this.currentStateFive = buttonFive[0];
     }else if(state == 3){ // 4 buttons active
       this.buttonOne = buttonGraphics[0];

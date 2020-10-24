@@ -107,7 +107,7 @@ public class Assets {
     MENUBUTTONS = loadGif(path, "menuButtons.gif", 159, 51);
     PAUSEBUTTONS = loadGif(path, "pauseButtons.gif", 159, 51);
     LEVELSELECTBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
-    DEADBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
+    DEADBUTTONS = loadGif(path, "deadButtons.gif", 159, 51);
     GAMEOVERBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
     INFOPAUSEBUTTON = loadGif(path, "infoPauseButton.gif", 102, 22);
     RECORDBUTTON = loadGif(path, "recordButton.gif", 26, 38);
