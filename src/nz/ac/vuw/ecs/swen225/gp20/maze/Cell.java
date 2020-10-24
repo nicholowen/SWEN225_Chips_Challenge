@@ -2,14 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.*;
 import java.util.HashMap;
-
-import nz.ac.vuw.ecs.swen225.gp20.render.sprites.Sprite;
-
 public class Cell {
 	
 	
 	//Rendering and Animation
-	protected Sprite animationObject;
 	protected String name;
 	protected int x;//Assigned when the tile is made, this value is used only for the rendering.
 	protected int y;//Assigned when the tile is made, this value is used only for the rendering.
@@ -134,16 +130,6 @@ public class Cell {
 	public String getRenderData() {
 			return(name+":0");
 	}
-	
-	//Rendering/animating getters and setters
-	
-	public void setAnimationObject(Sprite animationObject){
-		  this.animationObject = animationObject;
-		}
-
-		public Sprite getAnimationObject(){
-		  return animationObject;
-		}
 
 	/**
 	 * @return X position
