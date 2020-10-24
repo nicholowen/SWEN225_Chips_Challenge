@@ -31,6 +31,7 @@ public class InfoPane {
 
   boolean onInfo; //true if the player is on an info tile
   boolean recording; //true is game is being recorded.
+  boolean replaying;
 
   private BufferedImage[][] font;
 
@@ -63,6 +64,8 @@ public class InfoPane {
     this.font = assets.getAsset("font");
     this.energyBarShade = assets.getAsset("energyBarShade")[0][0];
     this.energyBar = assets.getAsset("energyBar")[0][0];
+    this.recordingLight = assets.getAsset("recording")[0][0];
+    this.replayingLight = assets.getAsset("replaying")[0][0];
     buttonGraphics = new ArrayList<>();
     BufferedImage[][] controlButtons = assets.getAsset("controlButtons");
     buttonGraphics.add(assets.getAsset("infoPauseButton")[0]);
@@ -86,9 +89,11 @@ public class InfoPane {
    *
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple, String buttonEvent) {
+  public void update(int timeLimit, RenderTuple tuple, String buttonEvent, boolean recording, boolean replaying) {
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
+    this.recording = recording;
+    this.replaying = replaying;
     this.inventory = tuple.getInventory();
     this.info = drawString(tuple.getInfo());
     this.onInfo = tuple.isPlayerOnInfo();
@@ -253,6 +258,10 @@ public class InfoPane {
         }
       }
     }
+
+    if(recording) g.drawImage(recordingLight, gameSize + 268, 25, null);
+    if(replaying) g.drawImage(replayingLight, gameSize + 268, 52, null);
+
     //draw buttons
     g.drawImage(buttonStates[0], gameSize + 96, 539, null); // pause button
     g.drawImage(buttonStates[1], gameSize + 174, 33, null); // record button
