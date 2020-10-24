@@ -44,7 +44,7 @@ public class Main {
         else if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
-//            this.loadLvl(1);
+            this.loadLvl(1);
         }
         while (true) {
             currentState = gui.getGameState();
