@@ -41,11 +41,12 @@ public class MouseManager implements MouseListener {
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         String name = mouseEvent.getComponent().getName();
-        if (gui.getGameState() == 4) {
+        if (gui.getGameState() == 4 || gui.getGameState() == 3 || gui.getGameState() == 1) {
             if (name.equals("pause") || name.equals("record")) {
                 gui.setButtonSoundEvent("pressed_" + name);
             }
-        } else if (gui.getGameState() > 0) {
+        }
+        if (gui.getGameState() != 0 && gui.getGameState() != 4) {
             if (!name.equals("pause") && !name.equals("record")) {
                 gui.setButtonSoundEvent("pressed_" + name);
             }
@@ -71,11 +72,12 @@ public class MouseManager implements MouseListener {
     public void mouseEntered(MouseEvent mouseEvent) {
         String name = mouseEvent.getComponent().getName();
 
-        if (gui.getGameState() == 4) {
+        if (gui.getGameState() == 4 || gui.getGameState() == 3 || gui.getGameState() == 1) {
             if (name.equals("pause") || name.equals("record")) {
                 gui.setButtonSoundEvent("hover_" + name);
             }
-        } else if (gui.getGameState() > 0) {
+        }
+        if (gui.getGameState() != 0 && gui.getGameState() != 4) {
             if (!name.equals("pause") && !name.equals("record")) {
                 gui.setButtonSoundEvent("hover_" + name);
             }
