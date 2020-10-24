@@ -154,7 +154,7 @@ public class GUI extends JPanel implements KeyListener {
                 setGameState(1);
                 break;
             case 3:// pause state
-                main.saveCurrentState();
+                main.saveCurrentState(); // save state
                 break;
             case 5: // loss state
                 System.exit(0); // exit the game
@@ -198,7 +198,6 @@ public class GUI extends JPanel implements KeyListener {
         pause = new JButton();
         record = new JButton();
 
-        // Recording "Panel" Buttons
         slow = new JButton();
         fast = new JButton();
         pauseRecording = new JButton();
@@ -293,7 +292,6 @@ public class GUI extends JPanel implements KeyListener {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setIconImage(new ImageIcon("src/nz/ac/vuw/ecs/swen225/gp20/render/Resources/icon.png").getImage());
         frame.pack();
     }
 
