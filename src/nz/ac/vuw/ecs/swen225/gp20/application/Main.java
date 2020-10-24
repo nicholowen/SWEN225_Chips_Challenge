@@ -230,10 +230,9 @@ public class Main {
                 render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
             }
         }
-
-//        if (RecordAndPlay.getMoves().equals()) {
-//            ;
-//        }
+        else {
+            replaying = false;
+        }
     }
 
     public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
