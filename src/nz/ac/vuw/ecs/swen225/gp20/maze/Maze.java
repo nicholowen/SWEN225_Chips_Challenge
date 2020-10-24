@@ -16,30 +16,19 @@ public class Maze {
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
-	//private ArrayList<String> playerInventory;
 	private HashMap<String, Integer> playerInventory;
-	
-	//Board logic
-	private int boardHeight;
-	private int boardWidth;
-	private ArrayList<Cell> exitList;
-	
+
 	//Actor logic
 	private Actor player;//Player character, there is only one.
 	private ArrayList<Actor> creatures;//Hostile NPCs
-	private static final boolean MONSTERS_USE_PATHS=true;//If true, NPCs will use paths for movement. If false, they'll just move in straight lines.
-	
+
 	//Sound logic
 	private int oomphCounter;//Forces a small delay between "oomph" sounds to stop them from stacking up in a deafening way.
 	private final int oomphDelay=10;//Time in ticks between each "oomph" sound if the player repeatedly tries to cause it.
 
-	//Recording
-	private Direction recordedMove;
-
 	//Loading/Saving/Progressing-through-levels
 	private boolean isLastLevel;
 
-	
 	/**
 	 * This module handles the maze, collision, actors and inventory.
 	 * Loads a maze of the given number. Completely resets every time a maze is loaded.
@@ -71,12 +60,10 @@ public class Maze {
 		currentTreasureLeft=toLoad.properties.chipsInLevel;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
-		exitList=new ArrayList<>();
 		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
 		timeRemaining = toLoad.properties.timeLimit;
 		oomphCounter=0;
-		recordedMove=null;
 		System.out.println("Loaded arbitrary values");
 		
 		//Load board
@@ -107,10 +94,6 @@ public class Maze {
 	
 	public Cell[][] getBoard(){
 		return board;
-	}
-
-	public  int getBoardSize() {
-	  	return board.length;
 	}
 	
 	/**
@@ -150,7 +133,6 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
-		recordedMove=null;//For Mel's original method of recording - Deprecate if moving to another method.
 		Direction playerActuallyMoved=null;
 		boolean creatureMoved=false;
 
@@ -186,7 +168,6 @@ public class Maze {
 						soundEvent="move";
 
 			player.move(movementDirection);
-			recordedMove=movementDirection;
 			playerActuallyMoved=movementDirection;
 		} else if(!player.getIsMoving() && movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
 			if(isWalkingIntoDoor) 
@@ -219,17 +200,7 @@ public class Maze {
 
 			if(npc.getName().equals("spider")){//If it's a "spider"
 				npc.setHasJustMoved(false);
-				if(!MONSTERS_USE_PATHS){
-				//Low complexity: simple, just patrol north-to-south and turn around if you hit something.
-				if(!npc.getIsMoving()){//If not moving,
-					creatureMoved=true;
-					if(isMoveValid(npc, npc.getDirection().getDirection()) && !NPCBlocksPath(getCoordinateFromDir(npc, npc.getDirection().getDirection()))){//If the move's valid (checks terrain AND NPCs)
-						npc.move(npc.getDirection());//Keep moving if it's clear!
-					} else{//If it's not clear, turn the other way!
-						npc.move(reverseDir(npc.getDirection()));
-					}
-				}
-				} else {//High complexity - creatures will use "movement paths"!
+				//High complexity - creatures will use "movement paths"!
 					if (!npc.getIsMoving()){//If not moving, we need to pick a new direction to move in.
 						if (npc.isAtEndOfSegment())
 							npc.advanceSegment();//If at the end of the segment, immediately proceed to the next
@@ -244,8 +215,6 @@ public class Maze {
 					else//If the next move isn't valid, then turn around 180 degrees!
 						npc.reverseMovementDirection();
 				}
-				}
-
 			}
 		}
 
@@ -331,31 +300,6 @@ public class Maze {
 		
 		return(board[xToCheck][yToCheck]);
 	}
-
-	/**
-	 * From a given actor and a given direction (as a point) return a poitn signifying the coordinates of the new cell
-	 * @param a The actor whose coordinates are the starting point
-	 * @param p A Point representing the change in x/y coordinates from the actor's current position
-	 * @return
-	 */
-	public Point getCoordinateFromDir(Actor a, Point p){
-		Cell newCell=getCellFromDir(a,p);
-		return new Point(newCell.getX(),newCell.getY());
-	}
-
-	public Direction reverseDir(Direction d){
-		switch(d){
-			case LEFT:
-				return Direction.RIGHT;
-			case RIGHT:
-				return Direction.LEFT;
-			case UP:
-				return Direction.DOWN;
-			case DOWN:
-				return Direction.UP;
-		}
-		return null;//Should never get here!
-	}
 	
 	/**
 	 * Given a character and a direction, check if it's a valid or invalid move.
@@ -415,7 +359,6 @@ public class Maze {
 		if(NPCBlocksPath(new Point(c.getX(),c.getY()))){//If anything's in the way, then
 			for(Actor a:creatures) {//For every NPC - we need to check all of them after all.
 				if (a.getX() == c.getX() && a.getY() == c.getY()){//If it's on the tile we're looking at
-					System.out.println("[DEBUG]Found an NPC blocking our path on the tile x:"+a.getX()+", y:"+a.getY()+", name:"+a.getName());
 					if (a.blocksMovement() && !a.isPushable)
 						return false;//If we can't get past it, immediately return false.
 					else if (a.isPushable()) {
@@ -468,12 +411,5 @@ public class Maze {
 		this.timeRemaining = timeRemaining;
 	}
 
-	/**
-	 * Returns the direction the player successfully started to move in, or null if they didn't.
-	 * @return
-	 */
-	public Direction getPlayerMovementForRecording(){
-		return recordedMove;
-	}
 
 }
