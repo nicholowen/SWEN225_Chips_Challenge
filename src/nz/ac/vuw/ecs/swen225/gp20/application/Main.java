@@ -24,7 +24,7 @@ public class Main {
     private Direction direction = null;
     private boolean replaying = false;
 
-    private int fps = 40;
+    private int speed = 300;
     private int introCounter;
     private int currentState;
 
@@ -189,7 +189,7 @@ public class Main {
      */
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
-        RecordAndPlay.setPlaybackSpeed(fps);
+        RecordAndPlay.setPlaybackSpeed(speed);
         RecordAndPlay.runReplay(this);
         RecordAndPlay.resetRecording();
     }
@@ -255,23 +255,23 @@ public class Main {
     }
 
     /**
-     * Set refresh-rate of replay in frames per second, used to determine speed of
-     * replaying a recording.
+     * Set speed used for replaying a recording. (higher number -> longer wait -> slower replay)
      *
-     * @param fps frames per second.
+     * @param speed  - milliseconds to wait
      */
     public void setSpeed(int speed) {
-        this.fps = speed;
+        this.speed = speed;
     }
 
     /**
-     * Gets refresh-rate of replay in frames per second.
+     * Get speed used for replaying a recording. (higher number -> longer wait -> slower replay)
      *
-     * @return fps frames per second.
+     * @return speed - milliseconds to wait 
      */
-    public int getFPS() {
-        return this.fps;
+    public int getSpeed() {
+        return this.speed;
     }
+
 
     /**
      * Records direction made by player while recording.
