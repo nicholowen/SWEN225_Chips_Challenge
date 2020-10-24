@@ -7,15 +7,13 @@ import java.awt.image.BufferedImage;
 
 /**
  * Handles the intro fade in - fade out screen with team logo.
- * <p>
- * Fade algorithm credit: Zequnyu - https://github.com/zequnyu
  *
+ * Fade algorithm credit: Zequnyu - https://github.com/zequnyu
  * @author Owen Nicholson 300130653
  */
 public class IntroState {
 
   Assets assets;
-
   BufferedImage logo;
 
   private int alpha;
@@ -26,12 +24,15 @@ public class IntroState {
     init();
   }
 
+  /**
+   * Sets the logo image to be drawn.
+   */
   private void init() {
     this.logo = assets.getAsset("logo")[0][0];
   }
 
   /**
-   * Changes the alpha channel used by the draw method.
+   * Changes the alpha channel used by the draw method - fade and length is time in ticks.
    * Low alpha = transparent, high alpha = opaque
    */
   public void update() {
@@ -52,9 +53,7 @@ public class IntroState {
   }
 
   public void draw(Graphics g) {
-//    super.paintComponent(g);
     g.drawImage(logo, 0, 0, null);
-    //draws black transparent/opaque rectangle over the logo
     g.setColor(new Color(0, 0, 0, alpha));
     g.fillRect(0, 0, logo.getWidth(), logo.getHeight());
   }

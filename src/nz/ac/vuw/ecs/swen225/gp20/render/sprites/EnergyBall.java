@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -10,15 +11,11 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class EnergyBall extends Sprite {
+public class EnergyBall {
 
+  Animation animation = new Animation();
 
   public EnergyBall(Assets assets) {
-
-    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
-
-    int width = 64;
-    int height = 64;
 
     // calls on asset class to get the frames for this object.
     animation.setFrames(assets.getAsset("energy")[0]);
@@ -35,7 +32,6 @@ public class EnergyBall extends Sprite {
 
   /**
    * retrieves the image for the current frame it's in
-   *
    * @return Current animation frame
    */
   public BufferedImage getImage() {

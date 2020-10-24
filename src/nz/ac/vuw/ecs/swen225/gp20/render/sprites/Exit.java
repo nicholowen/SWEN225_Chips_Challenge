@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -10,20 +11,12 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class Exit extends Sprite {
+public class Exit {
 
+  Animation animation = new Animation();
   BufferedImage[] sprites;
-  int x, y;
 
-  public Exit(Assets assets, int x, int y) {
-
-    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
-
-    int width = 64;
-    int height = 64;
-
-    this.x = x;
-    this.y = y;
+  public Exit(Assets assets) {
 
     // calls on asset class to get the frames for this object.
     sprites = assets.getAsset("exit")[0];
@@ -47,24 +40,5 @@ public class Exit extends Sprite {
   public BufferedImage getImage() {
     return animation.getFrame();
   }
-
-  /**
-   * Get x coordinate of this object (same as the corresponding cell)
-   *
-   * @return x
-   */
-  public int getX() {
-    return x;
-  }
-
-  /**
-   * Get y coordinate of this object (same as the corresponding cell)
-   *
-   * @return y
-   */
-  public int getY() {
-    return y;
-  }
-
 }
 

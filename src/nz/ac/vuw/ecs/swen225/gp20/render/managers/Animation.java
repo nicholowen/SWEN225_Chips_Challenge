@@ -3,13 +3,13 @@ package nz.ac.vuw.ecs.swen225.gp20.render.managers;
 import java.awt.image.BufferedImage;
 
 /**
- * Each sprite object gets one of these classes.
+ * Each sprite object gets and instance of this class.
  * Sets the frame of the image depending on the counter (updated every tick).
  * Delay represents the number of ticks it will take to set the next frame.
- * <p>
+ *
  * Credit: Zequnyu - https://github.com/zequnyu
  *
- * @author Owen Nicholosn 300130635
+ * @author Owen Nicholson 300130635
  */
 public class Animation {
 
@@ -66,7 +66,7 @@ public class Animation {
   }
 
   /**
-   * Increments the frame number of the animation depending on the delay.
+   * Increments the frame number of the animation depending on the tick delay.
    * Will revert back to zero to count again when this happens.
    */
   public void update() {
@@ -98,7 +98,7 @@ public class Animation {
   /**
    * Gets the image set by the setImage(), a singular image for non-animated objects
    *
-   * @return a 'permanent' image set by the panel.
+   * @return a 'permanent' image set by the sprite object.
    */
   public BufferedImage getImage() {
     return image;

@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Cell;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -10,13 +11,12 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class WallTile extends Sprite {
+public class WallTile {
 
+  Animation animation = new Animation();
   Assets assets;
 
   public WallTile(Assets assets) {
-
-    super();
     this.assets = assets;
     animation.setDelay(-1);
 
@@ -36,11 +36,10 @@ public class WallTile extends Sprite {
     n = e = s = w = false;
     BufferedImage[] img = assets.getAsset("wall")[0];
     //checks to see if the neighbouring tile is a wall or a door (walls link up to doors)
-    if (north != null && (getInfo("name", north).equals("wall") || getInfo("name", north).equals("door"))) n = true;
-    if (east != null && (getInfo("name", east).equals("wall") || getInfo("name", east).equals("door"))) e = true;
-    if (south != null && (getInfo("name", south).equals("wall") || getInfo("name", south).equals("door"))) s = true;
-    if (west != null && (getInfo("name", west).equals("wall") || getInfo("name", west).equals("door"))) w = true;
-
+    if (north != null && (north.getName().equals("wall") || north.getName().equals("door"))) n = true;
+    if (east  != null && ( east.getName().equals("wall") ||  east.getName().equals("door"))) e = true;
+    if (south != null && (south.getName().equals("wall") || south.getName().equals("door"))) s = true;
+    if (west  != null && ( west.getName().equals("wall") ||  west.getName().equals("door"))) w = true;
 
     //unsure if this is going to work as it is giving me warnings
     if (n && !e && s && !w) animation.setImage(img[0]);

@@ -37,12 +37,11 @@ public class MapPane {
   private Cell[][] exit = new Cell[11][11];
   private Cell[][] exitLock = new Cell[11][11];
   private Cell[][] info = new Cell[11][11];
+
+  private Cell[][] surround = new Cell[11][11];
+
   private Actor[][] mobs = new Actor[11][11];
   private Actor[][] sunken = new Actor[11][11];
-
-  private ActorSprite[][] testing = new ActorSprite[11][11];
-
-//  private Actor[][] mobMazePosition;
 
   private ActorSprite playerSprite;
 
@@ -51,7 +50,7 @@ public class MapPane {
   private HashMap<Cell, HoleTile> holeObjects = new HashMap<>();
   private HashMap<Cell, Door> doorObjects = new HashMap<>();
   private HashMap<Cell, EnergyBall> energyObjects = new HashMap<>();
-  private HashMap<Cell, KeyCard> keyObjects = new HashMap<>();
+  private HashMap<Cell, Key> keyObjects = new HashMap<>();
 
   private HashMap<Actor, ActorSprite> actorObjects;
 
@@ -60,11 +59,9 @@ public class MapPane {
   private ExitLock exitLockOb;
   private Exit exitOb;
 
-  //transition offset
+  //Tile move transition offset
   int offsetX = 0;
   int offsetY = 0;
-
-
 
   public MapPane(Assets assets) {
     this.assets = assets;
@@ -75,7 +72,6 @@ public class MapPane {
     this.bg = assets.getAsset("mapBackground")[0][0];
     this.floorAsset = assets.getAsset("floor")[0][0];
     this.goopAsset = assets.getAsset("goop")[0][0];
-    this.infoAsset = assets.getAsset("info")[0][0];
   }
 
   /**
@@ -86,9 +82,6 @@ public class MapPane {
    * @param actors Array including the player and all other mobs in game (hostile/neutral)
    */
   public void initAnimationObjects(Cell[][] cells, Actor[] actors) {
-
-//    mobMazePosition = new Actor[cells.length][cells[0].length];
-    System.out.println("ACTOR LENGTH: " + actors.length);
     this.playerSprite = new ActorSprite(actors[actors.length-1], assets);
     actorObjects = new HashMap<>(); // SAFEGUARD: need to initialise it here in case this method gets called multiple times
     for(int m = 0; m < actors.length - 1; m++){
@@ -117,7 +110,7 @@ public class MapPane {
               energyObjects.put(cells[i][j], eb);
               break;
             case "key":
-              KeyCard kc = new KeyCard(assets, cells[i][j].getColor());
+              Key kc = new Key(assets, cells[i][j].getColor());
               keyObjects.put(cells[i][j], kc);
               break;
             case "door":
@@ -130,13 +123,13 @@ public class MapPane {
               doorObjects.put(cells[i][j], door);
               break;
             case "exit":
-              exitOb = new Exit(assets, i, j);
+              exitOb = new Exit(assets);
               break;
             case "exit lock":
-              exitLockOb = new ExitLock(assets, i, j);
+              exitLockOb = new ExitLock(assets);
               break;
             case "info":
-              infoOb = new Info(assets, i, j, infoAsset);
+              infoOb = new Info(assets);
               break;
             default:
               break;
@@ -148,12 +141,12 @@ public class MapPane {
   }
 
   /**
-   * Finds the neighbouring cells of a wall (all cardinal directions).
+   * Finds the neighbouring cells of a cell (all cardinal directions).
    *
    * @param cells All map cells.
-   * @param x     the x coordinate of the main cell being checked.
-   * @param y     the y coordinate of the main cell being checked.
-   * @return A cell array containing between 1 and 4 cells which are adjacent to the main cell in north, east, south, west order..
+   * @param x     the x coordinate of the cell being checked.
+   * @param y     the y coordinate of the cell being checked.
+   * @return A cell array containing between 1 and 4 cells which are adjacent to the main cell in north, east, south, west order.
    */
   private Cell[] getWallNeighbours(Cell[][] cells, int x, int y) {
     Cell[] neighbours = new Cell[4];
@@ -176,19 +169,17 @@ public class MapPane {
       neighbours[0] = null;
       neighbours[2] = cells[y + 1][x];
     }
-
     return neighbours;
   }
 
   /**
-   * Gets an 11x11 grid around the player. Will keep the player centered on the screen.
+   * Gets an 11x11 grid around the player so everything can be updated and later drawn.
+   * Will keep the player centered on the screen.
    *
    * @param tuple  render tuple for retrieving the game board
    * @param player The player's character - for obtaining current position
-   * @return 9x9 Cell array
    */
-  private Cell[][] getSurround(RenderTuple tuple, ActorSprite player) {
-    Cell[][] ret = new Cell[11][11]; //a new array to store all the cells around the player
+  private void setSurround(RenderTuple tuple, ActorSprite player) {
     int posX = player.getX();
     int posY = player.getY();
 
@@ -197,37 +188,18 @@ public class MapPane {
     for (int i = 0; i < 11; i++) {
       int y = posY - 5;
       for (int j = 0; j < 11; j++) {
-        if ((x >= 0 && x < tuple.getCells().length) && (y >= 0 && y < tuple.getCells()[0].length)) {
-          ret[i][j] = tuple.getCells()[x][y];
-        } else {
-          ret[i][j] = null;
-        }
-        y++;
-      }
-      x++;
-    }
-    return ret;
-  }
-
-  private void setVisibleMobs(RenderTuple tuple, ActorSprite player) {
-    Actor[][] ret = new Actor[11][11];
-    int posX = player.getX();
-    int posY = player.getY();
-
-    int x = posX - 5;
-    for (int i = 0; i < 11; i++) {
-      int y = posY - 5;
-      for (int j = 0; j < 11; j++) {
-        if ((x >= 0 && x <= tuple.getCells().length) && (y >= 0 && y <= tuple.getCells()[0].length)) {
-          for(Actor actor : actorObjects.keySet()){
-            if(actor.getX() == x && actor.getY() == y){
-//              actorObjects.get(actor).setVisiblePos(i, j);
-              if(actor.getName().equals("dirt") && !actor.isPushable()) {
-                sunken[i][j] = actor;
-              }
-              else mobs[i][j] = actor;
+        for(Actor actor : actorObjects.keySet()){
+          if(actor.getX() == x && actor.getY() == y){
+            if(actor.getName().equals("dirt") && !actor.isPushable()) {
+              sunken[i][j] = actor;
             }
+            else mobs[i][j] = actor;
           }
+        }
+        if ((x >= 0 && x < tuple.getCells().length) && (y >= 0 && y < tuple.getCells()[0].length)) {
+          surround[i][j] = tuple.getCells()[x][y];
+        } else {
+          surround[i][j] = null;
         }
         y++;
       }
@@ -243,20 +215,13 @@ public class MapPane {
    * @param tuple tuple containing Cells and actors
    */
   public void update(RenderTuple tuple) {
-    //update player with direction
-//    player = tuple.getActors()[0];
     playerSprite.update();
 
     for(ActorSprite sprites : actorObjects.values()){
-      sprites.setTuple(tuple);
       sprites.update();
     }
-
-    //TODO: add player animation - might need to combine mobs and player together.
-
     //update all mobs with direction (this can probably be condensed as all actors)
-    Cell[][] surround = getSurround(tuple, playerSprite);
-    setVisibleMobs(tuple, playerSprite);
+    setSurround(tuple, playerSprite);
 
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
@@ -324,15 +289,13 @@ public class MapPane {
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
-   * The extra lines are for transition frames  - they are drawn off-screen and transition in
+   * The extra lines are for transition frames  - they are 'drawn' off-screen and transition in
    * as the player moves.
    *
    * @param g graphics object
    */
 //  @Override
   public void draw(Graphics g) {
-//    super.paintComponent(g);
-
     int speed = 12;
     // transition animation - draws all objects depending on offset (speed)
     if (playerSprite != null && playerSprite.getIsMoving()) {
@@ -354,10 +317,11 @@ public class MapPane {
           break;
       }
     } else {
+      //reset offsets after each move.
       offsetX = offsetY = 0;
     }
 
-
+    //Size of each tile.
     int x = 64;
     int y = 64;
 
@@ -410,7 +374,8 @@ public class MapPane {
           actorObjects.get(sunken[i][j]).draw(g, x * i + offsetX - x, y * j + offsetY - y);
         }
       }
-    }for (int i = 0; i < 11; i++) {
+    }
+    for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
         if (mobs[i][j] != null) {
           actorObjects.get(mobs[i][j]).draw(g, x * i + offsetX - x, y * j + offsetY - y);
@@ -421,7 +386,6 @@ public class MapPane {
     //draws player last to remain on top and center of screen (uses absolute positioning)
     if (playerSprite != null) playerSprite.draw(g, 4 * 64, 4 * 64);
 
-    //clears lists for next frame
     clearLists();
 
   }
@@ -441,8 +405,6 @@ public class MapPane {
     info = new Cell[11][11];
     mobs = new Actor[11][11];
     sunken = new Actor[11][11];
-    testing = new ActorSprite[11][11];
 
   }
-
 }

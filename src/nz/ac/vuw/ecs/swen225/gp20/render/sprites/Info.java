@@ -1,35 +1,26 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
 /**
- * Represents the Information screen on the 'score panel'.
- * Get's updated and information rendered when the player is on the info cell.
+ * Represents the info tile.
  *
  * @author Owen Nicholson 300120635
  */
 public class Info {
-  private BufferedImage image;
-  private int x, y;
 
-  public Info(Assets assets, int x, int y, BufferedImage image) {
-    this.x = x;
-    this.y = y;
-    this.image = image;
+  Animation animation = new Animation();
+
+  public Info(Assets assets) {
+    animation.setImage(assets.getAsset("info")[0][0]);
   }
 
-  public int getX() {
-    return x;
-  }
-
-  public int getY() {
-    return y;
-  }
 
   public BufferedImage getImage() {
-    return image;
+    return animation.getImage();
   }
 
 }

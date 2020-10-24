@@ -7,6 +7,11 @@ import java.io.IOException;
 /**
  * Audio Player - plays the music when constructed (i.e. the game starts), then loops the main theme.
  * Will play the sound for the corresponding sound event depending on the string provided.
+ *
+ * Audio clip credit: SubspaceAudio https://opengameart.org/content/512-sound-effects-8-bit-style
+ * Main music courtesy of Lex Ashurst-Smoult.
+ *
+ * @author Owen Nicholson 300130635
  */
 public class Audio {
 
@@ -21,7 +26,7 @@ public class Audio {
   /**
    * Plays the sound effect.
    *
-   * @param soundEvent String representing the sound
+   * @param soundEvent String representing the sound.
    */
   public void updateButtons(String soundEvent) {
     buttonSounds(soundEvent);
@@ -32,12 +37,11 @@ public class Audio {
   }
 
   /**
-   * Plays the sound for the particular sound event.
+   * Plays the audio for the particular button event.
    *
    * @param action String representing the sound
    */
   public void buttonSounds(String action) {
-//    System.out.println(action);
 
     String file;
 
@@ -65,9 +69,11 @@ public class Audio {
     play(file);
   }
 
+  /**
+   * Plays the audio for game events - moving, collecting items etc.
+   * @param action String representing the sound.
+   */
   public void gameSounds(String action) {
-//    System.out.println(action);
-
     String file = null;
     if (action != null) {
       file = action + ".wav";
@@ -77,27 +83,10 @@ public class Audio {
     }
   }
 
-
   /**
-   * Dedicated method for playing the theme music. It loops continuously (until the game is exited).
+   * Plays the sound effect based on event.
+   * @param file The file name of the audio clip.
    */
-  public void playMusic() {
-    try {
-      AudioInputStream audioIn;
-      audioIn = AudioSystem.getAudioInputStream(new File(path, "main_theme.wav"));
-      Clip clip = AudioSystem.getClip();
-      clip.open(audioIn);
-      clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-      gainControl.setValue(-25.0f); // reduce volume (decibels)
-
-      clip.start();
-    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-      e.printStackTrace();
-    }
-  }
-
   private void play(String file){
 
     try {
@@ -118,5 +107,23 @@ public class Audio {
 
   }
 
+  /**
+   * Dedicated method for playing the theme music. It loops continuously (until the game is exited).
+   */
+  public void playMusic() {
+    try {
+      AudioInputStream audioIn;
+      audioIn = AudioSystem.getAudioInputStream(new File(path, "main_theme.wav"));
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioIn);
+      clip.loop(Clip.LOOP_CONTINUOUSLY);
 
+      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+      gainControl.setValue(-25.0f); // reduce volume (decibels)
+
+      clip.start();
+    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+      e.printStackTrace();
+    }
+  }
 }

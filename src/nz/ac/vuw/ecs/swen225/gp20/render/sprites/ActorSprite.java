@@ -3,16 +3,20 @@ package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Represents an moving object. I.e. player, hostile mob, movable block etc.
+ * Represents a moving object. i.e. player, hostile mob, movable block.
+ * This class sets the image the sprite uses for it's direction, and also draws itself
+ * (rather than being drawn from the Map). Uses an offset to draw movement outside of the normal tile transitions.
  */
-public class ActorSprite extends Sprite {
+public class ActorSprite {
 
+  Animation animation = new Animation();
   private BufferedImage[][] sprites;
   private Actor actor;
 
@@ -20,12 +24,10 @@ public class ActorSprite extends Sprite {
   private int offsetY;
   private boolean isPushable;
   private Assets assets;
-  private RenderTuple tuple;
 
-  int speed = 0; //offset which draws the character a number of pixels in the direction it is facing/travelling
+  int speed; //offset which draws the character a number of pixels in the direction it is facing/travelling
 
   public ActorSprite(Actor actor, Assets assets) {
-    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
     this.isPushable = actor.isPushable();
     this.actor = actor;
     this.assets = assets;
@@ -94,14 +96,6 @@ public class ActorSprite extends Sprite {
   }
 
   /**
-   * Sets the tuple for this object - sole purpose to retrieve
-   * @param tuple
-   */
-  public void setTuple(RenderTuple tuple){
-    this.tuple = tuple;
-  }
-
-  /**
    * retrieves the image for the current frame it's in
    *
    * @return Current animation frame
@@ -146,6 +140,7 @@ public class ActorSprite extends Sprite {
    */
   public void draw(Graphics g, int x, int y){
     //resets the offset when the character has started it's move cycle.
+    // isMoving boolean is unreliable with the hostile actor.
     if(actor.getName().equals("spider") && actor.hasJustMoved()){
       offsetX = 0;
       offsetY = 0;
@@ -169,9 +164,9 @@ public class ActorSprite extends Sprite {
       }
     }
     else{
-        offsetX = 0;
-        offsetY = 0;
-
+      // If the actor has stop moving, reset the offsets.
+      offsetX = 0;
+      offsetY = 0;
     }
     if(!actor.getName().equals("player")) {
       g.drawImage(getImage(), x + offsetX, y + offsetY, null);

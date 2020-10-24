@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -9,24 +10,17 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class ExitLock extends Sprite {
+public class ExitLock {
 
+  Animation animation = new Animation();
   BufferedImage[] sprites;
-  int x, y;
 
-  public ExitLock(Assets assets, int x, int y) {
-
-    super(); //Creates Sprite object for this, in turn creating an animation object which it can access.
-
-
-    this.x = x;
-    this.y = y;
+  public ExitLock(Assets assets) {
 
     // calls on asset class to get the frames for this object.
     sprites = assets.getAsset("exitLock")[0];
     animation.setFrames(sprites);
     animation.setDelay(2);
-
   }
 
   /**
@@ -45,22 +39,5 @@ public class ExitLock extends Sprite {
     return animation.getFrame();
   }
 
-  /**
-   * Get x coordinate of this object (same as the corresponding cell)
-   *
-   * @return x
-   */
-  public int getX() {
-    return x;
-  }
-
-  /**
-   * Get y coordinate of this object (same as the corresponding cell)
-   *
-   * @return y
-   */
-  public int getY() {
-    return y;
-  }
 
 }

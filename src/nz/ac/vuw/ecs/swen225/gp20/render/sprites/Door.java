@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
@@ -11,17 +12,13 @@ import java.awt.image.BufferedImage;
  *
  * @author Owen Nicholson 300120635
  */
-public class Door extends Sprite {
+public class Door {
 
-  // TODO: Make this similar to the other animated objects, including update()
-  //  method. Animate door opening or closing depending on when it was opened/closed.
-
+  Animation animation = new Animation();
   boolean vertical;
   boolean isSolid;
 
   public Door(Assets assets, String c, boolean vertical, boolean isSolid) {
-
-    super();
 
     this.isSolid = isSolid;
 
@@ -56,8 +53,11 @@ public class Door extends Sprite {
 
   }
 
+  /**
+   * Updates the frame of the current animation.
+   * If it is closed it won't animate. If open, will only animate once.
+   */
   public void update() {
-
     if (!isSolid) {
       animation.setDelay(1);
       animation.setSingleAnimation(true);
@@ -65,14 +65,26 @@ public class Door extends Sprite {
     animation.update();
   }
 
+  /**
+   * Gets the current frame of animation.
+   * @return BufferedImage of the current frame.
+   */
   public BufferedImage getImage() {
     return animation.getFrame();
   }
 
+  /**
+   * Checks to see if it is a vertically aligned door.
+   * @return True if the door has a wall above or below it.
+   */
   public boolean isVertical() {
     return vertical;
   }
 
+  /**
+   * Updates the sprite to it's new status.
+   * @param isSolid True if the door is solid (un-walkable)
+   */
   public void setIsSolid(boolean isSolid){
     this.isSolid = isSolid;
   }

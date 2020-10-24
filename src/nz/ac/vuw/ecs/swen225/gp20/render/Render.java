@@ -14,6 +14,14 @@ import java.util.HashMap;
 
 /**
  * Main Render Module class. Simply stores the Drawing panels and performs updates to both every tick.
+ * States: - 0: Intro State
+ *         - 1: Main Menu
+ *         - 2: Level Select
+ *         - 3: Pause
+ *         - 4: Main Game State
+ *         - 5: You Died State
+ *         - 6: Win State
+ *         - 7: Game Information
  *
  * @author Owen Nicholson 300130653
  */
@@ -50,7 +58,7 @@ public class Render {
   /**
    * Updates the graphics based on the player position and state of the game (time inventory etc)
    *
-   * @param tuple         Contains the current state of the cells and the player
+   * @param tuple Contains the current state of the cells and the player
    * @param timeRemaining self explanatory
    */
   public void update(RenderTuple tuple, int timeRemaining, String event) {
@@ -99,7 +107,7 @@ public class Render {
   /**
    * Draws on the provided graphics objects.
    *
-   * @param g         Graphics object of the main drawing object.
+   * @param g Graphics object of the main drawing object.
    * @param gameState Integer representing game state.
    */
   public void draw(Graphics g, int gameState) {
@@ -133,7 +141,6 @@ public class Render {
         break;
     }
   }
-
 
   /**
    * Initialises all the assets in the game.

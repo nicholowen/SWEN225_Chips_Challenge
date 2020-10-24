@@ -1,20 +1,21 @@
 package nz.ac.vuw.ecs.swen225.gp20.render.sprites;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.managers.Animation;
 import nz.ac.vuw.ecs.swen225.gp20.render.managers.Assets;
 
 import java.awt.image.BufferedImage;
 
 /**
- * Represents a Key Card. This Class contains the animation frames of the object,
- * and the delay - the time it takes (number of ticks) for the next frame to be fetched.
+ * Represents a Key Card.
+ * Key can be different colors and will use the correct images from the provided asset.
  *
  * @author Owen Nicholson 300120635
  */
-public class KeyCard extends Sprite {
+public class Key {
 
+  Animation animation = new Animation();
 
-  public KeyCard(Assets assets, String c) {
-    super();
+  public Key(Assets assets, String c) {
 
     int index = 0;
     switch (c) {
@@ -35,9 +36,8 @@ public class KeyCard extends Sprite {
 
     }
     // calls on asset class to get the frames for this object.
-    animation.setFrames(assets.getAsset("keycard")[index]);
+    animation.setFrames(assets.getAsset("key")[index]);
     animation.setDelay(4);
-
   }
 
   /**

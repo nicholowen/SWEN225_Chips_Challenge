@@ -22,21 +22,13 @@ public class Assets {
   private static BufferedImage[][] GOOP;
   private static BufferedImage[][] WALL;
   private static BufferedImage[][] DOOR;
-  private static BufferedImage[][] HOLE;
+  private static BufferedImage[][] WATER;
   private static BufferedImage[][] VDOOR;
   private static BufferedImage[][] ENERGYBALL;
-  private static BufferedImage[][] KEYCARD_G;
+  private static BufferedImage[][] KEY;
   private static BufferedImage[][] INFO;
   private static BufferedImage[][] EXITLOCK;
   private static BufferedImage[][] EXIT;
-
-  //Score/info gifs
-  private static BufferedImage[][] DIGITS;
-  private static BufferedImage[][] INVENTORY;
-  private static BufferedImage[][] FONT;
-  //energybar
-  private static BufferedImage[][] ENERGYBARSHADE;
-  private static BufferedImage[][] ENERGYBAR;
 
   //mob sprites
   private static BufferedImage[][] PLAYER;
@@ -63,38 +55,54 @@ public class Assets {
   private static BufferedImage[][] GAMEOVERBUTTONS;
   private static BufferedImage[][] INFORMATIONBUTTONS;
 
+  //Information panel
+  private static BufferedImage[][] DIGITS;
+  private static BufferedImage[][] INVENTORY;
+  private static BufferedImage[][] FONT;
+  private static BufferedImage[][] ENERGYBARSHADE;
+  private static BufferedImage[][] ENERGYBAR;
   private static BufferedImage[][] INFOPAUSEBUTTON;
   private static BufferedImage[][] RECORDBUTTON;
   private static BufferedImage[][] CONTROLBUTTONS;
+  private static BufferedImage[][] RECORDING;
+  private static BufferedImage[][] REPLAYING;
 
 
   public Assets() {
     init();
   }
 
+  /**
+   * Initialises all assets in game to avoid in-game file loading.
+   */
   private void init() {
 
+    //Logo for intro screen
+    LOGO = loadGif(path, "logo.gif", 892, 576);
+
+    //Environment
     FLOOR = loadGif(path, "floortile.gif", 64, 64);
-    GOOP = loadGif(path, "goop.gif", 64, 64);
+
     WALL = loadGif(path, "walltiles.gif", 64, 64);
     DOOR = loadGif(path, "doorsheet.gif", 64, 64);
-    HOLE = loadGif(path, "hole.gif", 64, 64);
+    WATER = loadGif(path, "hole.gif", 64, 64);
     VDOOR = loadGif(path, "vertdoorsheet.gif", 64, 106);
-    ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
-    KEYCARD_G = loadGif(path, "keycardsprites.gif", 64, 64);
-    HOVERINACTIVE = loadGif(path, "hover_inactive.gif", 64, 64);
-    HOVERACTIVE = loadGif(path, "hover_active.gif", 64, 64);
+    GOOP = loadGif(path, "goop.gif", 64, 64);
     INFO = loadGif(path, "info.gif", 64, 64);
     EXITLOCK = loadGif(path, "exitlock.gif", 64, 64);
     EXIT = loadGif(path, "exit.gif", 64, 64);
-    DIGITS = loadGif(path, "digits.gif", 32, 45);
-    INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
-    FONT = loadGif(path, "font.gif", 9, 12);
-    ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22);
-    ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22);
+
+    //Items
+    ENERGYBALL = loadGif(path, "energysprite.gif", 64, 64);
+    KEY = loadGif(path, "keycardsprites.gif", 64, 64);
+
+    //Actors
     PLAYER = loadGif(path, "playersheet.gif", 64, 64);
     HOSTILEMOB = loadGif(path, "hostilesheet.gif", 64, 64);
-    LOGO = loadGif(path, "logo.gif", 892, 576);
+    HOVERINACTIVE = loadGif(path, "hover_inactive.gif", 64, 64);
+    HOVERACTIVE = loadGif(path, "hover_active.gif", 64, 64);
+
+    //Backgrounds
     MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
     SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
     MENU = loadGif(path, "menu.gif", 892, 576);
@@ -104,8 +112,7 @@ public class Assets {
     WIN = loadGif(path, "winBackground.gif", 892, 576);
     INFORMATION = loadGif(path, "informationBackground.gif", 892, 576);
 
-
-
+    //Buttons
     MENUBUTTONS = loadGif(path, "menuButtons.gif", 159, 51);
     PAUSEBUTTONS = loadGif(path, "pauseButtons.gif", 159, 51);
     LEVELSELECTBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
@@ -116,13 +123,22 @@ public class Assets {
     CONTROLBUTTONS = loadGif(path, "controlButtons.gif", 18, 18);
     INFORMATIONBUTTONS = loadGif(path, "informationButtons.gif", 159, 51);
 
-
+    //In-Game Information
+    DIGITS = loadGif(path, "digits.gif", 32, 45);
+    INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
+    FONT = loadGif(path, "font.gif", 9, 12);
+    ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22);
+    ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22);
+//    RECORDING = loadGif(path, "recording.gif", 16, 16);
+//    REPLAYING = loadGif(path, "replaying.gif", 16, 16);
 
   }
 
 
   /**
    * Gets a sprite sheet from the resources folder and splits them up into individual images.
+   * Rows are used for different directions or colors.
+   * Columns are used for either states or animation frames.
    *
    * @param path directory path
    * @param f    image file name
@@ -170,7 +186,7 @@ public class Assets {
         break;
       case "wall": ret = WALL;
         break;
-      case "hole": ret = HOLE;
+      case "water": ret = WATER;
         break;
       case "door": ret = DOOR;
         break;
@@ -178,7 +194,7 @@ public class Assets {
         break;
       case "energy": ret = ENERGYBALL;
         break;
-      case "keycard": ret = KEYCARD_G;
+      case "key": ret = KEY;
         break;
       case "info": ret = INFO;
         break;
@@ -239,6 +255,10 @@ public class Assets {
       case "recordButton": ret = RECORDBUTTON;
         break;
       case "controlButtons": ret = CONTROLBUTTONS;
+        break;
+      case "recording": ret = RECORDING;
+        break;
+      case "replaying": ret = REPLAYING;
         break;
       default:
         return null;

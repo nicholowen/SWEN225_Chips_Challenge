@@ -8,15 +8,14 @@ import java.nio.Buffer;
 
 /**
  * Represents the menu states the game can be in.
- * States:
- *  0 - Intro
- *  1 - Menu
- *  2 - Levels
- *  3 - Pause
- *  4 - Play
- *  5 - Dead
- *  6 - Win
- *  7 - Information
+ * States: - 0: Intro
+ *         - 1: Menu
+ *         - 2: Levels
+ *         - 3: Pause
+ *         - 4: Play
+ *         - 5: Dead
+ *         - 6: Win
+ *         - 7: Information
  *
  * @author Owen Nicholson 3001130635
  */
@@ -64,7 +63,7 @@ public class State {
       this.currentStateTwo = buttonTwo[0];
       this.currentStateThree = buttonThree[0];
       this.currentStateFive = buttonFive[0];
-    }else if(state == 3){ // 4 buttons active
+    }else if(state == 3){ // 5 buttons active
       this.buttonOne = buttonGraphics[0];
       this.buttonTwo = buttonGraphics[1];
       this.buttonThree = buttonGraphics[2];
@@ -94,7 +93,7 @@ public class State {
   }
 
   /**
-   * Returns the button graphics back to the default state.
+   * Returns the button graphics back to the button state.
    * Has to check if it's null since different states have different number of buttons.
    */
   private void resetButtonStates() {
@@ -130,6 +129,15 @@ public class State {
     }
   }
 
+  /**
+   * Checks to see what the button state is.
+   * If the mouse is over the button, it will receive a 'hover' tag.
+   * If the mouse is pressed, it will receive a 'pressed' tag.
+   *
+   * @param buttonEvent The tag that determines what action state the button is in
+   * @param sheet The image sheet
+   * @return Buffered image of the state the button is in. (highlighted or being pressed).
+   */
   public BufferedImage checkState(String buttonEvent, BufferedImage[] sheet){
     if (buttonEvent.contains("hover")) return sheet[1];
     else if (buttonEvent.contains("pressed")) return sheet[2];

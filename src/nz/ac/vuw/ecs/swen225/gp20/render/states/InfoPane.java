@@ -30,7 +30,7 @@ public class InfoPane {
   private BufferedImage[] info; //array of font images to print out on the information read-out
 
   boolean onInfo; //true if the player is on an info tile
-  boolean recording;
+  boolean recording; //true is game is being recorded.
 
   private BufferedImage[][] font;
 
@@ -39,10 +39,11 @@ public class InfoPane {
   private int energyFilled; //amount of energy filled (an x coordinate to draw the energy bar)
   private BufferedImage energyBarShade;
   private BufferedImage energyBar;
+  private BufferedImage recordingLight;
+  private BufferedImage replayingLight;
 
   private ArrayList<BufferedImage[]> buttonGraphics;
   private BufferedImage[] buttonStates;
-
 
   int gameSize = 576; // the width of the MapPane image (to draw this pane in the correct place)
 
@@ -52,7 +53,8 @@ public class InfoPane {
   }
 
   /**
-   * Initialises the background - more coming soon...
+   * Initialises the background and all assets associated with this pane.
+   * Also initializes button graphics.
    */
   private void init() {
     this.bg = assets.getAsset("infoBackground")[0][0];
@@ -76,7 +78,6 @@ public class InfoPane {
     for(int i = 0; i < buttonStates.length; i++) {
       buttonStates[i] = buttonGraphics.get(i)[0];
     }
-
   }
 
 
