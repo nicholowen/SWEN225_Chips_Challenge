@@ -38,14 +38,13 @@ public class Main {
     public void play() {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
-
         if (Persistence.getLastSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
         }
-        if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
+        else if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
-            this.loadLvl(1);
+//            this.loadLvl(1);
         }
         while (true) {
             currentState = gui.getGameState();
