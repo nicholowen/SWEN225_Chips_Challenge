@@ -154,8 +154,7 @@ public class GUI extends JPanel implements KeyListener {
                 setGameState(1);
                 break;
             case 3:// pause state
-                setGameState(7); // shows game info
-                lastState = 3;
+                main.saveCurrentState();
                 break;
             case 5: // loss state
                 System.exit(0); // exit the game
@@ -223,8 +222,12 @@ public class GUI extends JPanel implements KeyListener {
             if (gameState == 4) {
                 setGameState(3);
             }
-            if (gameState == 1) {
+            else if (gameState == 1) {
                 lastState = 1;
+                setGameState(7); // show game info (instructions)
+            }
+            else if (gameState == 3) {
+                lastState = 3;
                 setGameState(7); // show game info (instructions)
             }
         });
