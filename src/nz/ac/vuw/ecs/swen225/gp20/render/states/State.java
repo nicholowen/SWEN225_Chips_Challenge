@@ -69,10 +69,12 @@ public class State {
       this.buttonTwo = buttonGraphics[1];
       this.buttonThree = buttonGraphics[2];
       this.buttonFour = buttonGraphics[3];
+      this.buttonFive = buttonGraphics[4];
       this.currentStateOne = buttonOne[0];
       this.currentStateTwo = buttonTwo[0];
       this.currentStateThree = buttonThree[0];
       this.currentStateFour = buttonFour[0];
+      this.currentStateFive = buttonFive[0];
     }else if (state == 2 || state == 5) { // 3 buttons active
       this.buttonOne = buttonGraphics[0];
       this.buttonTwo = buttonGraphics[1];
@@ -100,6 +102,7 @@ public class State {
     if (currentStateTwo != null) this.currentStateTwo = buttonTwo[0];
     if (currentStateThree != null) this.currentStateThree = buttonThree[0];
     if (currentStateFour != null) this.currentStateFour = buttonFour[0];
+    if (currentStateFive != null) this.currentStateFive = buttonFive[0];
   }
 
   /**
@@ -119,8 +122,8 @@ public class State {
          currentStateThree = checkState(buttonEvent, buttonThree);
       } else if (currentStateFour != null && buttonEvent.contains("four")) {
         currentStateFour = checkState(buttonEvent, buttonFour);
-      } else if (currentStateFive != null && buttonEvent.contains("five")) {
-        currentStateFour = checkState(buttonEvent, buttonFour);
+      } else if (currentStateFive != null && buttonEvent.contains("pause")) {
+        currentStateFive = checkState(buttonEvent, buttonFive);
       }
     } else {
       resetButtonStates();
