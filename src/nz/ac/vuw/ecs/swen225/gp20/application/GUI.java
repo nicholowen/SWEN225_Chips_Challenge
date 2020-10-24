@@ -176,7 +176,6 @@ public class GUI extends JPanel implements KeyListener {
                 // no button
                 break;
             case 3:// pause state
-                main.saveCurrentState();
                 setGameState(1); // go to main menu
                 break;
             case 5:// loss state
