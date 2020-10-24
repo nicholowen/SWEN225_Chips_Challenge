@@ -111,6 +111,7 @@ public class GUI extends JPanel implements KeyListener {
                 setGameState(4);
                 break;
             case 6: // win state
+                main.loadUnfinished();
                 setGameState(1);
                 break;
             case 7: // info state
@@ -134,6 +135,7 @@ public class GUI extends JPanel implements KeyListener {
                 setGameState(4); // restart last unfinished level
                 break;
             case 5: // loss state
+                main.loadUnfinished();
                 setGameState(1); // back to main menu
                 break;
             case 6: // win state
@@ -222,6 +224,7 @@ public class GUI extends JPanel implements KeyListener {
                 setGameState(3);
             }
             if (gameState == 1) {
+                lastState = 1;
                 setGameState(7); // show game info (instructions)
             }
         });
