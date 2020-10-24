@@ -16,13 +16,7 @@ public class Maze {
 	private int currentLevel;//Iterate every time a level is complete
 	private int currentTreasureLeft;
 	private int currentTreasureCollected;
-	//private ArrayList<String> playerInventory;
 	private HashMap<String, Integer> playerInventory;
-	
-	//Board logic
-	private int boardHeight;
-	private int boardWidth;
-	private ArrayList<Cell> exitList;
 	
 	//Actor logic
 	private Actor player;//Player character, there is only one.
@@ -32,9 +26,6 @@ public class Maze {
 	//Sound logic
 	private int oomphCounter;//Forces a small delay between "oomph" sounds to stop them from stacking up in a deafening way.
 	private final int oomphDelay=10;//Time in ticks between each "oomph" sound if the player repeatedly tries to cause it.
-
-	//Recording
-	private Direction recordedMove;
 
 	//Loading/Saving/Progressing-through-levels
 	private boolean isLastLevel;
@@ -71,12 +62,10 @@ public class Maze {
 		currentTreasureLeft=toLoad.properties.chipsInLevel;
 		currentTreasureCollected=0;
 		creatures=new ArrayList<>();//Init arraylist that NPCs will be put on
-		exitList=new ArrayList<>();
 		playerInventory=new HashMap<>();//Reset the player's inventory
 		currentLevel=levelToLoad;
 		timeRemaining = toLoad.properties.timeLimit;
 		oomphCounter=0;
-		recordedMove=null;
 		System.out.println("Loaded arbitrary values");
 		
 		//Load board
@@ -150,7 +139,6 @@ public class Maze {
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
 	public RenderTuple tick(Direction movementDirection) {
-		recordedMove=null;//For Mel's original method of recording - Deprecate if moving to another method.
 		Direction playerActuallyMoved=null;
 		boolean creatureMoved=false;
 
@@ -158,7 +146,6 @@ public class Maze {
 		if(oomphCounter>0)//Sound-related. Keeps track of the delay between certain sounds so that they don't stack.
 			oomphCounter--;
 		String soundEvent=null;//For the RenderTuple. Keeps track of whether or not a sound should be played on a given tick. A sound may be "over-written" in theory, but this should never happen in practice.
-		//System.out.println("Maze is running Tick with the direction:"+movementDirection);
 		boolean isWalkingIntoDoor=false;
 		boolean isWalkingIntoExitDoor=false;
 		boolean isCellSolid=false;
@@ -186,7 +173,6 @@ public class Maze {
 						soundEvent="move";
 
 			player.move(movementDirection);
-			recordedMove=movementDirection;
 			playerActuallyMoved=movementDirection;
 		} else if(!player.getIsMoving() && movementDirection!=null && oomphCounter==0){//If there's movement input and it's invalid, play a sound to signify this. Oomphcounter is to stop the sounds from stacking
 			if(isWalkingIntoDoor) 
@@ -466,14 +452,6 @@ public class Maze {
 
 	public void setTimeRemaining(int timeRemaining) {
 		this.timeRemaining = timeRemaining;
-	}
-
-	/**
-	 * Returns the direction the player successfully started to move in, or null if they didn't.
-	 * @return
-	 */
-	public Direction getPlayerMovementForRecording(){
-		return recordedMove;
 	}
 
 }
