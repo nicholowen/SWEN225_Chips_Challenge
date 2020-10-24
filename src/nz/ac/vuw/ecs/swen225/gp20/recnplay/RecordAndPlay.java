@@ -35,15 +35,13 @@ public class RecordAndPlay {
     private static final ArrayList<Integer> actors = new ArrayList<>();
     private static final ArrayList<String> moves = new ArrayList<>();
 
-    private static long defaultSpeed = 300;
-    private static long playbackSpeed = 300; //default speed
+    private static long playbackSpeed;
     private static int remainingTimeAfterRun;
 
     private static boolean isRunning;
     private static boolean currentlyRecording;
 
     private static String saveFile;
-
 
     /**
      * Called by main to start recording
@@ -79,7 +77,7 @@ public class RecordAndPlay {
 
             // build the object and att it to every single tick using time remaining fed from Main
             JsonObjectBuilder builder = Json.createObjectBuilder()
-                    // example output: {"moves": ["UP", "LEFT", "LEFT", "DOWN", "RIGHT"]}
+                    // example output: {moves: [UP, LEFT, LEFT, DOWN, RIGHT]}
                     .add("moves", array)
 
                     // time passed from Main (the final time after running all the moves)
@@ -168,61 +166,49 @@ public class RecordAndPlay {
         actors.clear();
     }
 
-
     /**
      * This method replays the game step by step.
      *
      * @param game Game object
      */
-
-    /*
-        to run this, have a button in GUI or somewhere where main can call
-        RecordAndPlay.setPlaybackSpeed(time) where
-        time:
-            100  = 0.1s (slow)
-            200  = 0.2s
-            500  = 0.5s
-            1000 = 1.0s (fast)
-     */
     public static void playByStep(Main game) throws InterruptedException {
-        if (isRunning && moves.size() > 0) {
-            if (actors.get(0) == 0) {
+        try {
+            if (isRunning && moves.size() > 0) {
 
                 // if the first actor is the player
-                game.runMove(moves.get(0));
+                if (actors.get(0) == 0) {
+                    moves.remove(0);
+                    actors.remove(0);
 
-                moves.remove(0);
-                actors.remove(0);
-
-                // Make game wait as long as the playback speed
-                // before continuing another move
-                synchronized (RecordAndPlay.class) {
-                    RecordAndPlay.class.wait(200);
+                /* Make game wait as long as the playback
+                   speed before continuing another move */
+                    synchronized (RecordAndPlay.class) {
+                        RecordAndPlay.class.wait(200);
+                    }
                 }
-            }
 //            else {
 //                // in the future for level 2 mob movement
 //                if (moves.size() > 0) playByStep(game);
 //            }
-        }
+            }
 
-        if (moves.size() == 0) {
-            isRunning = false;
-            game.setTimeRemaining(remainingTimeAfterRun);
+            if (moves.size() == 0) {
+                isRunning = false;
+                game.setTimeRemaining(remainingTimeAfterRun);
+            }
+            game.runMove();
+        } catch (IndexOutOfBoundsException swallow) {
+            // Ignored.
         }
-        game.runMove();
     }
-
 
     /**
      * Runs the replay on a separate thread
      *
      * @param game the game
      */
-    public static void runReplay(Main game) throws InterruptedException {
-        game.setSpeed((int) (1000 / playbackSpeed));
+    public static void runReplay(Main game, int playbackSpeed) throws InterruptedException {
         while (moves.size() > 0) {
-            System.out.println(moves);
             if (actors.size() > 0 && actors.get(0) == 0) {
                 try {
                     Thread.sleep(playbackSpeed);
@@ -232,13 +218,16 @@ public class RecordAndPlay {
             }
             playByStep(game);
         }
+
+        /* set the time back into the time remaining after running
+           to reset it for the player to continue with the game */
         game.setTimeRemaining(remainingTimeAfterRun);
         isRunning = false;
     }
 
-    //==================================================
-    //            GETTERS, SETTERS & MISC
-    //==================================================
+    //=============================================================================//
+    //                           GETTERS, SETTERS & MISC                           //
+    //=============================================================================//
 
     /**
      * Gets the moves of the actors
@@ -270,16 +259,16 @@ public class RecordAndPlay {
     /**
      * Get state of the playback.
      *
-     * @return true if recoding is running, false if not.
+     * @return true if recording is running, false if not.
      */
     public static boolean getIsRunning() {
         return isRunning;
     }
 
     /**
-     * Return true if currently recording, false if not.
+     * Get state of whether or not if the game is currently recording.
      *
-     * @return
+     * @return true if currently recording, false if not.
      */
     public static boolean getRecording() {
         return currentlyRecording;
@@ -310,19 +299,3 @@ public class RecordAndPlay {
         }
     }
 }
-
-/*
-        Record and Replay Games
-        The record and replay module adds functionality to record game play,
-        and stores the recorded games in a file (in JSON format).
-        It also adds the dual functionality to load a recorded game, and to replay it.
-        The user should have controls for replay: step-by-step, auto-reply, set replay speed.
-        Note that this is different from the persistence module: here, not just the current game state is saved,
-        but also its history (i.e., each turn or Chap and any other actors).
-
-            features implemented (manual tested):
-            1. step-by-step (80% done, only enemies left)
-            2. auto-reply (done done) // call runReplay without setting playback speed.
-            3. set replay speed (done) // call runReplay and set playback speed.
- */
-
