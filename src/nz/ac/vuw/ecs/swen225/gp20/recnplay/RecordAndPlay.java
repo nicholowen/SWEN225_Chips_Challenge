@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
+
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 
 import java.io.Writer;
@@ -28,20 +29,21 @@ import javax.json.JsonObjectBuilder;
  */
 
 public class RecordAndPlay {
-    public static final Path resources = Paths.get("resources");
-    public static final Path recordings = Paths.get(resources.toString(), "recordings");
+    private static final Path resources = Paths.get("resources");
+    private static final Path recordings = Paths.get(resources.toString(), "recordings");
 
-    private static ArrayList<Integer> actors = new ArrayList<>();
-    private static ArrayList<String> moves = new ArrayList<>();
+    private static final ArrayList<Integer> actors = new ArrayList<>();
+    private static final ArrayList<String> moves = new ArrayList<>();
 
-    private static long playbackSpeed = 123; // arbitrary number
+    private static long defaultSpeed = 300;
+    private static long playbackSpeed = 300; //default speed
     private static int remainingTimeAfterRun;
-
-    private static String saveFile;
-    private static String gameState;
 
     private static boolean isRunning;
     private static boolean currentlyRecording;
+
+    private static String saveFile;
+
 
     /**
      * Called by main to start recording
@@ -101,7 +103,7 @@ public class RecordAndPlay {
      * @param saveFileName saved file name
      * @param game         the game
      */
-    public static void load(String saveFileName, Main game) throws IOException, InterruptedException {
+    public static void load(String saveFileName, Main game) throws IOException {
         JsonObject obj;
         game.loadCurrentState();
 
@@ -158,7 +160,6 @@ public class RecordAndPlay {
      */
     public static void resetRecording() {
         saveFile = null;
-        gameState = null;
 
         isRunning = false;
         currentlyRecording = false;
@@ -176,51 +177,48 @@ public class RecordAndPlay {
 
     /*
         to run this, have a button in GUI or somewhere where main can call
-        Recordnplay.setPlaybackSpeed(time) where
+        RecordAndPlay.setPlaybackSpeed(time) where
         time:
             100  = 0.1s (slow)
             200  = 0.2s
             500  = 0.5s
             1000 = 1.0s (fast)
      */
-    public static void playByStep(Main game) {
-        try {
-            if (isRunning && moves.size() > 0) {
-                if (actors.get(0) == 0) {
+    public static void playByStep(Main game) throws InterruptedException {
+        if (isRunning && moves.size() > 0) {
+            if (actors.get(0) == 0) {
 
-                    // if the first actor is the player
-                    game.runMove(moves.get(0));
+                // if the first actor is the player
+                game.runMove(moves.get(0));
 
-                    moves.remove(0);
-                    actors.remove(0);
+                moves.remove(0);
+                actors.remove(0);
 
-                    // Make game wait as long as the playback speed
-                    // before continuing another move
-                    synchronized (RecordAndPlay.class) {
-                        RecordAndPlay.class.wait(playbackSpeed);
-                    }
-
-//            } else {
-//                // in the future for level 2 mob movement
-//                if (moves.size() > 0) playByStep(game);
+                // Make game wait as long as the playback speed
+                // before continuing another move
+                synchronized (RecordAndPlay.class) {
+                    RecordAndPlay.class.wait(200);
                 }
-
-                if (moves.size() == 0) {
-                    isRunning = false;
-                    game.setTimeRemaining(remainingTimeAfterRun);
-                }
-                game.runMove();
+            } else {
+                // in the future for level 2 mob movement
+                if (moves.size() > 0) playByStep(game);
             }
-        } catch (IndexOutOfBoundsException | InterruptedException ignore) {
         }
+
+        if (moves.size() == 0) {
+            isRunning = false;
+            game.setTimeRemaining(remainingTimeAfterRun);
+        }
+        game.runMove();
     }
+
 
     /**
      * Runs the replay on a separate thread
      *
      * @param game the game
      */
-    public static void runReplay(Main game) {
+    public static void runReplay(Main game) throws InterruptedException {
         game.setSpeed((int) (1000 / playbackSpeed));
         while (moves.size() > 0) {
             System.out.println(moves);
@@ -262,10 +260,10 @@ public class RecordAndPlay {
     /**
      * Setting the playback delay time
      *
-     * @param t delay time in milliseconds.
+     * @param speed delay time in milliseconds.
      */
-    public static void setPlaybackSpeed(long t) {
-        playbackSpeed = t;
+    public static void setPlaybackSpeed(long speed) {
+        playbackSpeed = speed;
     }
 
     /**
@@ -277,6 +275,11 @@ public class RecordAndPlay {
         return isRunning;
     }
 
+    /**
+     * Return true if currently recording, false if not.
+     *
+     * @return
+     */
     public static boolean getRecording() {
         return currentlyRecording;
     }
@@ -296,8 +299,8 @@ public class RecordAndPlay {
     /**
      * Adds to the history of enemy actions.
      *
-     * @param dir
-     * @param enemyNumber
+     * @param dir         direction of enemy movement
+     * @param enemyNumber which enemy (multiple)
      */
     public static void addEnemyMovement(String dir, int enemyNumber) {
         if (currentlyRecording) {
@@ -321,3 +324,4 @@ public class RecordAndPlay {
             2. auto-reply (done done) // call runReplay without setting playback speed.
             3. set replay speed (done) // call runReplay and set playback speed.
  */
+

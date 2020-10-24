@@ -224,6 +224,10 @@ public class Main {
         } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
             render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
+
+//        if (RecordAndPlay.getMoves().equals()) {
+//            ;
+//        }
     }
 
     public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
