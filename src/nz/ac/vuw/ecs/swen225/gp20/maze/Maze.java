@@ -162,6 +162,9 @@ public class Maze {
 		boolean isWalkingIntoDoor=false;
 		boolean isWalkingIntoExitDoor=false;
 		boolean isCellSolid=false;
+		boolean isAboutToPush=false;
+		if(movementDirection!=null && NPCBlocksPath(getCellFromDir(player,movementDirection.getDirection()).getCoordinate()))
+			isAboutToPush=true;
 		if(movementDirection!=null && getCellFromDir(player,movementDirection.getDirection())!=null) {
 			isWalkingIntoDoor = (getCellFromDir(player,movementDirection.getDirection()).getName().equals("door"));
 			isWalkingIntoExitDoor= (getCellFromDir(player,movementDirection.getDirection()).getName().equals("exit lock"));//True if the player's about to walk into a door or exitLock
@@ -177,7 +180,10 @@ public class Maze {
 						soundEvent="exitlock";
 				}
 				else
-					soundEvent="move";
+					if(isAboutToPush)
+						soundEvent="moving_block";
+					else
+						soundEvent="move";
 
 			player.move(movementDirection);
 			recordedMove=movementDirection;
