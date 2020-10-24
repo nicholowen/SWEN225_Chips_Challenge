@@ -38,6 +38,7 @@ public class MapPane {
   private Cell[][] exitLock = new Cell[11][11];
   private Cell[][] info = new Cell[11][11];
   private Actor[][] mobs = new Actor[11][11];
+  private Actor[][] sunken = new Actor[11][11];
 
   private ActorSprite[][] testing = new ActorSprite[11][11];
 
@@ -221,7 +222,10 @@ public class MapPane {
           for(Actor actor : actorObjects.keySet()){
             if(actor.getX() == x && actor.getY() == y){
 //              actorObjects.get(actor).setVisiblePos(i, j);
-              mobs[i][j] = actor;
+              if(actor.getName().equals("dirt") && !actor.isPushable()) {
+                sunken[i][j] = actor;
+              }
+              else mobs[i][j] = actor;
             }
           }
         }
@@ -402,6 +406,12 @@ public class MapPane {
     //needs separate loop to avoid drawing mobs underneath other tiles.
     for (int i = 0; i < 11; i++) {
       for (int j = 0; j < 11; j++) {
+        if (sunken[i][j] != null) {
+          actorObjects.get(sunken[i][j]).draw(g, x * i + offsetX - x, y * j + offsetY - y);
+        }
+      }
+    }for (int i = 0; i < 11; i++) {
+      for (int j = 0; j < 11; j++) {
         if (mobs[i][j] != null) {
           actorObjects.get(mobs[i][j]).draw(g, x * i + offsetX - x, y * j + offsetY - y);
         }
@@ -430,6 +440,7 @@ public class MapPane {
     exitLock = new Cell[11][11];
     info = new Cell[11][11];
     mobs = new Actor[11][11];
+    sunken = new Actor[11][11];
     testing = new ActorSprite[11][11];
 
   }
