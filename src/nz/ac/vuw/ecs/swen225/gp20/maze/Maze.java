@@ -232,6 +232,7 @@ public class Maze {
 						creatureMoved=true;
 					if (isMoveValid(npc, npc.getNextMove().getDirection()) && !NPCBlocksPath(toMoveTo.getCoordinate())){//If the move IS valid
 						npc.move(npc.getNextMove());
+						board[npc.getX()][npc.getY()].goopify(npc.getspeed());//Make the floor under the creature lethal for a time.
 						npc.setHasJustMoved(true);
 					}
 					else//If the next move isn't valid, then turn around 180 degrees!
@@ -268,6 +269,13 @@ public class Maze {
 			soundEvent="awinrarisyou";//Sound signifying success
 			//Small check to ensure that the sound doesn't repeat at unpleasant speed
 			oomphCounter=-1;//Sound only plays once, then level changes. This ensures the sound won't play more than once.
+		}
+
+		for(Cell[] ca:board){
+			for(Cell c:ca){//For every cell on the board, if tickable, tick it.
+				if(c.isTickable())
+					c.tick();
+			}
 		}
 
 		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, playerActuallyMoved,creatureMoved);

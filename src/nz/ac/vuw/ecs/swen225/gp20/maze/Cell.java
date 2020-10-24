@@ -25,6 +25,9 @@ public class Cell {
 	protected String infoMessage;
 	protected String protectiveItem;//The item which will protect a player from being killed if they stand on this tile. Null if there isn't one.
 
+	//Tick-related functions.
+	private int ticksRemaining;
+	private boolean isTickable;//Whether or not this particular tile needs to be ticked
 
 	
 	/**
@@ -190,6 +193,8 @@ public class Cell {
 
 	public Point getCoordinate(){return new Point(x,y);}
 
+	public boolean isTickable(){return isTickable;}
+
 	/**
 	 * Nullifies the threat. In other words, makes this tile unable to kill the player.
 	 * ONLY TO BE USED IN SPECIFIC CIRCUMSTANCES. THIS CHANGE IS PERMANENT TO THE CELL.
@@ -213,5 +218,29 @@ public class Cell {
 		}
 		return killsPlayer;
 	}
-	
+
+	public void goopify(int timeToStayLethal){
+		if(name.equals("free")) {//Only to this to free tiles!
+			isTickable = true;
+			ticksRemaining = timeToStayLethal;
+			killsPlayer = true;
+			name="goop";
+		}
+	}
+
+	public void tick(){
+		ticksRemaining--;
+		if(ticksRemaining==0){//If it's fully "decayed"
+			isTickable=false;
+			killsPlayer=false;
+			name="free";
+		}
+
+
+	}
+
+
+
+
+
 }
