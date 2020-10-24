@@ -365,9 +365,9 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
-            /*
-             * if (recording) { main.movePlayer(direction.toString()); }
-             */
+            if (recording) {
+                main.movePlayer(direction.toString());
+            }
         }
     }
 
@@ -449,9 +449,9 @@ public class GUI extends JPanel implements KeyListener {
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
             }
-            /*
-             * if (recording) { main.movePlayer(direction.toString()); }
-             */
+            if (recording) {
+                main.movePlayer(direction.toString());
+            }
         }
     }
 
@@ -480,13 +480,13 @@ public class GUI extends JPanel implements KeyListener {
     /**
      * Checks what state the game is currently in.
      *
-     * @return 0, if intro state
+     * @return 0, if intro state 
      *         1, if menu state 
      *         2, if level select 
      *         3, if paused 
-     *         4, if playing
-     *         5, if game lost state
-     *         6, if game won state
+     *         4, if playing 
+     *         5, if game lost state 
+     *         6, if game won state 
      *         7, if info state
      */
     public int getGameState() {
