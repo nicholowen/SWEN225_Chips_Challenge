@@ -246,7 +246,7 @@ public class GUI extends JPanel implements KeyListener {
         slow.addActionListener(e -> {
             if (gameState == 4) {
                 if (main.getSpeed() == 100) {
-                    main.setSpeed(200);
+                    main.setSpeed(300);
                 } else if (main.getSpeed() == 300) {
                     main.setSpeed(500);
                 } else if (main.getSpeed() == 500) {
@@ -263,7 +263,7 @@ public class GUI extends JPanel implements KeyListener {
                 if (main.getSpeed() == 1000) {
                     main.setSpeed(500);
                 } else if (main.getSpeed() == 500) {
-                    main.setSpeed(200);
+                    main.setSpeed(300);
                 } else if (main.getSpeed() == 300) {
                     main.setSpeed(100);
                 } else {
