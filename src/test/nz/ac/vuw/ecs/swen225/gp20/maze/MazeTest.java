@@ -3,6 +3,8 @@ package test.nz.ac.vuw.ecs.swen225.gp20.maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,6 +14,13 @@ public class MazeTest {
     public void mazeTest01() {
         // tests that player cant move through wall
         Maze maze = new Maze(1);
+
+        //at the beginning, game should be neither won nor lost!
+        assertFalse(maze.getGameLost());
+        assertFalse(maze.getGameWon());
+
+        //Make sure this isn't the last level - it's level 1 after all
+        assertFalse(maze.isLastLevel());
 
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
@@ -81,6 +90,7 @@ public class MazeTest {
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.RIGHT); // pickup yellow key
+        assertTrue(maze.tick(null).getInventory().containsKey("yellowkey"));//Make sure the yellow key was picked up.
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
@@ -157,12 +167,146 @@ public class MazeTest {
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.UP);
+
+        //Make sure all keys were used up.
+        assertFalse(maze.tick(null).getInventory().containsKey("yellowkey"));
+        assertFalse(maze.tick(null).getInventory().containsKey("redkey"));
+        assertFalse(maze.tick(null).getInventory().containsKey("greenkey"));
+        assertFalse(maze.tick(null).getInventory().containsKey("bluekey"));
+
+        RenderTuple r =maze.tick(null);//Check treausre values are correct
+        assertEquals(0, r.getTreasureLeft());
+        assertEquals(9 ,r.getTreasureCollected());
+
         moveActor(maze, Direction.UP);
 
         assertEquals(7, player.getX());
         assertEquals(2, player.getY());
 
-        // check gameover here
+        //Make sure the game was won
+        assertTrue(maze.getGameWon());
+    }
+
+    @Test
+    public void mazeTest05() {
+        //Tests that level 2 loads, and allow the NPCs to run the full course of their pathfinding
+        Maze maze = new Maze(2);
+        assertEquals(18, maze.getPlayer().getX());//Starting coordinates correct
+        assertEquals(5,maze.getPlayer().getY());
+
+        for(int i=0; i<128; i++)//Ensure that NPC pathfinding/Patrol segments are working properly.
+            maze.tick(null);
+
+        assertTrue(maze.isLastLevel());
+    }
+
+    @Test
+    public void mazeTest06() {
+        Maze maze = new Maze(2);
+        //at the beginning, game should be neither won nor lost!
+        assertFalse(maze.getGameLost());
+        assertFalse(maze.getGameWon());
+
+        assertEquals(18, maze.getPlayer().getX());//Starting coordinates correct
+        assertEquals(5,maze.getPlayer().getY());
+
+        //Assert that the player cannot clip through a wall by sending multiple inputs at once.
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        assertEquals(18, maze.getPlayer().getX());
+        assertEquals(5,maze.getPlayer().getY());
+
+
+        RenderTuple t = maze.tick(Direction.LEFT);
+        assertTrue(t.playerMoved().equals(Direction.LEFT));
+        assertTrue(t.getSoundEvent().equals("move"));
+
+
+
+        //Assert that the player cannot change direction (to the right) mid-move (going left).
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        assertEquals(17, maze.getPlayer().getX());
+        assertEquals(5,maze.getPlayer().getY());
+
+        //Assert that even if the player builds up "momentum" by actually moving that they cannot clip through a wall by pressing the movement keys mid-movement.
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT);
+        assertEquals(18, maze.getPlayer().getX());
+        assertEquals(5,maze.getPlayer().getY());
+        }
+
+
+    @Test
+    public void mazeTest07() {
+        Maze maze = new Maze(2);
+        RenderTuple t = maze.tick(null);
+        assertTrue(t.creatureMoved());//Creatures should start to move on the first tick
+
+
+        assertFalse(t.isPlayerOnInfo());
+        moveActor(maze, Direction.LEFT);
+        t=maze.tick(null);
+        assertTrue(t.isPlayerOnInfo());
+        System.out.println(t.getInfo());
+        assertTrue(t.getInfo()!=null);
+
+        t=maze.tick(null);
+
+        for(Actor n:t.getActors()){//Three ticks in, all NPCs should be mid-way through their movement cycles.
+            if(n.getName().equals("spider"))
+                assertFalse(n.hasJustMoved());
+        }
+
+    }
+
+    @Test
+    public void mazeTest08() {
+        Maze maze = new Maze(2);
+
+        moveActor(maze, Direction.UP);
+        moveActor(maze, Direction.UP);
+        moveActor(maze, Direction.UP);
+        moveActor(maze, Direction.UP);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        moveActor(maze, Direction.LEFT);
+        //Make sure player isn't dead.
+        assertFalse(maze.getGameLost());
+        assertFalse(maze.getGameWon());
+
+        moveActor(maze, Direction.DOWN);//Push a dirt block down
+        moveActor(maze, Direction.LEFT);//Push a dirt block over the void
+        moveActor(maze, Direction.LEFT);//Stand over the hovering platform
+        assertFalse(maze.getGameLost());
+        assertFalse(maze.getGameWon());//Make sure we're not dead.
+
+        //Ensure the "time remaining" function can be ticked down correctly.
+        int x=maze.getTimeRemaining();
+        maze.tickTimeRemaining();
+        assertEquals(x-1, maze.getTimeRemaining());
+
+        moveActor(maze, Direction.LEFT);//Jump into the void.
+        assertTrue(maze.getGameLost());//Ensure that we "die" properly.
     }
 
     private void moveActor(Maze maze, Direction direction) {
