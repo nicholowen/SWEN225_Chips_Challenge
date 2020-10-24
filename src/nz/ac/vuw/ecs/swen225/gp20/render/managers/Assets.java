@@ -51,6 +51,9 @@ public class Assets {
   private static BufferedImage[][] MENU;
   private static BufferedImage[][] LEVEL;
   private static BufferedImage[][] PAUSE;
+  private static BufferedImage[][] DEAD;
+  private static BufferedImage[][] WIN;
+  private static BufferedImage[][] INFORMATION;
 
   //State Buttons
   private static BufferedImage[][] MENUBUTTONS;
@@ -58,6 +61,7 @@ public class Assets {
   private static BufferedImage[][] LEVELSELECTBUTTONS;
   private static BufferedImage[][] DEADBUTTONS;
   private static BufferedImage[][] GAMEOVERBUTTONS;
+  private static BufferedImage[][] INFORMATIONBUTTONS;
 
   private static BufferedImage[][] INFOPAUSEBUTTON;
   private static BufferedImage[][] RECORDBUTTON;
@@ -96,14 +100,22 @@ public class Assets {
     MENU = loadGif(path, "menu.gif", 892, 576);
     LEVEL = loadGif(path, "levels.gif", 892, 576);
     PAUSE = loadGif(path, "pause.gif", 892, 576);
+    DEAD = loadGif(path, "deadBackground.gif", 892, 576);
+    WIN = loadGif(path, "winBackground.gif", 892, 576);
+    INFORMATION = loadGif(path, "informationBackground.gif", 892, 576);
+
+
+
     MENUBUTTONS = loadGif(path, "menuButtons.gif", 159, 51);
     PAUSEBUTTONS = loadGif(path, "pauseButtons.gif", 159, 51);
     LEVELSELECTBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
-    DEADBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
-    GAMEOVERBUTTONS = loadGif(path, "levelSelectButtons.gif", 159, 51);
+    DEADBUTTONS = loadGif(path, "deadButtons.gif", 159, 51);
+    GAMEOVERBUTTONS = loadGif(path, "winButtons.gif", 159, 51);
     INFOPAUSEBUTTON = loadGif(path, "infoPauseButton.gif", 102, 22);
     RECORDBUTTON = loadGif(path, "recordButton.gif", 26, 38);
     CONTROLBUTTONS = loadGif(path, "controlButtons.gif", 18, 18);
+    INFORMATIONBUTTONS = loadGif(path, "informationButtons.gif", 159, 51);
+
 
 
   }
@@ -206,13 +218,21 @@ public class Assets {
         break;
       case "levelSelectButtons": ret = LEVELSELECTBUTTONS;
         break;
+      case "deadBackground": ret = DEAD;
+        break;
+      case "winBackground": ret = WIN;
+        break;
+      case "informationBackground": ret = INFORMATION;
+        break;
       case "menuButtons": ret = MENUBUTTONS;
         break;
       case "pauseButtons": ret = PAUSEBUTTONS;
         break;
       case "deadButtons": ret = DEADBUTTONS;
         break;
-      case "gameoverButtons": ret = GAMEOVERBUTTONS;
+      case "winButtons": ret = GAMEOVERBUTTONS;
+        break;
+      case "informationButtons": ret = INFORMATIONBUTTONS;
         break;
       case "infoPauseButton": ret = INFOPAUSEBUTTON;
         break;

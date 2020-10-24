@@ -40,13 +40,13 @@ public class MouseManager implements MouseListener {
      */
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        System.out.println("pressed");
         String name = mouseEvent.getComponent().getName();
-        if (gui.getGameState() == 4) {
+        if (gui.getGameState() == 4 || gui.getGameState() == 3 || gui.getGameState() == 1) {
             if (name.equals("pause") || name.equals("record")) {
                 gui.setButtonSoundEvent("pressed_" + name);
             }
-        } else if (gui.getGameState() > 0) {
+        }
+        if (gui.getGameState() != 0 && gui.getGameState() != 4) {
             if (!name.equals("pause") && !name.equals("record")) {
                 gui.setButtonSoundEvent("pressed_" + name);
             }
@@ -61,7 +61,6 @@ public class MouseManager implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         gui.resetButtonEvent();
-        System.out.println("released");
     }
 
     /**
@@ -71,14 +70,14 @@ public class MouseManager implements MouseListener {
      */
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
-        System.out.println("entered");
         String name = mouseEvent.getComponent().getName();
 
-        if (gui.getGameState() == 4) {
+        if (gui.getGameState() == 4 || gui.getGameState() == 3 || gui.getGameState() == 1) {
             if (name.equals("pause") || name.equals("record")) {
                 gui.setButtonSoundEvent("hover_" + name);
             }
-        } else if (gui.getGameState() > 0) {
+        }
+        if (gui.getGameState() != 0 && gui.getGameState() != 4) {
             if (!name.equals("pause") && !name.equals("record")) {
                 gui.setButtonSoundEvent("hover_" + name);
             }
@@ -93,7 +92,5 @@ public class MouseManager implements MouseListener {
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
         gui.resetButtonEvent();
-        System.out.println("why here?");
-        System.out.println("exited");
     }
 }

@@ -23,10 +23,9 @@ public class Render {
 
   MapPane gp;
   InfoPane sp;
-  IntroState is;
-  State ms;
-  State ls;
-  State ps;
+  IntroState intros;
+  State ms, ls, ps, ds, ws, is;
+
 
 
   Audio audio;
@@ -37,10 +36,13 @@ public class Render {
 
     gp = new MapPane(assets);
     sp = new InfoPane(assets);
-    is = new IntroState(assets);
+    intros = new IntroState(assets);
     ms = new State(assets, 1, "menu");
     ls = new State(assets, 2, "levelSelect");
     ps = new State(assets, 3, "pause");
+    ds = new State(assets, 5, "dead");
+    ws = new State(assets, 6, "win");
+    is = new State(assets, 7, "information");
 
     audio = new Audio();
   }
@@ -67,7 +69,7 @@ public class Render {
   public void update(int gameState, String event) {
     switch (gameState) {
       case 0:
-        is.update();
+        intros.update();
         break;
       case 1:
         ms.update(event);
@@ -77,6 +79,15 @@ public class Render {
         break;
       case 3:
         ps.update(event);
+        break;
+      case 5:
+        ds.update(event);
+        break;
+      case 6:
+        ws.update(event);
+        break;
+      case 7:
+        is.update(event);
         break;
       default:
         break;
@@ -94,7 +105,7 @@ public class Render {
   public void draw(Graphics g, int gameState) {
     switch (gameState) {
       case 0:
-        is.draw(g);
+        intros.draw(g);
         break;
       case 1:
         ms.draw(g);
@@ -109,10 +120,18 @@ public class Render {
         gp.draw(g);
         sp.draw(g);
         break;
+      case 5:
+        ds.draw(g);
+        break;
+      case 6:
+        ws.draw(g);
+        break;
+      case 7:
+        is.draw(g);
+        break;
       default:
         break;
     }
-
   }
 
 
