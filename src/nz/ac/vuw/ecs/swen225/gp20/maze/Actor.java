@@ -98,7 +98,6 @@ public class Actor {
 		currentSegment=0;
 	}
 
-
 	/**
 	 * Used when initializing an actor with a patrol path.
 	 * Turns the coordinate points into "patrol segments" which the NPC can use to figure out which was it should move.
@@ -196,7 +195,6 @@ public class Actor {
 	public int getX() {return x;}
 	public int getY() {return y;}
 	public int getspeed(){return ticksToMove;}
-	
 
 	/**
 	 *
@@ -223,7 +221,6 @@ public class Actor {
 			isPushable = false;
 		}
 	}
-
 
 	public Direction getDirection() {
 		return direction;

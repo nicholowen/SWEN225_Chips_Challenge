@@ -12,19 +12,11 @@ public class PatrolSegment {
     private int y2;
 
     /**
-     * Stores two coordinates - a simplistic "line".
-     * @param x1 X point of first coordinate
-     * @param y1 Y point of first coordinate
-     * @param x2 X point of second coordinate
-     * @param y2 Y point of second coordinate
+     * Stores two points - a simplistic line in other words.
+     * Lines should be either strictly horizontal or vertical.
+     * @param first
+     * @param second
      */
-    public PatrolSegment(int x1, int y1, int x2, int y2){
-        this.x1=x1;
-        this.x2=x2;
-        this.y1=y1;
-        this.y2=y2;
-    }
-
     public PatrolSegment(Coordinate first, Coordinate second){
         this.x1=first.x;
         this.x2=second.x;
