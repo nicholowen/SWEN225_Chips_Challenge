@@ -42,7 +42,7 @@ public class Render {
     ps = new State(assets, 3, "pause");
     ds = new State(assets, 5, "dead");
     ws = new State(assets, 6, "win");
-    is = new State(assets, 7, "info");
+    is = new State(assets, 7, "information");
 
     audio = new Audio();
   }
