@@ -9,9 +9,6 @@ import java.io.IOException;
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndPlay;
 
 /**
  * This class handles the setup of the main frame. It also handles the key
@@ -44,7 +41,7 @@ public class GUI extends JPanel implements KeyListener {
     // =======================================.
     private Direction direction = null;
     private boolean recording = false;
-    private int replaying = 0;
+    private boolean replaying = false;
 
     private int lastState;
     private Main main;
@@ -176,7 +173,6 @@ public class GUI extends JPanel implements KeyListener {
                 // no button
                 break;
             case 3:// pause state
-                main.saveCurrentState();
                 setGameState(1); // go to main menu
                 break;
             case 5:// loss state
@@ -220,12 +216,10 @@ public class GUI extends JPanel implements KeyListener {
         pause.addActionListener(e -> {
             if (gameState == 4) {
                 setGameState(3);
-            }
-            else if (gameState == 1) {
+            } else if (gameState == 1) {
                 lastState = 1;
                 setGameState(7); // show game info (instructions)
-            }
-            else if (gameState == 3) {
+            } else if (gameState == 3) {
                 lastState = 3;
                 setGameState(7); // show game info (instructions)
             }
@@ -245,19 +239,39 @@ public class GUI extends JPanel implements KeyListener {
                 recording = !recording;
             }
         });
-//        
-//        slow.addActionListener(e -> {
-//            if (gameState == 4) {
-//                main.setFPS(main.getFPS() - 20);
-//            }
-//        });
-//
-//        fast.addActionListener(e -> {
-//            if (gameState == 4) {
-//                main.setFPS(main.getFPS() + 20);
-//            }
-//        });
-//        
+
+        slow.addActionListener(e -> {
+            if (gameState == 4) {
+                if (main.getSpeed() == 150) {
+                    main.setSpeed(300);
+                } else if (main.getSpeed() == 300) {
+                    main.setSpeed(500);
+                } else if (main.getSpeed() == 500) {
+                    main.setSpeed(750);
+                } else if (main.getSpeed() == 750) {
+                    main.setSpeed(1000);
+                } else {
+                    return;
+                }
+            }
+        });
+
+        fast.addActionListener(e -> {
+            if (gameState == 4) {
+                if (main.getSpeed() == 1000) {
+                    main.setSpeed(750);
+                } else if (main.getSpeed() == 750) {
+                    main.setSpeed(500);
+                } else if (main.getSpeed() == 500) {
+                    main.setSpeed(300);
+                } else if (main.getSpeed() == 300) {
+                    main.setSpeed(150);
+                } else {
+                    return;
+                }
+            }
+        });
+
 //        pauseRecording.addActionListener(e -> {
 //            if (gameState == 4) {
 //                replaying = 2;
@@ -267,6 +281,7 @@ public class GUI extends JPanel implements KeyListener {
         play.addActionListener(e -> {
             if (gameState == 4) {
                 recording = false;
+                replaying = true;
                 try {
                     main.replay();
                 } catch (IOException e1) {
@@ -351,9 +366,6 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
-                main.movePlayer(direction.toString());
-            }
         }
     }
 
@@ -435,9 +447,6 @@ public class GUI extends JPanel implements KeyListener {
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
             }
-            if (recording) {
-                main.movePlayer(direction.toString());
-            }
         }
     }
 
@@ -466,8 +475,14 @@ public class GUI extends JPanel implements KeyListener {
     /**
      * Checks what state the game is currently in.
      *
-     * @return int 0, if intro state 1 if menu state 2 if level select 3 if paused 4
-     *         if playing
+     * @return 0, if intro state 
+     *         1, if menu state 
+     *         2, if level select 
+     *         3, if paused 
+     *         4, if playing 
+     *         5, if game lost state 
+     *         6, if game won state 
+     *         7, if info state
      */
     public int getGameState() {
         return gameState;
@@ -483,7 +498,7 @@ public class GUI extends JPanel implements KeyListener {
     }
 
     /**
-     * Sets recording to false, when user wants to stoprecording.
+     * Sets recording to false, when user wants to stop recording.
      *
      */
     public void stopRecording() {

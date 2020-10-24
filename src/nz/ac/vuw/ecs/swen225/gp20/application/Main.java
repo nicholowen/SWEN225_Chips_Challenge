@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.*;
 import nz.ac.vuw.ecs.swen225.gp20.render.Render;
@@ -24,7 +25,7 @@ public class Main {
     private Direction direction = null;
     private boolean replaying = false;
 
-    private int fps = 40;
+    private int speed = 300;
     private int introCounter;
     private int currentState;
 
@@ -56,13 +57,15 @@ public class Main {
             }
 
             if (!gameEnded) {
+                RenderTuple rt = maze.tick(direction);
                 direction = gui.getDirection();
-                if (gui.isRecording() && direction != null) {
+                if (gui.isRecording() && rt.playerMoved() != null) {
+                    movePlayer(rt.playerMoved().toString());
                 }
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(maze.tick(direction), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent());
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -189,8 +192,8 @@ public class Main {
      */
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
-        RecordAndPlay.setPlaybackSpeed(fps);
-        RecordAndPlay.runReplay(this);
+        RecordAndPlay.setPlaybackSpeed(speed);
+        RecordAndPlay.runReplay(this, speed);
         RecordAndPlay.resetRecording();
     }
 
@@ -215,15 +218,22 @@ public class Main {
      * 
      */
     public void runMove() {
-        if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+
+        if (RecordAndPlay.getMoves().size() > 0) {
+            if (RecordAndPlay.getMoves().get(0).equals("UP")) {
+                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
+                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
+                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
+                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
+            }
         }
+
+//        if (RecordAndPlay.getMoves().equals()) {
+//            ;
+//        }
     }
 
     public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
@@ -255,22 +265,23 @@ public class Main {
     }
 
     /**
-     * Set refresh-rate of replay in frames per second, used to determine speed of
-     * replaying a recording.
+     * Set speed used for replaying a recording. (higher number -> longer wait ->
+     * slower replay)
      *
-     * @param fps frames per second.
+     * @param speed - milliseconds to wait
      */
     public void setSpeed(int speed) {
-        this.fps = speed;
+        this.speed = speed;
     }
 
     /**
-     * Gets refresh-rate of replay in frames per second.
+     * Get speed used for replaying a recording. (higher number -> longer wait ->
+     * slower replay)
      *
-     * @return fps frames per second.
+     * @return speed - milliseconds to wait
      */
-    public int getFPS() {
-        return this.fps;
+    public int getSpeed() {
+        return this.speed;
     }
 
     /**

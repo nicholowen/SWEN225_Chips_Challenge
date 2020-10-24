@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
+
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 
 import java.io.Writer;
@@ -28,20 +29,19 @@ import javax.json.JsonObjectBuilder;
  */
 
 public class RecordAndPlay {
-    public static final Path resources = Paths.get("resources");
-    public static final Path recordings = Paths.get(resources.toString(), "recordings");
+    private static final Path resources = Paths.get("resources");
+    private static final Path recordings = Paths.get(resources.toString(), "recordings");
 
-    private static ArrayList<Integer> actors = new ArrayList<>();
-    private static ArrayList<String> moves = new ArrayList<>();
+    private static final ArrayList<Integer> actors = new ArrayList<>();
+    private static final ArrayList<String> moves = new ArrayList<>();
 
-    private static long playbackSpeed = 123; // arbitrary number
+    private static long playbackSpeed;
     private static int remainingTimeAfterRun;
-
-    private static String saveFile;
-    private static String gameState;
 
     private static boolean isRunning;
     private static boolean currentlyRecording;
+
+    private static String saveFile;
 
     /**
      * Called by main to start recording
@@ -77,7 +77,7 @@ public class RecordAndPlay {
 
             // build the object and att it to every single tick using time remaining fed from Main
             JsonObjectBuilder builder = Json.createObjectBuilder()
-                    // example output: {"moves": ["UP", "LEFT", "LEFT", "DOWN", "RIGHT"]}
+                    // example output: {moves: [UP, LEFT, LEFT, DOWN, RIGHT]}
                     .add("moves", array)
 
                     // time passed from Main (the final time after running all the moves)
@@ -101,7 +101,7 @@ public class RecordAndPlay {
      * @param saveFileName saved file name
      * @param game         the game
      */
-    public static void load(String saveFileName, Main game) throws IOException, InterruptedException {
+    public static void load(String saveFileName, Main game) throws IOException {
         JsonObject obj;
         game.loadCurrentState();
 
@@ -142,7 +142,7 @@ public class RecordAndPlay {
                 }
             }
         }
-        System.out.println("moves:" + moves);
+        // System.out.println("moves:" + moves);
 
         // if there are moves left to be played, that means the replaying is still running
         if (moves.size() > 0) isRunning = true;
@@ -158,7 +158,6 @@ public class RecordAndPlay {
      */
     public static void resetRecording() {
         saveFile = null;
-        gameState = null;
 
         isRunning = false;
         currentlyRecording = false;
@@ -167,51 +166,39 @@ public class RecordAndPlay {
         actors.clear();
     }
 
-
     /**
      * This method replays the game step by step.
      *
      * @param game Game object
      */
-
-    /*
-        to run this, have a button in GUI or somewhere where main can call
-        Recordnplay.setPlaybackSpeed(time) where
-        time:
-            100  = 0.1s (slow)
-            200  = 0.2s
-            500  = 0.5s
-            1000 = 1.0s (fast)
-     */
-    public static void playByStep(Main game) {
+    public static void playByStep(Main game) throws InterruptedException {
         try {
             if (isRunning && moves.size() > 0) {
+
+                // if the first actor is the player
                 if (actors.get(0) == 0) {
-
-                    // if the first actor is the player
-                    game.runMove(moves.get(0));
-
                     moves.remove(0);
                     actors.remove(0);
 
-                    // Make game wait as long as the playback speed
-                    // before continuing another move
+                /* Make game wait as long as the playback
+                   speed before continuing another move */
                     synchronized (RecordAndPlay.class) {
-                        RecordAndPlay.class.wait(playbackSpeed);
+                        RecordAndPlay.class.wait(200);
                     }
-
-//            } else {
+                }
+//            else {
 //                // in the future for level 2 mob movement
 //                if (moves.size() > 0) playByStep(game);
-                }
-
-                if (moves.size() == 0) {
-                    isRunning = false;
-                    game.setTimeRemaining(remainingTimeAfterRun);
-                }
-                game.runMove();
+//            }
             }
-        } catch (IndexOutOfBoundsException | InterruptedException ignore) {
+
+            if (moves.size() == 0) {
+                isRunning = false;
+                game.setTimeRemaining(remainingTimeAfterRun);
+            }
+            game.runMove();
+        } catch (IndexOutOfBoundsException swallow) {
+            // Ignored.
         }
     }
 
@@ -220,26 +207,27 @@ public class RecordAndPlay {
      *
      * @param game the game
      */
-    public static void runReplay(Main game) {
-        game.setSpeed((int) (1000 / playbackSpeed));
+    public static void runReplay(Main game, int playbackSpeed) throws InterruptedException {
         while (moves.size() > 0) {
-            System.out.println(moves);
             if (actors.size() > 0 && actors.get(0) == 0) {
                 try {
                     Thread.sleep(playbackSpeed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException ignore) {
+                    // Swallowed;
                 }
             }
             playByStep(game);
         }
+
+        /* set the time back into the time remaining after running
+           to reset it for the player to continue with the game */
         game.setTimeRemaining(remainingTimeAfterRun);
         isRunning = false;
     }
 
-    //==================================================
-    //            GETTERS, SETTERS & MISC
-    //==================================================
+    //=============================================================================//
+    //                           GETTERS, SETTERS & MISC                           //
+    //=============================================================================//
 
     /**
      * Gets the moves of the actors
@@ -262,21 +250,26 @@ public class RecordAndPlay {
     /**
      * Setting the playback delay time
      *
-     * @param t delay time in milliseconds.
+     * @param speed delay time in milliseconds.
      */
-    public static void setPlaybackSpeed(long t) {
-        playbackSpeed = t;
+    public static void setPlaybackSpeed(long speed) {
+        playbackSpeed = speed;
     }
 
     /**
      * Get state of the playback.
      *
-     * @return true if recoding is running, false if not.
+     * @return true if recording is running, false if not.
      */
     public static boolean getIsRunning() {
         return isRunning;
     }
 
+    /**
+     * Get state of whether or not if the game is currently recording.
+     *
+     * @return true if currently recording, false if not.
+     */
     public static boolean getRecording() {
         return currentlyRecording;
     }
@@ -296,8 +289,8 @@ public class RecordAndPlay {
     /**
      * Adds to the history of enemy actions.
      *
-     * @param dir
-     * @param enemyNumber
+     * @param dir         direction of enemy movement
+     * @param enemyNumber which enemy (multiple)
      */
     public static void addEnemyMovement(String dir, int enemyNumber) {
         if (currentlyRecording) {
@@ -306,18 +299,3 @@ public class RecordAndPlay {
         }
     }
 }
-
-/*
-        Record and Replay Games
-        The record and replay module adds functionality to record game play,
-        and stores the recorded games in a file (in JSON format).
-        It also adds the dual functionality to load a recorded game, and to replay it.
-        The user should have controls for replay: step-by-step, auto-reply, set replay speed.
-        Note that this is different from the persistence module: here, not just the current game state is saved,
-        but also its history (i.e., each turn or Chap and any other actors).
-
-            features implemented (manual tested):
-            1. step-by-step (80% done, only enemies left)
-            2. auto-reply (done done) // call runReplay without setting playback speed.
-            3. set replay speed (done) // call runReplay and set playback speed.
- */
