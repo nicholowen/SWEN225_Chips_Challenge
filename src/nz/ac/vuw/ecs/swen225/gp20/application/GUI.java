@@ -245,11 +245,13 @@ public class GUI extends JPanel implements KeyListener {
 
         slow.addActionListener(e -> {
             if (gameState == 4) {
-                if (main.getSpeed() == 100) {
+                if (main.getSpeed() == 150) {
                     main.setSpeed(300);
                 } else if (main.getSpeed() == 300) {
                     main.setSpeed(500);
                 } else if (main.getSpeed() == 500) {
+                    main.setSpeed(750);
+                } else if (main.getSpeed() == 750) {
                     main.setSpeed(1000);
                 } else {
                     return;
@@ -259,16 +261,18 @@ public class GUI extends JPanel implements KeyListener {
 
         fast.addActionListener(e -> {
             if (gameState == 4) {
-                System.out.println(main.getSpeed());
                 if (main.getSpeed() == 1000) {
+                    main.setSpeed(750);
+                } else if (main.getSpeed() == 750) {
                     main.setSpeed(500);
                 } else if (main.getSpeed() == 500) {
                     main.setSpeed(300);
                 } else if (main.getSpeed() == 300) {
-                    main.setSpeed(100);
+                    main.setSpeed(150);
                 } else {
                     return;
                 }
+                System.out.println(main.getSpeed());
             }
         });
 
