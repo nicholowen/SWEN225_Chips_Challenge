@@ -199,10 +199,11 @@ public class RecordAndPlay {
                 synchronized (RecordAndPlay.class) {
                     RecordAndPlay.class.wait(200);
                 }
-            } else {
-                // in the future for level 2 mob movement
-                if (moves.size() > 0) playByStep(game);
             }
+//            else {
+//                // in the future for level 2 mob movement
+//                if (moves.size() > 0) playByStep(game);
+//            }
         }
 
         if (moves.size() == 0) {
@@ -225,8 +226,8 @@ public class RecordAndPlay {
             if (actors.size() > 0 && actors.get(0) == 0) {
                 try {
                     Thread.sleep(playbackSpeed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException ignore) {
+                    // Swallowed;
                 }
             }
             playByStep(game);
