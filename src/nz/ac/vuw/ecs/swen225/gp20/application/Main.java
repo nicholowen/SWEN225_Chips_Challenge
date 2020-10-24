@@ -40,8 +40,7 @@ public class Main {
         int delay = 1000; // 1 Second
         if (Persistence.getLastSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
-        }
-        else if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
+        } else if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
             this.loadCurrentState();
         } else {
             this.loadLvl(1);
@@ -87,7 +86,7 @@ public class Main {
                     }
                 }
                 if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
-                    this.saveUnfinished();  // update last unfinished level
+                    this.saveUnfinished(); // update last unfinished level
                     gui.setGameState(5); // lost state
                 }
             } else {
@@ -104,6 +103,11 @@ public class Main {
     // =======================================================.
     // Saving and Loading Methods
     // =======================================================.
+    /**
+     * Sets the current level in Persistence, and sets the save type to unfinished,
+     * so when the game is run next time, the last unfinished level is loaded.
+     * 
+     */
     public void saveUnfinished() {
         try {
             Persistence.setSaveType("unfinished");
@@ -113,6 +117,11 @@ public class Main {
         }
     }
 
+    /**
+     * Sets the current state of the game in Persistence, and sets the save type to
+     * resume, so when the game is run next time, this state is loaded.
+     * 
+     */
     public void saveCurrentState() {
         try {
             Persistence.setSaveType("resume");
@@ -122,21 +131,35 @@ public class Main {
         }
     }
 
+    /**
+     * Loads the last unfinished level.
+     * 
+     */
     public void loadUnfinished() {
         maze = new Maze(Persistence.getCurrentLevel());
         render.init(maze);
     }
 
+    /**
+     * Loads the specified level.
+     * 
+     * @param lvl to load
+     */
     public void loadLvl(int lvl) {
         maze = new Maze(lvl);
         render.init(maze);
     }
 
+    /**
+     * Loads the last saved state. If there is an error, the last unfinished level
+     * is loaded instead.
+     * 
+     */
     public void loadCurrentState() {
         try {
             maze = Persistence.loadGameState();
         } catch (IOException e) {
-            maze = new Maze(1);
+            maze = new Maze(Persistence.getCurrentLevel());
         }
         render.init(maze);
     }
@@ -144,14 +167,26 @@ public class Main {
     // =======================================================.
     // Recording and Replaying Methods
     // =======================================================.
+    /**
+     * Starts a new recording.
+     * 
+     */
     public void startRecord() {
         RecordAndPlay.startNewRecording(this, "recording");
     }
 
+    /**
+     * Stops and saves recording.
+     * 
+     */
     public void stopRecord() throws IOException {
         RecordAndPlay.save(this);
     }
 
+    /**
+     * Loads and replays saved recording.
+     * 
+     */
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
         RecordAndPlay.setPlaybackSpeed(fps);
@@ -159,6 +194,11 @@ public class Main {
         RecordAndPlay.resetRecording();
     }
 
+    /**
+     * Loads the saved recording if not already loaded. If recording is already
+     * playing, this method allows player to take one recorded step.
+     * 
+     */
     public void step() throws IOException, InterruptedException {
         if (!replaying) {
             replaying = true;
@@ -170,6 +210,10 @@ public class Main {
         }
     }
 
+    /**
+     * Used by RecordAndPlay to force the player to move in a specific direction.
+     * 
+     */
     public void runMove() {
         if (RecordAndPlay.getMoves().get(0).equals("UP")) {
             render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
@@ -182,7 +226,7 @@ public class Main {
         }
     }
 
-    public void runMove(String dir) {
+    public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
         if (dir.equals("UP")) {
             render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
         }
@@ -211,31 +255,49 @@ public class Main {
     }
 
     /**
-     * Set refresh-rate of replay in frames per second.
+     * Set refresh-rate of replay in frames per second, used to determine speed of
+     * replaying a recording.
      *
      * @param fps frames per second.
      */
-    public void setFPS(int fps) {
-        this.fps = fps;
+    public void setSpeed(int speed) {
+        this.fps = speed;
     }
 
+    /**
+     * Gets refresh-rate of replay in frames per second.
+     *
+     * @return fps frames per second.
+     */
     public int getFPS() {
         return this.fps;
     }
 
+    /**
+     * Records direction made by player while recording.
+     *
+     * @param direction player has moved.
+     */
     public void movePlayer(String direction) {
         RecordAndPlay.addPlayerMovement(direction);
     }
 
+    /**
+     * Used by Persistence and RecordAndPlay to set the time after loading state, or
+     * after replaying a recording.
+     *
+     * @param timeRemaining
+     */
     public void setTimeRemaining(int timeRemaining) {
         maze.setTimeRemaining(timeRemaining);
     }
 
+    /**
+     * Gets the time remaining to finish current level.
+     *
+     * @return timeRemaining
+     */
     public int getTimeRemaining() {
         return maze.getTimeRemaining();
-    }
-
-    public void setSpeed(int speed) {
-        this.fps = speed;
     }
 }
