@@ -142,7 +142,7 @@ public class RecordAndPlay {
                 }
             }
         }
-        System.out.println("moves:" + moves);
+        // System.out.println("moves:" + moves);
 
         // if there are moves left to be played, that means the replaying is still running
         if (moves.size() > 0) isRunning = true;
