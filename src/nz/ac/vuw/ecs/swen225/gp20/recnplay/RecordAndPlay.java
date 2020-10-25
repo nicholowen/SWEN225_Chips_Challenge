@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
+import javafx.css.converter.LadderConverter;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 
 import java.io.Writer;
@@ -33,7 +34,8 @@ public class RecordAndPlay {
     private static final Path recordings = Paths.get(resources.toString(), "recordings");
 
     private static final ArrayList<Integer> actors = new ArrayList<>();
-    private static final ArrayList<String> moves = new ArrayList<>();
+    private static final ArrayList<String>   moves = new ArrayList<>();
+    private static       ArrayList<Integer>  ticks = new ArrayList<>();
 
     private static long playbackSpeed;
     private static int remainingTimeAfterRun;
@@ -64,7 +66,6 @@ public class RecordAndPlay {
      */
     public static void save(Main game) throws IOException {
         if (currentlyRecording) {
-
             JsonArrayBuilder array = Json.createArrayBuilder();
 
             // save player and player movements
@@ -72,6 +73,7 @@ public class RecordAndPlay {
                 JsonObjectBuilder builder = Json.createObjectBuilder()
                         .add("actor", actors.get(i))
                         .add("move", moves.get(i));
+//                        .add("tick", ticks.get(i));   // for mob movement
                 array.add(builder.build());
             }
 
@@ -109,12 +111,14 @@ public class RecordAndPlay {
         actors.clear();
         moves.clear();
 
-        BufferedReader r = new BufferedReader(new FileReader(Paths.get(recordings.toFile().getPath(), saveFileName).toFile() + ".json"));
+        BufferedReader r = new BufferedReader(new FileReader(
+                Paths.get(recordings.toFile().getPath(), saveFileName).toFile() + ".json"));
         JsonReader jReader = Json.createReader(new StringReader(r.readLine()));
         r.close();
         obj = jReader.readObject();
 
-        JsonArray allMoves = Optional.ofNullable(obj).map(object -> object.getJsonArray("moves")).orElse(null);
+        JsonArray allMoves = Optional.ofNullable(obj).map(
+                object -> object.getJsonArray("moves")).orElse(null);
 
         if (allMoves != null) {
             for (int i = 0; i < allMoves.size(); ++i) {
@@ -142,15 +146,14 @@ public class RecordAndPlay {
                 }
             }
         }
-        // System.out.println("moves:" + moves);
-
         // if there are moves left to be played, that means the replaying is still running
         if (moves.size() > 0) isRunning = true;
 
         // update the time remaining after run
-        remainingTimeAfterRun = Optional.ofNullable(obj).map(jsonObject -> jsonObject.getInt("timeRemaining")).orElse(0);
+        remainingTimeAfterRun = Optional.ofNullable(obj).map(
+                jsonObject -> jsonObject.getInt("timeRemaining")).orElse(0);
 
-//        game.runMove();
+        game.runMove();
     }
 
     /**
@@ -171,16 +174,16 @@ public class RecordAndPlay {
      *
      * @param game Game object
      */
+
     public static void playByStep(Main game) throws InterruptedException {
         try {
             if (isRunning && moves.size() > 0) {
 
                 // if the first actor is the player
                 if (actors.get(0) == 0) {
-                    if (game.runMove()) {
-                        moves.remove(0);
-                        actors.remove(0);
-                    }
+                    game.runMove();
+                    moves.remove(0);
+                    actors.remove(0);
 
                 /* Make game wait as long as the playback
                    speed before continuing another move */
@@ -188,12 +191,7 @@ public class RecordAndPlay {
                         RecordAndPlay.class.wait(200);
                     }
                 }
-//            else {
-//                // in the future for level 2 mob movement
-//                if (moves.size() > 0) playByStep(game);
-//            }
             }
-
             if (moves.size() == 0) {
                 isRunning = false;
                 game.setTimeRemaining(remainingTimeAfterRun);
@@ -208,13 +206,13 @@ public class RecordAndPlay {
      *
      * @param game the game
      */
-    public static void runReplay(Main game, int playbackSpeed) throws InterruptedException {
+    public static void runReplay(Main game) throws InterruptedException {
         while (moves.size() > 0) {
             if (actors.size() > 0 && actors.get(0) == 0) {
                 try {
                     Thread.sleep(playbackSpeed);
-                } catch (InterruptedException ignore) {
-                    // Swallowed;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
             playByStep(game);
@@ -280,10 +278,12 @@ public class RecordAndPlay {
      *
      * @param dir direction of movement
      */
-    public static void addPlayerMovement(String dir) {
+    // editted here, added tick to param
+    public static void addPlayerMovement(String dir, int tick) {
         if (currentlyRecording) {
             moves.add(dir);
             actors.add(0); // add the player
+            ticks.add(tick);
         }
     }
 
