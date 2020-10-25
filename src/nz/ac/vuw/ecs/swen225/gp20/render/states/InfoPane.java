@@ -33,6 +33,7 @@ public class InfoPane {
   boolean onInfo; //true if the player is on an info tile
   boolean recording; //true is game is being recorded.
   boolean replaying;
+  private int replaySpeed;
 
   private BufferedImage[][] font;
 
@@ -92,7 +93,7 @@ public class InfoPane {
    *
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple, String buttonEvent, boolean recording, boolean replaying) {
+  public void update(int timeLimit, RenderTuple tuple, String buttonEvent, boolean recording, boolean replaying, int replaySpeed) {
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.recording = recording;
@@ -102,6 +103,7 @@ public class InfoPane {
     this.onInfo = tuple.isPlayerOnInfo();
     this.gathered = tuple.getTreasureCollected();
     this.total = gathered + tuple.getTreasureLeft();
+    this.replaySpeed = replaySpeed;
 
 
     if (buttonEvent != null) {
@@ -279,7 +281,9 @@ public class InfoPane {
     g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
 
     if(replaying){
-
+      for(int i = 0; i < replaySpeed; i++) {
+        g.drawImage(speed[i], gameSize + 210 + i * 9, 86, null);
+      }
     }
 
     //can only handle a single line up to 22 characters (including spaces)
