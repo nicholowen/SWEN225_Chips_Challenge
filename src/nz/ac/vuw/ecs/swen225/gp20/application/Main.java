@@ -234,21 +234,6 @@ public class Main {
             replaying = false;
         }
     }
-
-    public void runMove(String dir) { // I DONT THINK WE NEED THIS METHOD??
-        if (dir.equals("UP")) {
-            render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("DOWN")) {
-            render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("LEFT")) {
-            render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-        if (dir.equals("RIGHT")) {
-            render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent());
-        }
-    }
     
     // =======================================================.
     // Utility Methods for Persistence and RecnPlay
