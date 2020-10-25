@@ -235,16 +235,16 @@ public class Main {
                 // Updates render with info in order to move the character
                 if (RecordAndPlay.getMoves().get(0).equals("UP")) {
                     render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying());
+                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
                 } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
                     render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying());
+                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
                 } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
                     render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying());
+                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
                 } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
                     render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying());
+                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
                 }
                 moved = true; // The move has been executed
             }
