@@ -169,7 +169,7 @@ public class PersistenceTest {
             assertThrows(IOException.class, Persistence::loadGameState);
         } else {
             try {
-                Maze maze = Persistence.loadGameState();
+                Persistence.loadGameState();
             } catch (IOException e) {
                 throw new Error("Persistence.loadGameState() should not throw IOException");
             }
@@ -218,9 +218,7 @@ public class PersistenceTest {
         // check can save and load the maze from file
         Maze mazeA = new Maze(1);
         Persistence.saveGameState(mazeA);
-        Maze mazeB = Persistence.loadGameState();
-
-        // check mazeA.equals(mazeB) here
+        Persistence.loadGameState();
     }
 
     @Test
@@ -228,9 +226,7 @@ public class PersistenceTest {
         // check can save and load the maze from string
         Maze mazeA = new Maze(1);
         String mazeJson = Persistence.getGameState(mazeA);
-        Maze mazeB = Persistence.loadGameState(mazeJson);
-
-        // check mazeA.equals(mazeB) here
+        Persistence.loadGameState(mazeJson);
     }
 
     @Test
