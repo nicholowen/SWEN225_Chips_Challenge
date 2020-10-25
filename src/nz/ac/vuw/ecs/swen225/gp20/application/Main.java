@@ -17,9 +17,9 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
  *
  */
 public class Main {
-    private static Maze maze;
+    private Maze maze;
     private final GUI gui = new GUI(this);
-    private static Render render = new Render();
+    private static final Render render = new Render();
 
     private Direction direction = null;
 
