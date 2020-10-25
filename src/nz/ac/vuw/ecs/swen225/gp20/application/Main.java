@@ -23,7 +23,6 @@ public class Main {
 
     private boolean gameEnded;
     private Direction direction = null;
-    private boolean replaying = false;
 
     private int speed = 300;
     private int introCounter;
@@ -65,7 +64,7 @@ public class Main {
                 if (currentState == 4)
                     gui.frame.requestFocusInWindow();
                 if (currentState == 4)
-                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
+                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), gui.isReplaying());
                 else
                     render.update(currentState, gui.getButtonSoundEvent());
                 render.draw(gui.getImageGraphics(), currentState);
@@ -77,7 +76,7 @@ public class Main {
                     if (System.currentTimeMillis() >= startTick + tickDelay)
                         break; // wait 33 milli
                 }
-                if ((System.currentTimeMillis() >= start + delay) && currentState == 4) {
+                if ((System.currentTimeMillis() >= start + delay) && currentState == 4 && !gui.isReplaying()) {
                     start = System.currentTimeMillis();
                     maze.tickTimeRemaining(); // timeRemaining goes down every second
                 }
@@ -192,8 +191,8 @@ public class Main {
      */
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
-        RecordAndPlay.setPlaybackSpeed(speed);
         RecordAndPlay.runReplay(this, speed);
+        gui.setReplaying(false); 
         RecordAndPlay.resetRecording();
     }
 
@@ -203,13 +202,13 @@ public class Main {
      * 
      */
     public void step() throws IOException, InterruptedException {
-        if (!replaying) {
-            replaying = true;
+        if (!gui.isReplaying()) {
+            gui.setReplaying(true); 
             RecordAndPlay.load("recording", this);
         }
         RecordAndPlay.playByStep(this);
         if (RecordAndPlay.getMoves().size() == 0) {
-            replaying = false;
+            gui.setReplaying(false); 
         }
     }
 
@@ -217,24 +216,33 @@ public class Main {
      * Used by RecordAndPlay to force the player to move in a specific direction.
      * 
      */
-    public void runMove() {
-
+    public boolean runMove() {
+        boolean moved = false;
         if (RecordAndPlay.getMoves().size() > 0) {
-            if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
-            } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
-            } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
-            } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), this.replaying);
+            gui.setReplaying(true); 
+            gui.frame.requestFocusInWindow();
+            if (!gui.replayPaused()) {
+                if (RecordAndPlay.getMoves().get(0).equals("UP")) {
+                    render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                            gui.isRecording(), gui.isReplaying());
+                } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
+                    render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                            gui.isRecording(), gui.isReplaying());
+                } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
+                    render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                            gui.isRecording(), gui.isReplaying());
+                } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
+                    render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                            gui.isRecording(), gui.isReplaying());
+                }
+                moved = true;
             }
+        } else {
+            gui.setReplaying(false); 
         }
-        else {
-            replaying = false;
-        }
+        return moved;
     }
-    
+
     // =======================================================.
     // Utility Methods for Persistence and RecnPlay
     // =======================================================.

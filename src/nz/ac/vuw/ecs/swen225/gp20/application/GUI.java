@@ -42,6 +42,7 @@ public class GUI extends JPanel implements KeyListener {
     private Direction direction = null;
     private boolean recording = false;
     private boolean replaying = false;
+    private boolean replayPaused;
 
     private int lastState;
     private Main main;
@@ -272,14 +273,17 @@ public class GUI extends JPanel implements KeyListener {
             }
         });
 
-//        pauseRecording.addActionListener(e -> {
-//            if (gameState == 4) {
-//                replaying = 2;
-//            }
-//        });
-//
+        pauseRecording.addActionListener(e -> {
+            if (gameState == 4) {
+                replayPaused = true;
+                System.out.println(replayPaused);
+            }
+        });
+
         play.addActionListener(e -> {
             if (gameState == 4) {
+                replayPaused = false;
+                System.out.println(replayPaused);
                 recording = false;
                 replaying = true;
                 try {
@@ -410,7 +414,9 @@ public class GUI extends JPanel implements KeyListener {
             }
             // replay recording
             else if (keyCode == KeyEvent.VK_R) {
+                replayPaused = false;
                 recording = false;
+                replaying = true;
                 try {
                     main.replay();
                 } catch (IOException e1) {
@@ -505,6 +511,33 @@ public class GUI extends JPanel implements KeyListener {
         recording = false;
     }
 
+    /**
+     * Checks if is replaying.
+     *
+     * @return true, if is replaying
+     */
+    public boolean isReplaying() {
+        return replaying;
+    }
+
+    /**
+     * Sets replaying, when replay has started or finished.
+     * 
+     * @param replaying
+     */
+    public void setReplaying(boolean replaying) {
+        this.replaying = replaying;
+    }
+    
+    /**
+     * Checks if is replay is paused.
+     *
+     * @return true, if is paused
+     */
+    public boolean replayPaused() {
+        return this.replayPaused;
+    }
+    
     /**
      * Gets the movement direction.
      *
