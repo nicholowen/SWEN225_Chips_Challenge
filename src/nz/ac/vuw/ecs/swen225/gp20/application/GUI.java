@@ -114,6 +114,8 @@ public class GUI extends JPanel implements KeyListener {
             case 7: // info state
                 // no button
                 break;
+            default:
+                break;
             }
         });
 
@@ -140,6 +142,8 @@ public class GUI extends JPanel implements KeyListener {
             case 7: // info state
                 // no button
                 break;
+            default:
+                break;
             }
         });
 
@@ -160,6 +164,8 @@ public class GUI extends JPanel implements KeyListener {
                 break;
             case 7: // info state
                 // no button
+                break;
+            default:
                 break;
             }
         });
@@ -183,6 +189,8 @@ public class GUI extends JPanel implements KeyListener {
                 break;
             case 7:// info state
                 setGameState(lastState);
+                break;
+            default:
                 break;
             }
         });
