@@ -28,10 +28,12 @@ public class InfoPane {
   private HashMap<String, Integer> inventory;
 
   private BufferedImage[] info; //array of font images to print out on the information read-out
+  private BufferedImage[] speed; //array of images which represent the speed (slowest '>', fastest '>>>>').
 
   boolean onInfo; //true if the player is on an info tile
   boolean recording; //true is game is being recorded.
   boolean replaying;
+  private int replaySpeed;
 
   private BufferedImage[][] font;
 
@@ -78,6 +80,8 @@ public class InfoPane {
 
     buttonStates = new BufferedImage[buttonGraphics.size()];
 
+    speed = drawString(">>>>");
+
     for(int i = 0; i < buttonStates.length; i++) {
       buttonStates[i] = buttonGraphics.get(i)[0];
     }
@@ -89,7 +93,7 @@ public class InfoPane {
    *
    * @param timeLimit the time in 'int'
    */
-  public void update(int timeLimit, RenderTuple tuple, String buttonEvent, boolean recording, boolean replaying) {
+  public void update(int timeLimit, RenderTuple tuple, String buttonEvent, boolean recording, boolean replaying, int replaySpeed) {
     String time = String.valueOf(timeLimit);
     chars = time.toCharArray();
     this.recording = recording;
@@ -99,6 +103,7 @@ public class InfoPane {
     this.onInfo = tuple.isPlayerOnInfo();
     this.gathered = tuple.getTreasureCollected();
     this.total = gathered + tuple.getTreasureLeft();
+    this.replaySpeed = replaySpeed;
 
 
     if (buttonEvent != null) {
@@ -158,6 +163,10 @@ public class InfoPane {
 
     for (int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
+
+      if(ch == 62) {
+        string[i] = font[3][11];
+      }
 
       if (ch >= 65 && ch <= 90) {
         string[i] = font[0][ch - 65];
@@ -270,6 +279,12 @@ public class InfoPane {
     g.drawImage(buttonStates[4], gameSize + 99, 80, null); // pause replay
     g.drawImage(buttonStates[5], gameSize + 129, 80, null); // play replay
     g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
+
+    if(replaying){
+      for(int i = 0; i < replaySpeed; i++) {
+        g.drawImage(speed[i], gameSize + 210 + i * 9, 86, null);
+      }
+    }
 
     //can only handle a single line up to 22 characters (including spaces)
     if (onInfo && info != null) {
