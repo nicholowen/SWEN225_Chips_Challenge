@@ -54,6 +54,11 @@ public class MazeTest {
         // tests that player can pickup key
         Maze maze = new Maze(1);
 
+        //Ensure that this is actually level 1!
+        RenderTuple t = maze.tick(null);
+        assertEquals(1, t.getLevel());
+        assertEquals(1, maze.getLevel());
+
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.UP);
 
@@ -255,6 +260,10 @@ public class MazeTest {
         Maze maze = new Maze(2);
         RenderTuple t = maze.tick(null);
         assertTrue(t.creatureMoved());//Creatures should start to move on the first tick
+        //Ensure the get level checks work properly.
+        assertEquals(2, t.getLevel());
+        assertEquals(2, maze.getLevel());
+
 
 
         assertFalse(t.isPlayerOnInfo());

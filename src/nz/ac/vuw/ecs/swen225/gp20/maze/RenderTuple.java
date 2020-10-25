@@ -14,6 +14,7 @@ public class RenderTuple {
 	private Direction playerMoved;
 	private boolean creatureMoved;
 	private String soundToPlay;
+	private int level;
 	
 	/**
 	 * The RenderTuple is designed to be passed to the renderer, and contains all of the information that the renderer needs to draw the maze each tick.
@@ -28,7 +29,7 @@ public class RenderTuple {
 	 * @param creatureMoved If true, a creature moved this tick
 	 * @param playerMoved The direction the player moved, or null if they didn't move.
 	 */
-	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft, String soundEvent, Direction playerMoved, boolean creatureMoved) {
+	public RenderTuple(Actor[] aList, Cell[][] b, HashMap<String, Integer> inv, boolean playerOnInfo, String info, int treasureCollected, int treasureLeft, String soundEvent, Direction playerMoved, boolean creatureMoved, int level) {
 		actorList=aList;
 		board=b;
 		playerStandingOnInfo=playerOnInfo;
@@ -39,6 +40,7 @@ public class RenderTuple {
 		this.soundToPlay=soundEvent;
 		this.playerMoved=playerMoved;
 		this.creatureMoved=creatureMoved;
+		this.level=level;
 	}
 	
 	public Actor[] getActors() {
@@ -78,5 +80,7 @@ public class RenderTuple {
 	}
 
 	public boolean creatureMoved(){return creatureMoved;}
+
+	public int getLevel(){return level;}
 	
 }

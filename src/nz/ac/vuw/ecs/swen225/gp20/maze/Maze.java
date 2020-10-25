@@ -253,7 +253,7 @@ public class Maze {
 			}
 		}
 
-		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, playerActuallyMoved,creatureMoved);
+		return new RenderTuple(getActors(), getBoard(), getPlayerInventory(), playerStandingOnInfo, stoodOn.getInfo(), currentTreasureCollected ,currentTreasureLeft, soundEvent, playerActuallyMoved,creatureMoved, currentLevel);
 	}
 	
 	/**
