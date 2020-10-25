@@ -84,15 +84,17 @@ public class Main {
                 maze.tickTimeRemaining(); // timeRemaining goes down every second
             }
             if (maze.getGameWon()) {
-                gui.setReplaying(false);
                 if (!maze.isLastLevel()) {
                     this.loadLvl(maze.getLevel() + 1); // load next level
                 } else {
+                    gui.setReplaying(false);
+                    gui.stopRecording();
                     gui.setGameState(6); // no more levels to load - win state
                 }
             }
             if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
                 gui.setReplaying(false);
+                gui.stopRecording();
                 this.saveUnfinished(); // update last unfinished level
                 gui.setGameState(5); // lost state
             }
