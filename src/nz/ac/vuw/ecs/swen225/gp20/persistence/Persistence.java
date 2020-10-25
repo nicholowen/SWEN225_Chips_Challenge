@@ -153,6 +153,7 @@ public class Persistence {
     /**
      * Loads a the saved game state from a string into a Maze object
      *
+     * @param state a json string representing the maze state
      * @return the saved maze object
      */
     public static Maze loadGameState(String state) {
@@ -255,7 +256,9 @@ public class Persistence {
     }
 
     /**
-     * Get the highest level that has been reached from json
+     * Get the highest level that has been reached by the player
+     *
+     * @return an integer representing the level number
      */
     public static int getCurrentLevel() {
         try {
