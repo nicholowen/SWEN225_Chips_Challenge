@@ -284,10 +284,8 @@ public class InfoPane {
     g.drawImage(buttonStates[5], gameSize + 129, 80, null); // play replay
     g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
 
-    if(replaying){
-      for(int i = 0; i < replaySpeed; i++) {
-        g.drawImage(speed[i], gameSize + 210 + i * 9, 86, null);
-      }
+    for(int i = 0; i < replaySpeed; i++) {
+      g.drawImage(speed[i], gameSize + 210 + i * 9, 86, null);
     }
 
     g.drawImage(levelFont[level-1], gameSize + 113, 34, null);
