@@ -66,7 +66,7 @@ public class Main {
             }
             if (currentState == 4) {
                 render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(),
-                        gui.isReplaying());
+                        gui.isReplaying(), this.getSpeedCategory());
             } else {
                 render.update(currentState, gui.getButtonSoundEvent());
             }
@@ -255,8 +255,28 @@ public class Main {
     }
 
     // =======================================================.
-    // Utility Methods for Persistence and RecnPlay
+    // Getters And Setters
     // =======================================================.
+    /**
+     * Gets the speed category for render. 
+     *
+     * @return speed category
+     *         1 - slowest
+     *         4 - fastest
+     */
+    private int getSpeedCategory() {
+        switch (this.speed) {
+        case 150:
+            return 4;
+        case 300:
+            return 3;
+        case 750:
+            return 2;
+        case 1000:
+            return 1;
+        }
+        return 3;
+    }
 
     /**
      * Gets the maze.
