@@ -36,6 +36,9 @@ public class InfoPane {
   private int replaySpeed;
 
   private BufferedImage[][] font;
+  private BufferedImage[] levelFont;
+
+  private int level;
 
   private int total; //total amount of energy
   private int gathered; //energy picked up
@@ -64,6 +67,7 @@ public class InfoPane {
     this.inventorySprites = assets.getAsset("inventory");
     this.digits = assets.getAsset("digits")[0];
     this.font = assets.getAsset("font");
+    this.levelFont = assets.getAsset("levelFont")[0];
     this.energyBarShade = assets.getAsset("energyBarShade")[0][0];
     this.energyBar = assets.getAsset("energyBar")[0][0];
     this.recordingLight = assets.getAsset("recording")[0][0];
@@ -98,6 +102,7 @@ public class InfoPane {
     chars = time.toCharArray();
     this.recording = recording;
     this.replaying = replaying;
+    this.level = tuple.getLevel();
     this.inventory = tuple.getInventory();
     this.info = drawString(tuple.getInfo());
     this.onInfo = tuple.isPlayerOnInfo();
@@ -276,7 +281,6 @@ public class InfoPane {
     g.drawImage(buttonStates[1], gameSize + 174, 33, null); // record button
     g.drawImage(buttonStates[2], gameSize + 39, 80, null); // slow
     g.drawImage(buttonStates[3], gameSize + 69, 80, null); // fast
-    g.drawImage(buttonStates[4], gameSize + 99, 80, null); // pause replay
     g.drawImage(buttonStates[5], gameSize + 129, 80, null); // play replay
     g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
 
@@ -285,6 +289,8 @@ public class InfoPane {
         g.drawImage(speed[i], gameSize + 210 + i * 9, 86, null);
       }
     }
+
+    g.drawImage(levelFont[level-1], gameSize + 113, 34, null);
 
     //can only handle a single line up to 22 characters (including spaces)
     if (onInfo && info != null) {

@@ -59,6 +59,7 @@ public class Assets {
   private static BufferedImage[][] DIGITS;
   private static BufferedImage[][] INVENTORY;
   private static BufferedImage[][] FONT;
+  private static BufferedImage[][] LEVELFONT;
   private static BufferedImage[][] ENERGYBARSHADE;
   private static BufferedImage[][] ENERGYBAR;
   private static BufferedImage[][] INFOPAUSEBUTTON;
@@ -127,6 +128,7 @@ public class Assets {
     DIGITS = loadGif(path, "digits.gif", 32, 45);
     INVENTORY = loadGif(path, "inventorysheet.gif", 32, 32);
     FONT = loadGif(path, "font.gif", 9, 12);
+    LEVELFONT = loadGif(path, "levelFont.gif", 12, 16);
     ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22);
     ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22);
     RECORDING = loadGif(path, "recording.gif", 16, 16);
@@ -207,6 +209,8 @@ public class Assets {
       case "inventory": ret = INVENTORY;
         break;
       case "font": ret = FONT;
+        break;
+      case "levelFont": ret = LEVELFONT;
         break;
       case "energyBarShade": ret = ENERGYBARSHADE;
         break;
