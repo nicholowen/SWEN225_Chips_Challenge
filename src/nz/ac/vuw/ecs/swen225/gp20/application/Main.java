@@ -14,7 +14,6 @@ import nz.ac.vuw.ecs.swen225.gp20.render.Render;
  * info needed to different classes every tick.
  *
  * @author Maiza Rehan 300472305
- *
  */
 public class Main {
     private static Maze maze;
@@ -45,6 +44,9 @@ public class Main {
         } else {
             this.loadLvl(1);
         }
+
+        int tick = 0;
+
         while (true) {
             currentState = gui.getGameState();
             // Plays the intro screen (logo fade)
@@ -57,9 +59,11 @@ public class Main {
             }
 
             RenderTuple rt = maze.tick(direction);
+            tick++; // keeps track and adds to the tick
+
             direction = gui.getDirection();
             if (gui.isRecording() && rt.playerMoved() != null) {
-                movePlayer(rt.playerMoved().toString()); // Record player movements
+                movePlayer(rt.playerMoved().toString(), tick); // Record player movements
             }
             if (currentState == 4) {
                 gui.frame.requestFocusInWindow();
@@ -109,10 +113,10 @@ public class Main {
     // =======================================================.
     // Saving and Loading Methods
     // =======================================================.
+
     /**
      * Sets the current level in Persistence, and sets the save type to unfinished,
      * so when the game is run next time, the last unfinished level is loaded.
-     * 
      */
     public void saveUnfinished() {
         try {
@@ -126,7 +130,6 @@ public class Main {
     /**
      * Sets the current state of the game in Persistence, and sets the save type to
      * resume, so when the game is run next time, this state is loaded.
-     * 
      */
     public void saveCurrentState() {
         try {
@@ -139,7 +142,6 @@ public class Main {
 
     /**
      * Loads the last unfinished level.
-     * 
      */
     public void loadUnfinished() {
         maze = new Maze(Persistence.getCurrentLevel());
@@ -148,7 +150,7 @@ public class Main {
 
     /**
      * Loads the specified level.
-     * 
+     *
      * @param lvl to load
      */
     public void loadLvl(int lvl) {
@@ -159,7 +161,6 @@ public class Main {
     /**
      * Loads the last saved state. If there is an error, the last unfinished level
      * is loaded instead.
-     * 
      */
     public void loadCurrentState() {
         try {
@@ -173,9 +174,9 @@ public class Main {
     // =======================================================.
     // Recording and Replaying Methods
     // =======================================================.
+
     /**
      * Starts a new recording.
-     * 
      */
     public void startRecord() {
         RecordAndPlay.startNewRecording(this, "recording");
@@ -183,7 +184,6 @@ public class Main {
 
     /**
      * Stops and saves recording.
-     * 
      */
     public void stopRecord() throws IOException {
         RecordAndPlay.save(this);
@@ -191,14 +191,13 @@ public class Main {
 
     /**
      * Loads and replays saved recording.
-     * 
      */
     public void replay() throws IOException, InterruptedException {
         if (!gui.isReplaying()) {
             gui.setReplaying(true);
             RecordAndPlay.load("recording", this);
         }
-        RecordAndPlay.runReplay(this, speed);
+        RecordAndPlay.runReplay(this);
         gui.setReplaying(false); // Replay is finished or canceled
         RecordAndPlay.resetRecording();
     }
@@ -206,7 +205,6 @@ public class Main {
     /**
      * Loads the saved recording if not already loaded. If recording is already
      * playing, this method allows player to take one recorded step.
-     * 
      */
     public void step() throws IOException, InterruptedException {
         if (!gui.isReplaying()) {
@@ -221,9 +219,8 @@ public class Main {
 
     /**
      * Used by RecordAndPlay to force the player to move in a specific direction.
-     * 
+     *
      * @return moved - wheather or not the move was executed
-     * 
      */
     public boolean runMove() {
         boolean moved = false;
@@ -292,8 +289,12 @@ public class Main {
      *
      * @param direction player has moved.
      */
-    public void movePlayer(String direction) {
-        RecordAndPlay.addPlayerMovement(direction);
+    public void movePlayer(String direction, int tick) {
+        RecordAndPlay.addPlayerMovement(direction, tick);
+    }
+
+    public void moveEnemy(String direction, int n) {
+        RecordAndPlay.addEnemyMovement(direction, n);
     }
 
     /**
