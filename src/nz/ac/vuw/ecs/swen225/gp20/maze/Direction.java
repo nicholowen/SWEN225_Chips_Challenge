@@ -17,4 +17,24 @@ public enum Direction {
     public Point getDirection() {
         return direction;
     }
+
+    /**
+     * If for some reason you want to use a string to get the direction enum, this will do that. Returns null, takes uppercase only.
+     * @param s Name of the direction, "UP", "DOWN", "LEFT", "RIGHT"
+     * @return Corresponding Direction enum or null if input was invalid
+     */
+    public Direction get(String s){
+        switch(s){
+            case "UP":
+                return Direction.UP;
+            case "DOWN":
+                return Direction.DOWN;
+            case "LEFT":
+                return Direction.LEFT;
+            case "RIGHT":
+                return Direction.RIGHT;
+        }
+        return null;
+    }
+
 }
