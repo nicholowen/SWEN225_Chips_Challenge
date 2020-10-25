@@ -32,7 +32,6 @@ public class GUI extends JPanel implements KeyListener {
     private JButton record;
     private JButton slow;
     private JButton fast;
-    private JButton pauseRecording;
     private JButton play;
     private JButton step;
     // =======================================.
@@ -43,7 +42,6 @@ public class GUI extends JPanel implements KeyListener {
     private Direction direction = null;
     private boolean recording = false;
     private boolean replaying = false;
-    private boolean replayPaused;
 
     private int lastState;
     private Main main;
@@ -198,7 +196,6 @@ public class GUI extends JPanel implements KeyListener {
 
         slow = new JButton();
         fast = new JButton();
-        pauseRecording = new JButton();
         play = new JButton();
         step = new JButton();
 
@@ -207,7 +204,6 @@ public class GUI extends JPanel implements KeyListener {
 
         this.formatButton(slow, "slow", 615, 80, 18, 18);
         this.formatButton(fast, "fast", 645, 80, 18, 18);
-        this.formatButton(pauseRecording, "pauseRecording", 675, 80, 18, 18);
         this.formatButton(play, "play", 705, 80, 18, 18);
         this.formatButton(step, "step", 735, 80, 18, 18);
 
@@ -276,17 +272,8 @@ public class GUI extends JPanel implements KeyListener {
             }
         });
 
-        pauseRecording.addActionListener(e -> {
-            if (gameState == 4) {
-                replayPaused = true;
-                System.out.println(replayPaused);
-            }
-        });
-
         play.addActionListener(e -> {
             if (gameState == 4) {
-                replayPaused = false;
-                System.out.println(replayPaused);
                 recording = false;
                 try {
                     main.replay();
@@ -300,7 +287,6 @@ public class GUI extends JPanel implements KeyListener {
 
         step.addActionListener(e -> {
             if (gameState == 4) {
-                replayPaused = false;
                 try {
                     main.step();
                 } catch (IOException e1) {
@@ -419,7 +405,6 @@ public class GUI extends JPanel implements KeyListener {
             }
             // replay recording
             else if (keyCode == KeyEvent.VK_R) {
-                replayPaused = false;
                 recording = false;
                 try {
                     main.replay();
@@ -532,15 +517,6 @@ public class GUI extends JPanel implements KeyListener {
      */
     public void setReplaying(boolean replaying) {
         this.replaying = replaying;
-    }
-    
-    /**
-     * Checks if is replay is paused.
-     *
-     * @return true, if is paused
-     */
-    public boolean replayPaused() {
-        return this.replayPaused;
     }
     
     /**
