@@ -55,7 +55,7 @@ public class Cell {
 		switch(n){
 			case "water":
 				killsPlayer=true;
-				protectiveItem="jetpack";
+				protectiveItem=null;
 				break;
 			case "wall":
 				isSolid=true;
