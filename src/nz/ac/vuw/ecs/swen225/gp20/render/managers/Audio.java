@@ -91,7 +91,6 @@ public class Audio {
 
     try {
       AudioInputStream audioIn;
-      System.out.println(file);
       audioIn = AudioSystem.getAudioInputStream(new File(path, file));
       Clip clip = AudioSystem.getClip();
       clip.open(audioIn);
