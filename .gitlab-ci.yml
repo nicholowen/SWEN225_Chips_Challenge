@@ -35,6 +35,7 @@ test:
         - target/surefire-reports/TEST-*.xml
 
 generate-doc:
+  stage: generate-doc
   allow_failure: true
   tags:
     - shell

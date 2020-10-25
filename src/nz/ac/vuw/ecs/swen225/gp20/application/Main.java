@@ -230,24 +230,22 @@ public class Main {
         if (RecordAndPlay.getMoves().size() > 0) {
             gui.setReplaying(true);
             gui.frame.requestFocusInWindow();
-            if (!gui.replayPaused()) {
-                // Updates maze with direction based on string returned by RecordAndPlay
-                // Updates render with info in order to move the character
-                if (RecordAndPlay.getMoves().get(0).equals("UP")) {
-                    render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
-                } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
-                    render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
-                } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
-                    render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
-                } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
-                    render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
-                            gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
-                }
-                moved = true; // The move has been executed
+            // Updates maze with direction based on string returned by RecordAndPlay
+            // Updates render with info in order to move the character
+            if (RecordAndPlay.getMoves().get(0).equals("UP")) {
+                render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                        gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
+            } else if (RecordAndPlay.getMoves().get(0).equals("DOWN")) {
+                render.update(maze.tick(Direction.DOWN), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                        gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
+            } else if (RecordAndPlay.getMoves().get(0).equals("LEFT")) {
+                render.update(maze.tick(Direction.LEFT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                        gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
+            } else if (RecordAndPlay.getMoves().get(0).equals("RIGHT")) {
+                render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
+                        gui.isRecording(), gui.isReplaying(), this.getSpeedCategory());
             }
+            moved = true; // The move has been executed
         } else {
             gui.setReplaying(false); // There are no more moves to execute
         }
@@ -258,11 +256,9 @@ public class Main {
     // Getters And Setters
     // =======================================================.
     /**
-     * Gets the speed category for render. 
+     * Gets the speed category for render.
      *
-     * @return speed category
-     *         1 - slowest
-     *         4 - fastest
+     * @return speed category 1 - slowest, 4 - fastest
      */
     private int getSpeedCategory() {
         switch (this.speed) {
