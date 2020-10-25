@@ -23,7 +23,7 @@ public enum Direction {
      * @param s Name of the direction, "UP", "DOWN", "LEFT", "RIGHT"
      * @return Corresponding Direction enum or null if input was invalid
      */
-    public Direction get(String s){
+    public static Direction get(String s){
         switch(s){
             case "UP":
                 return Direction.UP;
