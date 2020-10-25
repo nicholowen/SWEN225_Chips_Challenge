@@ -84,6 +84,7 @@ public class Main {
                 maze.tickTimeRemaining(); // timeRemaining goes down every second
             }
             if (maze.getGameWon()) {
+                gui.setReplaying(false);
                 if (!maze.isLastLevel()) {
                     this.loadLvl(maze.getLevel() + 1); // load next level
                 } else {
@@ -91,6 +92,7 @@ public class Main {
                 }
             }
             if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
+                gui.setReplaying(false);
                 this.saveUnfinished(); // update last unfinished level
                 gui.setGameState(5); // lost state
             }

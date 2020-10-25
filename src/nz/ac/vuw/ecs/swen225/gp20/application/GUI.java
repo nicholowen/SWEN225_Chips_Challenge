@@ -217,6 +217,7 @@ public class GUI extends JPanel implements KeyListener {
 
         pause.addActionListener(e -> {
             if (gameState == 4) {
+                replaying = false;
                 setGameState(3);
             } else if (gameState == 1) {
                 lastState = 1;
@@ -229,6 +230,7 @@ public class GUI extends JPanel implements KeyListener {
 
         record.addActionListener(e -> {
             if (gameState == 4) {
+                replaying = false;
                 if (recording) {
                     try {
                         main.stopRecord();
