@@ -132,7 +132,7 @@ public class Maze {
 	 * @param movementDirection Input from the application indicating the direction of movement.
 	 * @return RenderTuple A bundle of information to be passed to the renderer
 	 */
-	public RenderTuple tick(Direction movementDirection) {
+	public RenderTuple tick(Direction movementDirection, boolean shouldCreaturesMove) {
 		Direction playerActuallyMoved=null;
 		boolean creatureMoved=false;
 
@@ -198,7 +198,7 @@ public class Maze {
 				}
 			}//End of dirt filling water logic
 
-			if(npc.getName().equals("spider")){//If it's a "spider"
+			if(npc.getName().equals("spider") && shouldCreaturesMove){//If it's a "spider"
 				npc.setHasJustMoved(false);
 				//High complexity - creatures will use "movement paths"!
 					if (!npc.getIsMoving()){//If not moving, we need to pick a new direction to move in.

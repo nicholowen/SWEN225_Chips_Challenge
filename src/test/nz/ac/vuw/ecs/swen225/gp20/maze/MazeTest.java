@@ -90,7 +90,7 @@ public class MazeTest {
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.RIGHT);
         moveActor(maze, Direction.RIGHT); // pickup yellow key
-        assertTrue(maze.tick(null).getInventory().containsKey("yellowkey"));//Make sure the yellow key was picked up.
+        assertTrue(maze.tick(null,true).getInventory().containsKey("yellowkey"));//Make sure the yellow key was picked up.
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
         moveActor(maze, Direction.LEFT);
@@ -169,12 +169,12 @@ public class MazeTest {
         moveActor(maze, Direction.UP);
 
         //Make sure all keys were used up.
-        assertFalse(maze.tick(null).getInventory().containsKey("yellowkey"));
-        assertFalse(maze.tick(null).getInventory().containsKey("redkey"));
-        assertFalse(maze.tick(null).getInventory().containsKey("greenkey"));
-        assertFalse(maze.tick(null).getInventory().containsKey("bluekey"));
+        assertFalse(maze.tick(null,true).getInventory().containsKey("yellowkey"));
+        assertFalse(maze.tick(null,true).getInventory().containsKey("redkey"));
+        assertFalse(maze.tick(null,true).getInventory().containsKey("greenkey"));
+        assertFalse(maze.tick(null,true).getInventory().containsKey("bluekey"));
 
-        RenderTuple r =maze.tick(null);//Check treausre values are correct
+        RenderTuple r =maze.tick(null,true);//Check treausre values are correct
         assertEquals(0, r.getTreasureLeft());
         assertEquals(9 ,r.getTreasureCollected());
 
@@ -195,7 +195,7 @@ public class MazeTest {
         assertEquals(5,maze.getPlayer().getY());
 
         for(int i=0; i<128; i++)//Ensure that NPC pathfinding/Patrol segments are working properly.
-            maze.tick(null);
+            maze.tick(null,true);
 
         assertTrue(maze.isLastLevel());
     }
@@ -211,40 +211,40 @@ public class MazeTest {
         assertEquals(5,maze.getPlayer().getY());
 
         //Assert that the player cannot clip through a wall by sending multiple inputs at once.
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
         assertEquals(18, maze.getPlayer().getX());
         assertEquals(5,maze.getPlayer().getY());
 
 
-        RenderTuple t = maze.tick(Direction.LEFT);
+        RenderTuple t = maze.tick(Direction.LEFT,true);
         assertTrue(t.playerMoved().equals(Direction.LEFT));
         assertTrue(t.getSoundEvent().equals("move"));
 
 
 
         //Assert that the player cannot change direction (to the right) mid-move (going left).
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
         assertEquals(17, maze.getPlayer().getX());
         assertEquals(5,maze.getPlayer().getY());
 
         //Assert that even if the player builds up "momentum" by actually moving that they cannot clip through a wall by pressing the movement keys mid-movement.
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
-        maze.tick(Direction.RIGHT);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
+        maze.tick(Direction.RIGHT,true);
         assertEquals(18, maze.getPlayer().getX());
         assertEquals(5,maze.getPlayer().getY());
         }
@@ -253,18 +253,18 @@ public class MazeTest {
     @Test
     public void mazeTest07() {
         Maze maze = new Maze(2);
-        RenderTuple t = maze.tick(null);
+        RenderTuple t = maze.tick(null,true);
         assertTrue(t.creatureMoved());//Creatures should start to move on the first tick
 
 
         assertFalse(t.isPlayerOnInfo());
         moveActor(maze, Direction.LEFT);
-        t=maze.tick(null);
+        t=maze.tick(null,true);
         assertTrue(t.isPlayerOnInfo());
         System.out.println(t.getInfo());
         assertTrue(t.getInfo()!=null);
 
-        t=maze.tick(null);
+        t=maze.tick(null,true);
 
         for(Actor n:t.getActors()){//Three ticks in, all NPCs should be mid-way through their movement cycles.
             if(n.getName().equals("spider"))
@@ -310,11 +310,11 @@ public class MazeTest {
     }
 
     private void moveActor(Maze maze, Direction direction) {
-        maze.tick(direction);
-        maze.tick(null);
-        maze.tick(null);
-        maze.tick(null);
-        maze.tick(null);
-        maze.tick(null);
+        maze.tick(direction,true);
+        maze.tick(null,true);
+        maze.tick(null,true);
+        maze.tick(null,true);
+        maze.tick(null,true);
+        maze.tick(null,true);
     }
 }
