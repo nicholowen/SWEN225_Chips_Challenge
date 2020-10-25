@@ -150,7 +150,7 @@ public class RecordAndPlay {
         // update the time remaining after run
         remainingTimeAfterRun = Optional.ofNullable(obj).map(jsonObject -> jsonObject.getInt("timeRemaining")).orElse(0);
 
-        game.runMove();
+//        game.runMove();
     }
 
     /**
@@ -177,8 +177,10 @@ public class RecordAndPlay {
 
                 // if the first actor is the player
                 if (actors.get(0) == 0) {
-                    moves.remove(0);
-                    actors.remove(0);
+                    if (game.runMove()) {
+                        moves.remove(0);
+                        actors.remove(0);
+                    }
 
                 /* Make game wait as long as the playback
                    speed before continuing another move */
@@ -196,7 +198,6 @@ public class RecordAndPlay {
                 isRunning = false;
                 game.setTimeRemaining(remainingTimeAfterRun);
             }
-            game.runMove();
         } catch (IndexOutOfBoundsException swallow) {
             // Ignored.
         }
