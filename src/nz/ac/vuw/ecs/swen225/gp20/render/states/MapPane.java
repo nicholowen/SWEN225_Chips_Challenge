@@ -23,7 +23,6 @@ public class MapPane {
   private Assets assets;
 
   BufferedImage bg;
-  BufferedImage infoAsset;
   BufferedImage floorAsset;
   BufferedImage goopAsset;
 
