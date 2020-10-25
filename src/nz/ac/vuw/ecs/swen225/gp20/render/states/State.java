@@ -151,10 +151,10 @@ public class State {
    */
   public void draw(Graphics g) {
     if (bg != null) g.drawImage(bg, 0, 0, null);
-    if (currentStateOne != null) g.drawImage(currentStateOne, 365, 268, null);
-    if (currentStateTwo != null) g.drawImage(currentStateTwo, 365, 336, null);
+    if (currentStateOne   != null) g.drawImage(currentStateOne,   365, 268, null);
+    if (currentStateTwo   != null) g.drawImage(currentStateTwo,   365, 336, null);
     if (currentStateThree != null) g.drawImage(currentStateThree, 365, 404, null);
-    if (currentStateFour != null) g.drawImage(currentStateFour, 365, 472, null);
-    if (currentStateFive != null) g.drawImage(currentStateFive, 660, 527, null);
+    if (currentStateFour  != null) g.drawImage(currentStateFour,  365, 472, null);
+    if (currentStateFive  != null) g.drawImage(currentStateFive,  660, 527, null);
   }
 }
