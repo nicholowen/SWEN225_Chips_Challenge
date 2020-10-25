@@ -7,7 +7,6 @@ import java.io.File;
 /**
  * Loads assets into 2D BufferedImage Arrays. This allows multiple states
  * of image to be loaded from a single sprite sheet.
- * <p>
  * Credit: Zequnyu - https://github.com/zequnyu
  *
  * @author Owen N
@@ -159,7 +158,6 @@ public class Assets {
       gif = new BufferedImage[height][width];
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          System.out.println(i + "" + j);
           gif[i][j] = spriteSheet.getSubimage(w * j, h * i, w, h); //adds portion of the image 'w x h'
         }
       }
