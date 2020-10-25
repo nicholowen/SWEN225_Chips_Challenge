@@ -86,6 +86,7 @@ public class Main {
             if (maze.getGameWon()) {
                 if (!maze.isLastLevel()) {
                     this.loadLvl(maze.getLevel() + 1); // load next level
+                    this.saveUnfinished(); // update last unfinished level
                 } else {
                     gui.setReplaying(false);
                     gui.stopRecording();
