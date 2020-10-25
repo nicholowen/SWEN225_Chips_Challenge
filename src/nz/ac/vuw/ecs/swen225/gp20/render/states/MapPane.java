@@ -27,19 +27,19 @@ public class MapPane {
   BufferedImage goopAsset;
 
   //Lists to be populated with Cells surrounding player in 11x11 grid
-  private Cell[][] floor = new Cell[11][11];
-  private Cell[][] wall = new Cell[11][11];
-  private Cell[][] hole = new Cell[11][11];
-  private Cell[][] door = new Cell[11][11];
-  private Cell[][] energy = new Cell[11][11];
-  private Cell[][] key = new Cell[11][11];
-  private Cell[][] exit = new Cell[11][11];
+  private Cell[][]    floor = new Cell[11][11];
+  private Cell[][]     wall = new Cell[11][11];
+  private Cell[][]     hole = new Cell[11][11];
+  private Cell[][]     door = new Cell[11][11];
+  private Cell[][]   energy = new Cell[11][11];
+  private Cell[][]      key = new Cell[11][11];
+  private Cell[][]     exit = new Cell[11][11];
   private Cell[][] exitLock = new Cell[11][11];
-  private Cell[][] info = new Cell[11][11];
+  private Cell[][]     info = new Cell[11][11];
 
   private Cell[][] surround = new Cell[11][11];
 
-  private Actor[][] mobs = new Actor[11][11];
+  private Actor[][]   mobs = new Actor[11][11];
   private Actor[][] sunken = new Actor[11][11];
 
   private ActorSprite playerSprite;
@@ -238,13 +238,19 @@ public class MapPane {
             case "water":
               hole[i][j] = surround[i][j];
               break;
-            case "door":
-              door[i][j] = surround[i][j];
-              if (doorObjects.containsKey(surround[i][j])) {
-                if(!surround[i][j].getIsSolid()) {
-                  doorObjects.get(surround[i][j]).setIsSolid(false);
-                }
-                doorObjects.get(surround[i][j]).update();
+            case "info":
+              info[i][j] = surround[i][j];
+              break;
+            case "exit":
+              exit[i][j] = surround[i][j];
+              if (exitOb != null) {
+                exitOb.update();
+              }
+              break;
+            case "exit lock":
+              exitLock[i][j] = surround[i][j];
+              if (exitLockOb != null) {
+                exitLockOb.update();
               }
               break;
             case "treasure":
@@ -261,19 +267,13 @@ public class MapPane {
                 keyObjects.get(surround[i][j]).update();
               }
               break;
-            case "info":
-              info[i][j] = surround[i][j];
-              break;
-            case "exit":
-              exit[i][j] = surround[i][j];
-              if (exitOb != null) {
-                exitOb.update();
-              }
-              break;
-            case "exit lock":
-              exitLock[i][j] = surround[i][j];
-              if (exitLockOb != null) {
-                exitLockOb.update();
+            case "door":
+              door[i][j] = surround[i][j];
+              if (doorObjects.containsKey(surround[i][j])) {
+                if(!surround[i][j].getIsSolid()) {
+                  doorObjects.get(surround[i][j]).setIsSolid(false);
+                }
+                doorObjects.get(surround[i][j]).update();
               }
               break;
             default:
@@ -283,8 +283,6 @@ public class MapPane {
       }
     }
   }
-
-
 
   /**
    * Draws all visible sprites(in the 9x9 grid around player) in order from the floor up.
@@ -393,17 +391,17 @@ public class MapPane {
    * Clears all lists ready for next frame
    */
   private void clearLists() {
-    floor = new Cell[11][11];
-    wall = new Cell[11][11];
-    hole = new Cell[11][11];
-    door = new Cell[11][11];
-    energy = new Cell[11][11];
-    key = new Cell[11][11];
-    exit = new Cell[11][11];
+    floor    = new Cell[11][11];
+    wall     = new Cell[11][11];
+    hole     = new Cell[11][11];
+    door     = new Cell[11][11];
+    energy   = new Cell[11][11];
+    key      = new Cell[11][11];
+    exit     = new Cell[11][11];
     exitLock = new Cell[11][11];
-    info = new Cell[11][11];
-    mobs = new Actor[11][11];
-    sunken = new Actor[11][11];
+    info     = new Cell[11][11];
+    mobs     = new Actor[11][11];
+    sunken   = new Actor[11][11];
 
   }
 }
