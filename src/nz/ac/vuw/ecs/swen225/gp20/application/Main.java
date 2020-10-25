@@ -2,6 +2,8 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.IOException;
 
+import javax.swing.JFrame;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
@@ -21,7 +23,6 @@ public class Main {
     private final GUI gui = new GUI(this);
     private static Render render = new Render();
 
-    private boolean gameEnded;
     private Direction direction = null;
 
     private int speed = 300;
@@ -55,44 +56,41 @@ public class Main {
                 }
             }
 
-            if (!gameEnded) {
-                RenderTuple rt = maze.tick(direction);
-                direction = gui.getDirection();
-                if (gui.isRecording() && rt.playerMoved() != null) {
-                    movePlayer(rt.playerMoved().toString());
-                }
-                if (currentState == 4)
-                    gui.frame.requestFocusInWindow();
-                if (currentState == 4)
-                    render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(), gui.isReplaying());
-                else
-                    render.update(currentState, gui.getButtonSoundEvent());
-                render.draw(gui.getImageGraphics(), currentState);
-                gui.drawToScreen();
+            RenderTuple rt = maze.tick(direction);
+            direction = gui.getDirection();
+            if (gui.isRecording() && rt.playerMoved() != null) {
+                movePlayer(rt.playerMoved().toString());
+            }
+            if (currentState == 4)
+                gui.frame.requestFocusInWindow();
+            if (currentState == 4)
+                render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(),
+                        gui.isReplaying());
+            else
+                render.update(currentState, gui.getButtonSoundEvent());
+            render.draw(gui.getImageGraphics(), currentState);
+            gui.drawToScreen();
 
-                long startTick = System.currentTimeMillis();
-                while (true) {
-                    int tickDelay = 33;
-                    if (System.currentTimeMillis() >= startTick + tickDelay)
-                        break; // wait 33 milli
+            long startTick = System.currentTimeMillis();
+            while (true) {
+                int tickDelay = 33;
+                if (System.currentTimeMillis() >= startTick + tickDelay)
+                    break; // wait 33 milli
+            }
+            if ((System.currentTimeMillis() >= start + delay) && currentState == 4 && !gui.isReplaying()) {
+                start = System.currentTimeMillis();
+                maze.tickTimeRemaining(); // timeRemaining goes down every second
+            }
+            if (maze.getGameWon()) {
+                if (!maze.isLastLevel()) {
+                    this.loadLvl(maze.getLevel() + 1); // load next level
+                } else {
+                    gui.setGameState(6); // no more levels to load - win state
                 }
-                if ((System.currentTimeMillis() >= start + delay) && currentState == 4 && !gui.isReplaying()) {
-                    start = System.currentTimeMillis();
-                    maze.tickTimeRemaining(); // timeRemaining goes down every second
-                }
-                if (maze.getGameWon()) {
-                    if (!maze.isLastLevel()) {
-                        this.loadLvl(maze.getLevel() + 1); // load next level
-                    } else {
-                        gui.setGameState(6); // no more levels to load - win state
-                    }
-                }
-                if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
-                    this.saveUnfinished(); // update last unfinished level
-                    gui.setGameState(5); // lost state
-                }
-            } else {
-                break;
+            }
+            if (maze.getGameLost() || maze.getTimeRemaining() == 0) {
+                this.saveUnfinished(); // update last unfinished level
+                gui.setGameState(5); // lost state
             }
         }
     }
@@ -192,7 +190,7 @@ public class Main {
     public void replay() throws IOException, InterruptedException {
         RecordAndPlay.load("recording", this);
         RecordAndPlay.runReplay(this, speed);
-        gui.setReplaying(false); 
+        gui.setReplaying(false);
         RecordAndPlay.resetRecording();
     }
 
@@ -203,12 +201,12 @@ public class Main {
      */
     public void step() throws IOException, InterruptedException {
         if (!gui.isReplaying()) {
-            gui.setReplaying(true); 
+            gui.setReplaying(true);
             RecordAndPlay.load("recording", this);
         }
         RecordAndPlay.playByStep(this);
         if (RecordAndPlay.getMoves().size() == 0) {
-            gui.setReplaying(false); 
+            gui.setReplaying(false);
         }
     }
 
@@ -219,7 +217,7 @@ public class Main {
     public boolean runMove() {
         boolean moved = false;
         if (RecordAndPlay.getMoves().size() > 0) {
-            gui.setReplaying(true); 
+            gui.setReplaying(true);
             gui.frame.requestFocusInWindow();
             if (!gui.replayPaused()) {
                 if (RecordAndPlay.getMoves().get(0).equals("UP")) {
@@ -238,7 +236,7 @@ public class Main {
                 moved = true;
             }
         } else {
-            gui.setReplaying(false); 
+            gui.setReplaying(false);
         }
         return moved;
     }
