@@ -129,8 +129,8 @@ public class Assets {
     FONT = loadGif(path, "font.gif", 9, 12);
     ENERGYBARSHADE = loadGif(path, "energy_top.gif", 152, 22);
     ENERGYBAR = loadGif(path, "energy_bot.gif", 152, 22);
-//    RECORDING = loadGif(path, "recording.gif", 16, 16);
-//    REPLAYING = loadGif(path, "replaying.gif", 16, 16);
+    RECORDING = loadGif(path, "recording.gif", 16, 16);
+    REPLAYING = loadGif(path, "replaying.gif", 16, 16);
 
   }
 

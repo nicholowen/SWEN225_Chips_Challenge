@@ -61,9 +61,9 @@ public class Render {
    * @param tuple Contains the current state of the cells and the player
    * @param timeRemaining self explanatory
    */
-  public void update(RenderTuple tuple, int timeRemaining, String event) {
+  public void update(RenderTuple tuple, int timeRemaining, String event, boolean recording, boolean replaying) {
     gp.update(tuple);
-    sp.update(timeRemaining, tuple, event);
+    sp.update(timeRemaining, tuple, event, recording, replaying);
 
     audio.updateGame(tuple.getSoundEvent());
     audio.updateButtons(event);
