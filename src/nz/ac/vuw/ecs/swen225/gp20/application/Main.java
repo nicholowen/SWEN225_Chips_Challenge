@@ -2,8 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.IOException;
 
-import javax.swing.JFrame;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.RenderTuple;
@@ -39,6 +37,7 @@ public class Main {
     public void play() {
         long start = System.currentTimeMillis();
         int delay = 1000; // 1 Second
+        // Decides what state/level to load based on previous exit
         if (Persistence.getLastSaveType().equalsIgnoreCase("unfinished")) {
             this.loadUnfinished();
         } else if (Persistence.getLastSaveType().equalsIgnoreCase("resume")) {
@@ -48,6 +47,7 @@ public class Main {
         }
         while (true) {
             currentState = gui.getGameState();
+            // Plays the intro screen (logo fade)
             if (currentState == 0) {
                 if (introCounter < 100) {
                     introCounter++;
@@ -59,15 +59,17 @@ public class Main {
             RenderTuple rt = maze.tick(direction);
             direction = gui.getDirection();
             if (gui.isRecording() && rt.playerMoved() != null) {
-                movePlayer(rt.playerMoved().toString());
+                movePlayer(rt.playerMoved().toString()); // Record player movements
             }
-            if (currentState == 4)
+            if (currentState == 4) {
                 gui.frame.requestFocusInWindow();
-            if (currentState == 4)
+            }
+            if (currentState == 4) {
                 render.update(rt, maze.getTimeRemaining(), gui.getButtonSoundEvent(), gui.isRecording(),
                         gui.isReplaying());
-            else
+            } else {
                 render.update(currentState, gui.getButtonSoundEvent());
+            }
             render.draw(gui.getImageGraphics(), currentState);
             gui.drawToScreen();
 
@@ -188,9 +190,12 @@ public class Main {
      * 
      */
     public void replay() throws IOException, InterruptedException {
-        RecordAndPlay.load("recording", this);
+        if (!gui.isReplaying()) {
+            gui.setReplaying(true);
+            RecordAndPlay.load("recording", this);
+        }
         RecordAndPlay.runReplay(this, speed);
-        gui.setReplaying(false);
+        gui.setReplaying(false); // Replay is finished or canceled
         RecordAndPlay.resetRecording();
     }
 
@@ -213,6 +218,8 @@ public class Main {
     /**
      * Used by RecordAndPlay to force the player to move in a specific direction.
      * 
+     * @return moved - wheather or not the move was executed
+     * 
      */
     public boolean runMove() {
         boolean moved = false;
@@ -220,6 +227,8 @@ public class Main {
             gui.setReplaying(true);
             gui.frame.requestFocusInWindow();
             if (!gui.replayPaused()) {
+                // Updates maze with direction based on string returned by RecordAndPlay
+                // Updates render with info in order to move the character
                 if (RecordAndPlay.getMoves().get(0).equals("UP")) {
                     render.update(maze.tick(Direction.UP), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
                             gui.isRecording(), gui.isReplaying());
@@ -233,12 +242,12 @@ public class Main {
                     render.update(maze.tick(Direction.RIGHT), maze.getTimeRemaining(), gui.getButtonSoundEvent(),
                             gui.isRecording(), gui.isReplaying());
                 }
-                moved = true;
+                moved = true; // The move has been executed
             }
         } else {
-            gui.setReplaying(false);
+            gui.setReplaying(false); // There are no more moves to execute
         }
-        return moved;
+        return moved; // The move was not executed
     }
 
     // =======================================================.

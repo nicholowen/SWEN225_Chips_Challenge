@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
 
+
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
  * @author Maiza Rehan 300472305
  */
 public class GUI extends JPanel implements KeyListener {
-
+    private static final long serialVersionUID = 1L; // default serial ID
     JFrame frame;
     private Graphics2D g;
     private JLayeredPane mainPanel;
@@ -383,6 +384,7 @@ public class GUI extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {
         this.direction = null;
         int keyCode = e.getKeyCode();
+        @SuppressWarnings("deprecation")
         boolean ctrl = (e.getModifiers() & KeyEvent.CTRL_MASK) != 0;
         if (this.gameState == 4) {
             // exit the game, the current game state will be lost, the next time the game is
