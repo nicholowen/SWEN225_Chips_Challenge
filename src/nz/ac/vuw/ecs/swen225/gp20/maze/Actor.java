@@ -111,11 +111,6 @@ public class Actor {
 		}
 		//For the last coordinate of the path, link it to the first!
 		toReturn.add(new PatrolSegment(path.get(path.size()-1),path.get(0)));
-		//TODO Remove debug output once done
-		System.out.println("[DEBUG]Finished building segments! Segments for one mob are as follows:");
-		for(PatrolSegment s:toReturn){
-			System.out.println(" (x:"+s.getX1()+" y:"+s.getY1()+") -> (x:"+s.getX2()+" y:"+s.getY2()+")");
-		}
 		numberOfSegments=toReturn.size()-1;
 		return toReturn;
 	}

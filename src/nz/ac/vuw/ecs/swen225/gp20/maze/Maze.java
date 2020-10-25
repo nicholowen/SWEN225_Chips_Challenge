@@ -45,7 +45,7 @@ public class Maze {
 	 * @return Time limit in seconds of the level in question. -1 if an error occurred while loading.
 	 */
 	private void loadMaze(int levelToLoad) {
-		System.out.println("Loadmaze was called, trying to load maze:"+levelToLoad);
+		//System.out.println("Loadmaze was called, trying to load maze:"+levelToLoad);
 		Level toLoad;
 		try {
 			toLoad=Persistence.read(levelToLoad);
@@ -54,7 +54,7 @@ public class Maze {
 			return;//If loading the next level went wrong then don't bother doing anything else as it'll result in a crash.
 		}
 		//Resetting/initializing
-		System.out.println("Managed to read the file successfully!");
+		//.out.println("Managed to read the file successfully!");
 		gameLost=false;
 		gameWon=false;
 		currentTreasureLeft=toLoad.properties.chipsInLevel;
@@ -64,15 +64,15 @@ public class Maze {
 		currentLevel=levelToLoad;
 		timeRemaining = toLoad.properties.timeLimit;
 		oomphCounter=0;
-		System.out.println("Loaded arbitrary values");
+		//System.out.println("Loaded arbitrary values");
 		
 		//Load board
 		board = toLoad.getBoard();
-		System.out.println("Loaded board");
+		//System.out.println("Loaded board");
 
 		//Load player
 		player=new Actor(true, "player", toLoad.getStartX(), toLoad.getStartY());
-		System.out.println("Loaded player");
+		//System.out.println("Loaded player");
 
 		//Load NPCs
 		for(NonPlayableCharacter c:toLoad.getNonPlayableCharacters()){
@@ -83,7 +83,7 @@ public class Maze {
 				creatures.add(new Actor(c.getType(), c.x, c.y));
 			}
 		}
-		System.out.println("Loaded NPCs!");
+		//System.out.println("Loaded NPCs!");
 
 		if(getLevel()==Persistence.getNumberOfLevels())
 			isLastLevel=true;
@@ -362,14 +362,14 @@ public class Maze {
 					if (a.blocksMovement() && !a.isPushable)
 						return false;//If we can't get past it, immediately return false.
 					else if (a.isPushable()) {
-						System.out.println("[DEBUG]We know that the NPC is pushable! Checking if the space behind it is clear");
+						//System.out.println("[DEBUG]We know that the NPC is pushable! Checking if the space behind it is clear");
 						Cell farSide = getCellFromDir(a, d.getDirection());//Cell on the far side of the one we're pushing.
 						if(farSide.isSolid || NPCBlocksPath(new Point(farSide.getX(), farSide.getY()))) {
-							System.out.println("[DEBUG]We were unable to push the NPC!");
+							//System.out.println("[DEBUG]We were unable to push the NPC!");
 							return false;//If there's no empty space on the far side, then don't push it.
 						}
 						//Else, we move what we're pushing!
-						System.out.println("[DEBUG]Pushing NPC!");
+						//System.out.println("[DEBUG]Pushing NPC!");
 						a.move(d);
 						return true;
 					}
