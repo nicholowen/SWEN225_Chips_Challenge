@@ -1,2 +1,2 @@
 repo url: https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2020/groupproject/team14/project
-tag to mark: HEAD // TODO: Change this
+tag to mark: submitted
