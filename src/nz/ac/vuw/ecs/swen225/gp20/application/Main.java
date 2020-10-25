@@ -59,7 +59,7 @@ public class Main {
             RenderTuple rt = maze.tick(direction);
             direction = gui.getDirection();
             if (gui.isRecording() && rt.playerMoved() != null) {
-                movePlayer(rt.playerMoved().toString()); // Record player movements
+                RecordAndPlay.addPlayerMovement(rt.playerMoved().toString()); // Record player movements
             }
             if (currentState == 4) {
                 gui.frame.requestFocusInWindow();
@@ -276,7 +276,8 @@ public class Main {
     }
 
     /**
-     * Gets the maze.
+     * Gets the maze. 
+     * Used by Persistence and RecordAndPlay
      *
      * @return the maze
      */
@@ -302,15 +303,6 @@ public class Main {
      */
     public int getSpeed() {
         return this.speed;
-    }
-
-    /**
-     * Records direction made by player while recording.
-     *
-     * @param direction player has moved.
-     */
-    public void movePlayer(String direction) {
-        RecordAndPlay.addPlayerMovement(direction);
     }
 
     /**
