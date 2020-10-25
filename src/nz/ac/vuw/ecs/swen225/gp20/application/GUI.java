@@ -285,7 +285,6 @@ public class GUI extends JPanel implements KeyListener {
                 replayPaused = false;
                 System.out.println(replayPaused);
                 recording = false;
-                replaying = true;
                 try {
                     main.replay();
                 } catch (IOException e1) {
@@ -298,6 +297,7 @@ public class GUI extends JPanel implements KeyListener {
 
         step.addActionListener(e -> {
             if (gameState == 4) {
+                replayPaused = false;
                 try {
                     main.step();
                 } catch (IOException e1) {
@@ -417,7 +417,6 @@ public class GUI extends JPanel implements KeyListener {
             else if (keyCode == KeyEvent.VK_R) {
                 replayPaused = false;
                 recording = false;
-                replaying = true;
                 try {
                     main.replay();
                 } catch (IOException e1) {
