@@ -370,6 +370,7 @@ public class GUI extends JPanel implements KeyListener {
             } else if (keyCode == KeyEvent.VK_RIGHT) {
                 this.direction = Direction.RIGHT;
             }
+            replaying = false;
         }
     }
 
@@ -453,6 +454,7 @@ public class GUI extends JPanel implements KeyListener {
             } else if (key == 'd') {
                 this.direction = Direction.RIGHT;
             }
+            replaying = false;
         }
     }
 
