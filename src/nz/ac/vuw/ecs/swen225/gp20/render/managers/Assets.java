@@ -106,7 +106,7 @@ public class Assets {
     MAPBACKGROUND = loadGif(path, "mapbackground.gif", 576, 576);
     SCOREBACKGROUND = loadGif(path, "scorepanelbackground.gif", 300, 576);
     MENU = loadGif(path, "menu.gif", 892, 576);
-    LEVEL = loadGif(path, "levels.gif", 892, 576);
+    LEVEL = loadGif(path, "levelsBackground.gif", 892, 576);
     PAUSE = loadGif(path, "pause.gif", 892, 576);
     DEAD = loadGif(path, "deadBackground.gif", 892, 576);
     WIN = loadGif(path, "winBackground.gif", 892, 576);

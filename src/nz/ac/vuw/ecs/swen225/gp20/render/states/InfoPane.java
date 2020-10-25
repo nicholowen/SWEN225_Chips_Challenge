@@ -28,6 +28,7 @@ public class InfoPane {
   private HashMap<String, Integer> inventory;
 
   private BufferedImage[] info; //array of font images to print out on the information read-out
+  private BufferedImage[] speed; //array of images which represent the speed (slowest '>', fastest '>>>>').
 
   boolean onInfo; //true if the player is on an info tile
   boolean recording; //true is game is being recorded.
@@ -77,6 +78,8 @@ public class InfoPane {
     buttonGraphics.add(controlButtons[4]);
 
     buttonStates = new BufferedImage[buttonGraphics.size()];
+
+    speed = drawString(">>>>");
 
     for(int i = 0; i < buttonStates.length; i++) {
       buttonStates[i] = buttonGraphics.get(i)[0];
@@ -158,6 +161,10 @@ public class InfoPane {
 
     for (int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
+
+      if(ch == 62) {
+        string[i] = font[3][11];
+      }
 
       if (ch >= 65 && ch <= 90) {
         string[i] = font[0][ch - 65];
@@ -270,6 +277,10 @@ public class InfoPane {
     g.drawImage(buttonStates[4], gameSize + 99, 80, null); // pause replay
     g.drawImage(buttonStates[5], gameSize + 129, 80, null); // play replay
     g.drawImage(buttonStates[6], gameSize + 159, 80, null); // step
+
+    if(replaying){
+
+    }
 
     //can only handle a single line up to 22 characters (including spaces)
     if (onInfo && info != null) {
